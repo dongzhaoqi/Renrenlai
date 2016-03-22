@@ -20,12 +20,14 @@ package com.siti.renrenlai.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 
@@ -195,6 +197,27 @@ public class TitleActivity extends Activity implements OnClickListener {
 
 		default:
 			break;
+		}
+	}
+
+	Toast mToast;
+	protected void showToast(final String text) {
+		if (!TextUtils.isEmpty(text)) {
+			runOnUiThread(new Runnable() {
+
+				@Override
+				public void run() {
+					// TODO Auto-generated method stub
+					if (mToast == null) {
+						mToast = Toast.makeText(getApplicationContext(), text,
+								Toast.LENGTH_LONG);
+					} else {
+						mToast.setText(text);
+					}
+					mToast.show();
+				}
+			});
+
 		}
 	}
 

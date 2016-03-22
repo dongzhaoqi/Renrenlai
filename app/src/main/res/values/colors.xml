@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
     <!-- 标题栏按钮背景颜色 -->
     <drawable name="button_backward_pressed">#2AB4F1</drawable>
     <drawable name="button_backward_normal">#0000</drawable>
@@ -9,6 +13,8 @@
     <color name="black">#000</color>
     <color name="white">#FFF</color>
     <color name="edit_hint">#A1A1A1</color>
+
+
 
 
 </resources>
