@@ -34,7 +34,7 @@ import com.siti.renrenlai.R;
 /**
  * @author gao_chun 自定义标题栏
  */
-public class TitleActivity extends Activity implements OnClickListener {
+public class TitleActivity extends Activity {
 
 	// private RelativeLayout mLayoutTitleBar;
 	private TextView mTitleTextView;
@@ -183,8 +183,7 @@ public class TitleActivity extends Activity implements OnClickListener {
 	 * @see android.view.View.OnClickListener#onClick(android.view.View)
 	 * 按钮点击调用的方法
 	 */
-	@Override
-	public void onClick(View v) {
+	public void btnClick(View v) {
 
 		switch (v.getId()) {
 		case R.id.button_backward:

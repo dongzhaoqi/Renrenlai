@@ -41,23 +41,10 @@ public class SplashActivity extends Activity {
 		// װ
 		AnimationSet set = new AnimationSet(false);
 
-		RotateAnimation rotate = new RotateAnimation(0, 360,
-				Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF,
-				0.5f);
-		rotate.setDuration(1000);
-		rotate.setFillAfter(true);
-
-		ScaleAnimation scale = new ScaleAnimation(0, 1, 0, 1,
-				Animation.RELATIVE_TO_SELF, 0.3f, Animation.RELATIVE_TO_SELF,
-				0.3f);
-		scale.setDuration(1000);
-		scale.setFillAfter(true);
-		
 		AlphaAnimation alpha = new AlphaAnimation(0, 1);
 		alpha.setDuration(2000);
 		alpha.setFillAfter(true);
-		set.addAnimation(rotate);
-		set.addAnimation(scale);
+
 		set.addAnimation(alpha);
 
 		set.setAnimationListener(new Animation.AnimationListener() {

@@ -3,7 +3,7 @@
     android:id="@+id/layout_titlebar"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="#2EA9DF" >
+    android:background="@drawable/background_with_shadow" >
 
     <TextView
         android:id="@+id/text_title"
@@ -25,7 +25,7 @@
         android:drawablePadding="6dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:onClick="onClick"
+        android:onClick="btnClick"
         android:paddingLeft="5dp"
         android:singleLine="true"
         android:text="返回"
@@ -42,7 +42,7 @@
         android:drawablePadding="6dp"
         android:ellipsize="end"
         android:gravity="center"
-        android:onClick="onClick"
+        android:onClick="btnClick"
         android:paddingLeft="5dp"
         android:singleLine="true"
         android:text="提交"

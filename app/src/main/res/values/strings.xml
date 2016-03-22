@@ -1,12 +1,15 @@
 <resources>
-    <string name="app_name">Renrenlai</string>
+    <string name="app_name">仁人来</string>
     <string name="text_back">返回</string>
     <string name="text_forward">提交</string>
 
-    <!-- Strings related to login -->
+    <!-- Strings related to login register-->
     <string name="prompt_email">用户名</string>
     <string name="prompt_password">密码</string>
+    <string name="prompt_confirm">确认密码</string>
+    <string name="prompt_tel">手机号码</string>
     <string name="action_sign_in">登录</string>
-    <string name="action_sign_in_short">登录</string>
+
+    <string name="register">注册</string>
 
 </resources>

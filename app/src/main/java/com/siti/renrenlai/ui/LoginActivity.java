@@ -1,9 +1,10 @@
 package com.siti.renrenlai.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -18,7 +19,7 @@ import com.xwray.passwordview.PasswordView;
 /**
  * Created by Dong on 2016/3/22.
  */
-public class LoginActivity extends AppCompatActivity implements OnClickListener{
+public class LoginActivity extends TitleActivity implements OnClickListener{
 
     private Button btn_sign_in;
     private EditText et_email;
@@ -30,7 +31,7 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         setTitle("登录");
-
+        showForwardView(R.string.register,true);
         initViews();
     }
 
@@ -41,6 +42,12 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
         btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
         btn_sign_in.setOnClickListener(this);
 
+    }
+
+    @Override
+    protected void onForward(View forwardView) {
+        super.onForward(forwardView);
+        startAnimActivity(RegisterActivity.class);
     }
 
     @Override
@@ -57,9 +64,9 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
         str_password = et_password.getText().toString();
 
         if(TextUtils.isEmpty(str_email)) {
-            Toast.makeText(this,"用户名不能为空",Toast.LENGTH_SHORT).show();
+            showToast("用户名不能为空");
         }else if(TextUtils.isEmpty(str_password)){
-            Toast.makeText(this,"密码不能为空",Toast.LENGTH_SHORT).show();
+            showToast("密码不能为空");
         }else{
             doLogin();
         }
@@ -69,7 +76,8 @@ public class LoginActivity extends AppCompatActivity implements OnClickListener{
 
         User user = new User();
         user.setUserName(str_email);
-
+        showToast("登录成功");
+        startAnimActivity(MainActivity.class);
         SharedPreferencesUtil.writeString(SharedPreferencesUtil
                         .getSharedPreference(getApplicationContext(), "login"),
                 "userName", user.getUserName());
