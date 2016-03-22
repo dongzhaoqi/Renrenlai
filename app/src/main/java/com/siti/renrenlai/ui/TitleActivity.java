@@ -15,9 +15,10 @@
  *     1.0.0: First created this class.
  *
  ******************************************************************************/
-package com.siti.renrenlai;
+package com.siti.renrenlai.ui;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +26,8 @@ import android.view.ViewGroup.LayoutParams;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.TextView;
+
+import com.siti.renrenlai.R;
 
 /**
  * @author gao_chun 自定义标题栏
@@ -194,4 +197,13 @@ public class TitleActivity extends Activity implements OnClickListener {
 			break;
 		}
 	}
+
+	public void startAnimActivity(Class<?> cla) {
+		this.startActivity(new Intent(this, cla));
+	}
+
+	public void startAnimActivity(Intent intent) {
+		this.startActivity(intent);
+	}
+
 }

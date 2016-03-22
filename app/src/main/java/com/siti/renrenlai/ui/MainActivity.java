@@ -1,6 +1,8 @@
-package com.siti.renrenlai;
+package com.siti.renrenlai.ui;
 
 import android.os.Bundle;
+
+import com.siti.renrenlai.R;
 
 public class MainActivity extends TitleActivity {
 
@@ -8,10 +10,9 @@ public class MainActivity extends TitleActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
         setTitle("第一个Activity");
         // showBackwardViewWithoutWord(false);
-        showBackwardView(R.string.text_back, true);
+        showBackwardViewWithoutWord(true);
         showForwardView(R.string.text_forward, true);
     }
 }

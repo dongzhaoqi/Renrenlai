@@ -3,7 +3,7 @@
     android:id="@+id/layout_titlebar"
     android:layout_width="match_parent"
     android:layout_height="52dp"
-    android:background="#ed4255" >
+    android:background="#2EA9DF" >
 
     <TextView
         android:id="@+id/text_title"
@@ -18,7 +18,7 @@
 
     <Button
         android:id="@+id/button_backward"
-        android:layout_width="60dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@drawable/title_button_selector"
         android:drawableLeft="@drawable/back_arrow"
