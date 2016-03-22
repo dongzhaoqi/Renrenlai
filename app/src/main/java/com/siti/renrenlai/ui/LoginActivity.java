@@ -81,6 +81,7 @@ public class LoginActivity extends TitleActivity implements OnClickListener{
         SharedPreferencesUtil.writeString(SharedPreferencesUtil
                         .getSharedPreference(getApplicationContext(), "login"),
                 "userName", user.getUserName());
+        finish();
 
     }
 }

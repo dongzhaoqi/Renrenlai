@@ -12,4 +12,10 @@
 
     <string name="register">注册</string>
 
+    <!--bottom item-->
+    <string name="tab_find">发现</string>
+    <string name="tab_activity">发起活动</string>
+    <string name="tab_me">我的</string>
+
+
 </resources>

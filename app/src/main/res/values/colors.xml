@@ -5,7 +5,7 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
     <color name="top_bar_color">#F56E6E</color>
-    <color name="top_bar_color2">#88F56D6D</color>
+    <color name="status_bar_color">#000</color>
 
     <!-- 标题栏按钮背景颜色 -->
     <drawable name="button_backward_pressed">#6FF56D6D</drawable>
@@ -17,6 +17,8 @@
     <color name="white">#FFF</color>
     <color name="edit_hint">#A1A1A1</color>
 
+    <color name="color_bottom_text_normal">#9da0a4</color>
+    <color name="color_bottom_text_press">#F56E6E</color>
 
 
 

@@ -20,6 +20,7 @@ package com.siti.renrenlai.ui;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +35,7 @@ import com.siti.renrenlai.R;
 /**
  * @author gao_chun 自定义标题栏
  */
-public class TitleActivity extends Activity {
+public class TitleActivity extends FragmentActivity {
 
 	// private RelativeLayout mLayoutTitleBar;
 	private TextView mTitleTextView;
