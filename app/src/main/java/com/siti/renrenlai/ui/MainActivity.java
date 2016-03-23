@@ -11,7 +11,7 @@ import com.siti.renrenlai.fragment.ActivityFragment;
 import com.siti.renrenlai.fragment.FindFragment;
 import com.siti.renrenlai.fragment.MeFragment;
 
-public class MainActivity extends TitleActivity {
+public class MainActivity extends BaseActivity{
 
     private Button[] mTabs;
     private Fragment[] mFragments;

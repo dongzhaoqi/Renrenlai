@@ -1,6 +1,6 @@
 package com.siti.renrenlai.ui;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -9,8 +9,6 @@ import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
-import android.view.animation.RotateAnimation;
-import android.view.animation.ScaleAnimation;
 import android.widget.RelativeLayout;
 
 import com.siti.renrenlai.R;
@@ -19,7 +17,7 @@ import com.siti.renrenlai.util.CustomApplcation;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
 
-public class SplashActivity extends Activity {
+public class SplashActivity extends BaseActivity {
 
 	private static final int GO_HOME = 100;
 	private static final int GO_LOGIN = 200;
@@ -34,11 +32,10 @@ public class SplashActivity extends Activity {
 		setContentView(R.layout.activity_splash);
 		relative = (RelativeLayout) findViewById(R.id.relative);
 		startAnimation(relative);
-
+		//SharedPreferencesUtil.writeString(getSharedPreferences("login", Context.MODE_PRIVATE),"userName","0");
 	}
 
 	private void startAnimation(RelativeLayout relative) {
-		// װ
 		AnimationSet set = new AnimationSet(false);
 
 		AlphaAnimation alpha = new AlphaAnimation(0, 1);

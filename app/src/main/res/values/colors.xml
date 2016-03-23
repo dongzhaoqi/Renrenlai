@@ -17,9 +17,15 @@
     <color name="white">#FFF</color>
     <color name="edit_hint">#A1A1A1</color>
 
-    <color name="color_bottom_text_normal">#9da0a4</color>
+    <color name="color_bottom_text_normal">#9DA0A4</color>
     <color name="color_bottom_text_press">#F56E6E</color>
+    <color name="transparent">#00000000</color>
 
 
+    <!-- 内容条目按下时的样式 -->
+    <color name="pressed_bg">#F2F2F2</color>
+    <color name="nopressed_bg">#FFF</color>
+    <color name="background">#E5E5E5</color>
+    <color name="me_text_color">#FF646464</color>
 
 </resources>

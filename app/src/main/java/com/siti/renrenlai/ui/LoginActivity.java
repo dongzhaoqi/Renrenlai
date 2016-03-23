@@ -1,15 +1,11 @@
 package com.siti.renrenlai.ui;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
@@ -19,7 +15,7 @@ import com.xwray.passwordview.PasswordView;
 /**
  * Created by Dong on 2016/3/22.
  */
-public class LoginActivity extends TitleActivity implements OnClickListener{
+public class LoginActivity extends BaseActivity implements OnClickListener{
 
     private Button btn_sign_in;
     private EditText et_email;
@@ -30,8 +26,13 @@ public class LoginActivity extends TitleActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        setTitle("登录");
-        showForwardView(R.string.register,true);
+        initTopBarForTitleAndRight("登录","注册",new OnRightButtonClickListener(){
+            @Override
+            public void onClick() {
+                super.onClick();
+                startAnimActivity(RegisterActivity.class);
+            }
+        });
         initViews();
     }
 
@@ -44,11 +45,6 @@ public class LoginActivity extends TitleActivity implements OnClickListener{
 
     }
 
-    @Override
-    protected void onForward(View forwardView) {
-        super.onForward(forwardView);
-        startAnimActivity(RegisterActivity.class);
-    }
 
     @Override
     public void onClick(View v) {

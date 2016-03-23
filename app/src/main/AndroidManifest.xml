@@ -19,6 +19,8 @@
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.LoginActivity"/>
         <activity android:name=".ui.RegisterActivity"/>
+        <activity android:name=".ui.MyProfileActivity"/>
+        <activity android:name=".ui.MyActivity"/>
     </application>
 
 </manifest>

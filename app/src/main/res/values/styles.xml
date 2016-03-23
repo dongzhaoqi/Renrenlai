@@ -5,11 +5,33 @@
         <!-- colorPrimary is used for the default action bar background -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <!-- colorPrimaryDark is used for the status bar -->
-        <item name="colorPrimaryDark">@color/top_bar_color</item>
+        <item name="colorPrimaryDark">@color/status_bar_color</item>
         <!-- colorAccent is used as the default value for colorControlActivated
              which is used to tint widgets -->
         <item name="colorAccent">@color/colorAccent</item>
 
     </style>
 
+
+    <style name="ActionBar">
+        <item name="android:orientation">horizontal</item>
+        <item name="android:background">@color/top_bar_color</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:layout_height">@dimen/base_action_bar_height</item>
+    </style>
+
+    <style name="more_text_style">
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/me_text_color</item>
+        <item name="android:paddingLeft">20dip</item>
+        <item name="android:gravity">center_vertical</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="me_text_style" parent="@style/more_text_style">
+        <item name="android:paddingLeft">8dip</item>
+    </style>
 </resources>

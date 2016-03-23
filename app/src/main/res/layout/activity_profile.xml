@@ -11,17 +11,15 @@
     <RelativeLayout
         android:id="@+id/layout_name"
         android:layout_width="fill_parent"
-        android:layout_height="90dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_height="120dp"
+        android:background="@drawable/row_selector">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
             android:id="@+id/img_photo"
-            android:layout_width="70dp"
-            android:layout_height="70dp"
-            android:layout_centerVertical="true"
+            android:layout_width="90dp"
+            android:layout_height="90dp"
+            android:layout_centerHorizontal="true"
             android:src="@drawable/launch"
             app:civ_border_width="2dp"
             app:civ_border_color="#FFFFFFFF"/>
@@ -30,86 +28,11 @@
             style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_photo"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/img_photo"
             android:text="仁人来" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
     </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:orientation="horizontal">
-
-        <LinearLayout
-            android:id="@+id/layout_favorite"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/enroll_selector"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_favorite"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="收藏" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_enroll"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/enroll_selector"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_enroll"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="报名" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/layout_launch"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:background="@drawable/enroll_selector"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_launch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="6" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="发起" />
-
-        </LinearLayout>
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -117,7 +40,7 @@
         android:background="@color/background" />
 
     <RelativeLayout
-        android:id="@+id/layout_message"
+        android:id="@+id/layout_nickname"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -125,7 +48,7 @@
         android:paddingRight="20dp">
 
         <ImageView
-            android:id="@+id/img_me"
+            android:id="@+id/img_nickname"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -135,8 +58,8 @@
             style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_me"
-            android:text="消息" />
+            android:layout_toRightOf="@id/img_nickname"
+            android:text="昵称" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -152,7 +75,7 @@
         android:background="@color/background" />
 
     <RelativeLayout
-        android:id="@+id/layout_myProfile"
+        android:id="@+id/layout_realname"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -160,7 +83,7 @@
         android:paddingRight="20dp">
 
         <ImageView
-            android:id="@+id/img_friends"
+            android:id="@+id/img_realname"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -170,8 +93,8 @@
             style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_friends"
-            android:text="邀请好友加入" />
+            android:layout_toRightOf="@id/img_realname"
+            android:text="真实姓名" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -188,7 +111,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/layout_identify"
+        android:id="@+id/layout_gender"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -196,7 +119,7 @@
         android:paddingRight="20dp">
 
         <ImageView
-            android:id="@+id/img_identify"
+            android:id="@+id/img_gender"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -206,8 +129,8 @@
             style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_identify"
-            android:text="身份认证" />
+            android:layout_toRightOf="@id/img_gender"
+            android:text="性别" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -224,7 +147,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/layout_feedback"
+        android:id="@+id/layout_community"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -232,7 +155,7 @@
         android:paddingRight="20dp">
 
         <ImageView
-            android:id="@+id/img_feedback"
+            android:id="@+id/img_community"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -242,15 +165,69 @@
             style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_feedback"
-            android:text="反馈" />
+            android:layout_toRightOf="@id/img_community"
+            android:text="所在社区" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_tel"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
 
         <ImageView
+            android:id="@+id/img_tel"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_me" />
+
+        <TextView
+            style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+            android:layout_toRightOf="@id/img_tel"
+            android:text="手机号码" />
+
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_password"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
+
+        <ImageView
+            android:id="@+id/img_password"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_me" />
+
+        <TextView
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/img_password"
+            android:text="修改密码" />
+
     </RelativeLayout>
 
     <View
