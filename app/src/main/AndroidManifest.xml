@@ -21,6 +21,7 @@
         <activity android:name=".ui.RegisterActivity"/>
         <activity android:name=".ui.MyProfileActivity"/>
         <activity android:name=".ui.MyActivity"/>
+        <activity android:name=".ui.SearchActivity"/>
     </application>
 
 </manifest>

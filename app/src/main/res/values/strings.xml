@@ -12,6 +12,9 @@
 
     <string name="register">注册</string>
 
+    <string name="search_hint">请输入</string>
+
+
     <!--bottom item-->
     <string name="tab_find">发现</string>
     <string name="tab_activity">发起活动</string>
