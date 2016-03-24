@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.siti.renrenlai" >
 
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:name=".util.CustomApplcation"
         android:allowBackup="true"
@@ -22,6 +23,7 @@
         <activity android:name=".ui.MyProfileActivity"/>
         <activity android:name=".ui.MyActivity"/>
         <activity android:name=".ui.SearchActivity"/>
+        <activity android:name=".ui.ActivityInfo"/>
     </application>
 
 </manifest>
