@@ -20,5 +20,10 @@
     <string name="tab_activity">发起活动</string>
     <string name="tab_me">我的</string>
 
+    <!--发现-->
+    <string name="fund_path">社区基金通道</string>
+    <string name="introduction">简介</string>
+    <string name="apply">申请</string>
+    <string name="project">项目一览</string>
 
 </resources>

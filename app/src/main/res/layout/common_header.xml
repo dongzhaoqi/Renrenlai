@@ -8,7 +8,7 @@
     <LinearLayout
         android:id="@+id/header_layout_leftview_container"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentLeft="true"
         android:gravity="center_vertical|left"
         android:orientation="horizontal" >
@@ -17,7 +17,7 @@
     <LinearLayout
         android:id="@+id/header_layout_middleview_container"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:gravity="center"
@@ -34,9 +34,9 @@
     <LinearLayout
         android:id="@+id/header_layout_rightview_container"
         android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:gravity="center_vertical|right"
+        android:gravity="center_vertical"
         android:orientation="horizontal" >
     </LinearLayout>
 

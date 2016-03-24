@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -26,6 +27,8 @@ public class HeaderLayout extends LinearLayout {
 	private LinearLayout mLayoutLeftImageButtonLayout;
 	private ImageButton mLeftImageButton;
 	private onLeftImageButtonClickListener mLeftImageButtonClickListener;
+
+	private LinearLayout.LayoutParams params;
 
 	public enum HeaderStyle {
 		DEFAULT_TITLE, TITLE_LIFT_IMAGEBUTTON, TITLE_RIGHT_IMAGEBUTTON, TITLE_DOUBLE_IMAGEBUTTON;
@@ -154,18 +157,20 @@ public class HeaderLayout extends LinearLayout {
 			setOnRightImageButtonClickListener(onRightImageButtonClickListener);
 		}
 	}
-	
+
 	public void setTitleAndRightText(CharSequence title,String text,
-			onRightImageButtonClickListener onRightImageButtonClickListener) {
+									 onRightImageButtonClickListener onRightImageButtonClickListener) {
 		setDefaultTitle(title);
 		mLayoutRightContainer.setVisibility(View.VISIBLE);
-		mRightImageButton.setWidth(PixelUtil.dp2px(50));
-		mRightImageButton.setHeight(PixelUtil.dp2px(70));
+		params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		mRightImageButton.setLayoutParams(params);
+		mRightImageButton.setBackgroundResource(R.drawable.register_btn_selector);
 		mRightImageButton.setText(text);
 		mRightImageButton.setTextSize(14);
 		setOnRightImageButtonClickListener(onRightImageButtonClickListener);
 	}
-	
+
+
 	public void setTitleAndRightImageButton(CharSequence title, int backid,
 			onRightImageButtonClickListener onRightImageButtonClickListener) {
 		setDefaultTitle(title);
