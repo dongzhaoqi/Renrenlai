@@ -1,6 +1,7 @@
 package com.siti.renrenlai.fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -58,18 +59,25 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         int id = v.getId();
+        Intent intent = null;
         switch (id){
             case R.id.layout_name:
                 startAnimActivity(MyProfileActivity.class);
                 break;
             case R.id.layout_favorite:
-                startAnimActivity(MyActivity.class);
+                intent = new Intent(getActivity(),MyActivity.class);
+                intent.putExtra("pos",0);
+                startAnimActivity(intent);
                 break;
             case R.id.layout_enroll:
-                startAnimActivity(MyActivity.class);
+                intent = new Intent(getActivity(),MyActivity.class);
+                intent.putExtra("pos",1);
+                startAnimActivity(intent);
                 break;
             case R.id.layout_launch:
-                startAnimActivity(MyActivity.class);
+                intent = new Intent(getActivity(),MyActivity.class);
+                intent.putExtra("pos",2);
+                startAnimActivity(intent);
                 break;
             case R.id.layout_logout:
                 SharedPreferencesUtil.writeString(SharedPreferencesUtil

@@ -26,4 +26,10 @@
     <string name="apply">申请</string>
     <string name="project">项目一览</string>
 
+    <!--我的-->
+    <string name="txt_favorite">收藏</string>
+    <string name="txt_enroll">报名</string>
+    <string name="txt_launch">发起</string>
+    <string name="txt_my_activity">我的活动</string>
+
 </resources>
