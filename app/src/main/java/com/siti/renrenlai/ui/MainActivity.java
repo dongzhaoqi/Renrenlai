@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 
+import com.igexin.sdk.PushManager;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.fragment.ActivityFragment;
 import com.siti.renrenlai.fragment.FindFragment;
@@ -27,6 +28,9 @@ public class MainActivity extends BaseActivity{
 
         initView();
         initTab();
+
+
+        PushManager.getInstance().initialize(this.getApplicationContext());
     }
 
     private void initTab() {

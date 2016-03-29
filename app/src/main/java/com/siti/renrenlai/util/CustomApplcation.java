@@ -50,6 +50,7 @@ public class CustomApplcation extends Application {
 		Log.e("", "application");
 		mInstance = this;
 		initImageLoader(getApplicationContext());
+
 	}
 
 	public static CustomApplcation getInstance() {

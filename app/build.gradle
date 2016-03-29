@@ -41,4 +41,7 @@ dependencies {
     compile(name:'material-search', ext:'aar')
     compile 'com.github.dexafree:materiallist:3.1.3'
     compile 'net.yanzm:mth:1.0.4'
+    compile files('libs/GetuiSDK-xxx.jar')
+    compile files('libs/GetuiExt-xxx.jar')
+    compile 'com.android.support:support-v4'
 }
