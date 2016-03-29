@@ -44,4 +44,5 @@ dependencies {
     compile files('libs/GetuiSDK-xxx.jar')
     compile files('libs/GetuiExt-xxx.jar')
     compile 'com.android.support:support-v4'
+    compile 'com.getbase:floatingactionbutton:1.10.1'
 }

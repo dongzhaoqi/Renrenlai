@@ -57,6 +57,7 @@
         <activity android:name=".ui.IntroductionActivity"/>
         <activity android:name=".ui.ApplyActivity"/>
         <activity android:name=".ui.ViewProjectActivity"/>
+        <activity android:name=".ui.LaunchActivity"/>
 
 
         <!--个推SDK配置开始-->

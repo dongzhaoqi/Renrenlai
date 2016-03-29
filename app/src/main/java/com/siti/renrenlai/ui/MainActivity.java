@@ -6,18 +6,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 
+import com.getbase.floatingactionbutton.AddFloatingActionButton;
+import com.getbase.floatingactionbutton.FloatingActionButton;
 import com.igexin.sdk.PushManager;
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.fragment.ActivityFragment;
 import com.siti.renrenlai.fragment.FindFragment;
 import com.siti.renrenlai.fragment.MeFragment;
 
-public class MainActivity extends BaseActivity{
+public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private Button[] mTabs;
+    private AddFloatingActionButton btn_activity;
     private Fragment[] mFragments;
     private FindFragment mFindFragment;
-    private ActivityFragment mActivityFragment;
     private MeFragment mMeFragment;
     private int currentTabIndex = 0;
     private int index;
@@ -29,28 +30,27 @@ public class MainActivity extends BaseActivity{
         initView();
         initTab();
 
-
         PushManager.getInstance().initialize(this.getApplicationContext());
     }
 
     private void initTab() {
         mFindFragment = new FindFragment();
-        mActivityFragment = new ActivityFragment();
         mMeFragment = new MeFragment();
-        mFragments = new Fragment[]{mFindFragment,mActivityFragment,mMeFragment};
+        mFragments = new Fragment[]{mFindFragment, mMeFragment};
         getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_container,mFindFragment)
                 .show(mFindFragment).commit();
     }
 
     private void initView() {
-        mTabs = new Button[3];
+        mTabs = new Button[2];
         mTabs[0] = (Button) findViewById(R.id.btn_find);
-        mTabs[1] = (Button) findViewById(R.id.btn_activity);
-        mTabs[2] = (Button) findViewById(R.id.btn_me);
-
+        mTabs[1] = (Button) findViewById(R.id.btn_me);
         mTabs[0].setSelected(true);
         index = 0;
+
+        btn_activity = (AddFloatingActionButton) findViewById(R.id.btn_activity);
+        btn_activity.setOnClickListener(this);
     }
 
     public void onTabSelect(View v){
@@ -59,11 +59,8 @@ public class MainActivity extends BaseActivity{
             case R.id.btn_find:
                 index = 0;
                 break;
-            case R.id.btn_activity:
-                index = 1;
-                break;
             case R.id.btn_me:
-                index = 2;
+                index = 1;
                 break;
         }
 
@@ -81,4 +78,12 @@ public class MainActivity extends BaseActivity{
 
     }
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+            case R.id.btn_activity:
+                startAnimActivity(LaunchActivity.class);
+                break;
+        }
+    }
 }

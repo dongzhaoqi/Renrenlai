@@ -1,66 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" tools:context=".MainActivity">
-
-    <LinearLayout
-        android:id="@+id/main_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:gravity="center_vertical"
-        android:layout_alignParentBottom="true"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_find"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/layout_top_border"
-            android:drawableTop="@drawable/tab_find_btn"
-            android:onClick="onTabSelect"
-            android:paddingBottom="2dip"
-            android:paddingTop="7dip"
-            android:scaleType="matrix"
-            android:text="@string/tab_find"
-            android:textColor="@drawable/tab_textcolor"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btn_activity"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/layout_top_border"
-            android:drawableTop="@drawable/tab_find_btn"
-            android:onClick="onTabSelect"
-            android:paddingBottom="2dip"
-            android:paddingTop="7dip"
-            android:scaleType="matrix"
-            android:text="@string/tab_activity"
-            android:textColor="@drawable/tab_textcolor"
-            android:textSize="12sp" />
-
-        <Button
-            android:id="@+id/btn_me"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/layout_top_border"
-            android:drawableTop="@drawable/tab_find_btn"
-            android:onClick="onTabSelect"
-            android:paddingTop="10dip"
-            android:scaleType="matrix"
-            android:text="@string/tab_me"
-            android:textColor="@drawable/tab_textcolor"
-            android:textSize="12sp" />
-
-    </LinearLayout>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:fab="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <RelativeLayout
-        android:id="@+id/fragment_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/main_bottom" />
+        tools:context=".MainActivity">
 
-</RelativeLayout>
+        <LinearLayout
+            android:id="@+id/main_bottom"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_height"
+            android:layout_alignParentBottom="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_find"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/layout_top_border"
+                android:drawableTop="@drawable/tab_find_btn"
+                android:onClick="onTabSelect"
+                android:paddingTop="12dp"
+                android:scaleType="matrix"
+                android:text="@string/tab_find"
+                android:textColor="@drawable/tab_textcolor"
+                android:textSize="@dimen/text_size_15" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/tab_activity"
+                android:textColor="@drawable/tab_textcolor"
+                android:gravity="bottom"
+                android:textSize="@dimen/text_size_15" />
+
+            <Button
+                android:id="@+id/btn_me"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/layout_top_border"
+                android:drawableTop="@drawable/tab_find_btn"
+                android:onClick="onTabSelect"
+                android:paddingTop="12dp"
+                android:scaleType="matrix"
+                android:text="@string/tab_me"
+                android:textColor="@drawable/tab_textcolor"
+                android:textSize="@dimen/text_size_15" />
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@id/main_bottom" />
+
+    </RelativeLayout>
+
+    <com.getbase.floatingactionbutton.AddFloatingActionButton
+        android:id="@+id/btn_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_marginBottom="12dp"
+        fab:fab_colorNormal="@color/top_bar_color"
+        fab:fab_colorPressed="@color/colorPrimary"
+        fab:fab_plusIconColor="@color/white" />
+</FrameLayout>
