@@ -10,7 +10,7 @@ import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 /**
  * Created by Dong on 2016/3/22.
  */
-public class ActivityInfo extends BaseActivity implements OnClickListener{
+public class ActivityInfo extends BaseActivity implements OnClickListener {
 
 
     @Override
@@ -24,10 +24,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener{
         initTopBarForBoth("活动详情", android.R.drawable.ic_menu_share, new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
-
+                showShare();
             }
         });
 
+    }
+
+    private void showShare() {
     }
 
 
