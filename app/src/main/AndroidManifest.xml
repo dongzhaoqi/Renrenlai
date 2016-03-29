@@ -24,6 +24,10 @@
         <activity android:name=".ui.MyActivity"/>
         <activity android:name=".ui.SearchActivity"/>
         <activity android:name=".ui.ActivityInfo"/>
+        <activity android:name=".ui.IntroductionActivity"/>
+        <activity android:name=".ui.ApplyActivity"/>
+        <activity android:name=".ui.ViewProjectActivity"/>
+
     </application>
 
 </manifest>

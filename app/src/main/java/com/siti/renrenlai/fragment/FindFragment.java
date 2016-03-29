@@ -7,12 +7,17 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.ItemBean;
 import com.siti.renrenlai.ui.ActivityInfo;
+import com.siti.renrenlai.ui.ApplyActivity;
+import com.siti.renrenlai.ui.IntroductionActivity;
 import com.siti.renrenlai.ui.SearchActivity;
+import com.siti.renrenlai.ui.ViewProjectActivity;
 import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
@@ -22,12 +27,14 @@ import java.util.List;
 /**
  * Created by Dong on 3/22/2016.
  */
-public class FindFragment extends FragmentBase {
+public class FindFragment extends FragmentBase implements View.OnClickListener{
 
     private View view;
     private Context mContext;
     private RecyclerView mRecyclerView;
     private List<ItemBean> itemList;
+    private RelativeLayout layout_introduction, layout_apply, layout_view_project;
+    private ActivityAdapter adapter;
     private String[] images = new String[]{
             "http://api.androidhive.info/music/images/adele.png",
             "http://img1.imgtn.bdimg.com/it/u=4092462854,1557898995&fm=21&gp=0.jpg",
@@ -50,7 +57,9 @@ public class FindFragment extends FragmentBase {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
+        initData();
         initView();
+        initEvent();
     }
 
     private void initView() {
@@ -62,21 +71,17 @@ public class FindFragment extends FragmentBase {
             }
         });
 
-        initData();
+        layout_introduction = (RelativeLayout) findViewById(R.id.layout_introduction);
+        layout_apply = (RelativeLayout) findViewById(R.id.layout_apply);
+        layout_view_project = (RelativeLayout) findViewById(R.id.layout_view_project);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        ActivityAdapter adapter = new ActivityAdapter(getActivity(), itemList);
+        adapter = new ActivityAdapter(getActivity(), itemList);
         mRecyclerView.setAdapter(adapter);
-        adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, Object data) {
-                showToast(data.toString());
-                startAnimActivity(ActivityInfo.class);
-            }
-        });
+
     }
 
     private void initData() {
@@ -89,4 +94,32 @@ public class FindFragment extends FragmentBase {
         }
     }
 
+    private void initEvent(){
+        layout_introduction.setOnClickListener(this);
+        layout_apply.setOnClickListener(this);
+        layout_view_project.setOnClickListener(this);
+        adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, Object data) {
+                //showToast(data.toString());
+                startAnimActivity(ActivityInfo.class);
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.layout_introduction:
+                startAnimActivity(IntroductionActivity.class);
+                break;
+            case R.id.layout_apply:
+                startAnimActivity(ApplyActivity.class);
+                break;
+            case R.id.layout_view_project:
+                startAnimActivity(ViewProjectActivity.class);
+                break;
+        }
+    }
 }
