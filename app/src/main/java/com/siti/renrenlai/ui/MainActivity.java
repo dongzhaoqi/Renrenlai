@@ -22,6 +22,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private MeFragment mMeFragment;
     private int currentTabIndex = 0;
     private int index;
+    private long firstTime;     //记录初次按下后退键的时间
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -85,5 +86,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 startAnimActivity(LaunchActivity.class);
                 break;
         }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(System.currentTimeMillis() - firstTime < 2000){
+            super.onBackPressed();
+        }else{
+            showToast("再按一次退出");
+        }
+        firstTime = System.currentTimeMillis();
     }
 }
