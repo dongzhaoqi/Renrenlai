@@ -14,7 +14,6 @@
 
     <string name="search_hint">请输入关键字</string>
 
-
     <!--bottom item-->
     <string name="tab_find">发现</string>
     <string name="tab_activity">发起活动</string>
@@ -31,5 +30,19 @@
     <string name="txt_enroll">报名</string>
     <string name="txt_launch">发起</string>
     <string name="txt_my_activity">我的活动</string>
+
+    <!--发起活动-->
+    <string name="txt_category">活动大类</string>
+    <string name="txt_interest">兴趣</string>
+    <string name="txt_help">互助</string>
+    <string name="txt_advice">意见征集</string>
+    <string name="txt_theme">活动主题:</string>
+    <string name="txt_time">活动时间:</string>
+    <string name="txt_end">报名截止:</string>
+    <string name="txt_place">活动地点:</string>
+    <string name="txt_detail">活动详情:</string>
+    <string name="txt_cover">选择封面:</string>
+    <string name="txt_preview">预览:</string>
+    <string name="txt_publish">立即发布:</string>
 
 </resources>

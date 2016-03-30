@@ -10,9 +10,169 @@
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="发起活动" />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_150"
+                android:background="@drawable/layout_bottom_border">
+
+                <com.siti.renrenlai.view.TextViewVertical
+                    android:id="@+id/txt_category"
+                    android:layout_width="56dp"
+                    android:layout_height="match_parent"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/txt_category"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/text_size_16" />
+                <View
+                    android:layout_width="1dp"
+                    android:layout_height="150dp"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="@color/divider"/>
+
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/txt_interest"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/txt_interest" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/txt_interest"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="@color/divider"/>
+
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/txt_help"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/txt_interest"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/txt_help" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_below="@id/txt_help"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="@color/divider"/>
+
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/txt_advice"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_below="@id/txt_help"
+                    android:layout_toRightOf="@id/txt_category"
+                    android:background="?attr/selectableItemBackground"
+                    android:gravity="center"
+                    android:text="@string/txt_advice" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_bottom_border"
+                android:paddingBottom="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8"
+                android:paddingLeft="@dimen/margin_8">
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/str_subject"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_theme"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:layout_toRightOf="@id/str_subject"
+                    android:background="@null"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_bottom_border"
+                android:paddingBottom="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8"
+                android:paddingLeft="@dimen/margin_8">
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/str_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_time"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:layout_toRightOf="@id/str_time"
+                    android:background="@null"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_bottom_border"
+                android:paddingBottom="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8"
+                android:paddingLeft="@dimen/margin_8">
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/str_end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_end"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:layout_toRightOf="@id/str_end"
+                    android:background="@null"/>
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/layout_bottom_border"
+                android:paddingBottom="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8"
+                android:paddingLeft="@dimen/margin_8">
+                <TextView
+                    style="@style/activity_text_style"
+                    android:id="@+id/str_place"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_place"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:layout_toRightOf="@id/str_place"
+                    android:background="@null"/>
+            </RelativeLayout>
+
+
+
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

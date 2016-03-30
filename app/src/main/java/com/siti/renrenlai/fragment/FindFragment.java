@@ -1,6 +1,7 @@
 package com.siti.renrenlai.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,14 +38,12 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private ActivityAdapter adapter;
     private String[] images = new String[]{
             "http://api.androidhive.info/music/images/adele.png",
-            "http://img1.imgtn.bdimg.com/it/u=4092462854,1557898995&fm=21&gp=0.jpg",
             "http://api.androidhive.info/music/images/eminem.png",
             "http://www.ld12.com/upimg358/allimg/c140921/14112A4V34010-219218.jpg",
             "http://www.ld12.com/upimg358/allimg/c150619/1434F6225920Z-105122.jpg",
             "http://api.androidhive.info/music/images/mj.png"
     };
-    private String[] strs = new String[]{"item1","item2","item3","item4","item5",
-            "item6"};
+    private String[] strs = new String[]{"item1","item2","item3","item4","item5"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -102,7 +101,13 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             @Override
             public void onItemClick(View view, Object data) {
                 //showToast(data.toString());
-                startAnimActivity(ActivityInfo.class);
+                int pos = Integer.parseInt(data.toString());
+                Intent intent = new Intent(getActivity(),ActivityInfo.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("name", itemList.get(pos).getTv());
+                bundle.putString("img", itemList.get(pos).getImg());
+                intent.putExtras(bundle);
+                startAnimActivity(intent);
             }
         });
     }

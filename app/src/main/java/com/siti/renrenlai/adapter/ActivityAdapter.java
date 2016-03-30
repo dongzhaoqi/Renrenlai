@@ -3,6 +3,7 @@ package com.siti.renrenlai.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,6 +32,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
     private Context mContext;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+    static int pos = 0;
 
     public ActivityAdapter(Context context, List<ItemBean> ItemBeans) {
         this.mContext = context;
@@ -54,8 +56,14 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
+        View v;
         // 给ViewHolder设置布局文件
-        View v = inflater.inflate(R.layout.card_layout, viewGroup, false);
+        if(pos % 2 == 0) {
+            v = inflater.inflate(R.layout.card_layout, viewGroup, false);
+        } else {
+            v = inflater.inflate(R.layout.card_layout2, viewGroup, false);
+        }
+        pos++;
         ViewHolder vh = new ViewHolder(v);
         //将创建的View注册点击事件
         v.setOnClickListener(this);

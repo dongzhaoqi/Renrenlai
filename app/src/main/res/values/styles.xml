@@ -34,6 +34,13 @@
         <item name="android:paddingLeft">8dip</item>
     </style>
 
+    <style name="activity_text_style" parent="@style/more_text_style">
+        <item name="android:paddingLeft">8dip</item>
+        <item name="android:gravity">center</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+
     <style name="MaterialSearchViewStyle">
         <item name="searchBackground">@color/white</item>
         <item name="searchVoiceIcon">@drawable/ic_action_voice_search</item>

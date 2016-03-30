@@ -16,6 +16,7 @@
     <color name="black">#000</color>
     <color name="white">#FFF</color>
     <color name="edit_hint">#A1A1A1</color>
+    <color name="divider">#E5E5E5</color>
 
     <color name="color_bottom_text_normal">#9DA0A4</color>
     <color name="color_bottom_text_press">#F56E6E</color>
