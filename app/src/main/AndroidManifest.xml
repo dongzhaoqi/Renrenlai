@@ -50,8 +50,6 @@
         </activity>
 
 
-
-
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.LoginActivity"/>
         <activity android:name=".ui.RegisterActivity"/>
@@ -62,7 +60,9 @@
         <activity android:name=".ui.IntroductionActivity"/>
         <activity android:name=".ui.ApplyActivity"/>
         <activity android:name=".ui.ViewProjectActivity"/>
-        <activity android:name=".ui.LaunchActivity"/>
+        <activity android:name=".ui.LaunchActivity" android:windowSoftInputMode="stateHidden|adjustUnspecified"/>
+        <activity android:name=".ui.MessageActivity"/>
+        <activity android:name=".ui.ModifyPasswordActivity"/>
 
 
         <!--个推SDK配置开始-->

@@ -13,8 +13,10 @@
     <dimen name="height_150">150dp</dimen>
 
     <dimen name="view_height">0.1dp</dimen>
-    <dimen name="card_height">64dp</dimen>
+    <dimen name="divider_height">0.1dp</dimen>
+    <dimen name="height_50">50dp</dimen>
     <dimen name="bottom_height">58dp</dimen>
+    <dimen name="card_height">64dp</dimen>
 
     <dimen name="text_size_15">15sp</dimen>
     <dimen name="text_size_16">16sp</dimen>

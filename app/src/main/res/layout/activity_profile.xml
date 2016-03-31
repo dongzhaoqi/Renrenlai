@@ -59,14 +59,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_nickname"
-            android:text="昵称" />
+            android:text="@string/txt_nick_name" />
 
-        <ImageView
+        <TextView
+            style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+            android:text="张三"/>
+
     </RelativeLayout>
 
     <View
@@ -94,14 +95,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_realname"
-            android:text="真实姓名" />
+            android:text="@string/txt_real_name" />
 
-        <ImageView
+        <TextView
+            style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+            android:text="张三"/>
     </RelativeLayout>
 
     <View
@@ -130,14 +131,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_gender"
-            android:text="性别" />
+            android:text="@string/txt_gender" />
 
-        <ImageView
+        <TextView
+            style="@style/me_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+            android:text="男"/>
     </RelativeLayout>
 
     <View
@@ -166,8 +167,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_community"
-            android:text="所在社区" />
+            android:text="@string/txt_community" />
 
+        <TextView
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="幸福小区"/>
     </RelativeLayout>
 
     <View
@@ -196,8 +204,15 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_tel"
-            android:text="手机号码" />
+            android:text="@string/txt_tel" />
 
+        <TextView
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_alignParentRight="true"
+            android:text="13562312510"/>
     </RelativeLayout>
 
     <View
@@ -226,7 +241,14 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_password"
-            android:text="修改密码" />
+            android:text="@string/txt_password" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
 
     </RelativeLayout>
 

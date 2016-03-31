@@ -31,6 +31,20 @@
     <string name="txt_launch">发起</string>
     <string name="txt_my_activity">我的活动</string>
 
+    <!--我的资料-->
+    <string name="txt_nick_name">昵称</string>
+    <string name="txt_real_name">真实姓名</string>
+    <string name="txt_gender">性别</string>
+    <string name="txt_community">所在社区</string>
+    <string name="txt_tel">手机号码</string>
+    <string name="txt_password">修改密码</string>
+
+    <!--修改密码-->
+    <string name="txt_old_password">原密码</string>
+    <string name="txt_confirm_password">确认密码</string>
+    <string name="txt_new_password">新密码</string>
+
+
     <!--发起活动-->
     <string name="txt_category">活动大类</string>
     <string name="txt_interest">兴趣</string>
@@ -42,7 +56,7 @@
     <string name="txt_place">活动地点:</string>
     <string name="txt_detail">活动详情:</string>
     <string name="txt_cover">选择封面:</string>
-    <string name="txt_preview">预览:</string>
-    <string name="txt_publish">立即发布:</string>
+    <string name="txt_preview">预览</string>
+    <string name="txt_publish">立即发布</string>
 
 </resources>

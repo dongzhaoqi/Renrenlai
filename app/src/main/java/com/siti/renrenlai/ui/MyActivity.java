@@ -49,6 +49,7 @@ public class MyActivity extends BaseActivity implements OnClickListener{
             tabHost.addTab(pagerAdapter.getPageTitle(i));
         }
 
+
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOnPageChangeListener(tabHost);

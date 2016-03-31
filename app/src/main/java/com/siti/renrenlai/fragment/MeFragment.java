@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.ui.MessageActivity;
 import com.siti.renrenlai.ui.MyActivity;
 import com.siti.renrenlai.ui.MyProfileActivity;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -22,8 +23,8 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
 
     private View view;
     private RelativeLayout layout_name;
-    private LinearLayout layout_favorite,layout_enroll,layout_launch;
-    private RelativeLayout layout_logout;
+    private LinearLayout layout_favorite, layout_enroll, layout_launch;
+    private RelativeLayout layout_logout, layout_message;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -47,6 +48,7 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
         layout_launch = (LinearLayout) findViewById(R.id.layout_launch);
 
         layout_logout = (RelativeLayout) findViewById(R.id.layout_logout);
+        layout_message = (RelativeLayout) findViewById(R.id.layout_message);
 
         layout_name.setOnClickListener(this);
         layout_favorite.setOnClickListener(this);
@@ -54,6 +56,7 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
         layout_launch.setOnClickListener(this);
 
         layout_logout.setOnClickListener(this);
+        layout_message.setOnClickListener(this);
     }
 
     @Override
@@ -78,6 +81,9 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
                 intent = new Intent(getActivity(),MyActivity.class);
                 intent.putExtra("pos",2);
                 startAnimActivity(intent);
+                break;
+            case R.id.layout_message:
+                startAnimActivity(MessageActivity.class);
                 break;
             case R.id.layout_logout:
                 SharedPreferencesUtil.writeString(SharedPreferencesUtil
