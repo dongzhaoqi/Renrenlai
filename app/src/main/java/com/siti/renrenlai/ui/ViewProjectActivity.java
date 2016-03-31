@@ -21,7 +21,6 @@ public class ViewProjectActivity extends BaseActivity implements OnClickListener
 
     private void initViews() {
         initTopBarForLeft("项目一览");
-
     }
 
 
