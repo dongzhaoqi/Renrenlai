@@ -42,6 +42,7 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         tabHost.setType(MaterialTabHost.Type.FullScreenWidth);
 //        tabHost.setType(MaterialTabHost.Type.Centered);
 //        tabHost.setType(MaterialTabHost.Type.LeftOffset);
+        tabHost.setElevation(0);
 
         SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         for (int i = 0; i < pagerAdapter.getCount(); i++) {

@@ -38,6 +38,7 @@
         <item name="android:paddingLeft">8dip</item>
         <item name="android:gravity">center</item>
         <item name="android:singleLine">true</item>
+        <item name="android:textStyle">normal</item>
     </style>
 
 

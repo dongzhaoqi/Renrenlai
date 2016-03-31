@@ -31,59 +31,78 @@
                     android:background="?attr/selectableItemBackground"
                     android:gravity="center"
                     android:text="@string/txt_category"
-                    android:textStyle="bold"
-                    android:textSize="@dimen/text_size_16" />
+                    android:textSize="@dimen/text_size_16"
+                    android:textStyle="bold" />
+
                 <View
                     android:layout_width="1dp"
                     android:layout_height="150dp"
                     android:layout_toRightOf="@id/txt_category"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
-                <TextView
-                    style="@style/activity_text_style"
+                <RelativeLayout
                     android:id="@+id/txt_interest"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_toRightOf="@id/txt_category"
                     android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/txt_interest" />
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/activity_text_style"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/icon_interest"
+                        android:text="@string/txt_interest" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/txt_interest"
                     android:layout_toRightOf="@id/txt_category"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
-                <TextView
-                    style="@style/activity_text_style"
+                <RelativeLayout
                     android:id="@+id/txt_help"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/txt_interest"
                     android:layout_toRightOf="@id/txt_category"
                     android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/txt_help" />
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/activity_text_style"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/icon_help"
+                        android:text="@string/txt_help" />
+                </RelativeLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_below="@id/txt_help"
                     android:layout_toRightOf="@id/txt_category"
-                    android:background="@color/divider"/>
+                    android:background="@color/divider" />
 
-                <TextView
-                    style="@style/activity_text_style"
+                <RelativeLayout
                     android:id="@+id/txt_advice"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_below="@id/txt_help"
                     android:layout_toRightOf="@id/txt_category"
                     android:background="?attr/selectableItemBackground"
-                    android:gravity="center"
-                    android:text="@string/txt_advice" />
+                    android:gravity="center">
+
+                    <TextView
+                        style="@style/activity_text_style"
+                        android:layout_width="120dp"
+                        android:layout_height="match_parent"
+                        android:drawableLeft="@drawable/icon_advice"
+                        android:text="@string/txt_advice" />
+                </RelativeLayout>
             </RelativeLayout>
 
             <RelativeLayout
@@ -91,20 +110,24 @@
                 android:layout_height="48dp"
                 android:background="@drawable/layout_bottom_border"
                 android:paddingBottom="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_8"
-                android:paddingLeft="@dimen/margin_8">
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8">
+
                 <TextView
-                    style="@style/activity_text_style"
                     android:id="@+id/str_subject"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/txt_theme"/>
+                    android:text="@string/txt_theme" />
+
                 <EditText
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/margin_8"
                     android:layout_toRightOf="@id/str_subject"
-                    android:background="@null"/>
+                    android:background="@null"
+                    android:nextFocusDown="@+id/et_time"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:singleLine="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -112,20 +135,25 @@
                 android:layout_height="48dp"
                 android:background="@drawable/layout_bottom_border"
                 android:paddingBottom="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_8"
-                android:paddingLeft="@dimen/margin_8">
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8">
+
                 <TextView
-                    style="@style/activity_text_style"
                     android:id="@+id/str_time"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/txt_time"/>
+                    android:text="@string/txt_time" />
+
                 <EditText
+                    android:id="@+id/et_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/margin_8"
                     android:layout_toRightOf="@id/str_time"
-                    android:background="@null"/>
+                    android:background="@null"
+                    android:nextFocusDown="@+id/et_end"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:singleLine="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -133,20 +161,25 @@
                 android:layout_height="48dp"
                 android:background="@drawable/layout_bottom_border"
                 android:paddingBottom="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_8"
-                android:paddingLeft="@dimen/margin_8">
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8">
+
                 <TextView
-                    style="@style/activity_text_style"
                     android:id="@+id/str_end"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/txt_end"/>
+                    android:text="@string/txt_end" />
+
                 <EditText
+                    android:id="@+id/et_end"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/margin_8"
                     android:layout_toRightOf="@id/str_end"
-                    android:background="@null"/>
+                    android:background="@null"
+                    android:nextFocusDown="@+id/et_place"
+                    android:paddingLeft="@dimen/margin_8"
+                    android:singleLine="true" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -154,23 +187,25 @@
                 android:layout_height="48dp"
                 android:background="@drawable/layout_bottom_border"
                 android:paddingBottom="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_8"
-                android:paddingLeft="@dimen/margin_8">
+                android:paddingLeft="@dimen/margin_8"
+                android:paddingTop="@dimen/margin_8">
+
                 <TextView
-                    style="@style/activity_text_style"
                     android:id="@+id/str_place"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/txt_place"/>
+                    android:text="@string/txt_place" />
+
                 <EditText
+                    android:id="@+id/et_place"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:paddingLeft="@dimen/margin_8"
                     android:layout_toRightOf="@id/str_place"
-                    android:background="@null"/>
+
+                    android:background="@null"
+                    android:paddingLeft="@dimen/margin_8" />
             </RelativeLayout>
-
-
 
 
         </LinearLayout>
