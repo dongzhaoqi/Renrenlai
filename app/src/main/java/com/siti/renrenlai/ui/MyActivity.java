@@ -11,6 +11,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.fragment.EnrollFragment;
+import com.siti.renrenlai.fragment.FavoriteFragment;
+import com.siti.renrenlai.fragment.LaunchFragment;
 
 import net.yanzm.mth.MaterialTabHost;
 
@@ -22,6 +25,10 @@ import java.util.Locale;
 public class MyActivity extends BaseActivity implements OnClickListener{
 
     private int pos;
+    private static FavoriteFragment mFavoriteFragment;
+    private EnrollFragment mEnrollFragment;
+    private LaunchFragment mLaunchFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,6 +41,11 @@ public class MyActivity extends BaseActivity implements OnClickListener{
 
     private void initViews() {
         initTopBarForLeft("我的活动");
+
+        mFavoriteFragment = new FavoriteFragment();
+        mEnrollFragment = new EnrollFragment();
+        mLaunchFragment = new LaunchFragment();
+
         pos = getIntent().getIntExtra("pos",0);
     }
 
@@ -48,7 +60,6 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         for (int i = 0; i < pagerAdapter.getCount(); i++) {
             tabHost.addTab(pagerAdapter.getPageTitle(i));
         }
-
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
@@ -78,7 +89,14 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+
+            if(position == 0){
+                return mFavoriteFragment;
+            }else if(position == 1){
+                return mEnrollFragment;
+            }else{
+                return mLaunchFragment;
+            }
         }
 
         @Override
@@ -99,44 +117,6 @@ public class MyActivity extends BaseActivity implements OnClickListener{
                     return getString(R.string.txt_launch).toUpperCase(l);
             }
             return null;
-        }
-    }
-
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            int pos = getArguments().getInt(ARG_SECTION_NUMBER);
-            View rootView = null;
-            if(pos == 1) {
-                rootView = inflater.inflate(R.layout.fragment_favorite, container, false);
-            }else if(pos == 2) {
-                rootView = inflater.inflate(R.layout.fragment_enroll, container, false);
-            }else {
-                rootView = inflater.inflate(R.layout.fragment_launch, container, false);
-            }
-            return rootView;
         }
     }
 
