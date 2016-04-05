@@ -13,7 +13,7 @@ public class PixelUtil {
 	/**
 	 * The context.
 	 */
-	private static Context mContext = CustomApplcation.getmInstance();
+	private static Context mContext = CustomApplcation.getInstance();
 
 	/**
 	 * dpת px.

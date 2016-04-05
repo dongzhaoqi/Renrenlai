@@ -4,6 +4,9 @@ import android.app.Application;
 import android.content.Context;
 import android.util.Log;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.toolbox.Volley;
 import com.nostra13.universalimageloader.cache.disc.impl.UnlimitedDiskCache;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.cache.memory.impl.LruMemoryCache;
@@ -28,7 +31,12 @@ public class CustomApplcation extends Application {
 	public static int mScreenWidth;
 	public static int mScreenHight;
 
-	public static CustomApplcation getmInstance() {
+	/**
+	 * Global request queue for Volley
+	 */
+	private RequestQueue mRequestQueue;
+
+	public static synchronized CustomApplcation getInstance() {
 		return mInstance;
 	}
 
@@ -53,8 +61,19 @@ public class CustomApplcation extends Application {
 
 	}
 
-	public static CustomApplcation getInstance() {
-		return mInstance;
+	public RequestQueue getRequestQueue() {
+		// lazy initialize the request queue, the queue instance will be
+		// created when it is accessed for the first time
+		if (mRequestQueue == null) {
+			mRequestQueue = Volley.newRequestQueue(getApplicationContext());
+		}
+
+		return mRequestQueue;
+	}
+
+	public <T> void addToRequestQueue(Request<T> req) {
+
+		getRequestQueue().add(req);
 	}
 
 	private void initImageLoader(Context context){
