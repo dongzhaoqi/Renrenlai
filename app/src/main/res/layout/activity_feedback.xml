@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SampleActivity$PlaceholderFragment">
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+
+    <EditText
+        android:id="@+id/et_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:hint="@string/str_tel"
+        android:textColorHint="@color/edit_hint"
+        android:textSize="@dimen/text_size_16"
+        android:background="@null"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minLines="5"
+        android:gravity="top"
+        android:padding="@dimen/activity_horizontal_margin"
+        android:hint="@string/txt_feedback"
+        android:textColorHint="@color/edit_hint"
+        android:textSize="@dimen/text_size_16"
+        android:background="@null"/>
+</LinearLayout>

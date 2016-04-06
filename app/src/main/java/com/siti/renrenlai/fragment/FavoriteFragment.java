@@ -2,24 +2,32 @@ package com.siti.renrenlai.fragment;
 
 import android.animation.ObjectAnimator;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.ScrollView;
-
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.TimeLineAdapter;
+import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.view.FragmentBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Dong on 2016/4/1.
  */
 public class FavoriteFragment extends FragmentBase {
     private View view;
-    private ScrollView mScrollView;
     private Button btn_to_top;
+    private RecyclerView mRecyclerView;
+    private LinearLayoutManager linearLayoutManager;
+    private TimeLineAdapter mTimeLineAdapter;
+
+    private List<TimeLineModel> mDataList = new ArrayList<>();
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -31,18 +39,24 @@ public class FavoriteFragment extends FragmentBase {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
+
+        initData();
     }
 
     private void initView(){
-        mScrollView= (ScrollView) findViewById(R.id.mScrollView);
         btn_to_top= (Button) findViewById(R.id.btn_to_top);
 
-        mScrollView.getViewTreeObserver().addOnScrollChangedListener(new ViewTreeObserver.OnScrollChangedListener() {
+        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        linearLayoutManager = new LinearLayoutManager(getActivity());
+        mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
             @Override
-            public void onScrollChanged() {
-                if(mScrollView.getScrollY() > 500){
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
                     btn_to_top.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     btn_to_top.setVisibility(View.INVISIBLE);
                 }
             }
@@ -51,9 +65,24 @@ public class FavoriteFragment extends FragmentBase {
         btn_to_top.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ObjectAnimator.ofInt(mScrollView, "scrollY", 0).setDuration(1000).start();
+                linearLayoutManager.scrollToPositionWithOffset(0, 0);
+                //ObjectAnimator.ofInt(mRecyclerView, "scrollY", 0).setDuration(1000).start();
             }
         });
+    }
+
+
+
+    private void initData(){
+        for(int i = 0;i < 30;i++) {
+            TimeLineModel model = new TimeLineModel();
+            model.setName("Random"+i);
+            model.setAge(i);
+            mDataList.add(model);
+        }
+
+        mTimeLineAdapter = new TimeLineAdapter(mDataList);
+        mRecyclerView.setAdapter(mTimeLineAdapter);
     }
 
 }

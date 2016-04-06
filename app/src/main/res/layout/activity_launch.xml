@@ -146,7 +146,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_time" />
 
-                <EditText
+                <TextView
                     android:id="@+id/et_time"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"

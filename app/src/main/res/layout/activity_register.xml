@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:gravity="center_horizontal"
     android:orientation="vertical"
-    tools:context="com.siti.renrenlai.ui.RegisterActivity">
+    tools:context="com.siti.renrenlai.activity.RegisterActivity">
 
     <include
         android:id="@+id/common_actionbar"

@@ -1,4 +1,4 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -9,18 +9,18 @@ import com.siti.renrenlai.R;
 /**
  * Created by Dong on 2016/3/22.
  */
-public class ApplyActivity extends BaseActivity implements OnClickListener{
+public class IntroductionActivity extends BaseActivity implements OnClickListener{
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_apply);
+        setContentView(R.layout.activity_introduction);
         initViews();
     }
 
     private void initViews() {
-        initTopBarForLeft("申请");
+        initTopBarForLeft("简介");
 
     }
 

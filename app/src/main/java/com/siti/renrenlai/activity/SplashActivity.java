@@ -1,6 +1,5 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;

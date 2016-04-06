@@ -41,7 +41,7 @@
         android:label="@string/app_name"
         android:theme="@style/AppTheme"
         android:supportsRtl="true">
-        <activity android:name=".ui.SplashActivity" >
+        <activity android:name=".activity.SplashActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -50,19 +50,20 @@
         </activity>
 
 
-        <activity android:name=".ui.MainActivity"/>
-        <activity android:name=".ui.LoginActivity"/>
-        <activity android:name=".ui.RegisterActivity"/>
-        <activity android:name=".ui.MyProfileActivity"/>
-        <activity android:name=".ui.MyActivity"/>
-        <activity android:name=".ui.SearchActivity"/>
-        <activity android:name=".ui.ActivityInfo"/>
-        <activity android:name=".ui.IntroductionActivity"/>
-        <activity android:name=".ui.ApplyActivity"/>
-        <activity android:name=".ui.ViewProjectActivity"/>
-        <activity android:name=".ui.LaunchActivity" android:windowSoftInputMode="stateHidden|adjustUnspecified"/>
-        <activity android:name=".ui.MessageActivity"/>
-        <activity android:name=".ui.ModifyPasswordActivity"/>
+        <activity android:name=".activity.MainActivity"/>
+        <activity android:name=".activity.LoginActivity"/>
+        <activity android:name=".activity.RegisterActivity"/>
+        <activity android:name=".activity.MyProfileActivity"/>
+        <activity android:name=".activity.MyActivity"/>
+        <activity android:name=".activity.SearchActivity"/>
+        <activity android:name=".activity.ActivityInfo"/>
+        <activity android:name=".activity.IntroductionActivity"/>
+        <activity android:name=".activity.ApplyActivity"/>
+        <activity android:name=".activity.ViewProjectActivity"/>
+        <activity android:name=".activity.LaunchActivity" android:windowSoftInputMode="stateHidden|adjustUnspecified"/>
+        <activity android:name=".activity.MessageActivity"/>
+        <activity android:name=".activity.ModifyPasswordActivity"/>
+        <activity android:name=".activity.FeedbackActivity"/>
 
 
         <!--个推SDK配置开始-->

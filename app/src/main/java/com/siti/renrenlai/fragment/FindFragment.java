@@ -9,16 +9,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.ItemBean;
-import com.siti.renrenlai.ui.ActivityInfo;
-import com.siti.renrenlai.ui.ApplyActivity;
-import com.siti.renrenlai.ui.IntroductionActivity;
-import com.siti.renrenlai.ui.SearchActivity;
-import com.siti.renrenlai.ui.ViewProjectActivity;
+import com.siti.renrenlai.activity.ActivityInfo;
+import com.siti.renrenlai.activity.ApplyActivity;
+import com.siti.renrenlai.activity.IntroductionActivity;
+import com.siti.renrenlai.activity.SearchActivity;
+import com.siti.renrenlai.activity.ViewProjectActivity;
 import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 

@@ -1,14 +1,12 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.fragment.EnrollFragment;

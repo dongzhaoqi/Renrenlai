@@ -1,26 +1,16 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
-import com.siti.renrenlai.util.ConstantValue;
-import com.siti.renrenlai.util.CustomApplcation;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.xwray.passwordview.PasswordView;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 /**
  * Created by Dong on 2016/3/22.
@@ -107,6 +97,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         CustomApplcation.getInstance().addToRequestQueue(req);*/
 
         User user = new User();
+
         user.setUserName(str_email);
         showToast("登录成功");
         startAnimActivity(MainActivity.class);

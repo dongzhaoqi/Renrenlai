@@ -1,27 +1,26 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
 /**
  * Created by Dong on 2016/3/22.
  */
-public class IntroductionActivity extends BaseActivity implements OnClickListener{
+public class ApplyActivity extends BaseActivity implements OnClickListener{
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_introduction);
+        setContentView(R.layout.activity_apply);
         initViews();
     }
 
     private void initViews() {
-        initTopBarForLeft("简介");
+        initTopBarForLeft("申请");
 
     }
 

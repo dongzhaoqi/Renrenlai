@@ -30,6 +30,8 @@
     <string name="txt_enroll">报名</string>
     <string name="txt_launch">发起</string>
     <string name="txt_my_activity">我的活动</string>
+    <string name="txt_feedback">请填写您的意见或建议，我们将尽快处理。</string>
+    <string name="str_tel">请输入手机号</string>
 
     <!--我的资料-->
     <string name="txt_nick_name">昵称</string>

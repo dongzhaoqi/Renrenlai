@@ -1,8 +1,6 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.siti.renrenlai.R;
 

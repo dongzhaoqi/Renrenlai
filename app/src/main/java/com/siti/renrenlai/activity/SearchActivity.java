@@ -1,28 +1,13 @@
-package com.siti.renrenlai.ui;
+package com.siti.renrenlai.activity;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
-import android.widget.Filter;
-import android.widget.Filterable;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.search.material.library.MaterialSearchView;
 import com.siti.renrenlai.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by Dong on 2016/3/22.
