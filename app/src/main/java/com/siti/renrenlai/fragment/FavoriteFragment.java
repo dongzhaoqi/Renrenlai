@@ -1,13 +1,17 @@
 package com.siti.renrenlai.fragment;
 
-import android.animation.ObjectAnimator;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.TimeLineAdapter;
 import com.siti.renrenlai.bean.TimeLineModel;
@@ -22,33 +26,43 @@ import java.util.List;
 public class FavoriteFragment extends FragmentBase {
     private View view;
     private Button btn_to_top;
-    private RecyclerView mRecyclerView;
+    private XRecyclerView mRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TimeLineAdapter mTimeLineAdapter;
 
     private List<TimeLineModel> mDataList = new ArrayList<>();
+    private int refreshTime = 0;
+    private int times = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_favorite,container,false);
+        view = inflater.inflate(R.layout.fragment_favorite, container, false);
         return view;
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initView();
 
         initData();
+        initView();
+
     }
 
-    private void initView(){
-        btn_to_top= (Button) findViewById(R.id.btn_to_top);
+    private void initView() {
+        btn_to_top = (Button) findViewById(R.id.btn_to_top);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+        mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
+
+        mTimeLineAdapter = new TimeLineAdapter(mDataList);
+        mRecyclerView.setAdapter(mTimeLineAdapter);
+
+        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
+        mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -69,20 +83,61 @@ public class FavoriteFragment extends FragmentBase {
                 //ObjectAnimator.ofInt(mRecyclerView, "scrollY", 0).setDuration(1000).start();
             }
         });
+
+        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                refreshTime++;
+                times = 0;
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        refreshData();
+                        mRecyclerView.refreshComplete();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                Log.d("refresh", "refreshTime:" + refreshTime);
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        loadData();
+                        mRecyclerView.loadMoreComplete();
+                    }
+                }, 1000);
+            }
+        });
     }
 
-
-
-    private void initData(){
-        for(int i = 0;i < 30;i++) {
+    private void initData() {
+        for (int i = 0; i < 15; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setName("Random"+i);
+            model.setName("Random" + i);
             model.setAge(i);
             mDataList.add(model);
         }
-
-        mTimeLineAdapter = new TimeLineAdapter(mDataList);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
     }
 
+    private void refreshData(){
+        for (int i = 0; i < 2; i++) {
+            TimeLineModel model = new TimeLineModel();
+            model.setName("refresh" + i);
+            model.setAge(i);
+            mDataList.add(0, model);
+        }
+        mTimeLineAdapter.notifyDataSetChanged();
+    }
+
+    private void loadData() {
+        for (int i = 0; i < 3; i++) {
+            TimeLineModel model = new TimeLineModel();
+            model.setName("load data" + i);
+            model.setAge(i);
+            mDataList.add(mDataList.size(), model);
+        }
+        mTimeLineAdapter.notifyDataSetChanged();
+    }
 }

@@ -9,6 +9,14 @@ public class TimeLineModel implements Serializable{
     private String name;
     private int age;
 
+    public TimeLineModel() {
+    }
+
+    public TimeLineModel(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
     public String getName() {
         return name;
     }
