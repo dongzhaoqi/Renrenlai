@@ -1,5 +1,6 @@
 package com.siti.renrenlai.activity;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -52,7 +53,9 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         tabHost.setType(MaterialTabHost.Type.FullScreenWidth);
 //        tabHost.setType(MaterialTabHost.Type.Centered);
 //        tabHost.setType(MaterialTabHost.Type.LeftOffset);
-        tabHost.setElevation(0);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tabHost.setElevation(0);
+        }
 
         SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         for (int i = 0; i < pagerAdapter.getCount(); i++) {

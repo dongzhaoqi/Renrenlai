@@ -40,7 +40,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/ic_eye"/>
+                android:drawableLeft="@drawable/icon_help"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/layout_apply"
@@ -55,7 +55,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/ic_eye"/>
+                android:drawableLeft="@drawable/icon_advice"/>
         </RelativeLayout>
         <RelativeLayout
             android:id="@+id/layout_view_project"
@@ -70,7 +70,7 @@
                 android:layout_centerInParent="true"
                 android:gravity="center"
                 android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/ic_eye"/>
+                android:drawableLeft="@drawable/ic_check"/>
         </RelativeLayout>
 
     </LinearLayout>

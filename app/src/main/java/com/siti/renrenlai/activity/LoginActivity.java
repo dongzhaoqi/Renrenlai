@@ -10,7 +10,6 @@ import android.widget.EditText;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.xwray.passwordview.PasswordView;
 
 /**
  * Created by Dong on 2016/3/22.
@@ -19,7 +18,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
     private Button btn_sign_in;
     private EditText et_email;
-    private PasswordView et_password;
+    private EditText et_password;
     private String str_email,str_password;
 
     @Override
@@ -39,7 +38,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
     private void initViews() {
 
         et_email = (EditText) findViewById(R.id.et_email);
-        et_password = (PasswordView) findViewById(R.id.et_password);
+        et_password = (EditText) findViewById(R.id.et_password);
         btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
         btn_sign_in.setOnClickListener(this);
 
