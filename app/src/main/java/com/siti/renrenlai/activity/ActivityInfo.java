@@ -83,7 +83,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         oks.setText(activity_name);
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
-        oks.setImageUrl("http://api.androidhive.info/music/images/eminem.png_413x1800");
+        //oks.setImageUrl("http://img05.tooopen.com/images/20160108/tooopen_sy_153700436869.jpg");
         // url仅在微信（包括好友和朋友圈）中使用
         oks.setUrl("http://sharesdk.cn");
         // comment是我对这条分享的评论，仅在人人网和QQ空间使用
@@ -96,4 +96,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         oks.show(this);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        ShareSDK.stopSDK(this);
+    }
 }

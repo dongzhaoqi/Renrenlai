@@ -64,7 +64,7 @@
         AppKey="1359181083"
         AppSecret="429e7fe77455a74dcc17f08d3cc80bc1"
         RedirectUrl="http://www.baidu.com"
-        ShareByAppClient="true"
+        ShareByAppClient="false"
         Enable="true" />
 
     <TencentWeibo
@@ -96,24 +96,24 @@
     <Wechat
         Id="4"
         SortId="4"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wx7c67a86d7d1a5c23"
+        AppSecret="fcea9c0f3bf25d8a3af22be56d436672"
         BypassApproval="false"
         Enable="true" />
     
     <WechatMoments
         Id="5"
         SortId="5"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wx7c67a86d7d1a5c23"
+        AppSecret="fcea9c0f3bf25d8a3af22be56d436672"
         BypassApproval="false"
         Enable="true" />
         
 	<WechatFavorite
         Id="6"
         SortId="6"
-        AppId="wx4868b35061f87885"
-        AppSecret="64020361b8ec4c99936c0e3999a9f249"
+        AppId="wx7c67a86d7d1a5c23"
+        AppSecret="fcea9c0f3bf25d8a3af22be56d436672"
         Enable="true" />
     
 	<!-- ShareByAppClient标识是否使用微博客户端分享，默认是false -->
