@@ -27,11 +27,13 @@ public class HeaderLayout extends LinearLayout {
 	private LinearLayout mLayoutLeftImageButtonLayout;
 	private ImageButton mLeftImageButton;
 	private onLeftImageButtonClickListener mLeftImageButtonClickListener;
+	private onLeftBtnClickListener mLeftButtonClickListener;
 
 	private LinearLayout.LayoutParams params;
 
 	public enum HeaderStyle {
-		DEFAULT_TITLE, TITLE_LIFT_IMAGEBUTTON, TITLE_RIGHT_IMAGEBUTTON, TITLE_DOUBLE_IMAGEBUTTON;
+		DEFAULT_TITLE, TITLE_LIFT_IMAGEBUTTON, TITLE_RIGHT_IMAGEBUTTON,
+		TITLE_DOUBLE_IMAGEBUTTON, TITLE_DOUBLE_BUTTON;
 	}
 
 	public HeaderLayout(Context context) {
@@ -85,6 +87,12 @@ public class HeaderLayout extends LinearLayout {
 			titleLeftImageButton();
 			titleRightImageButton();
 			break;
+
+		case TITLE_DOUBLE_BUTTON:
+			defaultTitle();
+			titleLeftButton();
+			titleRightImageButton();
+			break;
 		}
 	}
 
@@ -111,6 +119,27 @@ public class HeaderLayout extends LinearLayout {
 			}
 		});
 	}
+
+
+	private void titleLeftButton() {
+		View mleftImageButtonView = mInflater.inflate(
+				R.layout.common_header_button, null);
+		mLayoutLeftContainer.addView(mleftImageButtonView);
+		mLayoutLeftImageButtonLayout = (LinearLayout) mleftImageButtonView
+				.findViewById(R.id.header_layout_imagebuttonlayout);
+		mLeftImageButton = (ImageButton) mleftImageButtonView
+				.findViewById(R.id.header_ib_imagebutton);
+		mLayoutLeftImageButtonLayout.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View arg0) {
+				if (mLeftButtonClickListener != null) {
+					mLeftButtonClickListener.onClick();
+				}
+			}
+		});
+	}
+
 
 	private void titleRightImageButton() {
 		View mRightImageButtonView = mInflater.inflate(
@@ -191,6 +220,18 @@ public class HeaderLayout extends LinearLayout {
 		mLayoutRightContainer.setVisibility(View.INVISIBLE);
 	}
 
+
+	public void setTitleAndLeftButton(CharSequence title, int id,
+			onLeftBtnClickListener listener) {
+		setDefaultTitle(title);
+		if (mLeftImageButton != null && id > 0) {
+			mLeftImageButton.setImageResource(id);
+			setOnLeftButtonClickListener(listener);
+		}
+		mLayoutRightContainer.setVisibility(View.INVISIBLE);
+	}
+
+
 	public void setOnRightImageButtonClickListener(
 			onRightImageButtonClickListener listener) {
 		mRightImageButtonClickListener = listener;
@@ -206,6 +247,15 @@ public class HeaderLayout extends LinearLayout {
 	}
 
 	public interface onLeftImageButtonClickListener {
+		void onClick();
+	}
+
+	public void setOnLeftButtonClickListener(
+			onLeftBtnClickListener listener) {
+		mLeftButtonClickListener = listener;
+	}
+
+	public interface onLeftBtnClickListener {
 		void onClick();
 	}
 

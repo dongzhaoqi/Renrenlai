@@ -9,8 +9,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.ItemBean;
 import com.siti.renrenlai.activity.ActivityInfo;
@@ -19,7 +21,9 @@ import com.siti.renrenlai.activity.IntroductionActivity;
 import com.siti.renrenlai.activity.SearchActivity;
 import com.siti.renrenlai.activity.ViewProjectActivity;
 import com.siti.renrenlai.view.FragmentBase;
+import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,6 +39,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private List<ItemBean> itemList;
     private RelativeLayout layout_introduction, layout_apply, layout_view_project;
     private ActivityAdapter adapter;
+    private TextView tv_fund_intro;
     private String[] images = new String[]{
             "http://api.androidhive.info/music/images/adele.png",
             "http://api.androidhive.info/music/images/eminem.png",
@@ -62,16 +67,23 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
     private void initView() {
 
-        initTopBarForRight("发现", R.drawable.ic_action_action_search, new onRightImageButtonClickListener() {
+        initTopBarForLeftBtnBoth("发现", R.drawable.dog, new onLeftBtnClickListener(){
+            @Override
+            public void onClick() {
+                showToast("dog");
+            }
+        }, R.drawable.ic_action_action_search, new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 startAnimActivity(SearchActivity.class);
             }
         });
 
-        layout_introduction = (RelativeLayout) findViewById(R.id.layout_introduction);
-        layout_apply = (RelativeLayout) findViewById(R.id.layout_apply);
-        layout_view_project = (RelativeLayout) findViewById(R.id.layout_view_project);
+
+        //layout_introduction = (RelativeLayout) findViewById(R.id.layout_introduction);
+        //layout_apply = (RelativeLayout) findViewById(R.id.layout_apply);
+        //layout_view_project = (RelativeLayout) findViewById(R.id.layout_view_project);
+        tv_fund_intro= (TextView) findViewById(R.id.tv_fund_intro);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
@@ -93,9 +105,11 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     }
 
     private void initEvent(){
-        layout_introduction.setOnClickListener(this);
-        layout_apply.setOnClickListener(this);
-        layout_view_project.setOnClickListener(this);
+        //layout_introduction.setOnClickListener(this);
+        //layout_apply.setOnClickListener(this);
+        //layout_view_project.setOnClickListener(this);
+        tv_fund_intro.setOnClickListener(this);
+
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {
@@ -115,7 +129,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.layout_introduction:
+            /*case R.id.layout_introduction:
                 startAnimActivity(IntroductionActivity.class);
                 break;
             case R.id.layout_apply:
@@ -123,6 +137,9 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 break;
             case R.id.layout_view_project:
                 startAnimActivity(ViewProjectActivity.class);
+                break;*/
+            case R.id.tv_fund_intro:
+                startAnimActivity(FundIntroActivity.class);
                 break;
         }
     }

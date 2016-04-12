@@ -20,10 +20,20 @@
     <string name="tab_me">我的</string>
 
     <!--发现-->
-    <string name="fund_path">社区基金通道</string>
+    <string name="fund_intro">社区基金简介</string>
     <string name="introduction">简介</string>
     <string name="apply">申请</string>
     <string name="project">项目一览</string>
+
+    <string name="txt_home">我的家园</string>
+    <string name="txt_dream">更多梦想</string>
+
+    <string name="str_theme">主题：</string>
+    <string name="str_time">时间：</string>
+    <string name="str_location">活动地点：</string>
+    <string name="str_detail">活动详情：</string>
+
+
 
     <!--我的-->
     <string name="txt_favorite">收藏</string>

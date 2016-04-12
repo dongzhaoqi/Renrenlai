@@ -10,75 +10,20 @@
         layout="@layout/include_action_bar" />
 
     <TextView
+        android:id="@+id/tv_fund_intro"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
+        android:layout_height="@dimen/height_96"
         android:gravity="center"
         android:background="?attr/selectableItemBackground"
         android:textSize="@dimen/text_size_20"
-        android:text="@string/fund_path"/>
+        android:text="@string/fund_intro"/>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_height"
         android:background="@color/divider_grey"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:orientation="horizontal">
 
-        <RelativeLayout
-            android:id="@+id/layout_introduction"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/introduction"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/icon_help"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/layout_apply"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/apply"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/icon_advice"/>
-        </RelativeLayout>
-        <RelativeLayout
-            android:id="@+id/layout_view_project"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackground"
-            android:layout_height="match_parent">
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/project"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:drawablePadding="@dimen/drawable_padding_5"
-                android:drawableLeft="@drawable/ic_check"/>
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/divider_grey"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/list"

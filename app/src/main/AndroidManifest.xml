@@ -67,6 +67,8 @@
         <activity android:name=".activity.MessageActivity"/>
         <activity android:name=".activity.ModifyPasswordActivity"/>
         <activity android:name=".activity.FeedbackActivity"/>
+        <activity android:name=".activity.FundIntroActivity"/>
+        <activity android:name=".activity.ApplyWishActivity"/>
 
 
         <activity

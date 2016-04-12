@@ -10,10 +10,13 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="item_height">48dp</dimen>
     <dimen name="base_action_bar_height">52dp</dimen>
+    <dimen name="height_96">96dp</dimen>
     <dimen name="height_150">150dp</dimen>
+    <dimen name="height_200">200dp</dimen>
 
     <dimen name="view_height">0.1dp</dimen>
     <dimen name="divider_height">0.1dp</dimen>
+    <dimen name="height_1">1dp</dimen>
     <dimen name="height_50">50dp</dimen>
     <dimen name="bottom_height">58dp</dimen>
     <dimen name="card_height">64dp</dimen>

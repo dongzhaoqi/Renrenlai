@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".SampleActivity$PlaceholderFragment">
+
+    <include
+        android:id="@+id/common_actionbar"
+        layout="@layout/include_action_bar" />
+
+    <TextView
+        android:id="@+id/tv_fund_intro"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_96"
+        android:background="?attr/selectableItemBackground"
+        android:gravity="center"
+        android:text="@string/fund_intro"
+        android:textSize="@dimen/text_size_20" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:id="@+id/layout_message"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/str_theme"
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/str_theme" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/str_theme"
+            android:background="@null" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/str_time"
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/str_time" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/str_time"
+            android:background="@null" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/white"
+        android:paddingLeft="10dp"
+        android:paddingRight="20dp">
+
+        <TextView
+            android:id="@+id/str_location"
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/str_location" />
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/str_location"
+            android:background="@null" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingBottom="@dimen/margin_8"
+        android:paddingLeft="@dimen/margin_8"
+        android:paddingTop="@dimen/margin_8">
+
+        <TextView
+            android:id="@+id/str_detail"
+            style="@style/me_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/str_detail" />
+
+        <EditText
+            android:id="@+id/et_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/str_detail"
+            android:background="@null"
+            android:gravity="top"
+            android:minLines="3"
+            android:padding="@dimen/margin_8" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="bottom">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:background="@drawable/layout_bottom_border"
+            android:layout_alignParentBottom="true"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_preview"
+                style="@style/activity_text_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_background"
+                android:text="@string/txt_preview" />
+
+            <Button
+                android:id="@+id/btn_publish"
+                style="@style/activity_text_style"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/btn_preview"
+                android:layout_weight="1"
+                android:background="@drawable/btn_background"
+                android:text="@string/txt_publish" />
+        </LinearLayout>
+    </RelativeLayout>
+</LinearLayout>
