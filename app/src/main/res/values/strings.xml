@@ -66,6 +66,7 @@
     <string name="txt_time">活动时间:</string>
     <string name="txt_end">报名截止:</string>
     <string name="txt_place">活动地点:</string>
+    <string name="txt_people">活动人数:</string>
     <string name="txt_detail">活动详情:</string>
     <string name="txt_cover">选择封面:</string>
     <string name="txt_preview">预览</string>

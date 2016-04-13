@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
@@ -96,6 +97,17 @@ public abstract class FragmentBase extends Fragment {
 		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
 		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_BUTTON);
 		mHeaderLayout.setTitleAndLeftButton(titleName, leftDrawableId,
+				listener1);
+		mHeaderLayout.setTitleAndRightImageButton(titleName, rightDrawableId,
+				listener2);
+	}
+
+	public void initTopBarForLeftTextBoth(String titleName,
+			String leftText, onLeftTextClickListener listener1,
+			int rightDrawableId, onRightImageButtonClickListener listener2) {
+		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
+		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_LEFT_TEXT);
+		mHeaderLayout.setTitleAndLeftText(titleName, leftText,
 				listener1);
 		mHeaderLayout.setTitleAndRightImageButton(titleName, rightDrawableId,
 				listener2);

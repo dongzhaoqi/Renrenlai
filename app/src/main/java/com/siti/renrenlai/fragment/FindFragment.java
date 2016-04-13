@@ -5,12 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.orhanobut.dialogplus.DialogPlus;
+import com.orhanobut.dialogplus.OnBackPressListener;
+import com.orhanobut.dialogplus.OnCancelListener;
+import com.orhanobut.dialogplus.OnDismissListener;
+import com.orhanobut.dialogplus.OnItemClickListener;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
@@ -23,7 +30,7 @@ import com.siti.renrenlai.activity.ViewProjectActivity;
 import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
-import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +54,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             "http://www.ld12.com/upimg358/allimg/c150619/1434F6225920Z-105122.jpg",
             "http://api.androidhive.info/music/images/mj.png"
     };
-    private String[] strs = new String[]{"item1","item2","item3","item4","item5"};
+    private String[] strs = new String[]{"缤纷广场舞","南新七色馆\n儿童绘画营","春季夜跑族","缤纷广场舞","春季夜跑族"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,12 +74,44 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
     private void initView() {
 
-        initTopBarForLeftBtnBoth("发现", R.drawable.dog, new onLeftBtnClickListener(){
+        initTopBarForLeftTextBoth("发现", "阳光小区", new onLeftTextClickListener() {
             @Override
             public void onClick() {
-                showToast("dog");
+                DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
+                        .setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"上海","北京","广州","深圳"}))
+                        .setCancelable(true)
+                        .setGravity(Gravity.TOP)
+                        .setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(DialogPlus dialog) {
+
+                            }
+                        })
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
+                                showToast("position:" + position);
+                                dialog.dismiss();
+                            }
+                        })
+                        .setOnCancelListener(new OnCancelListener() {
+                            @Override
+                            public void onCancel(DialogPlus dialog) {
+
+                            }
+                        })
+                        .setOnBackPressListener(new OnBackPressListener() {
+                            @Override
+                            public void onBackPressed(DialogPlus dialogPlus) {
+
+                            }
+                        })
+                        .create();
+
+                dialogPlus.show();
             }
-        }, R.drawable.ic_action_action_search, new onRightImageButtonClickListener() {
+        }, R.drawable.ic_action_action_search, new onRightImageButtonClickListener(){
+
             @Override
             public void onClick() {
                 startAnimActivity(SearchActivity.class);

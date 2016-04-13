@@ -3,7 +3,6 @@ package com.siti.renrenlai.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -59,9 +58,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         View v;
         // 给ViewHolder设置布局文件
         if(pos % 2 == 0) {
-            v = inflater.inflate(R.layout.card_layout, viewGroup, false);
+            v = inflater.inflate(R.layout.item_card_layout, viewGroup, false);
         } else {
-            v = inflater.inflate(R.layout.card_layout2, viewGroup, false);
+            v = inflater.inflate(R.layout.item_card_layout2, viewGroup, false);
         }
         pos++;
         ViewHolder vh = new ViewHolder(v);

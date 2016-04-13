@@ -1,7 +1,9 @@
 package com.siti.renrenlai.view;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +22,7 @@ public class HeaderLayout extends LinearLayout {
 	private LinearLayout mLayoutLeftContainer;
 	private LinearLayout mLayoutRightContainer;
 	private TextView mHtvSubTitle;
+	private TextView mLeftText;
 	private LinearLayout mLayoutRightImageButtonLayout;
 	private Button mRightImageButton;
 	private onRightImageButtonClickListener mRightImageButtonClickListener;
@@ -28,12 +31,13 @@ public class HeaderLayout extends LinearLayout {
 	private ImageButton mLeftImageButton;
 	private onLeftImageButtonClickListener mLeftImageButtonClickListener;
 	private onLeftBtnClickListener mLeftButtonClickListener;
+	private onLeftTextClickListener mLeftTextClickListener;
 
 	private LinearLayout.LayoutParams params;
 
 	public enum HeaderStyle {
 		DEFAULT_TITLE, TITLE_LIFT_IMAGEBUTTON, TITLE_RIGHT_IMAGEBUTTON,
-		TITLE_DOUBLE_IMAGEBUTTON, TITLE_DOUBLE_BUTTON;
+		TITLE_DOUBLE_IMAGEBUTTON, TITLE_DOUBLE_BUTTON, TITLE_DOUBLE_LEFT_TEXT,
 	}
 
 	public HeaderLayout(Context context) {
@@ -93,6 +97,11 @@ public class HeaderLayout extends LinearLayout {
 			titleLeftButton();
 			titleRightImageButton();
 			break;
+		case TITLE_DOUBLE_LEFT_TEXT:
+			defaultTitle();
+			titleLeftTextButton();
+			titleRightImageButton();
+			break;
 		}
 	}
 
@@ -101,6 +110,9 @@ public class HeaderLayout extends LinearLayout {
 		mLayoutRightContainer.removeAllViews();
 	}
 
+	/**
+	 * 设置左侧为返回事件按钮
+	 */
 	private void titleLeftImageButton() {
 		View mleftImageButtonView = mInflater.inflate(
 				R.layout.common_header_button, null);
@@ -120,7 +132,32 @@ public class HeaderLayout extends LinearLayout {
 		});
 	}
 
+	/**
+	 * 设置左侧为文字
+	 */
+	private void titleLeftTextButton() {
+		View mleftTextView = mInflater.inflate(
+				R.layout.common_header_text, null);
+		mLayoutLeftContainer.addView(mleftTextView);
+		mLayoutLeftImageButtonLayout = (LinearLayout) mleftTextView
+				.findViewById(R.id.header_layout_textlayout);
+		mLeftText = (TextView) mleftTextView
+				.findViewById(R.id.header_ib_text);
+		mLeftText.setOnClickListener(new OnClickListener() {
 
+			@Override
+			public void onClick(View arg0) {
+				if (mLeftText != null) {
+					mLeftTextClickListener.onClick();
+				}
+			}
+		});
+	}
+
+
+	/**
+	 * 设置左侧为自定义事件按钮
+	 */
 	private void titleLeftButton() {
 		View mleftImageButtonView = mInflater.inflate(
 				R.layout.common_header_button, null);
@@ -210,6 +247,22 @@ public class HeaderLayout extends LinearLayout {
 		}
 	}
 
+	public void setTitleAndLeftText(CharSequence title,String text,
+									onLeftTextClickListener listener) {
+		setDefaultTitle(title);
+		mLayoutLeftContainer.setVisibility(View.VISIBLE);
+		params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		mLeftText.setLayoutParams(params);
+		mLeftText.setText(text);
+		setOnLeftTextClickListener(listener);
+	}
+
+	/**
+	 * 用于左侧返回按键
+	 * @param title
+	 * @param id
+	 * @param listener
+	 */
 	public void setTitleAndLeftImageButton(CharSequence title, int id,
 			onLeftImageButtonClickListener listener) {
 		setDefaultTitle(title);
@@ -221,6 +274,12 @@ public class HeaderLayout extends LinearLayout {
 	}
 
 
+	/**
+	 * 用于左侧非返回按键
+	 * @param title
+	 * @param id
+	 * @param listener
+	 */
 	public void setTitleAndLeftButton(CharSequence title, int id,
 			onLeftBtnClickListener listener) {
 		setDefaultTitle(title);
@@ -232,6 +291,10 @@ public class HeaderLayout extends LinearLayout {
 	}
 
 
+	/**
+	 * 设置右侧单击事件
+	 * @param listener
+	 */
 	public void setOnRightImageButtonClickListener(
 			onRightImageButtonClickListener listener) {
 		mRightImageButtonClickListener = listener;
@@ -241,6 +304,11 @@ public class HeaderLayout extends LinearLayout {
 		void onClick();
 	}
 
+
+	/**
+	 * 设置左侧返回事件
+	 * @param listener
+	 */
 	public void setOnLeftImageButtonClickListener(
 			onLeftImageButtonClickListener listener) {
 		mLeftImageButtonClickListener = listener;
@@ -250,6 +318,11 @@ public class HeaderLayout extends LinearLayout {
 		void onClick();
 	}
 
+
+	/**
+	 * 设置左侧按钮非返回事件
+	 * @param listener
+	 */
 	public void setOnLeftButtonClickListener(
 			onLeftBtnClickListener listener) {
 		mLeftButtonClickListener = listener;
@@ -258,5 +331,21 @@ public class HeaderLayout extends LinearLayout {
 	public interface onLeftBtnClickListener {
 		void onClick();
 	}
+
+
+	/**
+	 * 设置左侧文字点击事件
+	 * @param listener
+	 */
+	public void setOnLeftTextClickListener(
+			onLeftTextClickListener listener) {
+		mLeftTextClickListener = listener;
+	}
+
+	public interface onLeftTextClickListener {
+		void onClick();
+	}
+
+
 
 }
