@@ -49,4 +49,5 @@ dependencies {
     compile 'com.github.vipulasri:timelineview:1.0.2'
     compile 'com.jcodecraeer:xrecyclerview:1.2.6'
     compile 'com.orhanobut:dialogplus:1.11@aar'
+    compile "com.dev.sacot41:scviewpager:0.0.4"
 }

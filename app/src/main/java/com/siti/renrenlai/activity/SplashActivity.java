@@ -1,9 +1,14 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -23,15 +28,19 @@ public class SplashActivity extends BaseActivity {
 	private static final int WAITE = 300;
 	public static final String TAG = "SplashActivity";
 	private RelativeLayout relative;
+	private SharedPreferences preferences;
+	private Editor editor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
+		isFirst();
 		relative = (RelativeLayout) findViewById(R.id.relative);
 		startAnimation(relative);
 		//SharedPreferencesUtil.writeString(getSharedPreferences("login", Context.MODE_PRIVATE),"userName","0");
+
 	}
 
 	private void startAnimation(RelativeLayout relative) {
@@ -90,6 +99,21 @@ public class SplashActivity extends BaseActivity {
 		};
 	};
 
+	private void isFirst(){
+
+		int count = SharedPreferencesUtil.readInt(
+				SharedPreferencesUtil.getSharedPreference(
+						getApplicationContext(), "count"), "count");
+		//判断程序与第几次运行，如果是第一次运行则跳转到引导页面
+		if (count == 0) {
+			SharedPreferencesUtil.writeInt(getSharedPreferences("count", Context.MODE_PRIVATE), "count", ++count);
+			Intent intent = new Intent();
+			intent.setClass(this,GuideActivity.class);
+			startActivity(intent);
+			this.finish();
+		}
+
+	}
 
 	@Override
 	protected void onResume() {

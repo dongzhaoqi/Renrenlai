@@ -22,13 +22,27 @@ public class SharedPreferencesUtil {
         editor.commit();
     	
     }
-    
+
+    public static void writeInt(SharedPreferences sp,String name,int value){
+
+    	Editor editor = sp.edit();
+        editor.putInt(name, value);
+        editor.commit();
+
+    }
+
   public static String readString(SharedPreferences sp,String name){
     	
         return sp.getString(name, "0");
     	
     }
 	
-	
+  public static int readInt (SharedPreferences sp,String count){
+
+        return sp.getInt(count, 0);
+
+    }
+
+
 
 }
