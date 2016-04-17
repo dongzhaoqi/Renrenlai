@@ -1,9 +1,12 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -15,6 +18,7 @@ import com.dev.sacot41.scviewpager.SCViewAnimationUtil;
 import com.dev.sacot41.scviewpager.SCViewPager;
 import com.dev.sacot41.scviewpager.SCViewPagerAdapter;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 
 /**
  * Created by Dong on 4/17/2016.
@@ -34,6 +38,8 @@ public class GuideActivity extends FragmentActivity {
         getWindow().requestFeature(Window.FEATURE_ACTION_BAR);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_guide);
+
+        isFirst();
 
         mViewPager = (SCViewPager) findViewById(R.id.viewpager_main_activity);
         mDotsView = (DotsView) findViewById(R.id.dotsview_main);
@@ -161,6 +167,29 @@ public class GuideActivity extends FragmentActivity {
         startAnimation.addPageAnimation(new SCPositionAnimation(this, 3, -size.x, 0));
         mViewPager.addAnimation(startAnimation);
 
+        startView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(GuideActivity.this, MainActivity.class));
+                finish();
+            }
+        });
+
     }
 
+    private void isFirst(){
+
+        int count = SharedPreferencesUtil.readInt(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "count"), "count");
+        Log.d("count", "count:"+count);
+        //判断程序与第几次运行，如果是第一次运行则跳转到引导页面
+        if (count == 0) {
+            SharedPreferencesUtil.writeInt(getSharedPreferences("count", Context.MODE_PRIVATE), "count", ++count);
+        }else{
+            startActivity(new Intent(this, SplashActivity.class));
+            finish();
+        }
+
+    }
 }

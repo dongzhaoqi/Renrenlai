@@ -36,7 +36,7 @@ public class SplashActivity extends BaseActivity {
 
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_splash);
-		isFirst();
+
 		relative = (RelativeLayout) findViewById(R.id.relative);
 		startAnimation(relative);
 		//SharedPreferencesUtil.writeString(getSharedPreferences("login", Context.MODE_PRIVATE),"userName","0");
@@ -99,21 +99,6 @@ public class SplashActivity extends BaseActivity {
 		};
 	};
 
-	private void isFirst(){
-
-		int count = SharedPreferencesUtil.readInt(
-				SharedPreferencesUtil.getSharedPreference(
-						getApplicationContext(), "count"), "count");
-		//判断程序与第几次运行，如果是第一次运行则跳转到引导页面
-		if (count == 0) {
-			SharedPreferencesUtil.writeInt(getSharedPreferences("count", Context.MODE_PRIVATE), "count", ++count);
-			Intent intent = new Intent();
-			intent.setClass(this,GuideActivity.class);
-			startActivity(intent);
-			this.finish();
-		}
-
-	}
 
 	@Override
 	protected void onResume() {

@@ -2,6 +2,7 @@ package com.siti.renrenlai.util;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 
 import com.android.volley.Request;
@@ -14,6 +15,8 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
+import com.siti.renrenlai.activity.GuideActivity;
+import com.siti.renrenlai.activity.SplashActivity;
 import com.siti.renrenlai.bean.User;
 
 import java.io.File;
@@ -58,8 +61,8 @@ public class CustomApplcation extends Application {
 		Log.e("", "application");
 		mInstance = this;
 		initImageLoader(getApplicationContext());
-
 	}
+
 
 	public RequestQueue getRequestQueue() {
 		// lazy initialize the request queue, the queue instance will be
