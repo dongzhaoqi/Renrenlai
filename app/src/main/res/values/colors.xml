@@ -13,6 +13,8 @@
     <drawable name="splash">#F56E6E</drawable>
 
 
+    <color name="window_bg">#88838B8B</color>
+    <color name="crop_background">#737373</color>
     <color name="black">#000</color>
     <color name="white">#FFF</color>
     <color name="edit_hint">#A1A1A1</color>

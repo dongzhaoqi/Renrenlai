@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
+import com.squareup.picasso.Picasso;
 
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
@@ -30,7 +31,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
-        ShareSDK.initSDK(this);
         initViews();
         initEvent();
     }
@@ -50,6 +50,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         layout_contact = (RelativeLayout) findViewById(R.id.layout_contact);
 
         txt_avtivity_name.setText(activity_name);
+        //Picasso.with(this).load(str_activity_img).into(activity_img);
 
     }
 
@@ -70,6 +71,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     }
 
     private void showShare() {
+        ShareSDK.initSDK(this);
         OnekeyShare oks = new OnekeyShare();
         //关闭sso授权
         oks.disableSSOWhenAuthorize();

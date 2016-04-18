@@ -64,7 +64,7 @@
         AppKey="1359181083"
         AppSecret="429e7fe77455a74dcc17f08d3cc80bc1"
         RedirectUrl="http://www.baidu.com"
-        ShareByAppClient="false"
+        ShareByAppClient="true"
         Enable="true" />
 
     <TencentWeibo

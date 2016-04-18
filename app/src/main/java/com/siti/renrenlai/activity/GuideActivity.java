@@ -183,7 +183,7 @@ public class GuideActivity extends FragmentActivity {
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "count"), "count");
         Log.d("count", "count:"+count);
-        //判断程序与第几次运行，如果是第一次运行则跳转到引导页面
+        //判断程序第几次运行，如果是第一次运行则跳转到引导页面
         if (count == 0) {
             SharedPreferencesUtil.writeInt(getSharedPreferences("count", Context.MODE_PRIVATE), "count", ++count);
         }else{

@@ -89,6 +89,7 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/de.hdodenhof/circleimageview/2.0.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/material-search/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/net.yanzm/mth/1.0.4/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/rebus/bottom-dialog/0.0.5/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/incremental" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/jacoco" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/javaResources" />
@@ -121,8 +122,8 @@
     <orderEntry type="library" exported="" name="GetuiSDK2.8.1.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="support-annotations-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.1" level="project" />
+    <orderEntry type="library" exported="" name="support-annotations-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-QQ-2.7.1" level="project" />
@@ -131,12 +132,14 @@
     <orderEntry type="library" exported="" name="GetuiExt-xxx" level="project" />
     <orderEntry type="library" exported="" name="material-search-" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Email-2.7.1" level="project" />
+    <orderEntry type="library" exported="" name="bottom-dialog-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="GetuiSDK-xxx" level="project" />
-    <orderEntry type="library" exported="" name="MobTools-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.7.1" level="project" />
+    <orderEntry type="library" exported="" name="MobTools-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="MobCommons-2016.0406.1915" level="project" />
+    <orderEntry type="library" exported="" name="andbase20130716" level="project" />
     <orderEntry type="library" exported="" name="timelineview-1.0.2" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="scviewpager-0.0.4" level="project" />

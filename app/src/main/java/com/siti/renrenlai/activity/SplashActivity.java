@@ -96,7 +96,7 @@ public class SplashActivity extends BaseActivity {
 					}
 
 			}
-		};
+		}
 	};
 
 

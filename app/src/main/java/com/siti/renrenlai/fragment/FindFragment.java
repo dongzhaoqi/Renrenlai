@@ -3,8 +3,10 @@ package com.siti.renrenlai.fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,8 @@ import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jcodecraeer.xrecyclerview.ProgressStyle;
+import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnCancelListener;
@@ -27,6 +31,7 @@ import com.siti.renrenlai.activity.ApplyActivity;
 import com.siti.renrenlai.activity.IntroductionActivity;
 import com.siti.renrenlai.activity.SearchActivity;
 import com.siti.renrenlai.activity.ViewProjectActivity;
+import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
@@ -42,7 +47,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
     private View view;
     private Context mContext;
-    private RecyclerView mRecyclerView;
+    private XRecyclerView mXRecyclerView;
     private List<ItemBean> itemList;
     private RelativeLayout layout_introduction, layout_apply, layout_view_project;
     private ActivityAdapter adapter;
@@ -124,12 +129,35 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         //layout_view_project = (RelativeLayout) findViewById(R.id.layout_view_project);
         tv_fund_intro= (TextView) findViewById(R.id.tv_fund_intro);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.list);
+        mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         adapter = new ActivityAdapter(getActivity(), itemList);
-        mRecyclerView.setAdapter(adapter);
+        mXRecyclerView.setAdapter(adapter);
+        mXRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+        mXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+            @Override
+            public void onRefresh() {
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        mXRecyclerView.refreshComplete();
+                    }
+                }, 1000);
+            }
+
+            @Override
+            public void onLoadMore() {
+                new Handler().postDelayed(new Runnable() {
+                    public void run() {
+                        loadData();
+                        mXRecyclerView.loadMoreComplete();
+                    }
+                }, 1000);
+            }
+        });
 
     }
 
@@ -141,6 +169,16 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             item.setTv(strs[i]);
             itemList.add(item);
         }
+    }
+
+    private void loadData() {
+        for (int i = 0; i < 3; i++) {
+            ItemBean item = new ItemBean();
+            item.setImg(images[i]);
+            item.setTv(strs[i]);
+            itemList.add(item);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void initEvent(){

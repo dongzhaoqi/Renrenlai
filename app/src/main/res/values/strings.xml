@@ -72,4 +72,12 @@
     <string name="txt_preview">预览</string>
     <string name="txt_publish">立即发布</string>
 
+    <string name="str_select">请选择</string>
+    <string name="str_pic_photo">从相册选择</string>
+    <string name="str_take_pic">拍照</string>
+
+    <string name="cancelBtn">取消</string>
+    <string name="okBtn">确定</string>
+
+
 </resources>
