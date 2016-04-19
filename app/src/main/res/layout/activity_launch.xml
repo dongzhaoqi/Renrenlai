@@ -254,19 +254,15 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_cover" />
 
-                <GridView
-                    android:id="@+id/myGrid"
+                <ImageView
+                    android:id="@+id/iv_cover"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:columnWidth="75dp"
                     android:clickable="true"
                     android:layout_centerInParent="true"
+                    android:src="@drawable/cam_photo"
                     android:layout_toRightOf="@id/str_cover"
-                    android:layout_marginRight="@dimen/activity_horizontal_margin"
-                    android:horizontalSpacing="0dp"
-                    android:numColumns="auto_fit"
-                    android:stretchMode="columnWidth"
-                    android:verticalSpacing="10dp" />
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"/>
 
                 <ImageView
                     android:layout_width="wrap_content"

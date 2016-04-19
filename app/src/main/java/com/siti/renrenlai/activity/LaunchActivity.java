@@ -64,7 +64,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     // 照相机拍照得到的图片
     private File mCurrentPhotoFile;
     /* 拍照的照片存储位置 */
-    private  File PHOTO_DIR = null;
+    private File PHOTO_DIR = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,11 +89,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
         layout_cover = (RelativeLayout) findViewById(R.id.layout_cover);
 
-        mPhotoList.add(String.valueOf(R.drawable.cam_photo));
+        /*mPhotoList.add(String.valueOf(R.drawable.cam_photo));
         mGridView = (GridView) findViewById(R.id.myGrid);
         mImagePathAdapter = new AbImageShowAdapter(this, mPhotoList,116,116);
-        mGridView.setAdapter(mImagePathAdapter);
+        mGridView.setAdapter(mImagePathAdapter);*/
 
+        iv_cover = (ImageView) findViewById(R.id.iv_cover);
     }
 
     private void initEvent() {
@@ -102,7 +103,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
         layout_cover.setOnClickListener(this);
 
-        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        /*mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 selectIndex = position;
@@ -110,7 +111,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     showPicDialog();
                 }
             }
-    });
+        });*/
     }
 
     @Override
@@ -124,8 +125,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 showTimeDialog();
                 break;
             case R.id.layout_cover:
-                Log.d("cover", "vo");
-                //showPicDialog();
+                showPicDialog();
                 break;
         }
 
@@ -169,11 +169,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
                         return true;
                     case R.id.item_take_pic:
-                        imgName = System.currentTimeMillis() + ".jpg";
-                        File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
-                        mCurrentPhotoFile = new File(PHOTO_DIR, imgName);
+                        File imgFolder = new File(Environment.getExternalStorageDirectory(),"AAA");
+                        imgFolder.mkdirs();
+                        File img = new File(imgFolder,new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
                         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                        camera.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(mCurrentPhotoFile));
+                        Uri imgUri = Uri.fromFile(img);
+                        camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
                         startActivityForResult(camera, TAKE_PICTURE);
                         return true;
                     default:
@@ -193,49 +194,35 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
 
         if (requestCode == SELECT_PICTURE) {
-            Uri uri = data.getData();
-            String currentFilePath = getPath(uri);
-            if (!AbStrUtil.isEmpty(currentFilePath)) {
-                Intent intent1 = new Intent(this, CropImageActivity.class);
-                intent1.putExtra("PATH", currentFilePath);
-                mImagePathAdapter.addItem(mImagePathAdapter.getCount() - 1, currentFilePath);
-                camIndex++;
-                AbViewUtil.setAbsListViewHeight(mGridView, 3, 25);
-                //startActivityForResult(intent1, CAMERA_CROP_DATA);
-            } else {
-                showToast("未在存储卡中找到这个文件");
+            ContentResolver resolver = getContentResolver();
+            // 照片的原始资源地址
+            Uri originalUri = data.getData();
+            // 使用ContentProvider通过URI获取原始图片
+            Bitmap photo = null;
+            try {
+                photo = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            if (photo != null) {
+                // 为防止原始图片过大导致内存溢出，这里先缩小原图显示，然后释放原始Bitmap占用的内存
+                photo = ImageHelper.resizeImage(photo, 180, 180);
+                //bitmap = ImageHelper.getRoundedCornerBitmap(photo, 130);
+                // 释放原始图片占用的内存，防止out of memory异常发生
+                //photo.recycle();
+                iv_cover.setImageBitmap(photo);
             }
         } else if (requestCode == TAKE_PICTURE) {
-            String currentFilePath2 = mCurrentPhotoFile.getPath();
-            Log.d("take", currentFilePath2);
-            Intent intent2 = new Intent(this, CropImageActivity.class);
-            intent2.putExtra("PATH", currentFilePath2);
 
-            mImagePathAdapter.addItem(mImagePathAdapter.getCount() - 1, currentFilePath2);
-            camIndex++;
-            AbViewUtil.setAbsListViewHeight(mGridView, 3, 25);
-            //startActivityForResult(intent2, CAMERA_CROP_DATA);
-        } else if (requestCode == CAMERA_CROP_DATA) {
-            String path = data.getStringExtra("PATH");
-            if (true) Log.d("TAG", "裁剪后得到的图片的路径是 = " + path);
-            mImagePathAdapter.addItem(mImagePathAdapter.getCount() - 1, path);
-            camIndex++;
-            AbViewUtil.setAbsListViewHeight(mGridView, 3, 25);
+            File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
+            imgName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg";
+            File img = new File(imgFolder, imgName);
+            bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
+            bitmap = PhotoUtil.rotaingImageView(90, bitmap);
+            //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
+            iv_cover.setImageBitmap(bitmap);
         }
     }
 
-    /**
-     * 从相册得到的url转换为SD卡中图片路径
-     */
-    public String getPath(Uri uri) {
-        if (AbStrUtil.isEmpty(uri.getAuthority())) {
-            return null;
-        }
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = managedQuery(uri, projection, null, null, null);
-        int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String path = cursor.getString(column_index);
-        return path;
-    }
+
 }
