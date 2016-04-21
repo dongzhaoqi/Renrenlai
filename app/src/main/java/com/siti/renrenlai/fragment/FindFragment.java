@@ -115,7 +115,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
                 dialogPlus.show();
             }
-        }, R.drawable.ic_action_action_search, new onRightImageButtonClickListener(){
+        }, R.drawable.ic_action_search, new onRightImageButtonClickListener(){
 
             @Override
             public void onClick() {
@@ -158,8 +158,9 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 }, 1000);
             }
         });
-
     }
+
+
 
     private void initData() {
         itemList = new ArrayList<>();

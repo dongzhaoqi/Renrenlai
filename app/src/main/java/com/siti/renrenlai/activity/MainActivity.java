@@ -6,16 +6,18 @@ import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.widget.Button;
 
-import com.getbase.floatingactionbutton.AddFloatingActionButton;
+//import com.getbase.floatingactionbutton.AddFloatingActionButton;
 import com.igexin.sdk.PushManager;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.fragment.FindFragment;
 import com.siti.renrenlai.fragment.MeFragment;
+import com.software.shell.fab.ActionButton;
 
 public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     private Button[] mTabs;
-    private AddFloatingActionButton btn_activity;
+    //private AddFloatingActionButton btn_activity;
+    private ActionButton btn_activity;
     private Fragment[] mFragments;
     private FindFragment mFindFragment;
     private MeFragment mMeFragment;
@@ -49,7 +51,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mTabs[0].setSelected(true);
         index = 0;
 
-        btn_activity = (AddFloatingActionButton) findViewById(R.id.btn_activity);
+        btn_activity = (ActionButton) findViewById(R.id.btn_activity);
         btn_activity.setOnClickListener(this);
     }
 

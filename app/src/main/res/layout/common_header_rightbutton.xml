@@ -12,6 +12,7 @@
         android:id="@+id/header_ib_imagebutton"
         android:layout_width="30dp"
         android:layout_height="30dp"
+        android:layout_marginRight="@dimen/margin_8"
         android:textColor="@color/white"
         android:clickable="false"
         android:focusable="false"

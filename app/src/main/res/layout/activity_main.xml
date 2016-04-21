@@ -65,13 +65,19 @@
 
     </RelativeLayout>
 
-    <com.getbase.floatingactionbutton.AddFloatingActionButton
+    <com.software.shell.fab.ActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/btn_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|center_horizontal"
-        android:layout_marginBottom="12dp"
-        fab:fab_colorNormal="@color/top_bar_color"
-        fab:fab_colorPressed="@color/colorPrimary"
-        fab:fab_plusIconColor="@color/white" />
+        android:layout_marginBottom="20dp"
+        fab:button_color="@color/top_bar_color"
+        fab:button_colorPressed="@color/colorPrimary"
+        fab:image="@drawable/fab_plus_icon"
+        fab:image_size="24dp"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        />
 </FrameLayout>
