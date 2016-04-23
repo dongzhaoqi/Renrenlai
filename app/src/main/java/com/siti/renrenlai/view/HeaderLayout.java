@@ -216,8 +216,8 @@ public class HeaderLayout extends LinearLayout {
 		setDefaultTitle(title);
 		mLayoutRightContainer.setVisibility(View.VISIBLE);
 		if (mRightImageButton != null && backid > 0) {
-			mRightImageButton.setWidth(PixelUtil.dp2px(45));
-			mRightImageButton.setHeight(PixelUtil.dp2px(40));
+			mRightImageButton.setWidth(PixelUtil.dp2px(35));
+			mRightImageButton.setHeight(PixelUtil.dp2px(35));
 			mRightImageButton.setBackgroundResource(backid);
 			mRightImageButton.setText(text);
 			setOnRightImageButtonClickListener(onRightImageButtonClickListener);

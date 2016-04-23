@@ -27,7 +27,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView(){
-        initTopBarForBoth("家园创变大赛", android.R.drawable.ic_menu_share, new HeaderLayout.onRightImageButtonClickListener() {
+        initTopBarForBoth("家园创变大赛", R.drawable.ic_share_white_24dp, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();
