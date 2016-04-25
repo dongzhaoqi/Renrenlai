@@ -8,10 +8,16 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
+import com.orhanobut.dialogplus.DialogPlus;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
@@ -37,17 +43,21 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     @Bind(R.id.layout_name)
     RelativeLayout layoutName;
     @Bind(R.id.layout_nickname)
-    RelativeLayout layoutNickname;
-    @Bind(R.id.layout_realname)
-    RelativeLayout layoutRealname;
+    RelativeLayout layout_nickname;
+    @Bind(R.id.layout_community)
+    RelativeLayout layout_community;
     @Bind(R.id.layout_gender)
-    RelativeLayout layoutGender;
-    @Bind(R.id.layout_tel)
-    RelativeLayout layoutTel;
+    RelativeLayout layout_gender;
+    @Bind(R.id.layout_hobby)
+    RelativeLayout layout_hobby;
     @Bind(R.id.layout_introduction)
-    RelativeLayout layoutIntroduction;
+    RelativeLayout layout_introduction;
     @Bind(R.id.layout_password)
     RelativeLayout layout_password;
+    @Bind(R.id.tv_gender)
+    TextView tv_gender;
+    @Bind(R.id.tv_hobby)
+    TextView tv_hobby;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private Bitmap bitmap;
@@ -61,8 +71,8 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         initTopBarForLeft("我的资料");
     }
 
-    @OnClick({R.id.img_photo, R.id.layout_name, R.id.layout_nickname, R.id.layout_realname,
-            R.id.layout_gender, R.id.layout_tel, R.id.layout_introduction, R.id.layout_password})
+    @OnClick({R.id.img_photo, R.id.layout_name, R.id.layout_nickname, R.id.layout_community,
+            R.id.layout_gender, R.id.layout_hobby, R.id.layout_introduction, R.id.layout_password})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_photo:
@@ -72,13 +82,16 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.layout_nickname:
                 break;
-            case R.id.layout_realname:
+            case R.id.layout_community:
                 break;
             case R.id.layout_gender:
+                showGenderDialog();
                 break;
-            case R.id.layout_tel:
+            case R.id.layout_hobby:
+                showHobbyDialog();
                 break;
             case R.id.layout_introduction:
+                startAnimActivity(IntroductionActivity.class);
                 break;
             case R.id.layout_password:
                 startAnimActivity(ModifyPasswordActivity.class);
@@ -119,6 +132,52 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
 
         });
         dialog.show();
+    }
+
+    public void showGenderDialog(){
+        new MaterialDialog.Builder(this)
+                .title(R.string.str_select)
+                .items(R.array.gender)
+                .itemsCallbackSingleChoice(-1, new MaterialDialog.ListCallbackSingleChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        tv_gender.setText(text);
+                        return true;    // allow selection
+                    }
+                })
+                .positiveText(R.string.okBtn)
+                .show();
+    }
+
+    public void showHobbyDialog(){
+        final StringBuilder[] str = new StringBuilder[1];
+        new MaterialDialog.Builder(this)
+                .title(R.string.str_select)
+                .items(R.array.hobby)
+                .itemsCallbackMultiChoice(new Integer[]{1}, new MaterialDialog.ListCallbackMultiChoice() {
+                    @Override
+                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
+                        boolean allowSelection = which.length <= 5; // limit selection to 2, the new selection is included in the which array
+                        str[0] = new StringBuilder();
+                        if (!allowSelection) {
+                            showToast(R.string.selection_limit_reached);
+                        }
+                        for (int i = 0; i < which.length; i++) {
+                            str[0].append(text[i]);
+                            str[0].append(" ");
+                        }
+                        return allowSelection;
+                    }
+                })
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
+                        tv_hobby.setText(str[0]);
+                    }
+                })
+                .positiveText(R.string.okBtn)
+                .alwaysCallMultiChoiceCallback() // the callback will always be called, to check if selection is still allowed
+                .show();
     }
 
     @Override

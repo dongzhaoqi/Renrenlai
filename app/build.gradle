@@ -22,7 +22,6 @@ android {
         flatDir {
             dirs 'libs'
         }
-
         maven { url 'http://yanzm.github.io/MaterialTabHost/repository' }
         maven {url 'http://dl.bintray.com/raphaelbussa/maven'}
         maven {url "https://oss.sonatype.org/content/repositories/snapshots"}
@@ -56,4 +55,7 @@ dependencies {
     compile 'com.quinny898.library.persistentsearch:library:1.1.0-SNAPSHOT'
     compile 'com.ms-square:expandableTextView:0.1.4'
     compile 'com.jakewharton:butterknife:7.0.1'
+    compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
+        transitive = true
+    }
 }

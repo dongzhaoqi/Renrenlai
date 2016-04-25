@@ -58,6 +58,8 @@
     <string name="txt_hobby">我喜欢</string>
     <string name="txt_introduction">个人简介</string>
     <string name="txt_password">修改密码</string>
+    <string name="txt_hint_intro">请添加个人描述,不超过50个字</string>
+    <string name="selection_limit_reached">最多支持5个标签</string>
 
     <!--修改密码-->
     <string name="txt_old_password">原密码</string>

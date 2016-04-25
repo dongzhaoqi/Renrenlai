@@ -84,7 +84,7 @@
         android:background="@color/background" />
 
     <RelativeLayout
-        android:id="@+id/layout_realname"
+        android:id="@+id/layout_community"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -144,17 +144,18 @@
 
         <TextView
             style="@style/me_text_style"
-            android:id="@+id/tv_gender"
+            android:id="@+id/str_gender"
             android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_gender"
             android:text="@string/txt_gender" />
 
         <TextView
+            android:id="@+id/tv_gender"
             style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/tv_gender"
+            android:layout_toRightOf="@id/str_gender"
             android:text="男"/>
 
         <ImageView
@@ -177,7 +178,7 @@
 
 
     <RelativeLayout
-        android:id="@+id/layout_tel"
+        android:id="@+id/layout_hobby"
         android:layout_width="fill_parent"
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
@@ -193,18 +194,19 @@
 
         <TextView
             style="@style/me_text_style"
-            android:id="@+id/tv_hobby"
+            android:id="@+id/str_hobby"
             android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_hobby"
             android:text="@string/txt_hobby" />
 
         <TextView
+            android:id="@+id/tv_hobby"
             style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_toRightOf="@id/tv_hobby"
+            android:layout_toRightOf="@id/str_hobby"
             android:text="跑步 健身"/>
 
         <ImageView

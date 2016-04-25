@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="gender">
+        <item>男</item>
+        <item>女</item>
+    </string-array>
+
+    <string-array name="hobby">
+        <item>跑步</item>
+        <item>健身</item>
+        <item>遛狗</item>
+        <item>篮球</item>
+        <item>足球</item>
+        <item>乒乓球</item>
+    </string-array>
+
+
+</resources>
