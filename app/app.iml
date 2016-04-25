@@ -124,8 +124,8 @@
     <orderEntry type="library" exported="" name="GetuiSDK2.8.1.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.2.1" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.2.1" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-23.2.1" level="project" />
     <orderEntry type="library" exported="" name="library-1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
@@ -137,8 +137,8 @@
     <orderEntry type="library" exported="" name="bottom-dialog-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="GetuiSDK-xxx" level="project" />
-    <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="MobTools-2016.0406.1915" level="project" />
+    <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="MobCommons-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="andbase20130716" level="project" />

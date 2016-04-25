@@ -36,7 +36,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     }
 
     private void initViews() {
-        initTopBarForBoth("活动详情", android.R.drawable.ic_menu_share, new onRightImageButtonClickListener() {
+        initTopBarForBoth("活动详情", R.drawable.ic_share_white_24dp, new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();
