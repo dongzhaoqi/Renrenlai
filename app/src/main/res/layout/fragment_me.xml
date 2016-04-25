@@ -48,7 +48,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="60dp"
+        android:layout_height="@dimen/card_height"
         android:orientation="horizontal">
 
         <LinearLayout
@@ -57,7 +57,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/row_selector"
             android:orientation="vertical">
 
             <TextView
@@ -78,7 +78,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/row_selector"
             android:orientation="vertical">
 
             <TextView
@@ -99,7 +99,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center"
-            android:background="?attr/selectableItemBackground"
+            android:background="@drawable/row_selector"
             android:orientation="vertical">
 
             <TextView
@@ -118,7 +118,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
+        android:layout_height="@dimen/activity_vertical_margin"
         android:background="@color/background" />
 
     <RelativeLayout
@@ -141,7 +141,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_me"
-            android:text="消息" />
+            android:text="@string/str_tips" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -176,7 +176,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_friends"
-            android:text="邀请好友加入" />
+            android:text="@string/str_invite" />
 
         <ImageView
             android:layout_width="wrap_content"
@@ -190,43 +190,6 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_height"
         android:background="@color/background" />
-
-
-    <RelativeLayout
-        android:id="@+id/layout_identify"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
-
-        <ImageView
-            android:id="@+id/img_identify"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
-
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_identify"
-            android:text="身份认证" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
-
 
     <RelativeLayout
         android:id="@+id/layout_feedback"
@@ -248,7 +211,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_feedback"
-            android:text="反馈" />
+            android:text="@string/str_feedback" />
 
         <ImageView
             android:layout_width="wrap_content"

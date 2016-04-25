@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,15 +23,10 @@ import com.orhanobut.dialogplus.OnItemClickListener;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
-import com.siti.renrenlai.bean.ItemBean;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.activity.ActivityInfo;
-import com.siti.renrenlai.activity.ApplyActivity;
-import com.siti.renrenlai.activity.IntroductionActivity;
 import com.siti.renrenlai.activity.SearchActivity;
-import com.siti.renrenlai.activity.ViewProjectActivity;
-import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.view.FragmentBase;
-import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 
@@ -48,7 +41,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private View view;
     private Context mContext;
     private XRecyclerView mXRecyclerView;
-    private List<ItemBean> itemList;
+    private List<Activity> itemList;
     private RelativeLayout layout_introduction, layout_apply, layout_view_project;
     private ActivityAdapter adapter;
     private TextView tv_fund_intro;
@@ -165,7 +158,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private void initData() {
         itemList = new ArrayList<>();
         for (int i = 0; i < strs.length; i++) {
-            ItemBean item = new ItemBean();
+            Activity item = new Activity();
             item.setImg(images[i]);
             item.setTv(strs[i]);
             itemList.add(item);
@@ -174,7 +167,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
     private void loadData() {
         for (int i = 0; i < 3; i++) {
-            ItemBean item = new ItemBean();
+            Activity item = new Activity();
             item.setImg(images[i]);
             item.setTv(strs[i]);
             itemList.add(item);
@@ -191,12 +184,11 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {
-                //showToast(data.toString());
                 int pos = Integer.parseInt(data.toString());
+                Activity activity = itemList.get(pos);
                 Intent intent = new Intent(getActivity(),ActivityInfo.class);
                 Bundle bundle = new Bundle();
-                bundle.putString("name", itemList.get(pos).getTv());
-                bundle.putString("img", itemList.get(pos).getImg());
+                bundle.putSerializable("activity", activity);
                 intent.putExtras(bundle);
                 startAnimActivity(intent);
             }

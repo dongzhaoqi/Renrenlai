@@ -21,16 +21,33 @@ import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 import rebus.bottomdialog.BottomDialog;
 
 /**
  * Created by Dong on 2016/3/22.
  */
-public class MyProfileActivity extends BaseActivity implements OnClickListener{
+public class MyProfileActivity extends BaseActivity implements OnClickListener {
 
-    private RelativeLayout layout_password;
-    private CircleImageView img_photo;
+    @Bind(R.id.img_photo)
+    CircleImageView img_photo;
+    @Bind(R.id.layout_name)
+    RelativeLayout layoutName;
+    @Bind(R.id.layout_nickname)
+    RelativeLayout layoutNickname;
+    @Bind(R.id.layout_realname)
+    RelativeLayout layoutRealname;
+    @Bind(R.id.layout_gender)
+    RelativeLayout layoutGender;
+    @Bind(R.id.layout_tel)
+    RelativeLayout layoutTel;
+    @Bind(R.id.layout_introduction)
+    RelativeLayout layoutIntroduction;
+    @Bind(R.id.layout_password)
+    RelativeLayout layout_password;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private Bitmap bitmap;
@@ -40,30 +57,31 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
-        initViews();
-    }
-
-    private void initViews() {
+        ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
-
-        layout_password = (RelativeLayout) findViewById(R.id.layout_password);
-        layout_password.setOnClickListener(this);
-
-        img_photo = (CircleImageView) findViewById(R.id.img_photo);
-        img_photo.setOnClickListener(this);
-
     }
 
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
-            case R.id.layout_password:
-                startAnimActivity(ModifyPasswordActivity.class);
-                break;
+    @OnClick({R.id.img_photo, R.id.layout_name, R.id.layout_nickname, R.id.layout_realname,
+            R.id.layout_gender, R.id.layout_tel, R.id.layout_introduction, R.id.layout_password})
+    public void onClick(View view) {
+        switch (view.getId()) {
             case R.id.img_photo:
                 showPicDialog();
+                break;
+            case R.id.layout_name:
+                break;
+            case R.id.layout_nickname:
+                break;
+            case R.id.layout_realname:
+                break;
+            case R.id.layout_gender:
+                break;
+            case R.id.layout_tel:
+                break;
+            case R.id.layout_introduction:
+                break;
+            case R.id.layout_password:
+                startAnimActivity(ModifyPasswordActivity.class);
                 break;
         }
     }
@@ -85,9 +103,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener{
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
                         return true;
                     case R.id.item_take_pic:
-                        File imgFolder = new File(Environment.getExternalStorageDirectory(),"AAA");
+                        File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
                         imgFolder.mkdirs();
-                        File img = new File(imgFolder,new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
+                        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
                         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                         Uri imgUri = Uri.fromFile(img);
                         camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);

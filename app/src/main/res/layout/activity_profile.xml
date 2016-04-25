@@ -45,7 +45,7 @@
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:id="@+id/img_nickname"
@@ -56,17 +56,25 @@
 
         <TextView
             style="@style/me_text_style"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_name"
+            android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_nickname"
             android:text="@string/txt_nick_name" />
 
         <TextView
-            style="@style/me_text_style"
+            style="@style/more_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/tv_name"
+            android:text="张三"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="张三"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
 
     </RelativeLayout>
 
@@ -81,28 +89,36 @@
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
-            android:id="@+id/img_realname"
+            android:id="@+id/img_my_community"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
             android:src="@drawable/icon_me" />
 
         <TextView
+            android:id="@+id/tv_my_community"
             style="@style/me_text_style"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_realname"
-            android:text="@string/txt_real_name" />
+            android:layout_toRightOf="@id/img_my_community"
+            android:text="@string/txt_my_community" />
 
         <TextView
-            style="@style/me_text_style"
+            style="@style/more_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/tv_my_community"
+            android:text="金桥小区"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="张三"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
     </RelativeLayout>
 
     <View
@@ -117,7 +133,7 @@
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:id="@+id/img_gender"
@@ -128,55 +144,31 @@
 
         <TextView
             style="@style/me_text_style"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_gender"
+            android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_gender"
             android:text="@string/txt_gender" />
 
         <TextView
-            style="@style/me_text_style"
+            style="@style/more_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/tv_gender"
+            android:text="男"/>
+
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="男"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
     </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/view_height"
         android:background="@color/background" />
-
-
-    <RelativeLayout
-        android:id="@+id/layout_community"
-        android:layout_width="fill_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
-
-        <ImageView
-            android:id="@+id/img_community"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
-
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_community"
-            android:text="@string/txt_community" />
-
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center_vertical"
-            android:layout_alignParentRight="true"
-            android:text="幸福小区"/>
-    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
@@ -190,10 +182,10 @@
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
-            android:id="@+id/img_tel"
+            android:id="@+id/img_hobby"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_centerVertical="true"
@@ -201,18 +193,26 @@
 
         <TextView
             style="@style/me_text_style"
-            android:layout_width="wrap_content"
+            android:id="@+id/tv_hobby"
+            android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_tel"
-            android:text="@string/txt_tel" />
+            android:layout_toRightOf="@id/img_hobby"
+            android:text="@string/txt_hobby" />
 
         <TextView
-            style="@style/me_text_style"
+            style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_toRightOf="@id/tv_hobby"
+            android:text="跑步 健身"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:text="13562312510"/>
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
     </RelativeLayout>
 
     <View
@@ -220,6 +220,49 @@
         android:layout_height="@dimen/view_height"
         android:background="@color/background" />
 
+    <RelativeLayout
+        android:id="@+id/layout_introduction"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="10dp"
+        android:paddingRight="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/img_introduction"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/icon_me" />
+
+        <TextView
+            style="@style/me_text_style"
+            android:id="@+id/tv_introduction"
+            android:layout_width="@dimen/height_96"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/img_introduction"
+            android:text="@string/txt_introduction" />
+
+        <TextView
+            style="@style/more_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_toRightOf="@id/tv_introduction"
+            android:text="金桥社区男神"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
 
     <RelativeLayout
         android:id="@+id/layout_password"
@@ -227,7 +270,7 @@
         android:layout_height="50dp"
         android:background="@drawable/row_selector"
         android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+        android:paddingRight="@dimen/activity_horizontal_margin">
 
         <ImageView
             android:id="@+id/img_password"
@@ -238,7 +281,7 @@
 
         <TextView
             style="@style/me_text_style"
-            android:layout_width="wrap_content"
+            android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_password"
             android:text="@string/txt_password" />

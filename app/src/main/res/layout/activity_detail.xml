@@ -1,187 +1,274 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:expandableTextView="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:context=".SampleActivity$PlaceholderFragment">
 
     <include
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <RelativeLayout
-        android:id="@+id/layout_name"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/row_selector">
+        android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/activity_img"
-            android:layout_width="90dp"
-            android:layout_height="90dp"
-            android:layout_centerHorizontal="true"
-            android:src="@drawable/launch"/>
-
-        <TextView
-            style="@style/me_text_style"
-            android:id="@+id/activity_name"
-            android:layout_width="wrap_content"
+        <ScrollView
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_below="@id/activity_img"
-            android:text="仁人来" />
+            android:layout_marginBottom="@dimen/bottom_height"
+            android:scrollbars="none">
 
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
-
-    <RelativeLayout
-        android:id="@+id/layout_nickname"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
-
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="社区周末约跑" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
-
-    <RelativeLayout
-        android:id="@+id/layout_realname"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
-
-        <ImageView
-            android:id="@+id/img_realname"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
-
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_realname"
-            android:text="2016/3/20 08:30-10:00" />
-
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
 
 
-    <RelativeLayout
-        android:id="@+id/layout_gender"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+                <RelativeLayout
+                    android:id="@+id/layout_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/row_selector"
+                    android:padding="@dimen/activity_horizontal_margin">
 
-        <ImageView
-            android:id="@+id/img_gender"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
+                    <ImageView
+                        android:id="@+id/activity_img"
+                        android:layout_width="90dp"
+                        android:layout_height="90dp"
+                        android:src="@drawable/launch" />
 
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_gender"
-            android:text="四川成都" />
+                    <TextView
+                        android:id="@+id/activity_name"
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_toRightOf="@id/activity_img"
+                        android:text="仁人来" />
 
-    </RelativeLayout>
+                </RelativeLayout>
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_fund"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/row_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/img_fund"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_me" />
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/img_fund"
+                        android:text="@string/str_fund_support" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/go" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_realname"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/row_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/img_realname"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_me" />
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/img_realname"
+                        android:text="2016/3/20 08:30-10:00" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
 
 
-    <RelativeLayout
-        android:id="@+id/layout_contact"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+                <RelativeLayout
+                    android:id="@+id/layout_gender"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/row_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp">
 
-        <ImageView
-            android:id="@+id/img_community"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
+                    <ImageView
+                        android:id="@+id/img_gender"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_me" />
 
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_community"
-            android:text="联系发起人" />
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/img_gender"
+                        android:text="四川成都" />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+                </RelativeLayout>
 
-    </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
 
 
-    <RelativeLayout
-        android:id="@+id/layout_tel"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="20dp">
+                <RelativeLayout
+                    android:id="@+id/layout_contact"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/row_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp">
 
-        <ImageView
-            android:id="@+id/img_tel"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_centerVertical="true"
-            android:src="@drawable/icon_me" />
+                    <ImageView
+                        android:id="@+id/img_community"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_me" />
 
-        <TextView
-            style="@style/me_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/img_tel"
-            android:text="详细介绍" />
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/img_community"
+                        android:text="联系发起人" />
 
-    </RelativeLayout>
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:duplicateParentState="true"
+                        android:src="@drawable/go" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
+                </RelativeLayout>
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_intro"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:background="@drawable/row_selector"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="20dp">
+
+                    <ImageView
+                        android:id="@+id/img_intro"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_centerVertical="true"
+                        android:src="@drawable/icon_me" />
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_toRightOf="@id/img_intro"
+                        android:text="详细介绍" />
+
+                </RelativeLayout>
+
+                <com.ms.square.android.expandabletextview.ExpandableTextView
+                    android:id="@+id/expand_text_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    expandableTextView:animAlphaStart="1"
+                    expandableTextView:maxCollapsedLines="4">
+
+                    <TextView
+                        android:id="@id/expandable_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="8dp"
+                        android:fontFamily="sans-serif-light"
+                        android:textColor="#666666"
+                        android:textSize="16sp" />
+
+                    <ImageButton
+                        android:id="@id/expand_collapse"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="end|bottom"
+                        android:background="@android:color/transparent"
+                        android:padding="16dp" />
+                </com.ms.square.android.expandabletextview.ExpandableTextView>
+
+            </LinearLayout>
+
+
+        </ScrollView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/bottom_height"
+            android:layout_gravity="bottom"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_preview"
+                style="@style/activity_text_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_background"
+                android:drawableTop="@drawable/heart_selector"
+                android:text="@string/txt_favor" />
+
+            <Button
+                android:id="@+id/btn_publish"
+                style="@style/activity_text_style"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="2"
+                android:background="@drawable/btn_background"
+                android:text="@string/txt_im_enroll" />
+        </LinearLayout>
+    </FrameLayout>
 </LinearLayout>

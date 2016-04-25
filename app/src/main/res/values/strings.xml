@@ -33,22 +33,30 @@
     <string name="str_location">活动地点：</string>
     <string name="str_detail">活动详情：</string>
 
+    <string name="str_fund_support">基金支持专项活动</string>
+
+    <string name="dummy_text1">Far far away, behind the word mountains, far from the countries Vokalia and Consonantia, there live the blind texts. Separated they live in Bookmarksgrove right at the coast of the Semantics, a large language ocean. A small river named Duden flows by their place and supplies it with the necessary regelialia. It is a paradisematic country, in which roasted parts of sentences fly into your mouth. Even the all-powerful Pointing has no control about the blind texts it is an almost unorthographic life One day however a small line of blind text by the name of Lorem Ipsum decided to leave for the far World of Grammar.</string>
 
 
     <!--我的-->
-    <string name="txt_favorite">收藏</string>
+    <string name="txt_favorite">喜欢</string>
     <string name="txt_enroll">报名</string>
     <string name="txt_launch">发起</string>
     <string name="txt_my_activity">我的活动</string>
     <string name="txt_feedback">请填写您的意见或建议，我们将尽快处理。</string>
     <string name="str_tel">请输入手机号</string>
+    <string name="str_tips">消息</string>
+    <string name="str_invite">邀请好友加入</string>
+    <string name="str_feedback">我要反馈</string>
+
 
     <!--我的资料-->
     <string name="txt_nick_name">昵称</string>
-    <string name="txt_real_name">真实姓名</string>
+    <string name="txt_my_community">我的小区</string>
     <string name="txt_gender">性别</string>
     <string name="txt_community">所在社区</string>
-    <string name="txt_tel">手机号码</string>
+    <string name="txt_hobby">我喜欢</string>
+    <string name="txt_introduction">个人简介</string>
     <string name="txt_password">修改密码</string>
 
     <!--修改密码-->
@@ -71,6 +79,13 @@
     <string name="txt_cover">选择封面:</string>
     <string name="txt_preview">预览</string>
     <string name="txt_publish">立即发布</string>
+
+    <string name="txt_favor">喜欢</string>
+    <string name="txt_im_enroll">立即报名</string>
+
+    <string name="txt_enrolling">报名中</string>
+    <string name="txt_close">报名截止</string>
+    <string name="txt_already_end">已结束</string>
 
     <string name="str_select">请选择</string>
     <string name="str_pic_photo">从相册选择</string>

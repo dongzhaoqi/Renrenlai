@@ -1,6 +1,8 @@
 package com.siti.renrenlai.bean;
 
-public class ItemBean {
+import java.io.Serializable;
+
+public class Activity implements Serializable {
 
     private String img;
     private String tv;

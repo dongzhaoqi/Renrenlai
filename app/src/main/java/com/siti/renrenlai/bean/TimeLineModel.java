@@ -6,30 +6,31 @@ import java.io.Serializable;
  * Created by HP-HP on 05-12-2015.
  */
 public class TimeLineModel implements Serializable{
-    private String name;
-    private int age;
+    private String time;
+    private String img;
+    private String title;
 
-    public TimeLineModel() {
+    public String getTime() {
+        return time;
     }
 
-    public TimeLineModel(String name, int age) {
-        this.name = name;
-        this.age = age;
+    public void setTime(String time) {
+        this.time = time;
     }
 
-    public String getName() {
-        return name;
+    public String getImg() {
+        return img;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setImg(String img) {
+        this.img = img;
     }
 
-    public int getAge() {
-        return age;
+    public String getTitle() {
+        return title;
     }
 
-    public void setAge(int age) {
-        this.age = age;
+    public void setTitle(String title) {
+        this.title = title;
     }
 }

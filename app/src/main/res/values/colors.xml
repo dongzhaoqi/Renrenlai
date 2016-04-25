@@ -24,6 +24,9 @@
     <color name="color_bottom_text_press">#F56E6E</color>
     <color name="transparent">#00000000</color>
 
+    <color name="start">#6FAF2E</color>
+    <color name="end">#9B9B9B</color>
+
 
     <!-- 内容条目按下时的样式 -->
     <color name="pressed_bg">#F2F2F2</color>

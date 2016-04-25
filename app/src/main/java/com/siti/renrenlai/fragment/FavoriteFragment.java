@@ -16,6 +16,7 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.TimeLineAdapter;
 import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.view.FragmentBase;
+import com.software.shell.fab.ActionButton;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +26,7 @@ import java.util.List;
  */
 public class FavoriteFragment extends FragmentBase {
     private View view;
-    private Button btn_to_top;
+    private ActionButton btn_to_top;
     private XRecyclerView mRecyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TimeLineAdapter mTimeLineAdapter;
@@ -51,13 +52,13 @@ public class FavoriteFragment extends FragmentBase {
     }
 
     private void initView() {
-        btn_to_top = (Button) findViewById(R.id.btn_to_top);
+        btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
         mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
 
-        mTimeLineAdapter = new TimeLineAdapter(mDataList);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
         mRecyclerView.setAdapter(mTimeLineAdapter);
 
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
@@ -115,8 +116,8 @@ public class FavoriteFragment extends FragmentBase {
     private void initData() {
         for (int i = 0; i < 15; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setName("Random" + i);
-            model.setAge(i);
+            model.setTime("2016年4月3号");
+            model.setTitle(i + "小明的童年影像展览及逗逼故事分享会");
             mDataList.add(model);
         }
     }
@@ -124,8 +125,8 @@ public class FavoriteFragment extends FragmentBase {
     private void refreshData(){
         for (int i = 0; i < 2; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setName("refresh" + i);
-            model.setAge(i);
+            model.setTime("2016年4月3号");
+            model.setTitle("refresh:" + i + "春季亲子运动会");
             mDataList.add(0, model);
         }
         mTimeLineAdapter.notifyDataSetChanged();
@@ -134,8 +135,8 @@ public class FavoriteFragment extends FragmentBase {
     private void loadData() {
         for (int i = 0; i < 3; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setName("load data" + i);
-            model.setAge(i);
+            model.setTime("2016年4月3号");
+            model.setTitle("load:" + i + "春季亲子运动会");
             mDataList.add(mDataList.size(), model);
         }
         mTimeLineAdapter.notifyDataSetChanged();

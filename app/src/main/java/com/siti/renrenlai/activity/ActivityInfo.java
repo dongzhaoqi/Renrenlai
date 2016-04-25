@@ -10,7 +10,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -25,7 +27,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     private TextView txt_avtivity_name;
     private ImageView activity_img;
     private RelativeLayout layout_contact;
-    private String activity_name;
+    private String activity_title;
+    private Activity activity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +45,17 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showShare();
             }
         });
-        activity_name = getIntent().getExtras().getString("name");
-        final String str_activity_img = getIntent().getExtras().getString("img");
+        activity = (Activity) getIntent().getExtras().getSerializable("activity");
+
+        activity_title = activity.getTv();
 
         txt_avtivity_name = (TextView) findViewById(R.id.activity_name);
         activity_img = (ImageView) findViewById(R.id.activity_img);
         layout_contact = (RelativeLayout) findViewById(R.id.layout_contact);
-
-        txt_avtivity_name.setText(activity_name);
-        //Picasso.with(this).load(str_activity_img).into(activity_img);
+        ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.expand_text_view);
+        expTv1.setText(getString(R.string.dummy_text1));
+        txt_avtivity_name.setText(activity.getTv());
+        Picasso.with(this).load(activity.getImg()).into(activity_img);
 
     }
 
@@ -82,7 +87,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
         oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(activity_name);
+        oks.setText(activity_title);
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         //oks.setImageUrl("http://img05.tooopen.com/images/20160108/tooopen_sy_153700436869.jpg");

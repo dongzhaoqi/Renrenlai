@@ -16,7 +16,7 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.bean.ItemBean;
+import com.siti.renrenlai.bean.Activity;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -24,7 +24,7 @@ import java.util.List;
 
 public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHolder> implements View.OnClickListener{
 
-    private static List<ItemBean> ItemBeans;
+    private static List<Activity> activities;
     private LayoutInflater inflater;
     private DisplayImageOptions options;
     private ImageLoader loader;
@@ -33,9 +33,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     static int pos = 0;
 
-    public ActivityAdapter(Context context, List<ItemBean> ItemBeans) {
+    public ActivityAdapter(Context context, List<Activity> activities) {
         this.mContext = context;
-        this.ItemBeans = ItemBeans;
+        this.activities = activities;
         inflater = LayoutInflater.from(context);
         loader = ImageLoader.getInstance();
         options = new DisplayImageOptions.Builder()
@@ -57,11 +57,11 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View v;
         // 给ViewHolder设置布局文件
-        if(pos % 2 == 0) {
-            v = inflater.inflate(R.layout.item_card_layout, viewGroup, false);
-        } else {
+        //if(pos % 2 == 0) {
+         //   v = inflater.inflate(R.layout.item_card_layout, viewGroup, false);
+        //} else {
             v = inflater.inflate(R.layout.item_card_layout2, viewGroup, false);
-        }
+        //}
         pos++;
         ViewHolder vh = new ViewHolder(v);
         //将创建的View注册点击事件
@@ -72,9 +72,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         // 给ViewHolder设置元素
-        ItemBean p = ItemBeans.get(i);
+        Activity p = activities.get(i);
         viewHolder.mTextView.setText(p.getTv());
-        viewHolder.mImageView.setTag(ItemBeans.get(i));
+        viewHolder.mImageView.setTag(activities.get(i));
 
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
@@ -85,7 +85,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     @Override
     public int getItemCount() {
         // 返回数据总数
-        return ItemBeans == null ? 0 : ItemBeans.size();
+        return activities == null ? 0 : activities.size();
     }
 
     @Override
@@ -108,8 +108,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.tv);
-            mImageView = (ImageView) v.findViewById(R.id.img);
+            mTextView = (TextView) v.findViewById(R.id.tv_title);
+            mImageView = (ImageView) v.findViewById(R.id.iv_cover);
         }
     }
 

@@ -8,12 +8,20 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
-    <Button
+    <com.software.shell.fab.ActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/btn_to_top"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
         android:layout_margin="20dp"
-        android:background="@drawable/icon_backtotop"
-        android:visibility="invisible" />
+        fab:button_color="@color/top_bar_color"
+        fab:button_colorPressed="@color/colorPrimary"
+        fab:image="@drawable/arrow_up"
+        fab:image_size="24dp"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        android:visibility="invisible"
+        />
 </FrameLayout>
