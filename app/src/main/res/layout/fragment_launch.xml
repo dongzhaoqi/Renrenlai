@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp"
-        tools:context=".SampleActivity$PlaceholderFragment">
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/section_label"
+    <com.jcodecraeer.xrecyclerview.XRecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <com.software.shell.fab.ActionButton
+        xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/btn_to_top"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="launch" />
-</RelativeLayout>
+        android:layout_gravity="bottom|right"
+        android:layout_margin="20dp"
+        fab:button_color="@color/top_bar_color"
+        fab:button_colorPressed="@color/colorPrimary"
+        fab:image="@drawable/arrow_up"
+        fab:image_size="24dp"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        android:visibility="invisible"
+        />
+</FrameLayout>

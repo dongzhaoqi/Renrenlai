@@ -139,11 +139,11 @@
     <orderEntry type="library" exported="" name="bottom-dialog-0.0.5" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.8" level="project" />
-    <orderEntry type="library" exported="" name="GetuiSDK-xxx" level="project" />
     <orderEntry type="library" exported="" name="butterknife-7.0.1" level="project" />
+    <orderEntry type="library" exported="" name="GetuiSDK-xxx" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.3.0" level="project" />
-    <orderEntry type="library" exported="" name="MobTools-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-SinaWeibo-2.7.1" level="project" />
+    <orderEntry type="library" exported="" name="MobTools-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="MobCommons-2016.0406.1915" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-23.3.0" level="project" />

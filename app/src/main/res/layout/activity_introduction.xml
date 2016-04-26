@@ -11,9 +11,11 @@
         layout="@layout/include_action_bar" />
 
     <EditText
+        android:id="@+id/et_intro"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="5"
+        android:maxLines="5"
         android:gravity="top"
         android:padding="@dimen/activity_horizontal_margin"
         android:hint="@string/txt_hint_intro"
@@ -21,4 +23,16 @@
         android:textColorHint="@color/edit_hint"
         android:textSize="@dimen/text_size_16"
         android:background="@null"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/divider_height"
+        android:background="@color/divider"/>
+    <TextView
+        android:id="@+id/tv_len"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/margin_8"
+        android:text="0/50"
+        android:layout_gravity="right"
+        />
 </LinearLayout>

@@ -62,8 +62,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/row_selector"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="20dp">
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10">
 
                     <ImageView
                         android:id="@+id/img_fund"
@@ -158,8 +158,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:background="@drawable/row_selector"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="20dp">
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10">
 
                     <ImageView
                         android:id="@+id/img_community"

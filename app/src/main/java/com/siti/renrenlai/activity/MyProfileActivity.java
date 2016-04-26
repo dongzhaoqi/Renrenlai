@@ -81,6 +81,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             case R.id.layout_name:
                 break;
             case R.id.layout_nickname:
+                startAnimActivity(EditNameActivity.class);
                 break;
             case R.id.layout_community:
                 break;

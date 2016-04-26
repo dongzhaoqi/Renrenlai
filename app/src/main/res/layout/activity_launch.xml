@@ -243,9 +243,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_96"
                 android:background="@drawable/layout_bottom_border"
-                android:paddingBottom="@dimen/margin_8"
-                android:paddingLeft="@dimen/margin_8"
-                android:paddingTop="@dimen/margin_8">
+                android:padding="@dimen/padding_10">
 
                 <TextView
                     android:id="@+id/str_cover"

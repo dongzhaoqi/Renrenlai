@@ -228,7 +228,7 @@ public class HeaderLayout extends LinearLayout {
 									 onRightImageButtonClickListener onRightImageButtonClickListener) {
 		setDefaultTitle(title);
 		mLayoutRightContainer.setVisibility(View.VISIBLE);
-		params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.MATCH_PARENT);
+		params = new LinearLayout.LayoutParams(150,ViewGroup.LayoutParams.MATCH_PARENT);
 		mRightImageButton.setLayoutParams(params);
 		mRightImageButton.setBackgroundResource(R.drawable.register_btn_selector);
 		mRightImageButton.setText(text);

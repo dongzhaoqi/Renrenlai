@@ -11,8 +11,7 @@
     <RelativeLayout
         android:id="@+id/layout_name"
         android:layout_width="fill_parent"
-        android:layout_height="120dp"
-        android:background="@drawable/row_selector">
+        android:layout_height="120dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -42,10 +41,10 @@
     <RelativeLayout
         android:id="@+id/layout_nickname"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_nickname"
@@ -86,10 +85,10 @@
     <RelativeLayout
         android:id="@+id/layout_community"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_my_community"
@@ -130,10 +129,10 @@
     <RelativeLayout
         android:id="@+id/layout_gender"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_gender"
@@ -180,10 +179,10 @@
     <RelativeLayout
         android:id="@+id/layout_hobby"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_hobby"
@@ -206,6 +205,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/padding_20"
             android:layout_toRightOf="@id/str_hobby"
             android:text="跑步 健身"/>
 
@@ -225,10 +225,10 @@
     <RelativeLayout
         android:id="@+id/layout_introduction"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_introduction"
@@ -250,6 +250,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_marginRight="@dimen/padding_20"
             android:layout_toRightOf="@id/tv_introduction"
             android:text="金桥社区男神"/>
 
@@ -269,10 +270,10 @@
     <RelativeLayout
         android:id="@+id/layout_password"
         android:layout_width="fill_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
-        android:paddingLeft="10dp"
-        android:paddingRight="@dimen/activity_horizontal_margin">
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
 
         <ImageView
             android:id="@+id/img_password"

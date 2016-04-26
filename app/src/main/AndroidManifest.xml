@@ -70,6 +70,8 @@
         <activity android:name=".activity.FeedbackActivity"/>
         <activity android:name=".activity.FundIntroActivity"/>
         <activity android:name=".activity.ApplyWishActivity"/>
+        <activity android:name=".activity.MyLaunchActivity"/>
+        <activity android:name=".activity.EditNameActivity"/>
 
 
         <activity
