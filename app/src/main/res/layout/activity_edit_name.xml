@@ -11,6 +11,7 @@
         layout="@layout/include_action_bar" />
 
     <EditText
+        android:id="@+id/et_modify_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="top"

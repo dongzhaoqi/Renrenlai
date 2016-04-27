@@ -14,5 +14,9 @@
         <item>乒乓球</item>
     </string-array>
 
+    <string-array name="activity_type">
+        <item>兴趣</item>
+        <item>意见征集</item>
+    </string-array>
 
 </resources>

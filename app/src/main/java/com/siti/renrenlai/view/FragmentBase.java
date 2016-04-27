@@ -113,6 +113,9 @@ public abstract class FragmentBase extends Fragment {
 				listener2);
 	}
 
+	public void initLeftText(String leftText){
+		mHeaderLayout.setLeftText(leftText);
+	}
 
 	public void initTopBarForLeft(String titleName) {
 		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);

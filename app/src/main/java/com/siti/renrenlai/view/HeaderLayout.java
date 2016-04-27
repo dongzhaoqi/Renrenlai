@@ -211,6 +211,10 @@ public class HeaderLayout extends LinearLayout {
 		}
 	}
 
+	public void setLeftText(String leftText){
+		mLeftText.setText(leftText);
+	}
+
 	public void setTitleAndRightButton(CharSequence title, int backid,String text,
 			onRightImageButtonClickListener onRightImageButtonClickListener) {
 		setDefaultTitle(title);

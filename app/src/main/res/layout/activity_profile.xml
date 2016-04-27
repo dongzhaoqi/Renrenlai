@@ -63,9 +63,11 @@
 
         <TextView
             style="@style/more_text_style"
+            android:id="@+id/tv_nickName"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/tv_name"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_30"
             android:text="张三"/>
 
         <ImageView
@@ -109,7 +111,8 @@
             style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/tv_my_community"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_30"
             android:text="金桥小区"/>
 
         <ImageView
@@ -154,7 +157,8 @@
             style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_gender"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_30"
             android:text="男"/>
 
         <ImageView
@@ -164,11 +168,6 @@
             android:duplicateParentState="true"
             android:src="@drawable/go" />
     </RelativeLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/background" />
 
     <View
         android:layout_width="match_parent"
@@ -205,8 +204,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginRight="@dimen/padding_20"
-            android:layout_toRightOf="@id/str_hobby"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_30"
             android:text="跑步 健身"/>
 
         <ImageView
@@ -250,8 +249,8 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginRight="@dimen/padding_20"
-            android:layout_toRightOf="@id/tv_introduction"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/padding_30"
             android:text="金桥社区男神"/>
 
         <ImageView

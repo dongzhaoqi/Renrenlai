@@ -21,6 +21,7 @@ import com.orhanobut.dialogplus.DialogPlus;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -44,6 +45,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     RelativeLayout layoutName;
     @Bind(R.id.layout_nickname)
     RelativeLayout layout_nickname;
+    @Bind(R.id.tv_nickName) TextView tv_nickName;
     @Bind(R.id.layout_community)
     RelativeLayout layout_community;
     @Bind(R.id.layout_gender)
@@ -62,6 +64,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     private static final int TAKE_PICTURE = 1;
     private Bitmap bitmap;
     private String imgName;
+    private static int MODIFY_NAME = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +72,10 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
+        String nickName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "nickName");
+        tv_nickName.setText(nickName);
     }
 
     @OnClick({R.id.img_photo, R.id.layout_name, R.id.layout_nickname, R.id.layout_community,
@@ -81,7 +88,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             case R.id.layout_name:
                 break;
             case R.id.layout_nickname:
-                startAnimActivity(EditNameActivity.class);
+                Intent intent = new Intent();
+                intent.setClass(MyProfileActivity.this, EditNameActivity.class);
+                startActivityForResult(intent, MODIFY_NAME);
                 break;
             case R.id.layout_community:
                 break;
@@ -215,7 +224,14 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
             //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
             img_photo.setImageBitmap(bitmap);
+        }else if(requestCode == MODIFY_NAME){
+            String nickName = data.getStringExtra("nickName");
+            modifyName(nickName);
         }
+    }
+
+    public void modifyName(String userName) {
+        tv_nickName.setText(userName);
     }
 
 }

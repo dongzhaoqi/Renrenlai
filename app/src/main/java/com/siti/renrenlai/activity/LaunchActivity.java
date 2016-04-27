@@ -2,7 +2,6 @@ package com.siti.renrenlai.activity;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -10,22 +9,18 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.ab.adapter.AbImageShowAdapter;
-import com.ab.util.AbStrUtil;
-import com.ab.util.AbViewUtil;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
@@ -36,6 +31,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.aigestudio.datepicker.cons.DPMode;
 import cn.aigestudio.datepicker.views.DatePicker;
 import rebus.bottomdialog.BottomDialog;
@@ -46,11 +44,19 @@ import rebus.bottomdialog.BottomDialog;
 
 public class LaunchActivity extends BaseActivity implements View.OnClickListener {
 
-    private EditText et_subject, et_place, et_detail;
-    private TextView et_time, et_end;
-    private Button btn_preview, btn_publish;
-    private RelativeLayout layout_cover;
-    private ImageView iv_cover;
+    @Bind(R.id.layout_type) RelativeLayout layoutType;
+    @Bind(R.id.et_subject) EditText et_subject;
+    @Bind(R.id.tv_category) TextView tv_category;
+    @Bind(R.id.et_time) TextView et_time;
+    @Bind(R.id.tv_end) TextView et_end;
+    @Bind(R.id.et_place) EditText et_place;
+    @Bind(R.id.et_epople) EditText etEpople;
+    @Bind(R.id.iv_cover) ImageView iv_cover;
+    @Bind(R.id.layout_cover) RelativeLayout layout_cover;
+    @Bind(R.id.et_detail) EditText et_detail;
+    @Bind(R.id.btn_preview) Button btn_preview;
+    @Bind(R.id.btn_publish) Button btn_publish;
+
     private Bitmap bitmap;
     private String imgName;
     private int camIndex = 0;
@@ -70,6 +76,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
+        ButterKnife.bind(this);
         initViews();
 
         initEvent();
@@ -78,30 +85,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private void initViews() {
         initTopBarForLeft("发起活动");
 
-        et_subject = (EditText) findViewById(R.id.et_subject);
-        et_time = (TextView) findViewById(R.id.et_time);
-        et_end = (TextView) findViewById(R.id.tv_end);
-        et_place = (EditText) findViewById(R.id.et_place);
-        et_detail = (EditText) findViewById(R.id.et_detail);
-
-        btn_preview = (Button) findViewById(R.id.btn_preview);
-        btn_publish = (Button) findViewById(R.id.btn_publish);
-
-        layout_cover = (RelativeLayout) findViewById(R.id.layout_cover);
-
         /*mPhotoList.add(String.valueOf(R.drawable.cam_photo));
         mGridView = (GridView) findViewById(R.id.myGrid);
         mImagePathAdapter = new AbImageShowAdapter(this, mPhotoList,116,116);
         mGridView.setAdapter(mImagePathAdapter);*/
 
-        iv_cover = (ImageView) findViewById(R.id.iv_cover);
     }
 
     private void initEvent() {
-        et_time.setOnClickListener(this);
-        et_end.setOnClickListener(this);
-
-        layout_cover.setOnClickListener(this);
 
         /*mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -114,21 +105,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         });*/
     }
 
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id) {
-            case R.id.et_time:
-                showTimeDialog();
-                break;
-            case R.id.tv_end:
-                showTimeDialog();
-                break;
-            case R.id.layout_cover:
-                showPicDialog();
-                break;
-        }
-
+    public void showTypeDialog(){
+        new MaterialDialog.Builder(this)
+                .items(R.array.activity_type)
+                .title(R.string.txt_category)
+                .itemsCallback(new MaterialDialog.ListCallback() {
+                    @Override
+                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
+                        tv_category.setText(text);
+                    }
+                })
+                .show();
     }
 
     public void showTimeDialog() {
@@ -169,9 +156,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
                         return true;
                     case R.id.item_take_pic:
-                        File imgFolder = new File(Environment.getExternalStorageDirectory(),"AAA");
+                        File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
                         imgFolder.mkdirs();
-                        File img = new File(imgFolder,new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
+                        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
                         Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
                         Uri imgUri = Uri.fromFile(img);
                         camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
@@ -225,4 +212,25 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
 
+    @OnClick({R.id.layout_type, R.id.et_time, R.id.tv_end, R.id.layout_cover, R.id.btn_preview, R.id.btn_publish})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.layout_type:
+                showTypeDialog();
+                break;
+            case R.id.et_time:
+                showTimeDialog();
+                break;
+            case R.id.tv_end:
+                showTimeDialog();
+                break;
+            case R.id.layout_cover:
+                showPicDialog();
+                break;
+            case R.id.btn_preview:
+                break;
+            case R.id.btn_publish:
+                break;
+        }
+    }
 }

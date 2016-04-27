@@ -88,7 +88,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(DialogPlus dialog, Object item, View view, int position) {
-                                showToast("position:" + position);
+                                initLeftText(item.toString());
                                 dialog.dismiss();
                             }
                         })

@@ -5,6 +5,7 @@
     <dimen name="drawable_padding_5">5dp</dimen>
     <dimen name="margin_8">8dp</dimen>
     <dimen name="padding_10">10dp</dimen>
+    <dimen name="padding_12">12dp</dimen>
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

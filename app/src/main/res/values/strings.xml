@@ -49,6 +49,11 @@
     <string name="str_invite">邀请好友加入</string>
     <string name="str_feedback">我要反馈</string>
 
+    <string name="str_system_alarm">系统消息</string>
+    <string name="str_review">评论</string>
+    <string name="str_like">收到的喜欢</string>
+
+
 
     <!--我的资料-->
     <string name="txt_nick_name">昵称</string>
@@ -68,7 +73,7 @@
 
 
     <!--发起活动-->
-    <string name="txt_category">活动大类</string>
+    <string name="txt_category">活动类型:</string>
     <string name="txt_interest">兴趣</string>
     <string name="txt_help">互助</string>
     <string name="txt_advice">意见征集</string>

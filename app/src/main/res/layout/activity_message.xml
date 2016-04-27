@@ -8,9 +8,112 @@
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <TextView
-        android:id="@+id/section_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="消息" />
+    <RelativeLayout
+        android:id="@+id/layout_system_alarm"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/base_action_bar_height"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <ImageView
+            android:id="@+id/img_system_alarm"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/system_alarm" />
+
+        <TextView
+            style="@style/me_text_style"
+            android:id="@+id/str_system_alarm"
+            android:layout_width="@dimen/height_96"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/img_system_alarm"
+            android:text="@string/str_system_alarm" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+    <RelativeLayout
+        android:id="@+id/layout_review"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/base_action_bar_height"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <ImageView
+            android:id="@+id/img_review"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/review" />
+
+        <TextView
+            style="@style/me_text_style"
+            android:id="@+id/str_review"
+            android:layout_width="@dimen/height_96"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/img_review"
+            android:text="@string/str_review" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_like"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/base_action_bar_height"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <ImageView
+            android:id="@+id/img_like"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_centerVertical="true"
+            android:src="@drawable/like" />
+
+        <TextView
+            style="@style/me_text_style"
+            android:id="@+id/str_like"
+            android:layout_width="@dimen/height_96"
+            android:layout_height="match_parent"
+            android:layout_toRightOf="@id/img_like"
+            android:text="@string/str_like" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
 </LinearLayout>
