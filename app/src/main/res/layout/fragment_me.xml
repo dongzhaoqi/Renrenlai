@@ -157,7 +157,7 @@
         android:background="@color/background" />
 
     <RelativeLayout
-        android:id="@+id/layout_myProfile"
+        android:id="@+id/layout_invite"
         android:layout_width="fill_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"

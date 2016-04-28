@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/layout_top_border"
-                android:drawableTop="@drawable/tab_find_btn"
+                android:drawableTop="@drawable/tab_me_btn"
                 android:onClick="onTabSelect"
                 android:paddingTop="12dp"
                 android:scaleType="matrix"
