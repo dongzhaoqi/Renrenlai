@@ -37,8 +37,8 @@
 
                     <ImageView
                         android:id="@+id/activity_img"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
+                        android:layout_width="@dimen/height_96"
+                        android:layout_height="@dimen/height_96"
                         android:src="@drawable/launch" />
 
                     <TextView
@@ -60,7 +60,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_fund"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10">
@@ -96,7 +96,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_realname"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
                     android:paddingLeft="10dp"
                     android:paddingRight="20dp">
@@ -126,7 +126,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_gender"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
                     android:paddingLeft="10dp"
                     android:paddingRight="20dp">
@@ -156,7 +156,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_contact"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10">
@@ -192,7 +192,7 @@
                 <RelativeLayout
                     android:id="@+id/layout_intro"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
                     android:paddingLeft="10dp"
                     android:paddingRight="20dp">

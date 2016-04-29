@@ -46,13 +46,13 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private ActivityAdapter adapter;
     private TextView tv_fund_intro;
     private String[] images = new String[]{
-            "http://api.androidhive.info/music/images/adele.png",
-            "http://api.androidhive.info/music/images/eminem.png",
-            "http://www.ld12.com/upimg358/allimg/c140921/14112A4V34010-219218.jpg",
-            "http://www.ld12.com/upimg358/allimg/c150619/1434F6225920Z-105122.jpg",
+            "http://img1.imgtn.bdimg.com/it/u=1056505034,278532731&fm=206&gp=0.jpg",
+            "http://img5.imgtn.bdimg.com/it/u=19688821,301685728&fm=206&gp=0.jpg",
+            "http://img2.imgtn.bdimg.com/it/u=249146884,1242359836&fm=206&gp=0.jpg",
+            "http://img2.imgtn.bdimg.com/it/u=4124932944,3228346692&fm=206&gp=0.jpg",
             "http://api.androidhive.info/music/images/mj.png"
     };
-    private String[] strs = new String[]{"缤纷广场舞","南新七色馆\n儿童绘画营","春季夜跑族","缤纷广场舞","春季夜跑族"};
+    private String[] strs = new String[]{"缤纷广场舞","南新七色馆\n儿童绘画营","春季夜跑族","野外踏青","草莓音乐节"};
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
