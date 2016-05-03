@@ -1,14 +1,11 @@
 package com.siti.renrenlai.activity;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -17,7 +14,7 @@ import android.widget.RelativeLayout;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
-import com.siti.renrenlai.util.CustomApplcation;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
 
@@ -86,7 +83,7 @@ public class SplashActivity extends BaseActivity {
 
 						User user = new User();
 						user.setUserName(userName);
-						((CustomApplcation)getApplication()).setUser(user);
+						((CustomApplication)getApplication()).setUser(user);
 						startActivity(new Intent(SplashActivity.this,MainActivity.class));
 						finish();
 

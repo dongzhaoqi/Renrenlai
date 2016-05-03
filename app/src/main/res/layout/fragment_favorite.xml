@@ -14,7 +14,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|right"
-        android:layout_margin="20dp"
+        android:layout_margin="@dimen/activity_horizontal_margin"
         fab:button_color="@color/top_bar_color"
         fab:button_colorPressed="@color/colorPrimary"
         fab:image="@drawable/arrow_up"

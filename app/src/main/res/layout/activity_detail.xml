@@ -252,18 +252,27 @@
             android:orientation="horizontal">
 
             <Button
-                android:id="@+id/btn_preview"
-                style="@style/activity_text_style"
+                android:id="@+id/btn_comment"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@drawable/btn_background"
+                android:drawableTop="@drawable/comment"
+                android:paddingTop="5dp"
+                android:text="@string/txt_comment" />
+
+            <Button
+                android:id="@+id/btn_favor"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/btn_background"
                 android:drawableTop="@drawable/heart_selector"
+                android:paddingTop="5dp"
                 android:text="@string/txt_favor" />
 
             <Button
                 android:id="@+id/btn_publish"
-                style="@style/activity_text_style"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"

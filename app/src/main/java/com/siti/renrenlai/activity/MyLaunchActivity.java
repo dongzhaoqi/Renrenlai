@@ -20,7 +20,7 @@ public class MyLaunchActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_launch);
         model = (TimeLineModel) getIntent().getExtras().getSerializable("model");
-        initTopBarForBoth("我发起的活动" + model.getTitle().substring(0,3), R.drawable.ic_share_white_24dp, new HeaderLayout.onRightImageButtonClickListener() {
+        initTopBarForBoth("我发起的活动" + model.getTitle().substring(0,3), R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();

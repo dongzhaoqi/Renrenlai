@@ -3,9 +3,10 @@ package com.siti.renrenlai.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,6 +17,9 @@ import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.squareup.picasso.Picasso;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -24,18 +28,25 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class ActivityInfo extends BaseActivity implements OnClickListener {
 
-    private TextView txt_avtivity_name;
-    private ImageView activity_img;
-    private RelativeLayout layout_contact;
+    @Bind(R.id.activity_img) ImageView activity_img;
+    @Bind(R.id.activity_name) TextView txt_avtivity_name;
+    @Bind(R.id.layout_fund) RelativeLayout layoutFund;
+    @Bind(R.id.layout_contact) RelativeLayout layout_contact;
+    @Bind(R.id.expand_text_view) ExpandableTextView expTv1;
+    @Bind(R.id.btn_comment) Button btnComment;
+    @Bind(R.id.btn_favor) Button btnFavor;
+    @Bind(R.id.btn_publish) Button btnPublish;
     private String activity_title;
     private Activity activity;
+    boolean isReviewPressed = false;
+    boolean isFavorPressed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
+        ButterKnife.bind(this);
         initViews();
-        initEvent();
     }
 
     private void initViews() {
@@ -48,29 +59,32 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         activity_title = activity.getTv();
-
-        txt_avtivity_name = (TextView) findViewById(R.id.activity_name);
-        activity_img = (ImageView) findViewById(R.id.activity_img);
-        layout_contact = (RelativeLayout) findViewById(R.id.layout_contact);
-        ExpandableTextView expTv1 = (ExpandableTextView) findViewById(R.id.expand_text_view);
         expTv1.setText(getString(R.string.dummy_text1));
         txt_avtivity_name.setText(activity.getTv());
         Picasso.with(this).load(activity.getImg()).into(activity_img);
 
     }
 
-    private void initEvent(){
-        layout_contact.setOnClickListener(this);
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        switch (id){
+    @OnClick({R.id.layout_fund, R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.layout_fund:
+                break;
             case R.id.layout_contact:
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + "13761076562"));
                 startActivity(intent);
+                break;
+            case R.id.btn_comment:
+                break;
+            case R.id.btn_favor:
+                if (!isFavorPressed) {
+                    btnFavor.setBackgroundResource(R.drawable.heart);
+                } else {
+                    btnFavor.setBackgroundResource(R.drawable.heart_pressed);
+                }
+                isFavorPressed = !isFavorPressed;
+                break;
+            case R.id.btn_publish:
                 break;
         }
     }
@@ -108,4 +122,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         super.onDestroy();
         ShareSDK.stopSDK(this);
     }
+
+
 }

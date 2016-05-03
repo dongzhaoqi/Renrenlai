@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +13,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.TimeoutError;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -26,9 +33,14 @@ import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.SearchActivity;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +54,6 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private Context mContext;
     private XRecyclerView mXRecyclerView;
     private List<Activity> itemList;
-    private RelativeLayout layout_introduction, layout_apply, layout_view_project;
     private ActivityAdapter adapter;
     private TextView tv_fund_intro;
     private String[] images = new String[]{
@@ -66,6 +77,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
 
         initData();
+        initData2();
         initView();
         initEvent();
     }
@@ -117,9 +129,6 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         });
 
 
-        //layout_introduction = (RelativeLayout) findViewById(R.id.layout_introduction);
-        //layout_apply = (RelativeLayout) findViewById(R.id.layout_apply);
-        //layout_view_project = (RelativeLayout) findViewById(R.id.layout_view_project);
         tv_fund_intro= (TextView) findViewById(R.id.tv_fund_intro);
 
         mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
@@ -154,6 +163,67 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     }
 
 
+    private void initData2(){
+        /*String api = "/getActivityListForApp.action";
+        String url = ConstantValue.urlRoot + api;
+        Log.d("FindFragment", "url:" + url);
+        //请求成功
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject response) {
+                Log.d("onResponse", response.toString());
+            }
+        };
+
+        //请求失败
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                if (error.networkResponse == null) {
+                    if (error.getClass().equals(TimeoutError.class)) {
+                        // Show timeout error message
+                        Toast.makeText(getContext(),
+                                "Oops. Timeout error!",
+                                Toast.LENGTH_LONG).show();
+                    }
+                }
+                Log.e("onErrorResponse", error.getMessage(), error);
+            }
+        };
+
+        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, listener, errorListener);
+        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列*/
+
+        String api = "api/content/libao/getList";
+        String url = ConstantValue.urlRoot2 + api;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", "dq");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //请求成功
+        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+            @Override
+            public void onResponse(JSONObject arg0) {
+                Log.d("onResponse", arg0.toString());
+            }
+        };
+
+        //请求失败
+        Response.ErrorListener errorListener = new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("onErrorResponse", error.getMessage(), error);
+                byte[] htmlBodyBytes = error.networkResponse.data;
+                Log.e("onErrorResponse", new String(htmlBodyBytes), error);
+            }
+        };
+
+        JsonObjectRequest request = new JsonObjectRequest(url, jsonObject, listener, errorListener);
+        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
+    }
 
     private void initData() {
         itemList = new ArrayList<>();

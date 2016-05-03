@@ -93,7 +93,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                 }
         });
 
-        CustomApplcation.getInstance().addToRequestQueue(req);*/
+        CustomApplication.getInstance().addToRequestQueue(req);*/
 
         User user = new User();
 
