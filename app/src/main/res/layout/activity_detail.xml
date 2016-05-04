@@ -70,7 +70,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/tag" />
 
                     <TextView
                         style="@style/me_text_style"
@@ -94,7 +94,7 @@
                     android:background="@color/background" />
 
                 <RelativeLayout
-                    android:id="@+id/layout_realname"
+                    android:id="@+id/layout_time"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
@@ -102,17 +102,18 @@
                     android:paddingRight="20dp">
 
                     <ImageView
-                        android:id="@+id/img_realname"
+                        android:id="@+id/img_time"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/time" />
 
                     <TextView
                         style="@style/me_text_style"
+                        android:id="@+id/tv_activity_time"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@id/img_realname"
+                        android:layout_toRightOf="@id/img_time"
                         android:text="2016/3/20 08:30-10:00" />
 
                 </RelativeLayout>
@@ -124,7 +125,7 @@
 
 
                 <RelativeLayout
-                    android:id="@+id/layout_gender"
+                    android:id="@+id/layout_location"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
@@ -132,17 +133,18 @@
                     android:paddingRight="20dp">
 
                     <ImageView
-                        android:id="@+id/img_gender"
+                        android:id="@+id/img_location"
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/location" />
 
                     <TextView
                         style="@style/me_text_style"
+                        android:id="@+id/tv_activity_address"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
-                        android:layout_toRightOf="@id/img_gender"
+                        android:layout_toRightOf="@id/img_location"
                         android:text="四川成都" />
 
                 </RelativeLayout>
@@ -166,7 +168,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/tel" />
 
                     <TextView
                         style="@style/me_text_style"
@@ -202,7 +204,7 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/intro" />
 
                     <TextView
                         style="@style/me_text_style"
@@ -240,6 +242,8 @@
                         android:padding="16dp" />
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
 
+
+
             </LinearLayout>
 
 
@@ -259,6 +263,7 @@
                 android:background="@drawable/btn_background"
                 android:drawableTop="@drawable/comment"
                 android:paddingTop="5dp"
+                android:textColor="@color/me_text_color"
                 android:text="@string/txt_comment" />
 
             <Button
@@ -269,6 +274,7 @@
                 android:background="@drawable/btn_background"
                 android:drawableTop="@drawable/heart_selector"
                 android:paddingTop="5dp"
+                android:textColor="@color/me_text_color"
                 android:text="@string/txt_favor" />
 
             <Button
@@ -277,6 +283,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/btn_background"
+                android:textColor="@color/me_text_color"
                 android:text="@string/txt_im_enroll" />
         </LinearLayout>
     </FrameLayout>

@@ -73,12 +73,12 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         // 给ViewHolder设置元素
         Activity p = activities.get(i);
-        viewHolder.mTextView.setText(p.getTv());
+        viewHolder.mTextView.setText(p.getActivityName());
         viewHolder.mImageView.setTag(activities.get(i));
 
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
-        loader.displayImage(p.getImg(), viewHolder.mImageView, options,
+        loader.displayImage(p.getActivityImg(), viewHolder.mImageView, options,
                 animateFirstListener);
     }
 

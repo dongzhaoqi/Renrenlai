@@ -4,20 +4,67 @@ import java.io.Serializable;
 
 public class Activity implements Serializable {
 
-    private String img;
-    private String tv;
+    private String activityImg;
+    private String activityName;
+    private String activityAddress;
+    private String activityDescrip;
+    private String activityStartTime;
+    private String activityEndTime;
+    private String contactTel;
 
-    public String getImg() {
-        return img;
-    }
-    public void setImg(String img) {
-        this.img = img;
-    }
-    public String getTv() {
-        return tv;
-    }
-    public void setTv(String tv) {
-        this.tv = tv;
+    public String getActivityImg() {
+        return activityImg;
     }
 
+    public void setActivityImg(String activityImg) {
+        this.activityImg = activityImg;
+    }
+
+    public String getActivityName() {
+        return activityName;
+    }
+
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
+    }
+
+    public String getActivityAddress() {
+        return activityAddress;
+    }
+
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
+    }
+
+    public String getActivityDescrip() {
+        return activityDescrip;
+    }
+
+    public void setActivityDescrip(String activityDescrip) {
+        this.activityDescrip = activityDescrip;
+    }
+
+    public String getActivityStartTime() {
+        return activityStartTime;
+    }
+
+    public void setActivityStartTime(String activityStartTime) {
+        this.activityStartTime = activityStartTime;
+    }
+
+    public String getActivityEndTime() {
+        return activityEndTime;
+    }
+
+    public void setActivityEndTime(String activityEndTime) {
+        this.activityEndTime = activityEndTime;
+    }
+
+    public String getContactTel() {
+        return contactTel;
+    }
+
+    public void setContactTel(String contactTel) {
+        this.contactTel = contactTel;
+    }
 }

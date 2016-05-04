@@ -29,16 +29,18 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     @Bind(R.id.activity_img) ImageView activity_img;
-    @Bind(R.id.activity_name) TextView txt_avtivity_name;
+    @Bind(R.id.activity_name) TextView tv_avtivity_name;
     @Bind(R.id.layout_fund) RelativeLayout layoutFund;
     @Bind(R.id.layout_contact) RelativeLayout layout_contact;
+    @Bind(R.id.tv_activity_address) TextView tv_activity_address;
+    @Bind(R.id.tv_activity_time) TextView tv_activity_time;
     @Bind(R.id.expand_text_view) ExpandableTextView expTv1;
     @Bind(R.id.btn_comment) Button btnComment;
     @Bind(R.id.btn_favor) Button btnFavor;
     @Bind(R.id.btn_publish) Button btnPublish;
-    private String activity_title;
-    private Activity activity;
-    boolean isReviewPressed = false;
+
+    Activity activity;
+    String activity_title, contact_tel, activity_address, activity_describ, activity_time;
     boolean isFavorPressed = false;
 
     @Override
@@ -58,10 +60,21 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         });
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
-        activity_title = activity.getTv();
-        expTv1.setText(getString(R.string.dummy_text1));
-        txt_avtivity_name.setText(activity.getTv());
-        Picasso.with(this).load(activity.getImg()).into(activity_img);
+        if(activity != null){
+            activity_title = activity.getActivityName();
+            contact_tel = activity.getContactTel();
+            activity_address = activity.getActivityAddress();
+            activity_describ = activity.getActivityDescrip();
+            activity_time = activity.getActivityStartTime() + "-" + activity.getActivityEndTime();
+        }
+
+
+        expTv1.setText(activity_describ);
+        tv_avtivity_name.setText(activity_title);
+        tv_activity_address.setText(activity_address);
+        tv_activity_time.setText(activity_time);
+
+        Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
 
     }
 
@@ -71,16 +84,18 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             case R.id.layout_fund:
                 break;
             case R.id.layout_contact:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + "13761076562"));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + contact_tel));
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
+
+
                 break;
             case R.id.btn_favor:
                 if (!isFavorPressed) {
-                    btnFavor.setBackgroundResource(R.drawable.heart);
+                    btnFavor.setSelected(true);
                 } else {
-                    btnFavor.setBackgroundResource(R.drawable.heart_pressed);
+                    btnFavor.setSelected(false);
                 }
                 isFavorPressed = !isFavorPressed;
                 break;

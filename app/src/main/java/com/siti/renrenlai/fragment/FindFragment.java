@@ -39,6 +39,7 @@ import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -53,7 +54,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private View view;
     private Context mContext;
     private XRecyclerView mXRecyclerView;
-    private List<Activity> itemList;
+    private List<Activity> activityList;
     private ActivityAdapter adapter;
     private TextView tv_fund_intro;
     private String[] images = new String[]{
@@ -77,7 +78,6 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         super.onActivityCreated(savedInstanceState);
 
         initData();
-        initData2();
         initView();
         initEvent();
     }
@@ -135,11 +135,6 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         // 设置LinearLayoutManager
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        adapter = new ActivityAdapter(getActivity(), itemList);
-        mXRecyclerView.setAdapter(adapter);
-        mXRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
-
         mXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -163,20 +158,18 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     }
 
 
-    private void initData2(){
-        /*String api = "/getActivityListForApp.action";
+    private void initData(){
+        String api = "/getActivityListForApp";
         String url = ConstantValue.urlRoot + api;
         Log.d("FindFragment", "url:" + url);
-        //请求成功
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
+
+        JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>(){
             @Override
             public void onResponse(JSONObject response) {
                 Log.d("onResponse", response.toString());
+                getData(response);
             }
-        };
-
-        //请求失败
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
+        }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
                 if (error.networkResponse == null) {
@@ -186,76 +179,43 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                                 "Oops. Timeout error!",
                                 Toast.LENGTH_LONG).show();
                     }
+
+
                 }
                 Log.e("onErrorResponse", error.getMessage(), error);
             }
-        };
-
-        JsonObjectRequest request = new JsonObjectRequest(Request.Method.POST, url, null, listener, errorListener);
-        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列*/
-
-        String api = "api/content/libao/getList";
-        String url = ConstantValue.urlRoot2 + api;
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("userName", "dq");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //请求成功
-        Response.Listener<JSONObject> listener = new Response.Listener<JSONObject>() {
-            @Override
-            public void onResponse(JSONObject arg0) {
-                Log.d("onResponse", arg0.toString());
-            }
-        };
-
-        //请求失败
-        Response.ErrorListener errorListener = new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                Log.e("onErrorResponse", error.getMessage(), error);
-                byte[] htmlBodyBytes = error.networkResponse.data;
-                Log.e("onErrorResponse", new String(htmlBodyBytes), error);
-            }
-        };
-
-        JsonObjectRequest request = new JsonObjectRequest(url, jsonObject, listener, errorListener);
+        });
         CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
+
     }
 
-    private void initData() {
-        itemList = new ArrayList<>();
-        for (int i = 0; i < strs.length; i++) {
-            Activity item = new Activity();
-            item.setImg(images[i]);
-            item.setTv(strs[i]);
-            itemList.add(item);
+    private void getData(JSONObject response) {
+
+        JSONArray result = response.optJSONArray("result");
+
+        activityList = new ArrayList<>();
+        for (int i = 0; i < result.length(); i++) {
+            Activity activity = new Activity();
+            activity.setActivityImg(images[i]);
+            try {
+                activity.setActivityName(result.getJSONObject(i).optString("activityName"));
+                activity.setActivityStartTime(result.getJSONObject(i).optString("activityStartTime"));
+                activity.setActivityEndTime(result.getJSONObject(i).optString("activityEndTime"));
+                activity.setContactTel(result.getJSONObject(i).optString("activityReleaserTel"));
+                activity.setActivityAddress(result.getJSONObject(i).optString("activityAddress"));
+                activity.setActivityDescrip(result.getJSONObject(i).optString("activityDetailDescrip"));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            activityList.add(activity);
         }
-    }
 
-    private void loadData() {
-        for (int i = 0; i < 3; i++) {
-            Activity item = new Activity();
-            item.setImg(images[i]);
-            item.setTv(strs[i]);
-            itemList.add(item);
-        }
-        adapter.notifyDataSetChanged();
-    }
-
-    private void initEvent(){
-        //layout_introduction.setOnClickListener(this);
-        //layout_apply.setOnClickListener(this);
-        //layout_view_project.setOnClickListener(this);
-        tv_fund_intro.setOnClickListener(this);
-
+        adapter = new ActivityAdapter(getActivity(), activityList);
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
-                Activity activity = itemList.get(pos);
+                Activity activity = activityList.get(pos);
                 Intent intent = new Intent(getActivity(),ActivityInfo.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("activity", activity);
@@ -263,21 +223,30 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 startAnimActivity(intent);
             }
         });
+        mXRecyclerView.setAdapter(adapter);
+        mXRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        mXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+    }
+
+    private void loadData() {
+        for (int i = 0; i < 3; i++) {
+            Activity activity = new Activity();
+            //activity.setImg(images[i]);
+            //activity.setTv(strs[i]);
+            activityList.add(activity);
+        }
+        adapter.notifyDataSetChanged();
+    }
+
+    private void initEvent(){
+        tv_fund_intro.setOnClickListener(this);
+
     }
 
     @Override
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            /*case R.id.layout_introduction:
-                startAnimActivity(IntroductionActivity.class);
-                break;
-            case R.id.layout_apply:
-                startAnimActivity(ApplyActivity.class);
-                break;
-            case R.id.layout_view_project:
-                startAnimActivity(ViewProjectActivity.class);
-                break;*/
             case R.id.tv_fund_intro:
                 startAnimActivity(FundIntroActivity.class);
                 break;
