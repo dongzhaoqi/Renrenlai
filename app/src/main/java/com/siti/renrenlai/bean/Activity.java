@@ -1,6 +1,7 @@
 package com.siti.renrenlai.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Activity implements Serializable {
 
@@ -11,6 +12,8 @@ public class Activity implements Serializable {
     private String activityStartTime;
     private String activityEndTime;
     private String contactTel;
+    private List<LovedUsers> lovedUsers;
+    private List<CommentContents> comments;
 
     public String getActivityImg() {
         return activityImg;
@@ -66,5 +69,21 @@ public class Activity implements Serializable {
 
     public void setContactTel(String contactTel) {
         this.contactTel = contactTel;
+    }
+
+    public List<LovedUsers> getLovedUsers() {
+        return lovedUsers;
+    }
+
+    public void setLovedUsers(List<LovedUsers> lovedUsers) {
+        this.lovedUsers = lovedUsers;
+    }
+
+    public List<CommentContents> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentContents> comments) {
+        this.comments = comments;
     }
 }

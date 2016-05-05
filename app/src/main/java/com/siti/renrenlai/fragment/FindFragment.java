@@ -33,6 +33,8 @@ import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.SearchActivity;
+import com.siti.renrenlai.bean.CommentContents;
+import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.FragmentBase;
@@ -57,6 +59,8 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private List<Activity> activityList;
     private ActivityAdapter adapter;
     private TextView tv_fund_intro;
+    private List<LovedUsers> lovedUsersList;
+    private List<CommentContents> commentsList;
     private String[] images = new String[]{
             "http://img1.imgtn.bdimg.com/it/u=1056505034,278532731&fm=206&gp=0.jpg",
             "http://img5.imgtn.bdimg.com/it/u=19688821,301685728&fm=206&gp=0.jpg",
@@ -192,9 +196,10 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private void getData(JSONObject response) {
 
         JSONArray result = response.optJSONArray("result");
-
         activityList = new ArrayList<>();
         for (int i = 0; i < result.length(); i++) {
+            lovedUsersList = new ArrayList<>();
+            commentsList = new ArrayList<>();
             Activity activity = new Activity();
             activity.setActivityImg(images[i]);
             try {
@@ -204,6 +209,24 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 activity.setContactTel(result.getJSONObject(i).optString("activityReleaserTel"));
                 activity.setActivityAddress(result.getJSONObject(i).optString("activityAddress"));
                 activity.setActivityDescrip(result.getJSONObject(i).optString("activityDetailDescrip"));
+                JSONArray lovedusersArray = result.getJSONObject(i).optJSONArray("lovedUsers");
+                for(int j = 0; j < lovedusersArray.length(); j++){
+                    LovedUsers lovedUsers = new LovedUsers();
+                    lovedUsers.setUserHeadPicImagePath(lovedusersArray.optJSONObject(j).optString("userHeadPicImagePath"));
+                    lovedUsers.setUserId(lovedusersArray.optJSONObject(j).optString("userId"));
+                    lovedUsersList.add(lovedUsers);
+                }
+                activity.setLovedUsers(lovedUsersList);
+
+                JSONArray commentsArray = result.getJSONObject(i).optJSONArray("commentContents");
+                for(int k = 0; k < commentsArray.length(); k++){
+                    CommentContents comment = new CommentContents();
+                    comment.setUserName(commentsArray.optJSONObject(k).optString("userName"));
+                    comment.setCommentContent(commentsArray.optJSONObject(k).optString("commentContent"));
+                    commentsList.add(comment);
+                }
+                activity.setComments(commentsList);
+
             } catch (JSONException e) {
                 e.printStackTrace();
             }

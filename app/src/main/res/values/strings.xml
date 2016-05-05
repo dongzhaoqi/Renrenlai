@@ -106,4 +106,8 @@
     <string name="okBtn">确定</string>
 
 
+    <!--活动详情-->
+    <string name="str_favorite">喜欢:</string>
+    <string name="str_comment">评论:</string>
+    <string name="str_send">发送</string>
 </resources>

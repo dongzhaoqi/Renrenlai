@@ -3,25 +3,40 @@ package com.siti.renrenlai.activity;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.CommentContents;
+import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.squareup.picasso.Picasso;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Dong on 2016/3/22.
@@ -35,6 +50,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     @Bind(R.id.tv_activity_address) TextView tv_activity_address;
     @Bind(R.id.tv_activity_time) TextView tv_activity_time;
     @Bind(R.id.expand_text_view) ExpandableTextView expTv1;
+    @Bind(R.id.ll_image) LinearLayout ll_image;
+    @Bind(R.id.list_comment) RecyclerView list_comment;
     @Bind(R.id.btn_comment) Button btnComment;
     @Bind(R.id.btn_favor) Button btnFavor;
     @Bind(R.id.btn_publish) Button btnPublish;
@@ -42,6 +59,10 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
     boolean isFavorPressed = false;
+    private List<LovedUsers> lovedUsersList;
+    private List<CommentContents> commentsList;
+    private CommentAdapter mAdapter;
+    private RecyclerView.LayoutManager layoutManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,16 +87,39 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             activity_address = activity.getActivityAddress();
             activity_describ = activity.getActivityDescrip();
             activity_time = activity.getActivityStartTime() + "-" + activity.getActivityEndTime();
+            lovedUsersList = activity.getLovedUsers();
+            commentsList = activity.getComments();
         }
 
+        for(int i = 0; i < lovedUsersList.size(); i++){
+            CircleImageView image = new CircleImageView(this);
+            String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
+            //image.setBorderColorResource(R.color.colorPrimary);
+            //image.setBorderWidth(2);
+            Picasso.with(this).load(imagePath).resize(48, 48).into(image);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+            params.setMargins(0, 0, 15, 0);
+            ll_image.addView(image, params);
+        }
 
         expTv1.setText(activity_describ);
         tv_avtivity_name.setText(activity_title);
         tv_activity_address.setText(activity_address);
         tv_activity_time.setText(activity_time);
-
         Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
 
+        mAdapter = new CommentAdapter(this, commentsList);
+        mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, Object data) {
+                int pos = Integer.parseInt(data.toString());
+                showCommentDialog(commentsList, pos);
+
+            }
+        });
+        layoutManager = new LinearLayoutManager(this);
+        list_comment.setLayoutManager(layoutManager);
+        list_comment.setAdapter(mAdapter);
     }
 
     @OnClick({R.id.layout_fund, R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
@@ -89,7 +133,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 break;
             case R.id.btn_comment:
 
-
                 break;
             case R.id.btn_favor:
                 if (!isFavorPressed) {
@@ -102,6 +145,21 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             case R.id.btn_publish:
                 break;
         }
+    }
+
+    public void showCommentDialog(List<CommentContents> commentsList, int position){
+        CommentDialog dialog = new CommentDialog(this, position);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        lp.dimAmount = 0.5f;
+        dialog.setCommentList(commentsList, position);
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+
     }
 
     private void showShare() {

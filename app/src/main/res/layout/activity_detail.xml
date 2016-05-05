@@ -196,8 +196,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
-                    android:paddingLeft="10dp"
-                    android:paddingRight="20dp">
+                    android:paddingLeft="@dimen/padding_10"
+                    android:paddingRight="@dimen/padding_10">
 
                     <ImageView
                         android:id="@+id/img_intro"
@@ -242,10 +242,34 @@
                         android:padding="16dp" />
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_favorite"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    />
 
+                <LinearLayout
+                    android:id="@+id/ll_image"
+                    android:orientation="horizontal"
+                    android:layout_margin="@dimen/padding_10"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/str_comment"
+                    android:layout_marginLeft="@dimen/padding_10"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_10"/>
 
             </LinearLayout>
-
 
         </ScrollView>
 

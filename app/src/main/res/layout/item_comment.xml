@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_comment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/row_selector"
+    android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:textColor="@color/colorPrimaryDark"
+        android:text="user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/tv_comment"
+        android:layout_marginLeft="@dimen/drawable_padding_5"
+        android:text="哈哈哈哈"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+</LinearLayout>
