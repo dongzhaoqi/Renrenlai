@@ -102,6 +102,8 @@
     <string name="str_pic_photo">从相册选择</string>
     <string name="str_take_pic">拍照</string>
 
+
+    <string name="str_logout">注销账号</string>
     <string name="cancelBtn">取消</string>
     <string name="okBtn">确定</string>
 

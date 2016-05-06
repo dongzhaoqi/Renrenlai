@@ -19,10 +19,10 @@ public class FeedbackActivity extends BaseActivity {
     }
 
     private void initView(){
-        initTopBarForBoth("反馈", "提交", new onRightImageButtonClickListener() {
+        initTopBarForBoth("反馈", "发送", new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
-                showToast("提交");
+                showToast("感谢您的反馈!");
             }
         });
     }

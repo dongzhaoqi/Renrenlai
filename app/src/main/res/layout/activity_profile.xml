@@ -10,7 +10,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_name"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="120dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -40,7 +40,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_nickname"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
@@ -86,7 +86,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_community"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
@@ -131,7 +131,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_gender"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
@@ -177,7 +177,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_hobby"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
@@ -203,8 +203,11 @@
             style="@style/more_text_style"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
+            android:layout_toRightOf="@id/str_hobby"
             android:layout_alignParentRight="true"
+            android:singleLine="true"
+            android:ellipsize="end"
             android:layout_marginRight="@dimen/padding_30"
             android:text="跑步 健身"/>
 
@@ -223,7 +226,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_introduction"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
@@ -238,7 +241,7 @@
 
         <TextView
             style="@style/me_text_style"
-            android:id="@+id/tv_introduction"
+            android:id="@+id/str_introduction"
             android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/img_introduction"
@@ -246,11 +249,15 @@
 
         <TextView
             style="@style/more_text_style"
+            android:id="@+id/tv_introduction"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
+            android:gravity="center_vertical|right"
             android:layout_alignParentRight="true"
+            android:layout_toRightOf="@id/str_introduction"
             android:layout_marginRight="@dimen/padding_30"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="金桥社区男神"/>
 
         <ImageView
@@ -268,7 +275,7 @@
 
     <RelativeLayout
         android:id="@+id/layout_password"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="@dimen/base_action_bar_height"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"

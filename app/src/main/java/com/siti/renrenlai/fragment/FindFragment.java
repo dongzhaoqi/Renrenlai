@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.speech.RecognizerIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 import android.view.Gravity;
@@ -11,15 +12,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.arlib.floatingsearchview.FloatingSearchView;
+import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
+import com.arlib.floatingsearchview.suggestions.model.SearchSuggestion;
+import com.arlib.floatingsearchview.util.view.BodyTextView;
+import com.arlib.floatingsearchview.util.view.IconImageView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.orhanobut.dialogplus.DialogPlus;
@@ -27,19 +31,20 @@ import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
+import com.quinny898.library.persistentsearch.SearchBox;
+import com.quinny898.library.persistentsearch.SearchResult;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
-import com.siti.renrenlai.activity.ActivityInfo;
-import com.siti.renrenlai.activity.SearchActivity;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.FragmentBase;
-import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -58,9 +63,11 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private XRecyclerView mXRecyclerView;
     private List<Activity> activityList;
     private ActivityAdapter adapter;
-    private TextView tv_fund_intro;
+    private ImageView iv_fund;
     private List<LovedUsers> lovedUsersList;
     private List<CommentContents> commentsList;
+    private SearchBox search;
+    private FloatingSearchView mSearchView;
     private String[] images = new String[]{
             "http://img1.imgtn.bdimg.com/it/u=1056505034,278532731&fm=206&gp=0.jpg",
             "http://img5.imgtn.bdimg.com/it/u=19688821,301685728&fm=206&gp=0.jpg",
@@ -128,16 +135,75 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
             @Override
             public void onClick() {
-                startAnimActivity(SearchActivity.class);
+                //startAnimActivity(SearchActivity.class);
+                //openSearch();
+                mSearchView.setVisibility(View.VISIBLE);
+                mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+                    @Override
+                    public void onSearchTextChanged(String oldQuery, final String newQuery) {
+
+                        Log.d("search", "onSearchTextChanged()");
+                    }
+                });
+
+                mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+                    @Override
+                    public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+
+                        Log.d("TAG", "onSuggestionClicked()");
+
+                    }
+
+                    @Override
+                    public void onSearchAction() {
+
+                        Log.d("TAG", "onSearchAction()");
+                    }
+                });
+
+
+                mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+                    @Override
+                    public void onFocus() {
+
+                        Log.d("TAG", "onFocus()");
+                    }
+
+                    @Override
+                    public void onFocusCleared() {
+
+                        Log.d("TAG", "onFocusCleared()");
+                    }
+                });
+
+                mSearchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
+                    @Override
+                    public void onHomeClicked() {
+                        mSearchView.setVisibility(View.GONE);
+                    }
+                });
+
+
+                mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+                    @Override
+                    public void onBindSuggestion(IconImageView leftIcon, BodyTextView bodyText, SearchSuggestion item, int itemPosition) {
+
+                    }
+
+                });
+
             }
         });
 
-
-        tv_fund_intro= (TextView) findViewById(R.id.tv_fund_intro);
-
+        search = (SearchBox) findViewById(R.id.searchbox);
+        mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+
+        View header = LayoutInflater.from(getActivity()).inflate(R.layout.recyclerview_header, (ViewGroup)findViewById(android.R.id.content),false);
+        iv_fund= (ImageView) header.findViewById(R.id.iv_fund);
+        mXRecyclerView.addHeaderView(header);
 
         mXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
@@ -239,7 +305,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
                 Activity activity = activityList.get(pos);
-                Intent intent = new Intent(getActivity(),ActivityInfo.class);
+                Intent intent = new Intent(getActivity(), ActivityInfo.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("activity", activity);
                 intent.putExtras(bundle);
@@ -262,7 +328,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     }
 
     private void initEvent(){
-        tv_fund_intro.setOnClickListener(this);
+        iv_fund.setOnClickListener(this);
 
     }
 
@@ -270,9 +336,82 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     public void onClick(View v) {
         int id = v.getId();
         switch (id){
-            case R.id.tv_fund_intro:
+            case R.id.iv_fund:
                 startAnimActivity(FundIntroActivity.class);
                 break;
         }
+    }
+
+    public void openSearch() {
+        search.revealFromMenuItem(R.id.action_search, getActivity());
+        for (int x = 0; x < 10; x++) {
+            SearchResult option = new SearchResult("Result "
+                    + Integer.toString(x), getResources().getDrawable(
+                    R.drawable.ic_history));
+            search.addSearchable(option);
+        }
+        search.setMenuListener(new SearchBox.MenuListener() {
+
+            @Override
+            public void onMenuClick() {
+                //Toast.makeText(getActivity(), "Menu click", Toast.LENGTH_LONG).show();
+                closeSearch();
+            }
+
+        });
+        search.setSearchListener(new SearchBox.SearchListener() {
+
+            @Override
+            public void onSearchOpened() {
+                // Use this to tint the screen
+
+            }
+
+            @Override
+            public void onSearchClosed() {
+                // Use this to un-tint the screen
+                closeSearch();
+            }
+
+            @Override
+            public void onSearchTermChanged(String term) {
+                // React to the search term changing
+                // Called after it has updated results
+            }
+
+            @Override
+            public void onSearch(String searchTerm) {
+                Toast.makeText(getActivity(), searchTerm + " Searched",
+                        Toast.LENGTH_LONG).show();
+                closeSearch();
+            }
+
+            @Override
+            public void onResultClick(SearchResult result) {
+                //React to result being clicked
+            }
+
+            @Override
+            public void onSearchCleared() {
+
+            }
+
+        });
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 1234) {
+            ArrayList<String> matches = data
+                    .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+            search.populateEditText(matches.get(0));
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    protected void closeSearch() {
+        search.hideCircularly(getActivity());
     }
 }

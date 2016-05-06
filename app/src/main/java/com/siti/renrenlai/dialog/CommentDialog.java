@@ -52,7 +52,6 @@ public class CommentDialog extends Dialog{
 
         CommentContents comment = commentsList.get(position);
         String userName = comment.getUserName();
-        System.out.println("userName:" + userName);
         etContent.setHint("回复 " + userName + ":");
     }
 

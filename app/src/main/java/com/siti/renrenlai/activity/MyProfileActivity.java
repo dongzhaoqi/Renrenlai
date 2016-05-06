@@ -42,7 +42,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     @Bind(R.id.img_photo)
     CircleImageView img_photo;
     @Bind(R.id.layout_name)
-    RelativeLayout layoutName;
+    RelativeLayout layout_name;
     @Bind(R.id.layout_nickname)
     RelativeLayout layout_nickname;
     @Bind(R.id.tv_nickName) TextView tv_nickName;
@@ -60,11 +60,13 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     TextView tv_gender;
     @Bind(R.id.tv_hobby)
     TextView tv_hobby;
+    @Bind(R.id.tv_introduction) TextView tv_introduction;
+    private Bitmap bitmap;
+    private String imgName, nickName, intro;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
-    private Bitmap bitmap;
-    private String imgName;
-    private static int MODIFY_NAME = 2;
+    private static int MODIFY_NAME = 2;         //修改昵称
+    private static int MODIFY_INTRO = 3;        //修改个人简介
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,23 +74,25 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         setContentView(R.layout.activity_profile);
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
-        String nickName = SharedPreferencesUtil.readString(
+        nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "nickName");
         tv_nickName.setText(nickName);
+        intro = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "intro");
+        tv_introduction.setText(intro);
     }
 
-    @OnClick({R.id.img_photo, R.id.layout_name, R.id.layout_nickname, R.id.layout_community,
+    @OnClick({R.id.img_photo, R.id.layout_nickname, R.id.layout_community,
             R.id.layout_gender, R.id.layout_hobby, R.id.layout_introduction, R.id.layout_password})
     public void onClick(View view) {
+        Intent intent = new Intent();
         switch (view.getId()) {
             case R.id.img_photo:
                 showPicDialog();
                 break;
-            case R.id.layout_name:
-                break;
             case R.id.layout_nickname:
-                Intent intent = new Intent();
                 intent.setClass(MyProfileActivity.this, EditNameActivity.class);
                 startActivityForResult(intent, MODIFY_NAME);
                 break;
@@ -101,7 +105,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 showHobbyDialog();
                 break;
             case R.id.layout_introduction:
-                startAnimActivity(IntroductionActivity.class);
+                intent.setClass(MyProfileActivity.this, IntroductionActivity.class);
+                intent.putExtra("intro", intro);
+                startActivityForResult(intent, MODIFY_INTRO);
                 break;
             case R.id.layout_password:
                 startAnimActivity(ModifyPasswordActivity.class);
@@ -225,13 +231,12 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
             img_photo.setImageBitmap(bitmap);
         }else if(requestCode == MODIFY_NAME){
-            String nickName = data.getStringExtra("nickName");
-            modifyName(nickName);
+            nickName = data.getStringExtra("nickName");
+            tv_nickName.setText(nickName);
+        }else if(requestCode == MODIFY_INTRO){
+            intro = data.getStringExtra("intro");
+            tv_introduction.setText(intro);
         }
-    }
-
-    public void modifyName(String userName) {
-        tv_nickName.setText(userName);
     }
 
 }

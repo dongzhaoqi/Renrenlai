@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FeedbackActivity;
 import com.siti.renrenlai.activity.LoginActivity;
@@ -125,14 +127,28 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
                 showShare();
                 break;
             case R.id.layout_logout:
-                SharedPreferencesUtil.writeString(SharedPreferencesUtil
-                                .getSharedPreference(getActivity(), "login"),
-                        "userName", "0");
-                startAnimActivity(LoginActivity.class);
+                showLogoutDialog();
                 break;
             case R.id.layout_feedback:
                 startAnimActivity(FeedbackActivity.class);
                 break;
         }
+    }
+
+    public void showLogoutDialog(){
+        new MaterialDialog.Builder(getActivity())
+                .content(R.string.str_logout)
+                .positiveText(R.string.okBtn)
+                .negativeText(R.string.cancelBtn)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(MaterialDialog dialog, DialogAction which) {
+                        SharedPreferencesUtil.writeString(SharedPreferencesUtil
+                                        .getSharedPreference(getActivity(), "login"),
+                                "userName", "0");
+                        startAnimActivity(LoginActivity.class);
+                    }
+                })
+                .show();
     }
 }

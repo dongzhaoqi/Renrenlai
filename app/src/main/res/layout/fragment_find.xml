@@ -1,33 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <TextView
-        android:id="@+id/tv_fund_intro"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_96"
-        android:gravity="center"
-        android:background="?attr/selectableItemBackground"
-        android:textSize="@dimen/text_size_20"
-        android:text="@string/fund_intro"/>
+    <com.quinny898.library.persistentsearch.SearchBox
+        android:id="@+id/searchbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:layout_marginTop="-6dp"
+        android:layout_marginLeft="-6dp"
+        android:layout_marginRight="-6dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true" />
 
-    <View
+    <com.arlib.floatingsearchview.FloatingSearchView
+        android:id="@+id/floating_search_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/view_height"
-        android:background="@color/divider_grey"/>
-
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        app:floatingSearch_searchHint="Search..."
+        app:floatingSearch_showSearchKey="false"
+        app:floatingSearch_dismissOnOutsideTouch="true"
+        app:floatingSearch_leftActionMode="showHome"
+        app:floatingSearch_menu="@menu/menu_main"/>
 
     <com.jcodecraeer.xrecyclerview.XRecyclerView
         android:id="@+id/list"
         android:layout_width="match_parent"
+        android:layout_below="@id/common_actionbar"
         android:layout_height="match_parent" />
 
-
-</LinearLayout>
+</RelativeLayout>
