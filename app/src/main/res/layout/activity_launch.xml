@@ -14,247 +14,320 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <RelativeLayout
-            android:id="@+id/layout_type"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:background="@drawable/layout_bottom_border"
-            android:gravity="center_vertical"
-            android:padding="@dimen/padding_10">
-
-            <TextView
-                android:id="@+id/str_category"
-                style="@style/activity_text_style"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="@string/txt_category"/>
-
-            <TextView
-                android:id="@+id/tv_category"
-                style="@style/me_text_style"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toRightOf="@id/str_category"
-                android:layout_marginLeft="@dimen/margin_8"/>
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentRight="true"
-                android:duplicateParentState="true"
-                android:src="@drawable/ic_expand_small_holo_light" />
-
-
-        </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
-
-        <TextView
-            android:id="@+id/str_subject"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_theme" />
-
-        <EditText
-            android:id="@+id/et_subject"
-            style="@style/me_text_style"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_subject"
-            android:background="@null"
-            android:nextFocusDown="@+id/et_time"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:singleLine="true" />
-    </RelativeLayout>
+            android:orientation="vertical">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
+            <RelativeLayout
+                android:id="@+id/layout_type"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:gravity="center_vertical"
+                android:padding="@dimen/padding_10">
 
-        <TextView
-            android:id="@+id/str_time"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_time" />
+                <TextView
+                    android:id="@+id/str_category"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_category" />
 
-        <TextView
-            android:id="@+id/et_time"
-            style="@style/me_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_time"
-            android:background="@null"
-            android:nextFocusDown="@+id/tv_end"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:singleLine="true" />
-    </RelativeLayout>
+                <TextView
+                    android:id="@+id/tv_category"
+                    style="@style/me_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/margin_8"
+                    android:layout_toRightOf="@id/str_category" />
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
+                <!--<ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/ic_expand_small_holo_light" />-->
 
-        <TextView
-            android:id="@+id/str_end"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_end" />
-
-        <TextView
-            android:id="@+id/tv_end"
-            style="@style/me_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_end"
-            android:background="@null"
-            android:nextFocusDown="@+id/et_place"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:singleLine="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
-
-        <TextView
-            android:id="@+id/str_place"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_place" />
-
-        <EditText
-            android:id="@+id/et_place"
-            style="@style/me_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_place"
-            android:background="@null"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:singleLine="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
-
-        <TextView
-            android:id="@+id/str_people"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_people" />
-
-        <EditText
-            android:id="@+id/et_epople"
-            style="@style/me_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_toRightOf="@id/str_people"
-            android:background="@null"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:singleLine="true" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/layout_cover"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/height_96"
-        android:background="@drawable/layout_bottom_border"
-        android:padding="@dimen/padding_10">
-
-        <TextView
-            android:id="@+id/str_cover"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_cover" />
-
-        <ImageView
-            android:id="@+id/iv_cover"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/activity_horizontal_margin"
-            android:layout_toRightOf="@id/str_cover"
-            android:clickable="true"
-            android:src="@drawable/cam_photo" />
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:padding="@dimen/padding_10">
-
-        <TextView
-            android:id="@+id/str_detail"
-            style="@style/activity_text_style"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="@string/txt_detail" />
-
-        <EditText
-            android:id="@+id/et_detail"
-            style="@style/me_text_style"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/str_detail"
-            android:background="@null"
-            android:gravity="top"
-            android:minLines="3"
-            android:padding="@dimen/padding_10" />
-    </RelativeLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/item_height"
-        android:background="@drawable/layout_bottom_border"
-        android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_preview"
-            style="@style/activity_text_style"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@drawable/btn_background"
-            android:text="@string/txt_preview" />
-
-        <Button
-            android:id="@+id/btn_publish"
-            style="@style/activity_text_style"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@drawable/btn_background"
-            android:text="@string/txt_publish" />
-    </LinearLayout>
+            </RelativeLayout>
 
 
-</LinearLayout></ScrollView></LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_110"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/btn_background"
+                    android:padding="@dimen/margin_8"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/launch_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:textSize="@dimen/text_size_16"
+                        android:text="@string/txt_interest" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="@string/txt_interest_hint"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/btn_background"
+                    android:padding="@dimen/margin_8"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/launch_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/txt_help" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="@string/txt_help_hint"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:background="@drawable/btn_background"
+                    android:padding="@dimen/margin_8"
+                    android:layout_weight="1">
+
+                    <TextView
+                        style="@style/launch_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/txt_advice" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/text_size_12"
+                        android:text="@string/txt_advice_hint"/>
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_subject"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_theme" />
+
+                <EditText
+                    android:id="@+id/et_subject"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_subject"
+                    android:background="@null"
+                    android:nextFocusDown="@+id/et_time"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_time"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_time" />
+
+                <TextView
+                    android:id="@+id/et_time"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_time"
+                    android:background="@null"
+                    android:nextFocusDown="@+id/tv_end"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_end"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_end" />
+
+                <TextView
+                    android:id="@+id/tv_end"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_end"
+                    android:background="@null"
+                    android:nextFocusDown="@+id/et_place"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_place"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_place" />
+
+                <EditText
+                    android:id="@+id/et_place"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_place"
+                    android:background="@null"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_people"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_people" />
+
+                <EditText
+                    android:id="@+id/et_epople"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_people"
+                    android:background="@null"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/layout_cover"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_96"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_cover"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_cover" />
+
+                <ImageView
+                    android:id="@+id/iv_cover"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+                    android:layout_toRightOf="@id/str_cover"
+                    android:clickable="true"
+                    android:src="@drawable/cam_photo" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentRight="true"
+                    android:duplicateParentState="true"
+                    android:src="@drawable/go" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_detail"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_detail" />
+
+                <EditText
+                    android:id="@+id/et_detail"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/str_detail"
+                    android:background="@null"
+                    android:gravity="top"
+                    android:minLines="3"
+                    android:padding="@dimen/padding_10" />
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_preview"
+                    style="@style/activity_text_style"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_background"
+                    android:text="@string/txt_preview" />
+
+                <Button
+                    android:id="@+id/btn_publish"
+                    style="@style/activity_text_style"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/btn_background"
+                    android:text="@string/txt_publish" />
+            </LinearLayout>
+
+
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

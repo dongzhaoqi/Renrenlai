@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -17,6 +18,7 @@ import com.siti.renrenlai.activity.LoginActivity;
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.FragmentBase;
 
@@ -39,7 +41,10 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
     @Bind(R.id.layout_invite) RelativeLayout layout_invite;
     @Bind(R.id.layout_feedback) RelativeLayout layout_feedback;
     @Bind(R.id.layout_logout) RelativeLayout layout_logout;
+    @Bind(R.id.tv_userName) TextView tv_userName;
     private View view;
+    String userName;
+    boolean isSignedin = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -53,8 +58,16 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initTopBarForOnlyTitle("我的");
+        userName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getActivity(), "login"), "userName");
+        if(userName.equals("0")){
+            tv_userName.setText("请登录");
+        }else{
+            tv_userName.setText(userName);
+            isSignedin = true;
+        }
     }
-
 
     private void showShare() {
         ShareSDK.initSDK(getActivity());
@@ -103,7 +116,11 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
         Intent intent = null;
         switch (id) {
             case R.id.layout_name:
-                startAnimActivity(MyProfileActivity.class);
+                if(!isSignedin){
+                    startAnimActivity(LoginActivity.class);
+                }else{
+                    startAnimActivity(MyProfileActivity.class);
+                }
                 break;
             case R.id.layout_favorite:
                 intent = new Intent(getActivity(), MyActivity.class);

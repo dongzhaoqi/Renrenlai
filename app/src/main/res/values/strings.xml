@@ -40,6 +40,7 @@
 
     <!--我的-->
     <string name="txt_favorite">喜欢</string>
+    <string name="txt_cancel_favorite">取消喜欢</string>
     <string name="txt_enroll">报名</string>
     <string name="txt_launch">发起</string>
     <string name="txt_my_activity">我的活动</string>
@@ -73,10 +74,15 @@
 
 
     <!--发起活动-->
-    <string name="txt_category">活动类型:</string>
+    <string name="txt_category">请选择活动类型</string>
     <string name="txt_interest">兴趣</string>
-    <string name="txt_help">互助</string>
-    <string name="txt_advice">意见征集</string>
+    <string name="txt_help">公益</string>
+    <string name="txt_advice">议事</string>
+    <string name="txt_interest_hint">文化 运动 爱好等兴趣活动</string>
+    <string name="txt_help_hint">志愿 互助 环保等公益活动</string>
+    <string name="txt_advice_hint">一起讨论小区身边费大小事</string>
+
+
     <string name="txt_theme">活动主题:</string>
     <string name="txt_time">活动时间:</string>
     <string name="txt_end">报名截止:</string>
@@ -106,6 +112,7 @@
     <string name="str_logout">注销账号</string>
     <string name="cancelBtn">取消</string>
     <string name="okBtn">确定</string>
+    <string name="str_start">立即体验</string>
 
 
     <!--活动详情-->

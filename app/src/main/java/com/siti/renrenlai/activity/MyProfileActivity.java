@@ -76,12 +76,16 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         initTopBarForLeft("我的资料");
         nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
-                        getApplicationContext(), "login"), "nickName");
+                        getApplicationContext(), "login"), "userName");
         tv_nickName.setText(nickName);
         intro = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "intro");
-        tv_introduction.setText(intro);
+        if("0".equals(intro)){
+            tv_introduction.setText("请填写");
+        }else{
+            tv_introduction.setText(intro);
+        }
     }
 
     @OnClick({R.id.img_photo, R.id.layout_nickname, R.id.layout_community,
@@ -106,7 +110,11 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.layout_introduction:
                 intent.setClass(MyProfileActivity.this, IntroductionActivity.class);
-                intent.putExtra("intro", intro);
+                if("0".equals(intro)){
+                    intent.putExtra("intro", "");
+                }else{
+                    intent.putExtra("intro", intro);
+                }
                 startActivityForResult(intent, MODIFY_INTRO);
                 break;
             case R.id.layout_password:

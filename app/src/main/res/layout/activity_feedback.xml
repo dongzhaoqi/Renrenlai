@@ -10,7 +10,7 @@
         android:id="@+id/common_actionbar"
         layout="@layout/include_action_bar" />
 
-    <EditText
+    <!--<EditText
         android:id="@+id/et_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -22,9 +22,10 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/divider_height"
-        android:background="@color/divider"/>
+        android:background="@color/divider"/>-->
 
     <EditText
+        android:id="@+id/et_feedback"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minLines="5"

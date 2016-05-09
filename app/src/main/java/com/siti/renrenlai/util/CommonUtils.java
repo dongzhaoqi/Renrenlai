@@ -1,6 +1,5 @@
 package com.siti.renrenlai.util;
 
-import android.app.Activity;
 import android.content.Context;
 import android.view.inputmethod.InputMethodManager;
 
@@ -9,4 +8,10 @@ import android.view.inputmethod.InputMethodManager;
  */
 public class CommonUtils {
 
+    public static void showKeyboard(Context context){
+        InputMethodManager imm = (InputMethodManager)context.getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null){
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,0);
+        }
+    }
 }

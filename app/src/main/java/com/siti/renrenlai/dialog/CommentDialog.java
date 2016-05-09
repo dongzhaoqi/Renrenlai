@@ -50,9 +50,13 @@ public class CommentDialog extends Dialog{
         etContent = (EditText) findViewById(R.id.et_content);
         btnSend = (Button) findViewById(R.id.btn_send);
 
-        CommentContents comment = commentsList.get(position);
-        String userName = comment.getUserName();
-        etContent.setHint("回复 " + userName + ":");
+        if(commentsList != null) {
+            CommentContents comment = commentsList.get(position);
+            String userName = comment.getUserName();
+            etContent.setHint("回复 " + userName + ":");
+        }else{
+            etContent.setHint("评论 " + ":");
+        }
     }
 
 

@@ -216,7 +216,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_type:
-                showTypeDialog();
+                //showTypeDialog();
                 break;
             case R.id.et_time:
                 showTimeDialog();

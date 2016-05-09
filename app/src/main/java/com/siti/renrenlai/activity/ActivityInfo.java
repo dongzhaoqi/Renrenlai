@@ -10,6 +10,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.RotateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -26,6 +29,7 @@ import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.dialog.CommentDialog;
+import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.squareup.picasso.Picasso;
 
@@ -132,13 +136,17 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
-
+                showCommentDialog();
                 break;
             case R.id.btn_favor:
                 if (!isFavorPressed) {
-                    btnFavor.setSelected(true);
+                    btnFavor.setSelected(true);         //喜欢
+                    btnFavor.setText(R.string.txt_cancel_favorite);
+                    addImage();
                 } else {
-                    btnFavor.setSelected(false);
+                    btnFavor.setSelected(false);        //取消喜欢
+                    btnFavor.setText(R.string.txt_favorite);
+                    removeImage();
                 }
                 isFavorPressed = !isFavorPressed;
                 break;
@@ -159,7 +167,37 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
 
+    public void showCommentDialog(){
+        CommentDialog dialog = new CommentDialog(this);
+        dialog.setCanceledOnTouchOutside(true);
+        WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
+        lp.width = WindowManager.LayoutParams.MATCH_PARENT;
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
+        lp.gravity = Gravity.BOTTOM;
+        lp.dimAmount = 0.5f;
+        dialog.show();
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+
+
+    public void addImage(){
+        CircleImageView image = new CircleImageView(this);
+        Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 15, 0);
+        ll_image.addView(image, 0, params);
+    }
+
+    public void removeImage(){
+        CircleImageView image = new CircleImageView(this);
+        Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        params.setMargins(0, 0, 15, 0);
+        ll_image.removeViewAt(0);
     }
 
     private void showShare() {
