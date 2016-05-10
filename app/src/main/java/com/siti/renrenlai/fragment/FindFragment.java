@@ -245,12 +245,10 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 if (error.networkResponse == null) {
                     if (error.getClass().equals(TimeoutError.class)) {
                         // Show timeout error message
-                        Toast.makeText(getContext(),
+                        /*Toast.makeText(getActivity(),
                                 "Oops. Timeout error!",
-                                Toast.LENGTH_LONG).show();
+                                Toast.LENGTH_LONG).show();*/
                     }
-
-
                 }
                 Log.e("onErrorResponse", error.getMessage(), error);
             }

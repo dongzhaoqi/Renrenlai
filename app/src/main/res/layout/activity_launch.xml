@@ -57,10 +57,11 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
+                    android:id="@+id/ll_interest"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:background="@drawable/btn_background"
+                    android:background="@drawable/ll_selector"
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
@@ -79,10 +80,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_help"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:background="@drawable/btn_background"
+                    android:background="@drawable/ll_selector"
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
@@ -100,10 +102,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_advice"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    android:background="@drawable/btn_background"
+                    android:background="@drawable/ll_selector"
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
@@ -249,7 +252,8 @@
             <RelativeLayout
                 android:id="@+id/layout_cover"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_96"
+                android:minHeight="@dimen/height_96"
+                android:layout_height="wrap_content"
                 android:background="@drawable/layout_bottom_border"
                 android:padding="@dimen/padding_10">
 
@@ -260,22 +264,26 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_cover" />
 
-                <ImageView
-                    android:id="@+id/iv_cover"
-                    android:layout_width="wrap_content"
+                <com.siti.renrenlai.view.NoScrollGridView
+                    android:id="@+id/noScrollgridview"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginRight="5dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:layout_marginLeft="@dimen/activity_horizontal_margin"
-                    android:layout_toRightOf="@id/str_cover"
-                    android:clickable="true"
-                    android:src="@drawable/cam_photo" />
+                    android:horizontalSpacing="3dp"
+                    android:listSelector="#00000000"
+                    android:numColumns="3"
+                    android:scrollbars="none"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:verticalSpacing="5dp" />
 
-                <ImageView
+                <!--<ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:duplicateParentState="true"
-                    android:src="@drawable/go" />
+                    android:src="@drawable/go" />-->
             </RelativeLayout>
 
             <RelativeLayout

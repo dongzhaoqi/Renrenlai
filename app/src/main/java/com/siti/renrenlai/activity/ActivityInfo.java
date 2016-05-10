@@ -63,8 +63,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
     boolean isFavorPressed = false;
-    private List<LovedUsers> lovedUsersList;
-    private List<CommentContents> commentsList;
+    private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
+    private List<CommentContents> commentsList;         //评论列表
     private CommentAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
 
@@ -95,6 +95,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             commentsList = activity.getComments();
         }
 
+        btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for(int i = 0; i < lovedUsersList.size(); i++){
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
@@ -141,11 +142,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             case R.id.btn_favor:
                 if (!isFavorPressed) {
                     btnFavor.setSelected(true);         //喜欢
-                    btnFavor.setText(R.string.txt_cancel_favorite);
                     addImage();
                 } else {
                     btnFavor.setSelected(false);        //取消喜欢
-                    btnFavor.setText(R.string.txt_favorite);
                     removeImage();
                 }
                 isFavorPressed = !isFavorPressed;
@@ -155,6 +154,11 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         }
     }
 
+    /**
+     * 点击某个人的评论，弹出评论框，进行回复
+     * @param commentsList
+     * @param position
+     */
     public void showCommentDialog(List<CommentContents> commentsList, int position){
         CommentDialog dialog = new CommentDialog(this, position);
         dialog.setCanceledOnTouchOutside(true);
@@ -169,6 +173,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
+    /**
+     * 弹出评论框
+     */
     public void showCommentDialog(){
         CommentDialog dialog = new CommentDialog(this);
         dialog.setCanceledOnTouchOutside(true);
@@ -183,21 +190,28 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     }
 
 
-
+    /**
+     * 点赞,将头像添加到最前面
+     */
     public void addImage(){
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 15, 0);
         ll_image.addView(image, 0, params);
+        btnFavor.setText("喜欢(" + (lovedUsersList.size()+1) + ")");
     }
 
+    /**
+     * 取消点赞,去除头像
+     */
     public void removeImage(){
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 15, 0);
         ll_image.removeViewAt(0);
+        btnFavor.setText("喜欢(" + lovedUsersList.size() + ")");
     }
 
     private void showShare() {

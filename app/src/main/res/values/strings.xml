@@ -2,6 +2,8 @@
     <string name="app_name">仁人来</string>
     <string name="text_back">返回</string>
     <string name="text_forward">提交</string>
+    <string name="add_tag">自定义</string>
+
 
     <!-- Strings related to login register-->
     <string name="prompt_email">用户名</string>

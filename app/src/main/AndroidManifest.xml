@@ -72,6 +72,8 @@
         <activity android:name=".activity.ApplyWishActivity"/>
         <activity android:name=".activity.MyLaunchActivity"/>
         <activity android:name=".activity.EditNameActivity"/>
+        <activity android:name=".activity.GalleryActivity"/>
+        <activity android:name=".activity.AlbumActivity"/>
 
 
         <activity

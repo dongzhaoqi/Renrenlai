@@ -1,0 +1,57 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".TagEditorActivity">
+
+    <com.siti.renrenlai.view.TagGroup
+        android:id="@+id/tag_group"
+        style="@style/TagGroup"
+        android:padding="@dimen/activity_horizontal_margin"
+        app:atg_horizontalSpacing="@dimen/activity_horizontal_margin"
+        app:atg_isAppendMode="true" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/divider"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+
+        <Button
+            android:id="@+id/btn_cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/row_selector"
+            android:text="@string/cancelBtn"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            />
+
+        <View
+            android:layout_width="@dimen/view_height"
+            android:layout_height="match_parent"
+            android:background="@color/divider"
+            />
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:background="@drawable/row_selector"
+            android:text="@string/okBtn"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp"
+            />
+    </LinearLayout>
+
+</LinearLayout>

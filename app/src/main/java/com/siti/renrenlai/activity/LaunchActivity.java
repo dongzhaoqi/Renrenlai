@@ -4,6 +4,8 @@ import android.content.ContentResolver;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -12,18 +14,25 @@ import android.support.v7.app.AlertDialog;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.ab.adapter.AbImageShowAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.PictureAdapter;
+import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
+import com.siti.renrenlai.view.NoScrollGridView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -45,20 +54,25 @@ import rebus.bottomdialog.BottomDialog;
 public class LaunchActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.layout_type) RelativeLayout layoutType;
+    @Bind(R.id.ll_interest) LinearLayout ll_interest;
+    @Bind(R.id.ll_help) LinearLayout ll_help;
+    @Bind(R.id.ll_advice) LinearLayout ll_advice;
     @Bind(R.id.et_subject) EditText et_subject;
     @Bind(R.id.tv_category) TextView tv_category;
     @Bind(R.id.et_time) TextView et_time;
     @Bind(R.id.tv_end) TextView et_end;
     @Bind(R.id.et_place) EditText et_place;
     @Bind(R.id.et_epople) EditText etEpople;
-    @Bind(R.id.iv_cover) ImageView iv_cover;
+    //@Bind(R.id.iv_cover) ImageView iv_cover;
     @Bind(R.id.layout_cover) RelativeLayout layout_cover;
+    @Bind(R.id.noScrollgridview) NoScrollGridView noScrollGridView;
     @Bind(R.id.et_detail) EditText et_detail;
     @Bind(R.id.btn_preview) Button btn_preview;
     @Bind(R.id.btn_publish) Button btn_publish;
 
-    private Bitmap bitmap;
+    public static Bitmap bitmap;
     private String imgName;
+    private String filepath;
     private int camIndex = 0;
     private int selectIndex = 0;
     private static final int SELECT_PICTURE = 0;
@@ -67,11 +81,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private ArrayList<String> mPhotoList = new ArrayList<String>();
     private GridView mGridView = null;
     private AbImageShowAdapter mImagePathAdapter = null;
+    private PictureAdapter picAdapter;
     // 照相机拍照得到的图片
     private File mCurrentPhotoFile;
     /* 拍照的照片存储位置 */
     private File PHOTO_DIR = null;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,6 +103,21 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         mGridView = (GridView) findViewById(R.id.myGrid);
         mImagePathAdapter = new AbImageShowAdapter(this, mPhotoList,116,116);
         mGridView.setAdapter(mImagePathAdapter);*/
+        noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        picAdapter = new PictureAdapter(this);
+        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                if (i == Bimp.getTempSelectBitmap().size()) {
+                    showPicDialog();
+                } else {
+                    Intent intent = new Intent(LaunchActivity.this,
+                            GalleryActivity.class);
+                    intent.putExtra("ID", i);
+                    startActivity(intent);
+                }
+            }
+        });
+        noScrollGridView.setAdapter(picAdapter);
 
     }
 
@@ -150,19 +179,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             public boolean onItemSelected(int id) {
                 switch (id) {
                     case R.id.item_pick_photo:
-                        Intent intent = new Intent();
-                        intent.setType("image/*");
+                        /*Intent intent = new Intent();
+                        intent.setType("image*//*");
                         intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
+                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);*/
+                        startAnimActivity(AlbumActivity.class);
                         return true;
                     case R.id.item_take_pic:
-                        File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
-                        imgFolder.mkdirs();
-                        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
-                        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                        Uri imgUri = Uri.fromFile(img);
-                        camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                        startActivityForResult(camera, TAKE_PICTURE);
+                        goCamera();
                         return true;
                     default:
                         return false;
@@ -172,6 +196,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
         });
         dialog.show();
+    }
+
+    private void goCamera(){
+        File imgFolder = new File(Environment.getExternalStorageDirectory(), "RenrenLai");
+        imgFolder.mkdirs();
+        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+        Uri imgUri = Uri.fromFile(img);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+        startActivityForResult(camera, TAKE_PICTURE);
     }
 
     @Override
@@ -197,7 +231,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 //bitmap = ImageHelper.getRoundedCornerBitmap(photo, 130);
                 // 释放原始图片占用的内存，防止out of memory异常发生
                 //photo.recycle();
-                iv_cover.setImageBitmap(photo);
+                ////iv_cover.setImageBitmap(photo);
             }
         } else if (requestCode == TAKE_PICTURE) {
 
@@ -207,16 +241,29 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
             //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
-            iv_cover.setImageBitmap(bitmap);
+            //iv_cover.setImageBitmap(bitmap);
         }
     }
 
 
-    @OnClick({R.id.layout_type, R.id.et_time, R.id.tv_end, R.id.layout_cover, R.id.btn_preview, R.id.btn_publish})
+    @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.et_time, R.id.tv_end, R.id.layout_cover,
+            R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_type:
                 //showTypeDialog();
+                break;
+            case R.id.ll_interest:
+                unselectedAll();
+                ll_interest.setSelected(true);
+                break;
+            case R.id.ll_help:
+                unselectedAll();
+                ll_help.setSelected(true);
+                break;
+            case R.id.ll_advice:
+                unselectedAll();
+                ll_advice.setSelected(true);
                 break;
             case R.id.et_time:
                 showTimeDialog();
@@ -232,5 +279,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_publish:
                 break;
         }
+    }
+
+    public void unselectedAll(){
+        ll_interest.setSelected(false);
+        ll_help.setSelected(false);
+        ll_advice.setSelected(false);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        picAdapter.notifyDataSetChanged();
     }
 }

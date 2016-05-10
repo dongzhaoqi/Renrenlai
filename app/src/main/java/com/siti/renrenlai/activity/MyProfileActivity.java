@@ -8,9 +8,11 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -19,6 +21,8 @@ import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.dialog.HobbyDialog;
+import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -58,8 +62,8 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     RelativeLayout layout_password;
     @Bind(R.id.tv_gender)
     TextView tv_gender;
-    @Bind(R.id.tv_hobby)
-    TextView tv_hobby;
+
+    static TextView tv_hobby;
     @Bind(R.id.tv_introduction) TextView tv_introduction;
     private Bitmap bitmap;
     private String imgName, nickName, intro;
@@ -67,11 +71,12 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     private static final int TAKE_PICTURE = 1;
     private static int MODIFY_NAME = 2;         //修改昵称
     private static int MODIFY_INTRO = 3;        //修改个人简介
-
+    private String filepath;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
+        tv_hobby = (TextView) findViewById(R.id.tv_hobby);
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
         nickName = SharedPreferencesUtil.readString(
@@ -140,13 +145,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                         startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);
                         return true;
                     case R.id.item_take_pic:
-                        File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
-                        imgFolder.mkdirs();
-                        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
-                        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
-                        Uri imgUri = Uri.fromFile(img);
-                        camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
-                        startActivityForResult(camera, TAKE_PICTURE);
+                        goCamera();
                         return true;
                     default:
                         return false;
@@ -158,6 +157,19 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         dialog.show();
     }
 
+    private void goCamera() {
+        File imgFolder = new File(Environment.getExternalStorageDirectory(), "RenrenLai");
+        imgFolder.mkdirs();
+        File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
+        Intent camera = new Intent(MediaStore.ACTION_IMAGE_CAPTURE, null);
+        Uri imgUri = Uri.fromFile(img);
+        camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
+        startActivityForResult(camera, TAKE_PICTURE);
+    }
+
+    /**
+     * "选择性别"弹出框
+     */
     public void showGenderDialog(){
         new MaterialDialog.Builder(this)
                 .title(R.string.str_select)
@@ -173,35 +185,29 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 .show();
     }
 
+    /**
+     * "选择兴趣"弹出框
+     */
     public void showHobbyDialog(){
-        final StringBuilder[] str = new StringBuilder[1];
-        new MaterialDialog.Builder(this)
-                .title(R.string.str_select)
-                .items(R.array.hobby)
-                .itemsCallbackMultiChoice(new Integer[]{1}, new MaterialDialog.ListCallbackMultiChoice() {
-                    @Override
-                    public boolean onSelection(MaterialDialog dialog, Integer[] which, CharSequence[] text) {
-                        boolean allowSelection = which.length <= 5; // limit selection to 2, the new selection is included in the which array
-                        str[0] = new StringBuilder();
-                        if (!allowSelection) {
-                            showToast(R.string.selection_limit_reached);
-                        }
-                        for (int i = 0; i < which.length; i++) {
-                            str[0].append(text[i]);
-                            str[0].append(" ");
-                        }
-                        return allowSelection;
-                    }
-                })
-                .onPositive(new MaterialDialog.SingleButtonCallback() {
-                    @Override
-                    public void onClick(MaterialDialog materialDialog, DialogAction dialogAction) {
-                        tv_hobby.setText(str[0]);
-                    }
-                })
-                .positiveText(R.string.okBtn)
-                .alwaysCallMultiChoiceCallback() // the callback will always be called, to check if selection is still allowed
-                .show();
+
+        HobbyDialog dialog = new HobbyDialog(this);
+        dialog.setCanceledOnTouchOutside(true);
+        dialog.show();
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        WindowManager.LayoutParams lp = dialog.getWindow()
+                .getAttributes();
+        lp.width = (int) (display.getWidth() * 0.9); // 设置宽度
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT;// 设置高度
+        lp.dimAmount = 0.5f;
+
+        dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().addFlags(
+                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    public static void setHobby(String hobby){
+        tv_hobby.setText(hobby);
     }
 
     @Override
