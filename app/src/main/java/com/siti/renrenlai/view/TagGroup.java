@@ -619,6 +619,7 @@ public class TagGroup extends ViewGroup {
         @Override
         public void onClick(View v) {
             final TagView tag = (TagView) v;
+
             if (isAppendMode) {
                 if (tag.mState == TagView.STATE_INPUT) {
                     // If the clicked tag is in INPUT state, uncheck the previous checked tag if exists.
@@ -653,6 +654,10 @@ public class TagGroup extends ViewGroup {
 
     public static String getCheckedTags(){
         return sb.toString();
+    }
+
+    public static void clearCheckedTags(){
+        sb.delete(0, sb.length());
     }
 
     /**

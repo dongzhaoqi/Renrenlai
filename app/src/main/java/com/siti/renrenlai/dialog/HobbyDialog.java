@@ -6,11 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.Toast;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.MyProfileActivity;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.TagGroup;
+
+import org.json.JSONObject;
 
 
 public class HobbyDialog extends Dialog implements OnClickListener{
@@ -19,7 +26,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 	private Dialog dialog;
 	private Button btn_confirm,btn_cancel;
 	private TagGroup mTagGroup;
-
+	String userName;
 	public HobbyDialog(Activity activity, int theme) {
 		super(activity, theme);
 		this.mActivity = activity;
@@ -45,6 +52,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 		btn_cancel.setOnClickListener(this);
 		String[] tags = new String[]{"健身", "游泳", "跑步", "遛狗", "羽毛球", "乒乓球", "篮球", "足球", "看书", "音乐"};
 		mTagGroup.setTags(tags);
+		TagGroup.clearCheckedTags();
 	}
 
 	@Override
@@ -56,6 +64,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 				//Toast.makeText(mActivity, choosen, Toast.LENGTH_SHORT).show();
 				MyProfileActivity.setHobby(choosen);
 				HobbyDialog.this.dismiss();
+				modifyHobby();
 				break;
 			case R.id.btn_cancel:
 				HobbyDialog.this.dismiss();
@@ -65,6 +74,24 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 		}
 	}
 
+	public void modifyHobby(){
+		String api = "/login?userName="+userName;
+		String url = ConstantValue.urlRoot + api;
 
+		JsonObjectRequest req = new JsonObjectRequest(url, null,
+				new Response.Listener<JSONObject>() {
+					@Override
+					public void onResponse(JSONObject response) {
+						VolleyLog.d("response", response.toString());
+					}
+				}, new Response.ErrorListener() {
+			@Override
+			public void onErrorResponse(VolleyError error) {
+				VolleyLog.e("Error: ", error.getMessage());
+			}
+		});
+
+		CustomApplication.getInstance().addToRequestQueue(req);
+	}
 
 }

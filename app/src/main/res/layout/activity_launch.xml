@@ -53,7 +53,7 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/height_110"
+                android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -65,17 +65,25 @@
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="@dimen/width_60"
+                        android:layout_height="@dimen/width_60"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:background="@drawable/desert"/>
+
                     <TextView
                         style="@style/launch_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
-                        android:textSize="@dimen/text_size_16"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/text_size_14"
                         android:text="@string/txt_interest" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"
                         android:text="@string/txt_interest_hint"/>
                 </LinearLayout>
 
@@ -88,16 +96,25 @@
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="@dimen/width_60"
+                        android:layout_height="@dimen/width_60"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:background="@drawable/desert"/>
+                    
                     <TextView
                         style="@style/launch_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/text_size_14"
                         android:text="@string/txt_help" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"
                         android:text="@string/txt_help_hint"/>
                 </LinearLayout>
 
@@ -110,16 +127,25 @@
                     android:padding="@dimen/margin_8"
                     android:layout_weight="1">
 
+                    <ImageView
+                        android:layout_width="@dimen/width_60"
+                        android:layout_height="@dimen/width_60"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginBottom="@dimen/margin_8"
+                        android:background="@drawable/desert"/>
+
                     <TextView
                         style="@style/launch_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
+                        android:gravity="center_horizontal"
+                        android:textSize="@dimen/text_size_14"
                         android:text="@string/txt_advice" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="@dimen/text_size_12"
+                        android:gravity="center_horizontal"
                         android:text="@string/txt_advice_hint"/>
                 </LinearLayout>
 

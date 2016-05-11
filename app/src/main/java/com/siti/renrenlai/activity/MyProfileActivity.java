@@ -195,15 +195,13 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         dialog.show();
         WindowManager windowManager = getWindowManager();
         Display display = windowManager.getDefaultDisplay();
-        WindowManager.LayoutParams lp = dialog.getWindow()
-                .getAttributes();
+        WindowManager.LayoutParams lp = dialog.getWindow().getAttributes();
         lp.width = (int) (display.getWidth() * 0.9); // 设置宽度
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;// 设置高度
         lp.dimAmount = 0.5f;
 
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(
-                WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     public static void setHobby(String hobby){
