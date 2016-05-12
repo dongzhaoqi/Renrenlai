@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Activity implements Serializable {
 
+    private int activityId;
     private String activityImg;
     private String activityName;
     private String activityAddress;
@@ -14,6 +15,14 @@ public class Activity implements Serializable {
     private String contactTel;
     private List<LovedUsers> lovedUsers;
     private List<CommentContents> comments;
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
+    }
 
     public String getActivityImg() {
         return activityImg;

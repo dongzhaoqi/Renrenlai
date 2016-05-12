@@ -13,6 +13,7 @@ import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import butterknife.Bind;
@@ -49,15 +50,24 @@ public class FeedbackActivity extends BaseActivity {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         feedBackInfoContent = etFeedback.getText().toString();
 
-        String api = "/insertFeedBackInfo?userName="+userName+"&feedBackInfoContent="+feedBackInfoContent;
+        String api = "/insertFeedBackInfo";
         String url = ConstantValue.urlRoot + api;
 
-        JsonObjectRequest req = new JsonObjectRequest(url, null,
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("feedBackContent", feedBackInfoContent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, json,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         VolleyLog.d("response", response.toString());
                         showToast("感谢您的反馈!");
+                        finish();
                     }
                 }, new Response.ErrorListener() {
             @Override

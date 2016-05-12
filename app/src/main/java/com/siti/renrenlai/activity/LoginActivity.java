@@ -20,6 +20,9 @@ import com.siti.renrenlai.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 /**
  * Created by Dong on 2016/3/22.
  */
@@ -78,7 +81,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
     private void doLogin() {
 
-        String api = "/login?userName="+str_email+"&password="+str_password;
+        String api = null;
+        try {
+            api = "/login?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String url = ConstantValue.urlRoot + api;
         /*JSONObject json = new JSONObject();
         try {

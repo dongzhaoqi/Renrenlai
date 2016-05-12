@@ -267,6 +267,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             Activity activity = new Activity();
             activity.setActivityImg(images[i]);
             try {
+                activity.setActivityId(result.getJSONObject(i).getInt("activityId"));
                 activity.setActivityName(result.getJSONObject(i).optString("activityName"));
                 activity.setActivityStartTime(result.getJSONObject(i).optString("activityStartTime"));
                 activity.setActivityEndTime(result.getJSONObject(i).optString("activityEndTime"));

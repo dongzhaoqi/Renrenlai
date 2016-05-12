@@ -116,7 +116,7 @@ public class LaunchFragment extends FragmentBase {
         for (int i = 0; i < 5; i++) {
             TimeLineModel model = new TimeLineModel();
             model.setTime("2016年4月3号");
-            model.setTitle(i + "小明的童年影像展览及逗逼故事分享会");
+            model.setTitle(i + "小明的童年影像展览及故事分享会");
             mDataList.add(model);
         }
     }

@@ -12,9 +12,15 @@ public class SharedPreferencesUtil {
         SharedPreferences sp = context.getSharedPreferences(name,Context.MODE_PRIVATE);
         //存入数据       
         return sp;
-		
 	}
-	    
+
+    public static void clearAll(SharedPreferences sp){
+        Editor editor = sp.edit();
+        editor.clear();
+        editor.commit();
+
+    }
+
     public static void writeString(SharedPreferences sp,String name,String value){
     	
     	Editor editor = sp.edit();

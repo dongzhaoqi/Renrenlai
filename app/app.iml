@@ -72,6 +72,8 @@
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/dex-cache" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/cn.aigestudio.datepicker/DatePicker/2.2.0/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/cn.qqtheme.framework/Common/1.1.2/jars" />
+      <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/cn.qqtheme.framework/WheelPicker/1.1.2/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.3.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.3.0/jars" />
       <excludeFolder url="file://$MODULE_DIR$/build/intermediates/exploded-aar/com.android.support/cardview-v7/23.1.1/jars" />
@@ -131,9 +133,11 @@
     <orderEntry type="library" exported="" name="support-v4-23.3.0" level="project" />
     <orderEntry type="library" exported="" name="expandableTextView-0.1.4" level="project" />
     <orderEntry type="library" exported="" name="core-0.8.5.8" level="project" />
+    <orderEntry type="library" exported="" name="WheelPicker-1.1.2" level="project" />
     <orderEntry type="library" exported="" name="andbase20130716" level="project" />
     <orderEntry type="library" exported="" name="animated-vector-drawable-23.3.0" level="project" />
     <orderEntry type="library" exported="" name="library-1.1.5" level="project" />
+    <orderEntry type="library" exported="" name="fastjson-1.1.46.android" level="project" />
     <orderEntry type="library" exported="" name="viewmover-1.1.0" level="project" />
     <orderEntry type="library" exported="" name="cardview-v7-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="fab-1.1.2" level="project" />
@@ -141,6 +145,7 @@
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Favorite-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="floatingsearchview-1.1.2" level="project" />
     <orderEntry type="library" exported="" name="circleimageview-2.0.0" level="project" />
+    <orderEntry type="library" exported="" name="Common-1.1.2" level="project" />
     <orderEntry type="library" exported="" name="appcompat-v7-23.3.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="library-1.1.0-SNAPSHOT" level="project" />

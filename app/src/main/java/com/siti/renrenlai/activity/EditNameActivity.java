@@ -16,6 +16,9 @@ import com.siti.renrenlai.view.HeaderLayout;
 
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -45,7 +48,12 @@ public class EditNameActivity extends BaseActivity {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         newName = etModifyName.getText().toString();
 
-        String api = "/updateUserName?userName="+userName+"&userNameChange="+newName;
+        String api = null;
+        try {
+            api = "/updateUserName?userName="+userName+"&userNameChange="+ URLEncoder.encode(newName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
         String url = ConstantValue.urlRoot + api;
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
@@ -58,7 +66,7 @@ public class EditNameActivity extends BaseActivity {
                                 "userName", newName);
                         Intent intent = new Intent();
                         intent.putExtra("nickName", newName);
-                        setResult(MODIFY_NAME, intent);
+                        setResult(RESULT_OK, intent);
                         finish();
                     }
                 }, new Response.ErrorListener() {

@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -15,9 +17,13 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.MyProfileActivity;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.TagGroup;
 
 import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 
 public class HobbyDialog extends Dialog implements OnClickListener{
@@ -63,8 +69,9 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 				String choosen = TagGroup.getCheckedTags();
 				//Toast.makeText(mActivity, choosen, Toast.LENGTH_SHORT).show();
 				MyProfileActivity.setHobby(choosen);
+				SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "hobby", choosen);
 				HobbyDialog.this.dismiss();
-				modifyHobby();
+				modifyHobby(choosen);
 				break;
 			case R.id.btn_cancel:
 				HobbyDialog.this.dismiss();
@@ -74,23 +81,34 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 		}
 	}
 
-	public void modifyHobby(){
-		String api = "/login?userName="+userName;
-		String url = ConstantValue.urlRoot + api;
+	public void modifyHobby(final String hobby){
+		String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userName");
 
-		JsonObjectRequest req = new JsonObjectRequest(url, null,
+		String api = null;
+		try {
+			api = "/updateUserHobby?userName="+userName+"&userHobby="+ URLEncoder.encode(hobby, "utf-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		String url = ConstantValue.urlRoot + api;
+		System.out.println("url:" + url);
+		JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
 						VolleyLog.d("response", response.toString());
+						Toast.makeText(mActivity, "修改成功!", Toast.LENGTH_SHORT).show();
+						SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"),
+								"hobby", hobby);
+
 					}
 				}, new Response.ErrorListener() {
 			@Override
 			public void onErrorResponse(VolleyError error) {
 				VolleyLog.e("Error: ", error.getMessage());
+				Toast.makeText(mActivity, "出错了!", Toast.LENGTH_SHORT).show();
 			}
 		});
-
 		CustomApplication.getInstance().addToRequestQueue(req);
 	}
 

@@ -160,9 +160,7 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
                 .onPositive(new MaterialDialog.SingleButtonCallback() {
                     @Override
                     public void onClick(MaterialDialog dialog, DialogAction which) {
-                        SharedPreferencesUtil.writeString(SharedPreferencesUtil
-                                        .getSharedPreference(getActivity(), "login"),
-                                "userName", "0");
+                        SharedPreferencesUtil.clearAll(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"));
                         startAnimActivity(LoginActivity.class);
                     }
                 })

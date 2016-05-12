@@ -19,16 +19,27 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.dialog.HobbyDialog;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
+import org.json.JSONObject;
+
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -58,15 +69,13 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     RelativeLayout layout_hobby;
     @Bind(R.id.layout_introduction)
     RelativeLayout layout_introduction;
-    @Bind(R.id.layout_password)
-    RelativeLayout layout_password;
     @Bind(R.id.tv_gender)
     TextView tv_gender;
 
     static TextView tv_hobby;
     @Bind(R.id.tv_introduction) TextView tv_introduction;
     private Bitmap bitmap;
-    private String imgName, nickName, intro;
+    private String imgName, nickName, gender, hobby, intro;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private static int MODIFY_NAME = 2;         //修改昵称
@@ -83,6 +92,21 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "userName");
         tv_nickName.setText(nickName);
+
+        gender = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "gender");
+        if("0".equals(gender)){
+            tv_gender.setText("请选择");
+        }else{
+            tv_gender.setText(gender);
+        }
+
+        hobby = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "hobby");
+        if("0".equals(hobby)){
+            tv_hobby.setText("请选择");
+        }else{
+            tv_hobby.setText(hobby);
+        }
+
         intro = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "intro");
@@ -94,7 +118,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     }
 
     @OnClick({R.id.img_photo, R.id.layout_nickname, R.id.layout_community,
-            R.id.layout_gender, R.id.layout_hobby, R.id.layout_introduction, R.id.layout_password})
+            R.id.layout_gender, R.id.layout_hobby, R.id.layout_introduction})
     public void onClick(View view) {
         Intent intent = new Intent();
         switch (view.getId()) {
@@ -121,9 +145,6 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                     intent.putExtra("intro", intro);
                 }
                 startActivityForResult(intent, MODIFY_INTRO);
-                break;
-            case R.id.layout_password:
-                startAnimActivity(ModifyPasswordActivity.class);
                 break;
         }
     }
@@ -178,11 +199,44 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                     @Override
                     public boolean onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
                         tv_gender.setText(text);
+                        updateGender(text.toString());
                         return true;    // allow selection
                     }
                 })
                 .positiveText(R.string.okBtn)
                 .show();
+    }
+
+
+    public void updateGender(final String gender){
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+
+        String api = null;
+        try {
+            api = "/updateUserGender?userName="+userName+"&userGender="+ URLEncoder.encode(gender, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = ConstantValue.urlRoot + api;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        VolleyLog.d("response", response.toString());
+                        showToast("修改成功!");
+                        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"),
+                                "gender", gender);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     /**
@@ -211,6 +265,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_OK) {
+            System.out.println("result error!");
             return;
         }
 
@@ -246,9 +301,16 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             nickName = data.getStringExtra("nickName");
             tv_nickName.setText(nickName);
         }else if(requestCode == MODIFY_INTRO){
-            intro = data.getStringExtra("intro");
-            tv_introduction.setText(intro);
+            System.out.println("modify intro");
+            intro = SharedPreferencesUtil.readString(
+                    SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "intro");
+            modifyIntro(intro);
+
         }
+    }
+
+    public void modifyIntro(String intro) {
+        tv_introduction.setText(intro);
     }
 
 }

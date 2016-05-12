@@ -22,6 +22,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
@@ -30,9 +35,16 @@ import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.Bind;
@@ -62,6 +74,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
+    int activity_id;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
@@ -86,6 +99,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         if(activity != null){
+            activity_id = activity.getActivityId();
             activity_title = activity.getActivityName();
             contact_tel = activity.getContactTel();
             activity_address = activity.getActivityAddress();
@@ -142,7 +156,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             case R.id.btn_favor:
                 if (!isFavorPressed) {
                     btnFavor.setSelected(true);         //喜欢
-                    addImage();
+                    like();
                 } else {
                     btnFavor.setSelected(false);        //取消喜欢
                     removeImage();
@@ -187,6 +201,38 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    /**
+     * 喜欢该活动
+     */
+    public void like(){
+        addImage();
+
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+        String api = null;
+        try {
+            api = "/loveThisActivityForApp?userName="+URLEncoder.encode(userName, "utf-8")+"&activityId="+ activity_id;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        String url = ConstantValue.urlRoot + api;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        VolleyLog.d("response", response.toString());
+                        showToast("修改成功!");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
 
