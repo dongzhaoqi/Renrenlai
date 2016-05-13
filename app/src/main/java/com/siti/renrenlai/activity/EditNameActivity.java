@@ -17,6 +17,7 @@ import com.siti.renrenlai.view.HeaderLayout;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
+import java.net.URL;
 import java.net.URLEncoder;
 
 import butterknife.Bind;
@@ -50,7 +51,7 @@ public class EditNameActivity extends BaseActivity {
 
         String api = null;
         try {
-            api = "/updateUserName?userName="+userName+"&userNameChange="+ URLEncoder.encode(newName, "utf-8");
+            api = "/updateUserName?userName="+ URLEncoder.encode(userName, "utf-8") +"&userNameChange="+ URLEncoder.encode(newName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

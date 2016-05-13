@@ -66,7 +66,7 @@ public class IntroductionActivity extends BaseActivity{
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String api = null;
         try {
-            api = "/updateUserIntroduction?userName="+userName+"&userIntroduction="+ URLEncoder.encode(intro, "utf-8");
+            api = "/updateUserIntroduction?userName="+URLEncoder.encode(userName, "utf-8")+"&userIntroduction="+ URLEncoder.encode(intro, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

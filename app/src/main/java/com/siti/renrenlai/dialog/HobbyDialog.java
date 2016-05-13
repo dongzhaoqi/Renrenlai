@@ -86,7 +86,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 
 		String api = null;
 		try {
-			api = "/updateUserHobby?userName="+userName+"&userHobby="+ URLEncoder.encode(hobby, "utf-8");
+			api = "/updateUserHobby?userName="+URLEncoder.encode(userName, "utf-8")+"&userHobby="+ URLEncoder.encode(hobby, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

@@ -213,7 +213,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
 
         String api = null;
         try {
-            api = "/updateUserGender?userName="+userName+"&userGender="+ URLEncoder.encode(gender, "utf-8");
+            api = "/updateUserGender?userName="+URLEncoder.encode(userName, "utf-8")+"&userGender="+ URLEncoder.encode(gender, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

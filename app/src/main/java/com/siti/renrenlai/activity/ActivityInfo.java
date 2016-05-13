@@ -115,7 +115,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
             //image.setBorderWidth(2);
-            Picasso.with(this).load(imagePath).resize(48, 48).into(image);
+            Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 15, 0);
             ll_image.addView(image, params);
@@ -241,7 +241,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      */
     public void addImage(){
         CircleImageView image = new CircleImageView(this);
-        Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
+        Picasso.with(this).load(R.drawable.arduino).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 15, 0);
         ll_image.addView(image, 0, params);

@@ -29,6 +29,7 @@ import com.afollestad.materialdialogs.MaterialDialog;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 
 import butterknife.Bind;
@@ -59,8 +61,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     @Bind(R.id.ll_advice) LinearLayout ll_advice;
     @Bind(R.id.et_subject) EditText et_subject;
     @Bind(R.id.tv_category) TextView tv_category;
-    @Bind(R.id.et_time) TextView et_time;
-    @Bind(R.id.tv_end) TextView et_end;
+    @Bind(R.id.tv_start_time) TextView tv_start_time;
+    @Bind(R.id.tv_end_time) TextView tv_end_time;
+    @Bind(R.id.tv_deadline) TextView tv_deadline;
     @Bind(R.id.et_place) EditText et_place;
     @Bind(R.id.et_epople) EditText etEpople;
     //@Bind(R.id.iv_cover) ImageView iv_cover;
@@ -86,6 +89,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private File mCurrentPhotoFile;
     /* 拍照的照片存储位置 */
     private File PHOTO_DIR = null;
+    private Calendar calendar = Calendar.getInstance();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,8 +152,30 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 .show();
     }
 
-    public void showTimeDialog() {
-        final AlertDialog dialog = new AlertDialog.Builder(LaunchActivity.this).create();
+    public void showTimeDialog(View v) {
+
+        final int id = v.getId();
+
+        DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
+        picker.setRange(2000, 2030);
+        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH),
+                calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
+        picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
+            @Override
+            public void onDateTimePicked(String year, String month, String day, String hour, String minute) {
+                //showToast(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                if(id == R.id.tv_start_time){
+                    tv_start_time.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                }else if(id == R.id.tv_end_time){
+                    tv_end_time.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                }else{
+                    tv_deadline.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                }
+            }
+        });
+        picker.show();
+
+        /*final AlertDialog dialog = new AlertDialog.Builder(LaunchActivity.this).create();
         dialog.show();
         DatePicker picker = new DatePicker(LaunchActivity.this);
         picker.setDate(2015, 10);
@@ -165,7 +192,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         dialog.getWindow().setContentView(picker, params);
-        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setGravity(Gravity.CENTER);*/
     }
 
     public void showPicDialog() {
@@ -246,8 +273,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-    @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.et_time, R.id.tv_end, R.id.layout_cover,
-            R.id.btn_preview, R.id.btn_publish})
+    @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.tv_start_time, R.id.tv_end_time,
+            R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_type:
@@ -265,11 +292,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 unselectedAll();
                 ll_advice.setSelected(true);
                 break;
-            case R.id.et_time:
-                showTimeDialog();
+            case R.id.tv_start_time:
+                showTimeDialog(view);
                 break;
-            case R.id.tv_end:
-                showTimeDialog();
+            case R.id.tv_end_time:
+                showTimeDialog(view);
+                break;
+            case R.id.tv_deadline:
+                showTimeDialog(view);
                 break;
             case R.id.layout_cover:
                 showPicDialog();

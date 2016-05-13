@@ -95,6 +95,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center_vertical"
                     android:textSize="@dimen/text_size_16"
+                    android:paddingLeft="@dimen/padding_10"
                     android:text="选择城市"/>
 
                 <TextView

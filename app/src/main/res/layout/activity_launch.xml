@@ -172,7 +172,7 @@
                     android:layout_height="match_parent"
                     android:layout_toRightOf="@id/str_subject"
                     android:background="@null"
-                    android:nextFocusDown="@+id/et_time"
+                    android:nextFocusDown="@+id/tv_start_time"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:singleLine="true" />
             </RelativeLayout>
@@ -184,20 +184,20 @@
                 android:padding="@dimen/padding_10">
 
                 <TextView
-                    android:id="@+id/str_time"
+                    android:id="@+id/str_start_time"
                     style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="@string/txt_time" />
+                    android:text="@string/txt_start_time" />
 
                 <TextView
-                    android:id="@+id/et_time"
+                    android:id="@+id/tv_start_time"
                     style="@style/me_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/str_time"
+                    android:layout_toRightOf="@id/str_start_time"
                     android:background="@null"
-                    android:nextFocusDown="@+id/tv_end"
+                    android:nextFocusDown="@+id/tv_end_time"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:singleLine="true" />
             </RelativeLayout>
@@ -209,18 +209,43 @@
                 android:padding="@dimen/padding_10">
 
                 <TextView
-                    android:id="@+id/str_end"
+                    android:id="@+id/str_end_time"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_end_time" />
+
+                <TextView
+                    android:id="@+id/tv_end_time"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_end_time"
+                    android:background="@null"
+                    android:nextFocusDown="@+id/tv_deadline"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_deadline"
                     style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/txt_end" />
 
                 <TextView
-                    android:id="@+id/tv_end"
+                    android:id="@+id/tv_deadline"
                     style="@style/me_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/str_end"
+                    android:layout_toRightOf="@id/str_deadline"
                     android:background="@null"
                     android:nextFocusDown="@+id/et_place"
                     android:paddingLeft="@dimen/activity_horizontal_margin"

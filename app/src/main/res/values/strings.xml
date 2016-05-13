@@ -86,7 +86,8 @@
 
 
     <string name="txt_theme">活动主题:</string>
-    <string name="txt_time">活动时间:</string>
+    <string name="txt_start_time">开始时间:</string>
+    <string name="txt_end_time">结束时间:</string>
     <string name="txt_end">报名截止:</string>
     <string name="txt_place">活动地点:</string>
     <string name="txt_people">活动人数:</string>
