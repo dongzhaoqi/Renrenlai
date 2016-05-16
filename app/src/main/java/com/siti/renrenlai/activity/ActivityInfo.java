@@ -74,7 +74,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
-    int activity_id;
+    int activity_id, userId;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
@@ -96,7 +96,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showShare();
             }
         });
+        userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
+
 
         if(activity != null){
             activity_id = activity.getActivityId();

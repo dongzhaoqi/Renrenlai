@@ -3,6 +3,7 @@ package com.siti.renrenlai.dialog;
 import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -96,7 +97,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 				new Response.Listener<JSONObject>() {
 					@Override
 					public void onResponse(JSONObject response) {
-						VolleyLog.d("response", response.toString());
+						Log.d("response", "response:" + response.toString());
 						Toast.makeText(mActivity, "修改成功!", Toast.LENGTH_SHORT).show();
 						SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"),
 								"hobby", hobby);

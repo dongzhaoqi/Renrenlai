@@ -1,8 +1,17 @@
 package com.siti.renrenlai.bean;
 
 public class User {
-	
-	public String userName;
+
+	private int userId;
+	private String userName;
+
+	public int getUserId() {
+		return userId;
+	}
+
+	public void setUserId(int userId) {
+		this.userId = userId;
+	}
 
 	public String getUserName() {
 		return userName;

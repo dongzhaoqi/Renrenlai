@@ -13,6 +13,8 @@ public class Activity implements Serializable {
     private String activityStartTime;
     private String activityEndTime;
     private String contactTel;
+    private String activityReleaseTime;
+    private String activityStatus;
     private List<LovedUsers> lovedUsers;
     private List<CommentContents> comments;
 
@@ -78,6 +80,22 @@ public class Activity implements Serializable {
 
     public void setContactTel(String contactTel) {
         this.contactTel = contactTel;
+    }
+
+    public String getActivityReleaseTime() {
+        return activityReleaseTime;
+    }
+
+    public void setActivityReleaseTime(String activityReleaseTime) {
+        this.activityReleaseTime = activityReleaseTime;
+    }
+
+    public String getActivityStatus() {
+        return activityStatus;
+    }
+
+    public void setActivityStatus(String activityStatus) {
+        this.activityStatus = activityStatus;
     }
 
     public List<LovedUsers> getLovedUsers() {

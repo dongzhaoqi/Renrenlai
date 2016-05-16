@@ -2,6 +2,7 @@ package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -9,7 +10,6 @@ import android.widget.EditText;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
@@ -17,7 +17,6 @@ import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -83,7 +82,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
         String api = null;
         try {
-            api = "/login?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
+            api = "/loginForApp?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -100,13 +99,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        VolleyLog.d("response", response.toString());
+                        Log.d("loginResponse", "response:" + response.toString());
                         loginSuccess(response);
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        VolleyLog.e("Error: ", error.getMessage());
+                        Log.e("Error: ", error.getMessage().toString());
                 }
         });
 
@@ -118,11 +117,16 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         int code = arg0.optInt("errorCode");
         if (code == 0) {
             User user = new User();
+            user.setUserId(result.optInt("userId"));
             user.setUserName(result.optString("userName"));
             ((CustomApplication) getApplication()).setUser(user);
             startAnimActivity(MainActivity.class);
+            finish();
             SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                     "userName", user.getUserName());
+            SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                    "userId", user.getUserId());
+
             showToast("登录成功");
         }else{
             showToast("登录失败,请检查用户名或密码");

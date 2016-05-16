@@ -9,6 +9,7 @@ public class TimeLineModel implements Serializable{
     private String time;
     private String img;
     private String title;
+    private String status;
 
     public String getTime() {
         return time;
@@ -32,5 +33,13 @@ public class TimeLineModel implements Serializable{
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 }

@@ -1,11 +1,17 @@
 package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.view.HeaderLayout;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
 
@@ -14,18 +20,45 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
  */
 public class MyLaunchActivity extends BaseActivity {
 
+    @Bind(R.id.activity_img)
+    ImageView activityImg;
+    @Bind(R.id.activity_name)
+    TextView activityName;
+    @Bind(R.id.activity_time)
+    TextView activityTime;
+    @Bind(R.id.activity_location)
+    TextView activityLocation;
+    @Bind(R.id.activity_enroll_number)
+    TextView activityEnrollNumber;
+    @Bind(R.id.activity_loved_number)
+    TextView activityLovedNumber;
     private TimeLineModel model;
+    private String str_activity_name, str_activity_time, str_activity_location,
+            str_activity_enroll_number, str_activity_loved_number;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_launch);
+        ButterKnife.bind(this);
         model = (TimeLineModel) getIntent().getExtras().getSerializable("model");
-        initTopBarForBoth("我发起的活动" + model.getTitle().substring(0,3), R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
+        initTopBarForBoth("我发起的活动", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();
             }
         });
+
+        initView();
+    }
+
+    public void initView(){
+        str_activity_name = model.getTitle();
+        str_activity_time = model.getTime();
+
+        activityName.setText(str_activity_name);
+        activityTime.setText(str_activity_time);
+
     }
 
     private void showShare() {
@@ -60,5 +93,15 @@ public class MyLaunchActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(this);
+    }
+
+    @OnClick({R.id.layout_enroll_number, R.id.layout_favor_number})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.layout_enroll_number:
+                break;
+            case R.id.layout_favor_number:
+                break;
+        }
     }
 }

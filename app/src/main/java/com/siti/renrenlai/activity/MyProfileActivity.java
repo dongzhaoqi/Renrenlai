@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
@@ -223,7 +224,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        VolleyLog.d("response", response.toString());
+                        Log.d("response", "response:" + response.toString());
                         showToast("修改成功!");
                         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"),
                                 "gender", gender);
@@ -232,7 +233,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+                Log.e("Error: ", error.getMessage());
                 showToast("出错了!");
             }
         });

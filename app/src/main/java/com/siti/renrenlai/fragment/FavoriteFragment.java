@@ -10,14 +10,25 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.TimeLineAdapter;
 import com.siti.renrenlai.bean.TimeLineModel;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.FragmentBase;
 import com.software.shell.fab.ActionButton;
 
+import org.json.JSONObject;
+
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -114,19 +125,37 @@ public class FavoriteFragment extends FragmentBase {
     }
 
     private void initData() {
-        for (int i = 0; i < 15; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle(i + "小明的童年影像展览及故事分享会");
-            mDataList.add(model);
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        String api = null;
+        try {
+            api = "/getLovedActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
         }
+        String url = ConstantValue.urlRoot + api;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("response", "喜欢 response:" + response.toString());
+                        showToast("获取喜欢成功!");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     private void refreshData(){
         for (int i = 0; i < 2; i++) {
             TimeLineModel model = new TimeLineModel();
             model.setTime("2016年4月3号");
-            model.setTitle("refresh:" + i + "春季亲子运动会");
+            model.setTitle("refresh:" + i + "春季亲子运动会喜欢");
             mDataList.add(0, model);
         }
         mTimeLineAdapter.notifyDataSetChanged();
@@ -136,7 +165,7 @@ public class FavoriteFragment extends FragmentBase {
         for (int i = 0; i < 3; i++) {
             TimeLineModel model = new TimeLineModel();
             model.setTime("2016年4月3号");
-            model.setTitle("load:" + i + "春季亲子运动会");
+            model.setTitle("load:" + i + "春季亲子运动会喜欢");
             mDataList.add(mDataList.size(), model);
         }
         mTimeLineAdapter.notifyDataSetChanged();

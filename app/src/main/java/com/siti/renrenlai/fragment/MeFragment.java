@@ -162,6 +162,8 @@ public class MeFragment extends FragmentBase implements View.OnClickListener {
                     public void onClick(MaterialDialog dialog, DialogAction which) {
                         SharedPreferencesUtil.clearAll(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"));
                         startAnimActivity(LoginActivity.class);
+                        getActivity().finish();
+
                     }
                 })
                 .show();

@@ -27,15 +27,33 @@ public class MyActivity extends BaseActivity implements OnClickListener{
     private static FavoriteFragment mFavoriteFragment;
     private EnrollFragment mEnrollFragment;
     private LaunchFragment mLaunchFragment;
+    private SectionsPagerAdapter pagerAdapter;
+    private MaterialTabHost tabHost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my);
 
+        initTab();
         initViews();
 
-        initTab();
+    }
+
+    private void initTab(){
+        tabHost = (MaterialTabHost) findViewById(R.id.tabhost);
+        tabHost.setType(MaterialTabHost.Type.FullScreenWidth);
+//        tabHost.setType(MaterialTabHost.Type.Centered);
+//        tabHost.setType(MaterialTabHost.Type.LeftOffset);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            tabHost.setElevation(0);
+        }
+
+        pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        for (int i = 0; i < pagerAdapter.getCount(); i++) {
+            tabHost.addTab(pagerAdapter.getPageTitle(i));
+        }
+
     }
 
     private void initViews() {
@@ -46,21 +64,7 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         mLaunchFragment = new LaunchFragment();
 
         pos = getIntent().getIntExtra("pos",0);
-    }
-
-    private void initTab(){
-        MaterialTabHost tabHost = (MaterialTabHost) findViewById(R.id.tabhost);
-        tabHost.setType(MaterialTabHost.Type.FullScreenWidth);
-//        tabHost.setType(MaterialTabHost.Type.Centered);
-//        tabHost.setType(MaterialTabHost.Type.LeftOffset);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            tabHost.setElevation(0);
-        }
-
-        SectionsPagerAdapter pagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        for (int i = 0; i < pagerAdapter.getCount(); i++) {
-            tabHost.addTab(pagerAdapter.getPageTitle(i));
-        }
+        System.out.println("pos:" + pos);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
         viewPager.setAdapter(pagerAdapter);
@@ -82,6 +86,8 @@ public class MyActivity extends BaseActivity implements OnClickListener{
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        Bundle bundle = new Bundle();
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -91,13 +97,17 @@ public class MyActivity extends BaseActivity implements OnClickListener{
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
 
-            if(position == 0){
-                return mFavoriteFragment;
-            }else if(position == 1){
-                return mEnrollFragment;
-            }else{
-                return mLaunchFragment;
+            switch (position) {
+                case 0:
+                    return mFavoriteFragment;
+                case 1:
+                    return mEnrollFragment;
+                case 2:
+                    return mLaunchFragment;
+                default:
+                    return null;
             }
+
         }
 
         @Override

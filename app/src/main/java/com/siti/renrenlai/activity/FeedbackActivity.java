@@ -1,6 +1,7 @@
 package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.EditText;
 
 import com.android.volley.Response;
@@ -65,14 +66,20 @@ public class FeedbackActivity extends BaseActivity {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        VolleyLog.d("response", response.toString());
-                        showToast("感谢您的反馈!");
+                        Log.d("response", "response:" + response.toString());
+                        String result = null;
+                        try {
+                            result = response.getString("result");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        showToast(result);
                         finish();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
+                Log.e("Error: ", error.getMessage());
                 showToast("出错了!");
             }
         });
