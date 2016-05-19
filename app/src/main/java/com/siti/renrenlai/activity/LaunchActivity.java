@@ -305,6 +305,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 showPicDialog();
                 break;
             case R.id.btn_preview:
+                Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
+                startActivity(previewIntent);
                 break;
             case R.id.btn_publish:
                 break;

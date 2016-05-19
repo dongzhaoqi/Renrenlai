@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class LovedUsers implements Serializable{
     private String userId;
+    private String userName;
     private String userHeadPicImagePath;
 
     public String getUserId() {
@@ -15,6 +16,14 @@ public class LovedUsers implements Serializable{
 
     public void setUserId(String userId) {
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserHeadPicImagePath() {

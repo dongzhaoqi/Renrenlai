@@ -43,6 +43,7 @@ import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
@@ -117,10 +118,21 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
             //image.setBorderWidth(2);
+            System.out.println("imagePath:" + imagePath);
             Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 15, 0);
             ll_image.addView(image, params);
+
+            image.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(ActivityInfo.this, FavoriteActivity.class);
+                    intent.putExtra("likeList", (Serializable) lovedUsersList);
+                    startActivity(intent);
+
+                }
+            });
         }
 
         expTv1.setText(activity_describ);
@@ -190,7 +202,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     }
 
     /**
-     * 弹出评论框
+     * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(){
         CommentDialog dialog = new CommentDialog(this);

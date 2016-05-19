@@ -9,6 +9,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.dialog.CustomProgressDialog;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
@@ -18,10 +19,9 @@ import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
 public class BaseActivity extends FragmentActivity {
 
 	protected HeaderLayout mHeaderLayout;
-	
 	protected int mScreenWidth;
 	protected int mScreenHeight;
-	
+	public CustomProgressDialog customProgressDialog;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +30,9 @@ public class BaseActivity extends FragmentActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		mScreenWidth = metric.widthPixels;
 		mScreenHeight = metric.heightPixels;
+		customProgressDialog = new CustomProgressDialog(BaseActivity.this, "loading..");
+		customProgressDialog.setCancelable(true);
+		customProgressDialog.setCanceledOnTouchOutside(true);
 
 	}
 
@@ -41,7 +44,6 @@ public class BaseActivity extends FragmentActivity {
 				
 				@Override
 				public void run() {
-					// TODO Auto-generated method stub
 					if (mToast == null) {
 						mToast = Toast.makeText(getApplicationContext(), text,
 								Toast.LENGTH_SHORT);
@@ -157,6 +159,25 @@ public class BaseActivity extends FragmentActivity {
 	
 	public void startAnimActivity(Intent intent) {
 		this.startActivity(intent);
+	}
+
+	public void showProcessDialog() {
+
+		if (customProgressDialog == null){
+			customProgressDialog = new CustomProgressDialog(this,"loading...");
+			customProgressDialog.show();
+			customProgressDialog.setCanceledOnTouchOutside(true);
+		}
+		if (customProgressDialog.isShowing() == false)
+			customProgressDialog.show();
+
+	}
+
+	public void dismissProcessDialog() {
+
+		if (customProgressDialog != null)
+			customProgressDialog.dismiss();
+
 	}
 
 

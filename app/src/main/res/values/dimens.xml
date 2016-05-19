@@ -12,8 +12,10 @@
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="padding_20">20dp</dimen>
     <dimen name="padding_30">30dp</dimen>
+    <dimen name="height_36">36dp</dimen>
     <dimen name="item_height">48dp</dimen>
     <dimen name="base_action_bar_height">52dp</dimen>
+    <dimen name="height_56">56dp</dimen>
     <dimen name="width_60">60dp</dimen>
     <dimen name="width_70">70dp</dimen>
     <dimen name="width_80">80dp</dimen>

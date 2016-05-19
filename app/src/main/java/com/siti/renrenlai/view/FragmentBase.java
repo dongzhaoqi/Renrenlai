@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.dialog.CustomProgressDialog;
 import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
@@ -21,7 +22,7 @@ public abstract class FragmentBase extends Fragment {
 	public HeaderLayout mHeaderLayout;
 
 	protected View contentView;
-	
+	public CustomProgressDialog customProgressDialog;
 	public LayoutInflater mInflater;
 	
 	private Handler handler = new Handler();
@@ -36,9 +37,11 @@ public abstract class FragmentBase extends Fragment {
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
+		customProgressDialog = new CustomProgressDialog(getActivity(), "loading..");
+		customProgressDialog.setCancelable(true);
+		customProgressDialog.setCanceledOnTouchOutside(true);
 	}
 
 	
@@ -152,7 +155,25 @@ public abstract class FragmentBase extends Fragment {
 	public void startAnimActivity(Class<?> cla) {
 		getActivity().startActivity(new Intent(getActivity(), cla));
 	}
-	
-	 
-	
+
+	public void showProcessDialog() {
+
+		if (customProgressDialog == null){
+			customProgressDialog = new CustomProgressDialog(getActivity(), "loading...");
+			customProgressDialog.show();
+			customProgressDialog.setCanceledOnTouchOutside(true);
+		}
+		if (customProgressDialog.isShowing() == false)
+			customProgressDialog.show();
+
+	}
+
+	public void dismissProcessDialog() {
+
+		if (customProgressDialog != null)
+			customProgressDialog.dismiss();
+
+	}
+
+
 }

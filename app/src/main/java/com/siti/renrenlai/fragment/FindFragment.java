@@ -76,6 +76,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             "http://api.androidhive.info/music/images/mj.png"
     };
     private String[] strs = new String[]{"缤纷广场舞","南新七色馆\n儿童绘画营","春季夜跑族","野外踏青","草莓音乐节"};
+    private Boolean isFirst = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -87,7 +88,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-
+        showProcessDialog();
         initData();
         initView();
         initEvent();
@@ -238,10 +239,13 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             public void onResponse(JSONObject response) {
                 Log.d("onResponse", response.toString());
                 getData(response);
+                dismissProcessDialog();
             }
         }, new Response.ErrorListener(){
             @Override
             public void onErrorResponse(VolleyError error) {
+
+                dismissProcessDialog();
                 if (error.networkResponse == null) {
                     if (error.getClass().equals(TimeoutError.class)) {
                         // Show timeout error message

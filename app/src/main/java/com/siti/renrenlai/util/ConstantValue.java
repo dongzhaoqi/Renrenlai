@@ -10,4 +10,7 @@ public class ConstantValue {
 
     /*外网测试*/
     //public static final String urlRoot = "http://116.228.3.125/RenrenLai";
+
+    /*缓存目录*/
+    public static final String ENVIROMENT_DIR_CACHE = "/activityCache";
 }

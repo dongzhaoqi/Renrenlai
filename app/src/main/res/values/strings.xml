@@ -76,7 +76,8 @@
 
 
     <!--发起活动-->
-    <string name="txt_category">请选择活动类型</string>
+    <string name="txt_select_category">请选择活动类型</string>
+    <string name="txt_category">活动类型</string>
     <string name="txt_interest">兴趣</string>
     <string name="txt_help">公益</string>
     <string name="txt_advice">议事</string>
@@ -93,6 +94,7 @@
     <string name="txt_people">活动人数:</string>
     <string name="txt_detail">活动详情:</string>
     <string name="txt_cover">选择封面:</string>
+    <string name="txt_activity_cover">活动封面:</string>
     <string name="txt_preview">预览</string>
     <string name="txt_publish">立即发布</string>
 
