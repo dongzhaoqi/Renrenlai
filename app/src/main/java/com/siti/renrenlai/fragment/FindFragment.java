@@ -15,9 +15,13 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
@@ -40,6 +44,7 @@ import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.util.CacheRequest;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.FragmentBase;
@@ -50,6 +55,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -234,29 +240,29 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         String url = ConstantValue.urlRoot + api;
         Log.d("FindFragment", "url:" + url);
 
-        JsonObjectRequest request = new JsonObjectRequest(url, null, new Response.Listener<JSONObject>(){
+        CacheRequest request = new CacheRequest(0, url, new Response.Listener<NetworkResponse>() {
             @Override
-            public void onResponse(JSONObject response) {
-                Log.d("onResponse", response.toString());
-                getData(response);
-                dismissProcessDialog();
+            public void onResponse(NetworkResponse response) {
+                try {
+                    final String jsonString = new String(response.data,
+                            HttpHeaderParser.parseCharset(response.headers));
+                    JSONObject jsonObject = new JSONObject(jsonString);
+                    getData(jsonObject);
+                    dismissProcessDialog();
+                    Log.d("response", "jsonobject:" + jsonObject.toString());
+                } catch (UnsupportedEncodingException | JSONException e) {
+                    e.printStackTrace();
+                }
             }
-        }, new Response.ErrorListener(){
+        }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-
                 dismissProcessDialog();
-                if (error.networkResponse == null) {
-                    if (error.getClass().equals(TimeoutError.class)) {
-                        // Show timeout error message
-                        /*Toast.makeText(getActivity(),
-                                "Oops. Timeout error!",
-                                Toast.LENGTH_LONG).show();*/
-                    }
-                }
-                Log.e("onErrorResponse", error.getMessage(), error);
             }
         });
+        /*int socketTimeout = 30000;//30 seconds - change to what you want
+        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
+        request.setRetryPolicy(policy);*/
         CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
 
     }

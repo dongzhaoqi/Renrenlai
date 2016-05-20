@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/layout_review"
+        android:layout_width="fill_parent"
+        android:layout_height="@dimen/height_36"
+        android:background="@drawable/row_selector"
+        android:paddingLeft="@dimen/padding_10"
+        android:paddingRight="@dimen/padding_10">
+
+        <TextView
+            style="@style/me_text_style"
+            android:id="@+id/str_review"
+            android:layout_width="@dimen/height_96"
+            android:layout_height="match_parent"
+            android:text="@string/str_review" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:duplicateParentState="true"
+            android:src="@drawable/go" />
+    </RelativeLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/view_height"
+        android:background="@color/background" />
+</LinearLayout>

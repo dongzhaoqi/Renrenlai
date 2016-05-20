@@ -28,6 +28,7 @@ import com.ab.adapter.AbImageShowAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.FileUtils;
@@ -37,6 +38,7 @@ import com.siti.renrenlai.view.NoScrollGridView;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -56,17 +58,16 @@ import rebus.bottomdialog.BottomDialog;
 public class LaunchActivity extends BaseActivity implements View.OnClickListener {
 
     @Bind(R.id.layout_type) RelativeLayout layoutType;
+    @Bind(R.id.tv_activity_type) TextView tv_activity_type;
     @Bind(R.id.ll_interest) LinearLayout ll_interest;
     @Bind(R.id.ll_help) LinearLayout ll_help;
     @Bind(R.id.ll_advice) LinearLayout ll_advice;
     @Bind(R.id.et_subject) EditText et_subject;
-    @Bind(R.id.tv_category) TextView tv_category;
     @Bind(R.id.tv_start_time) TextView tv_start_time;
     @Bind(R.id.tv_end_time) TextView tv_end_time;
     @Bind(R.id.tv_deadline) TextView tv_deadline;
     @Bind(R.id.et_place) EditText et_place;
-    @Bind(R.id.et_epople) EditText etEpople;
-    //@Bind(R.id.iv_cover) ImageView iv_cover;
+    @Bind(R.id.et_epople) EditText et_people;
     @Bind(R.id.layout_cover) RelativeLayout layout_cover;
     @Bind(R.id.noScrollgridview) NoScrollGridView noScrollGridView;
     @Bind(R.id.et_detail) EditText et_detail;
@@ -74,22 +75,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     @Bind(R.id.btn_publish) Button btn_publish;
 
     public static Bitmap bitmap;
-    private String imgName;
-    private String filepath;
-    private int camIndex = 0;
-    private int selectIndex = 0;
+    private String imgName,filepath, activity_type;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
-    private static final int CAMERA_CROP_DATA = 2;
-    private ArrayList<String> mPhotoList = new ArrayList<String>();
-    private GridView mGridView = null;
-    private AbImageShowAdapter mImagePathAdapter = null;
     private PictureAdapter picAdapter;
     // 照相机拍照得到的图片
     private File mCurrentPhotoFile;
     /* 拍照的照片存储位置 */
     private File PHOTO_DIR = null;
     private Calendar calendar = Calendar.getInstance();
+    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,16 +93,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         ButterKnife.bind(this);
         initViews();
 
-        initEvent();
     }
 
     private void initViews() {
         initTopBarForLeft("发起活动");
 
-        /*mPhotoList.add(String.valueOf(R.drawable.cam_photo));
-        mGridView = (GridView) findViewById(R.id.myGrid);
-        mImagePathAdapter = new AbImageShowAdapter(this, mPhotoList,116,116);
-        mGridView.setAdapter(mImagePathAdapter);*/
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new PictureAdapter(this);
         noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -126,36 +116,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    private void initEvent() {
-
-        /*mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectIndex = position;
-                if (selectIndex == camIndex) {
-                    showPicDialog();
-                }
-            }
-        });*/
-    }
-
-    public void showTypeDialog(){
-        new MaterialDialog.Builder(this)
-                .items(R.array.activity_type)
-                .title(R.string.txt_category)
-                .itemsCallback(new MaterialDialog.ListCallback() {
-                    @Override
-                    public void onSelection(MaterialDialog dialog, View view, int which, CharSequence text) {
-                        tv_category.setText(text);
-                    }
-                })
-                .show();
-    }
-
     public void showTimeDialog(View v) {
 
         final int id = v.getId();
-
         DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
         picker.setRange(2000, 2030);
         picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH),
@@ -163,36 +126,23 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
             @Override
             public void onDateTimePicked(String year, String month, String day, String hour, String minute) {
-                //showToast(year + "-" + month + "-" + day + " " + hour + ":" + minute);
-                if(id == R.id.tv_start_time){
-                    tv_start_time.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
-                }else if(id == R.id.tv_end_time){
-                    tv_end_time.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
-                }else{
-                    tv_deadline.setText(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                Date date = null;
+                try {
+                    date = sdf.parse(year + "-" + month + "-" + day + " " + hour + ":" + minute);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (id == R.id.tv_start_time) {
+                    tv_start_time.setText(sdf.format(date));
+                } else if (id == R.id.tv_end_time) {
+                    tv_end_time.setText(sdf.format(date));
+                } else {
+                    tv_deadline.setText(sdf.format(date));
                 }
             }
         });
         picker.show();
 
-        /*final AlertDialog dialog = new AlertDialog.Builder(LaunchActivity.this).create();
-        dialog.show();
-        DatePicker picker = new DatePicker(LaunchActivity.this);
-        picker.setDate(2015, 10);
-        picker.setTodayDisplay(true);
-        picker.setHolidayDisplay(false);
-        picker.setMode(DPMode.SINGLE);
-        picker.setOnDatePickedListener(new DatePicker.OnDatePickedListener() {
-            @Override
-            public void onDatePicked(String date) {
-                et_time.setText(date);
-                dialog.dismiss();
-            }
-        });
-        ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        dialog.getWindow().setContentView(picker, params);
-        dialog.getWindow().setGravity(Gravity.CENTER);*/
     }
 
     public void showPicDialog() {
@@ -206,10 +156,6 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             public boolean onItemSelected(int id) {
                 switch (id) {
                     case R.id.item_pick_photo:
-                        /*Intent intent = new Intent();
-                        intent.setType("image*//*");
-                        intent.setAction(Intent.ACTION_GET_CONTENT);
-                        startActivityForResult(Intent.createChooser(intent, "Select Picture"), SELECT_PICTURE);*/
                         startAnimActivity(AlbumActivity.class);
                         return true;
                     case R.id.item_take_pic:
@@ -267,8 +213,6 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             File img = new File(imgFolder, imgName);
             bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
-            //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
-            //iv_cover.setImageBitmap(bitmap);
         }
     }
 
@@ -277,20 +221,20 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.layout_type:
-                //showTypeDialog();
-                break;
             case R.id.ll_interest:
                 unselectedAll();
                 ll_interest.setSelected(true);
+                activity_type = "兴趣";
                 break;
             case R.id.ll_help:
                 unselectedAll();
                 ll_help.setSelected(true);
+                activity_type = "公益";
                 break;
             case R.id.ll_advice:
                 unselectedAll();
                 ll_advice.setSelected(true);
+                activity_type = "议事";
                 break;
             case R.id.tv_start_time:
                 showTimeDialog(view);
@@ -306,11 +250,28 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_preview:
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("activity", getActivityInfo());
+                previewIntent.putExtras(bundle);
                 startActivity(previewIntent);
                 break;
             case R.id.btn_publish:
                 break;
         }
+    }
+
+    public Activity getActivityInfo(){
+        Activity activity = new Activity();
+        activity.setActivityType(activity_type);
+        activity.setActivityName(et_subject.getText().toString());
+        activity.setActivityStartTime(tv_start_time.getText().toString());
+        activity.setActivityEndTime(tv_end_time.getText().toString());
+        activity.setDeadline(tv_deadline.getText().toString());
+        activity.setActivityAddress(et_place.getText().toString());
+        activity.setParticipateNum(et_people.getText().toString());
+        activity.setActivityDescrip(et_detail.getText().toString());
+
+        return activity;
     }
 
     public void unselectedAll(){

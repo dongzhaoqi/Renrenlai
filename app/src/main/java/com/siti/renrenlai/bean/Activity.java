@@ -8,10 +8,13 @@ public class Activity implements Serializable {
     private int activityId;
     private String activityImg;
     private String activityName;
-    private String activityAddress;
-    private String activityDescrip;
-    private String activityStartTime;
-    private String activityEndTime;
+    private String activityType;                    //活动类型
+    private String activityAddress;                 //活动地点
+    private String participateNum;                     //活动人数
+    private String activityDescrip;                 //活动详情
+    private String activityStartTime;               //开始时间
+    private String activityEndTime;                 //结束时间
+    private String deadline;                        //报名截止时间
     private String contactTel;
     private String activityReleaseTime;
     private String activityStatus;
@@ -42,12 +45,28 @@ public class Activity implements Serializable {
         this.activityName = activityName;
     }
 
+    public String getActivityType() {
+        return activityType;
+    }
+
+    public void setActivityType(String activityType) {
+        this.activityType = activityType;
+    }
+
     public String getActivityAddress() {
         return activityAddress;
     }
 
     public void setActivityAddress(String activityAddress) {
         this.activityAddress = activityAddress;
+    }
+
+    public String getParticipateNum() {
+        return participateNum;
+    }
+
+    public void setParticipateNum(String participateNum) {
+        this.participateNum = participateNum;
     }
 
     public String getActivityDescrip() {
@@ -72,6 +91,14 @@ public class Activity implements Serializable {
 
     public void setActivityEndTime(String activityEndTime) {
         this.activityEndTime = activityEndTime;
+    }
+
+    public String getDeadline() {
+        return deadline;
+    }
+
+    public void setDeadline(String deadline) {
+        this.deadline = deadline;
     }
 
     public String getContactTel() {

@@ -109,8 +109,8 @@
                         android:src="@drawable/time" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/tv_activity_time"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_time"
@@ -140,8 +140,8 @@
                         android:src="@drawable/location" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/tv_activity_address"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_location"
@@ -228,9 +228,9 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/padding_10"
                         android:layout_marginRight="@dimen/padding_10"
+                        android:ellipsize="end"
                         android:fontFamily="sans-serif-light"
                         android:textColor="#666666"
-                        android:ellipsize="end"
                         android:textSize="@dimen/text_size_16" />
 
                     <ImageButton
@@ -246,29 +246,33 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_favorite"
                     android:layout_marginLeft="@dimen/padding_10"
-                    />
+                    android:text="@string/str_favorite" />
 
-                <LinearLayout
-                    android:id="@+id/ll_image"
-                    android:orientation="horizontal"
-                    android:layout_margin="@dimen/padding_10"
+                <HorizontalScrollView
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/ll_image"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_10"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/str_comment"
                     android:layout_marginLeft="@dimen/padding_10"
-                    />
+                    android:text="@string/str_comment" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10"/>
+                    android:layout_margin="@dimen/padding_10" />
 
             </LinearLayout>
 
@@ -288,9 +292,9 @@
                 android:background="@drawable/btn_background"
                 android:drawableTop="@drawable/comment"
                 android:paddingTop="5dp"
+                android:text="@string/txt_comment"
                 android:textColor="@color/me_text_color"
-                android:textSize="@dimen/text_size_15"
-                android:text="@string/txt_comment" />
+                android:textSize="@dimen/text_size_15" />
 
             <Button
                 android:id="@+id/btn_favor"
@@ -300,9 +304,9 @@
                 android:background="@drawable/btn_background"
                 android:drawableTop="@drawable/heart_selector"
                 android:paddingTop="5dp"
+                android:text="@string/txt_favor"
                 android:textColor="@color/me_text_color"
-                android:textSize="@dimen/text_size_15"
-                android:text="@string/txt_favor" />
+                android:textSize="@dimen/text_size_15" />
 
             <Button
                 android:id="@+id/btn_publish"
@@ -310,9 +314,9 @@
                 android:layout_height="match_parent"
                 android:layout_weight="2"
                 android:background="@drawable/btn_background"
+                android:text="@string/txt_im_enroll"
                 android:textColor="@color/me_text_color"
-                android:textSize="@dimen/text_size_15"
-                android:text="@string/txt_im_enroll" />
+                android:textSize="@dimen/text_size_15" />
         </LinearLayout>
     </FrameLayout>
 </LinearLayout>

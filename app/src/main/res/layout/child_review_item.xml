@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/margin_8">
+
+    <ImageView
+        android:id="@+id/iv_review_icon"
+        android:layout_width="@dimen/height_50"
+        android:layout_height="@dimen/height_50"
+        android:layout_centerVertical="true"
+        android:src="@android:drawable/ic_partial_secure"/>
+
+    <TextView
+        android:id="@+id/tv_username"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/padding_10"
+        android:layout_toRightOf="@id/iv_review_icon"
+        android:text="活动通知"/>
+
+    <TextView
+        android:id="@+id/tv_review"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_below="@id/tv_username"
+        android:paddingTop="@dimen/margin_8"
+        android:layout_toRightOf="@id/iv_review_icon"
+        android:text="活动通知"/>
+    <TextView
+        android:id="@+id/tv_review_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_below="@id/tv_review"
+        android:paddingTop="@dimen/margin_8"
+        android:layout_toRightOf="@id/iv_review_icon"
+        android:text="活动通知"/>
+
+    <TextView
+        android:id="@+id/tv_activity_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:text="环小区挑战赛"/>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toLeftOf="@id/tv_activity_name"
+        android:src="@drawable/diploma"/>
+
+</RelativeLayout>

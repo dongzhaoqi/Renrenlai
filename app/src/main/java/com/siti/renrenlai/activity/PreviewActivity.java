@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.view.NoScrollGridView;
 
 import butterknife.Bind;
@@ -26,8 +27,8 @@ public class PreviewActivity extends BaseActivity {
     TextView tvDeadline;
     @Bind(R.id.tv_place)
     TextView tvPlace;
-    @Bind(R.id.tv_epople)
-    TextView tvEpople;
+    @Bind(R.id.tv_people)
+    TextView tvPeople;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollgridview;
     @Bind(R.id.tv_detail)
@@ -40,5 +41,19 @@ public class PreviewActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initTopBarForLeft("预览活动");
+
+        initView();
+    }
+
+    private void initView(){
+        Activity activity = (Activity) getIntent().getSerializableExtra("activity");
+        tvCategory.setText(activity.getActivityType());
+        tvSubject.setText(activity.getActivityName());
+        tvStartTime.setText(activity.getActivityStartTime());
+        tvEndTime.setText(activity.getActivityEndTime());
+        tvDeadline.setText(activity.getDeadline());
+        tvPlace.setText(activity.getActivityAddress());
+        tvPeople.setText(activity.getParticipateNum());
+        tvDetail.setText(activity.getActivityDescrip());
     }
 }
