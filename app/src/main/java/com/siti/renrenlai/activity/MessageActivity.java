@@ -38,10 +38,10 @@ public class MessageActivity extends BaseActivity {
     private SystemMessageExpandAdapter systemAdapter;
     private ReviewExpandAdapter reviewAdapter;
     private ReceivedLikeExpandAdapter receivedLikeAdapter;
-    private String[] str_message = {"本活动将于两天后举行!", "本活动取消了!"};
-    private String[] str_name = {"环小区挑战赛!", "越野跑", "夜跑"};
-    private String[] users = {"张三", "李四", "小王"};
-    private String[] contents = {"哈哈", "不错", "好玩"};
+    private String[] str_message = {"本活动将于两天后举行aaaaa啊啊啊啊啊!", "本活动取消了!"};
+    private String[] str_name = {"环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑"};
+    private String[] users = {"张三", "李四", "小王","张三", "李四", "小王", "张三", "李四", "小王"};
+    private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

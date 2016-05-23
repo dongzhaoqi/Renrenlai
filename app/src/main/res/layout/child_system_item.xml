@@ -1,39 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="horizontal"
     android:padding="@dimen/margin_8">
 
     <ImageView
         android:id="@+id/iv_system_icon"
         android:layout_width="@dimen/height_36"
         android:layout_height="@dimen/height_36"
-        android:layout_centerVertical="true"
-        android:src="@android:drawable/ic_partial_secure"/>
+        android:layout_gravity="center_vertical"
+        android:src="@android:drawable/ic_partial_secure" />
 
     <TextView
         android:id="@+id/system_message"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerVertical="true"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:layout_marginRight="@dimen/margin_8"
         android:layout_marginLeft="@dimen/padding_10"
-        android:layout_toRightOf="@id/iv_system_icon"
-        android:text="活动通知"/>
+        android:text="活动通知" />
 
-    <TextView
-        android:id="@+id/tv_activity_name"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="@dimen/height_150"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/margin_8"
-        android:text="环小区挑战赛"/>
+        android:gravity="left|center"
+        android:orientation="horizontal">
 
-    <ImageView
-        android:id="@+id/iv_activity_img"
-        android:layout_width="@dimen/height_50"
-        android:layout_height="@dimen/height_50"
-        android:layout_toLeftOf="@id/tv_activity_name"
-        android:src="@drawable/diploma"/>
+        <ImageView
+            android:id="@+id/iv_activity_img"
+            android:layout_width="@dimen/height_50"
+            android:layout_height="@dimen/height_50"
+            android:src="@drawable/diploma" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/tv_activity_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_8"
+            android:text="环小区挑战赛sssasasasddasdasda" />
+
+
+    </LinearLayout>
+</LinearLayout>

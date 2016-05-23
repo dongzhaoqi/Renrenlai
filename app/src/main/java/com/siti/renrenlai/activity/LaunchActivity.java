@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,18 +27,29 @@ import android.widget.TextView;
 
 import com.ab.adapter.AbImageShowAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.NoScrollGridView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -57,25 +69,42 @@ import rebus.bottomdialog.BottomDialog;
 
 public class LaunchActivity extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.layout_type) RelativeLayout layoutType;
-    @Bind(R.id.tv_activity_type) TextView tv_activity_type;
-    @Bind(R.id.ll_interest) LinearLayout ll_interest;
-    @Bind(R.id.ll_help) LinearLayout ll_help;
-    @Bind(R.id.ll_advice) LinearLayout ll_advice;
-    @Bind(R.id.et_subject) EditText et_subject;
-    @Bind(R.id.tv_start_time) TextView tv_start_time;
-    @Bind(R.id.tv_end_time) TextView tv_end_time;
-    @Bind(R.id.tv_deadline) TextView tv_deadline;
-    @Bind(R.id.et_place) EditText et_place;
-    @Bind(R.id.et_epople) EditText et_people;
-    @Bind(R.id.layout_cover) RelativeLayout layout_cover;
-    @Bind(R.id.noScrollgridview) NoScrollGridView noScrollGridView;
-    @Bind(R.id.et_detail) EditText et_detail;
-    @Bind(R.id.btn_preview) Button btn_preview;
-    @Bind(R.id.btn_publish) Button btn_publish;
+    @Bind(R.id.layout_type)
+    RelativeLayout layoutType;
+    @Bind(R.id.tv_activity_type)
+    TextView tv_activity_type;
+    @Bind(R.id.ll_interest)
+    LinearLayout ll_interest;
+    @Bind(R.id.ll_help)
+    LinearLayout ll_help;
+    @Bind(R.id.ll_advice)
+    LinearLayout ll_advice;
+    @Bind(R.id.et_subject)
+    EditText et_subject;
+    @Bind(R.id.tv_start_time)
+    TextView tv_start_time;
+    @Bind(R.id.tv_end_time)
+    TextView tv_end_time;
+    @Bind(R.id.tv_deadline)
+    TextView tv_deadline;
+    @Bind(R.id.et_place)
+    EditText et_place;
+    @Bind(R.id.et_epople)
+    EditText et_people;
+    @Bind(R.id.layout_cover)
+    RelativeLayout layout_cover;
+    @Bind(R.id.noScrollgridview)
+    NoScrollGridView noScrollGridView;
+    @Bind(R.id.et_detail)
+    EditText et_detail;
+    @Bind(R.id.btn_preview)
+    Button btn_preview;
+    @Bind(R.id.btn_publish)
+    Button btn_publish;
 
     public static Bitmap bitmap;
-    private String imgName,filepath, activity_type;
+    private String imgName;
+    private int activity_type;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private PictureAdapter picAdapter;
@@ -121,7 +150,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         final int id = v.getId();
         DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
         picker.setRange(2000, 2030);
-        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH)+1, calendar.get(Calendar.DAY_OF_MONTH),
+        picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE));
         picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
             @Override
@@ -171,7 +200,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         dialog.show();
     }
 
-    private void goCamera(){
+    private void goCamera() {
         File imgFolder = new File(Environment.getExternalStorageDirectory(), "RenrenLai");
         imgFolder.mkdirs();
         File img = new File(imgFolder, new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg");
@@ -224,17 +253,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.ll_interest:
                 unselectedAll();
                 ll_interest.setSelected(true);
-                activity_type = "兴趣";
+                activity_type = 1;
                 break;
             case R.id.ll_help:
                 unselectedAll();
                 ll_help.setSelected(true);
-                activity_type = "公益";
+                activity_type = 2;
                 break;
             case R.id.ll_advice:
                 unselectedAll();
                 ll_advice.setSelected(true);
-                activity_type = "议事";
+                activity_type = 3;
                 break;
             case R.id.tv_start_time:
                 showTimeDialog(view);
@@ -256,13 +285,54 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 startActivity(previewIntent);
                 break;
             case R.id.btn_publish:
+                publishActivity();
                 break;
         }
     }
 
-    public Activity getActivityInfo(){
+    public void publishActivity() {
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+        String api = null;
+
+        JSONObject activityContent = new JSONObject();
+        try {
+            activityContent.put("userName", userName);
+            activityContent.put("activityName", et_subject.getText().toString());
+            activityContent.put("beginTimeOfActivity", tv_start_time.getText().toString());
+            activityContent.put("endTimeOfActivity", tv_end_time.getText().toString());
+            activityContent.put("signUpDeadLine", tv_deadline.getText().toString());
+            activityContent.put("activityAddress", et_place.getText().toString());
+            activityContent.put("activityDescrip", et_detail.getText().toString());
+            activityContent.put("activityTypeId", activity_type);
+            activityContent.put("groupId", 2);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        api = "/launchActivity";
+        String url = ConstantValue.urlRoot + api;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(url, activityContent,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("response", "response:" + response.toString());
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", "error.getMessage():" + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+
+    public Activity getActivityInfo() {
         Activity activity = new Activity();
-        activity.setActivityType(activity_type);
+        activity.setActivityType(activity_type+"");
         activity.setActivityName(et_subject.getText().toString());
         activity.setActivityStartTime(tv_start_time.getText().toString());
         activity.setActivityEndTime(tv_end_time.getText().toString());
@@ -274,7 +344,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         return activity;
     }
 
-    public void unselectedAll(){
+    public void unselectedAll() {
         ll_interest.setSelected(false);
         ll_help.setSelected(false);
         ll_advice.setSelected(false);

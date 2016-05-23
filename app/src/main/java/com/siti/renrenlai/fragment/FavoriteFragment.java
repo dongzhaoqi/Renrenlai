@@ -155,6 +155,7 @@ public class FavoriteFragment extends FragmentBase {
         for (int i = 0; i < 2; i++) {
             TimeLineModel model = new TimeLineModel();
             model.setTime("2016年4月3号");
+
             model.setTitle("refresh:" + i + "春季亲子运动会喜欢");
             mDataList.add(0, model);
         }
