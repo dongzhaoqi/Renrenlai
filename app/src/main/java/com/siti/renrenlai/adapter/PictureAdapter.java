@@ -2,6 +2,7 @@ package com.siti.renrenlai.adapter;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,9 @@ import android.widget.ImageView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.Bimp;
 
+import java.io.File;
+import java.util.ArrayList;
+
 
 /**
  * Created by Hankkin on 2015/6/30.
@@ -21,9 +25,12 @@ public class PictureAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private int selectedPosition = -1;
     private boolean shape;
+    private ArrayList<String> list;
+
     public boolean isShape() {
         return shape;
     }
+
     private Activity context;
 
     public void setShape(boolean shape) {
@@ -35,14 +42,22 @@ public class PictureAdapter extends BaseAdapter {
         inflater = LayoutInflater.from(context);
     }
 
-
-    public int getCount() {
-            if (Bimp.tempSelectBitmap.size() == 9) {
-                return 9;
-            }
-            return (Bimp.tempSelectBitmap.size() + 1);
+    public PictureAdapter(Activity context, ArrayList<String> images) {
+        this.context = context;
+        this.list = images;
+        System.out.println("list size:" + list.size());
+        inflater = LayoutInflater.from(context);
     }
 
+    public int getCount() {
+        if (Bimp.tempSelectBitmap.size() == 9) {
+            return 9;
+        }
+        if(list != null){
+            return (Bimp.tempSelectBitmap.size());
+        }
+        return (Bimp.tempSelectBitmap.size() + 1);
+    }
 
 
     public Object getItem(int arg0) {
@@ -64,8 +79,8 @@ public class PictureAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder = null;
         if (convertView == null) {
-                convertView = inflater.inflate(R.layout.item_published_singal_item,
-                        parent, false);
+            convertView = inflater.inflate(R.layout.item_published_singal_item,
+                    parent, false);
 
             holder = new ViewHolder();
             holder.image = (ImageView) convertView
@@ -75,15 +90,24 @@ public class PictureAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-            if (position == Bimp.tempSelectBitmap.size()) {
-                holder.image.setImageBitmap(BitmapFactory.decodeResource(
-                        convertView.getResources(), R.drawable.icon_add_pic_unfocused));
-                if (position == 9) {
-                        holder.image.setVisibility(View.GONE);
-                }
-            } else {
-                holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+        if (position == Bimp.tempSelectBitmap.size()) {
+            holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                    convertView.getResources(), R.drawable.icon_add_pic_unfocused));
+            if (position == 9) {
+                holder.image.setVisibility(View.GONE);
             }
+        } else if (list != null) {
+            File imgFile = new File(list.get(position));
+            if (imgFile.exists()) {
+                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                holder.image.setImageBitmap(myBitmap);
+            }
+            if(position == list.size()+1){
+                holder.image.setVisibility(View.GONE);
+            }
+        } else {
+            holder.image.setImageBitmap(Bimp.tempSelectBitmap.get(position).getBitmap());
+        }
 
 
         return convertView;

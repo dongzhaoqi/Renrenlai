@@ -9,8 +9,11 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.MediaStore;
 import android.support.v7.app.AlertDialog;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -24,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ab.adapter.AbImageShowAdapter;
 import com.afollestad.materialdialogs.MaterialDialog;
@@ -39,6 +43,7 @@ import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
+import com.siti.renrenlai.util.MyUploader;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.NoScrollGridView;
@@ -46,6 +51,7 @@ import com.siti.renrenlai.view.NoScrollGridView;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -55,6 +61,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -114,6 +121,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private File PHOTO_DIR = null;
     private Calendar calendar = Calendar.getInstance();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    private static final String TAG = "LaunchActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +245,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             }
         } else if (requestCode == TAKE_PICTURE) {
 
-            File imgFolder = new File(Environment.getExternalStorageDirectory(), "AAA");
+            File imgFolder = new File(Environment.getExternalStorageDirectory(), "RenrenLai");
             imgName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg";
             File img = new File(imgFolder, imgName);
             bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
@@ -279,7 +287,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_preview:
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
+                int picCount = picAdapter.getCount();
+                System.out.println("count:" + picCount);
+                ArrayList<String> imgs = new ArrayList<>();
+                for (int i = 0; i < picCount - 1; i++) {
+                    System.out.println("path:" + Bimp.getTempSelectBitmap().get(i).getPath());
+                    imgs.add(Bimp.getTempSelectBitmap().get(i).getPath());
+                }
                 Bundle bundle = new Bundle();
+                bundle.putStringArrayList("images", imgs);
                 bundle.putSerializable("activity", getActivityInfo());
                 previewIntent.putExtras(bundle);
                 startActivity(previewIntent);
@@ -309,14 +325,37 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             e.printStackTrace();
         }
 
-        api = "/launchActivity";
+        api = "/launchActivityForApp";
         String url = ConstantValue.urlRoot + api;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, activityContent,
                 new Response.Listener<JSONObject>() {
+                    public String activity_id;
+
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "response:" + response.toString());
+                        try {
+                            activity_id = response.getString("result");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                String path, imageName;
+                                for (int i = 0; i < picAdapter.getCount() - 1; i++) {
+                                    path = Bimp.getTempSelectBitmap().get(i).getPath();
+                                    imageName = path.substring(path.lastIndexOf("/")+1);
+                                    File imgFile = new File(path);
+                                    if (imgFile.exists()) {
+                                        Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                        upload(activity_id, myBitmap, imageName);
+                                    }
+                                }
+
+                            }
+                        }).start();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -329,10 +368,51 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
+    private void upload(String activity_id, Bitmap bitmap, String imageName) {
+        String api = "/myupload";
+        String url = ConstantValue.urlRoot + api;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("imageName", imageName);
+            jsonObject.put("imageData", Bitmap2StrByBase64(bitmap));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("response", "response:" + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", "error.getMessage():" + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    /**
+     * 通过Base32将Bitmap转换成Base64字符串
+     *
+     * @param bit
+     * @return
+     */
+    public String Bitmap2StrByBase64(Bitmap bit) {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bit.compress(Bitmap.CompressFormat.JPEG, 40, bos);// 参数100表示不压缩
+        byte[] bytes = bos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.DEFAULT);
+
+    }
 
     public Activity getActivityInfo() {
         Activity activity = new Activity();
-        activity.setActivityType(activity_type+"");
+        activity.setActivityType(activity_type + "");
         activity.setActivityName(et_subject.getText().toString());
         activity.setActivityStartTime(tv_start_time.getText().toString());
         activity.setActivityEndTime(tv_end_time.getText().toString());
