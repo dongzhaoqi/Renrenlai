@@ -9,28 +9,18 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.Handler;
-import android.os.Message;
 import android.provider.MediaStore;
-import android.support.v7.app.AlertDialog;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.GridView;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.ab.adapter.AbImageShowAdapter;
-import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -41,9 +31,7 @@ import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
-import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
-import com.siti.renrenlai.util.MyUploader;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.NoScrollGridView;
@@ -54,20 +42,15 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import cn.aigestudio.datepicker.cons.DPMode;
-import cn.aigestudio.datepicker.views.DatePicker;
 import rebus.bottomdialog.BottomDialog;
 
 /**
@@ -307,6 +290,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void publishActivity() {
+
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String api = null;
 
@@ -340,9 +324,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-                        new Thread(new Runnable() {
-                            @Override
-                            public void run() {
+                        //new Thread(new Runnable() {
+                            //@Override
+                            //public void run() {
                                 String path, imageName;
                                 for (int i = 0; i < picAdapter.getCount() - 1; i++) {
                                     path = Bimp.getTempSelectBitmap().get(i).getPath();
@@ -354,8 +338,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                                     }
                                 }
 
-                            }
-                        }).start();
+                            //}
+                        //}).start();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -375,11 +359,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         try {
             jsonObject.put("imageName", imageName);
             jsonObject.put("imageData", Bitmap2StrByBase64(bitmap));
+            Log.d(TAG, "upload: jsonObject：" + jsonObject.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
@@ -406,7 +391,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         bit.compress(Bitmap.CompressFormat.JPEG, 40, bos);// 参数100表示不压缩
         byte[] bytes = bos.toByteArray();
-        return Base64.encodeToString(bytes, Base64.DEFAULT);
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
 
     }
 
