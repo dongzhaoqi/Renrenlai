@@ -20,6 +20,8 @@ import com.siti.renrenlai.bean.User;
 
 import java.io.File;
 
+import cn.jpush.android.api.JPushInterface;
+
 
 /**
  * @author Dong
@@ -63,7 +65,12 @@ public class CustomApplication extends Application {
 		Log.e("", "application");
 		mInstance = this;
 		initImageLoader(getApplicationContext());
+		JPushInterface.setDebugMode(true);
+		JPushInterface.init(this);
+
 	}
+
+
 
 
 	public RequestQueue getRequestQueue() {
