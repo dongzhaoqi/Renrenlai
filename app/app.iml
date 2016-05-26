@@ -120,12 +120,14 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="ShareSDK-QZone-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="support-vector-drawable-23.3.0" level="project" />
+    <orderEntry type="library" exported="" name="GetuiExt-2.0.3" level="project" />
     <orderEntry type="library" exported="" name="design-23.1.1" level="project" />
     <orderEntry type="library" exported="" name="xrecyclerview-1.2.6" level="project" />
     <orderEntry type="library" exported="" name="viewpropertyobjectanimator-1.2.0" level="project" />
     <orderEntry type="library" exported="" name="DatePicker-2.2.0" level="project" />
     <orderEntry type="library" exported="" name="picasso-2.5.2" level="project" />
     <orderEntry type="library" exported="" name="volley-1.0.0" level="project" />
+    <orderEntry type="library" exported="" name="GetuiSDK2.8.1.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-ShortMessage-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="universal-image-loader-1.9.5" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-QQ-2.7.1" level="project" />
@@ -151,12 +153,10 @@
     <orderEntry type="library" exported="" name="ShareSDK-Core-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="library-1.1.0-SNAPSHOT" level="project" />
     <orderEntry type="library" exported="" name="library-2.4.0" level="project" />
-    <orderEntry type="library" exported="" name="GetuiExt-xxx" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Email-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="recyclerview-v7-23.3.0" level="project" />
     <orderEntry type="library" exported="" name="ShareSDK-Wechat-Moments-2.7.1" level="project" />
     <orderEntry type="library" exported="" name="bottom-dialog-0.0.5" level="project" />
-    <orderEntry type="library" exported="" name="GetuiSDK-xxx" level="project" />
     <orderEntry type="library" exported="" name="butterknife-7.0.1" level="project" />
     <orderEntry type="library" exported="" name="autofittextview-0.2.0" level="project" />
     <orderEntry type="library" exported="" name="support-annotations-23.3.0" level="project" />

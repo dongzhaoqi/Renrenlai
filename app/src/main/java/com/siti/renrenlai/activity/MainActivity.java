@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 case 0:
                     logs = "Set tag and alias success";
                     //Log.i(TAG, logs);
-                    
+
                     break;
                 case 6002:
                     logs = "Failed to set alias and tags due to timeout. Try again after 60s.";
