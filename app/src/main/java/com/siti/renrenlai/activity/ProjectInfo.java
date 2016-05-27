@@ -9,21 +9,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,17 +26,15 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.dialog.CommentDialog;
-import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
+import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
@@ -64,21 +54,29 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
- * Created by Dong on 2016/3/22.
+ * Created by Dong on 2016/5/27.
  */
-public class ActivityInfo extends BaseActivity implements OnClickListener {
+public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
-    @Bind(R.id.activity_img) ImageView activity_img;
-    @Bind(R.id.activity_name) TextView tv_avtivity_name;
-    @Bind(R.id.layout_fund) RelativeLayout layoutFund;
+    @Bind(R.id.activity_img)
+    ImageView activity_img;
+    @Bind(R.id.activity_name)
+    TextView tv_avtivity_name;
+    @Bind(R.id.layout_fund)
+    RelativeLayout layoutFund;
     @Bind(R.id.layout_contact) RelativeLayout layout_contact;
     @Bind(R.id.tv_activity_address) TextView tv_activity_address;
     @Bind(R.id.tv_activity_time) TextView tv_activity_time;
-    @Bind(R.id.expand_text_view) ExpandableTextView expTv1;
-    @Bind(R.id.ll_image) LinearLayout ll_image;
-    @Bind(R.id.list_comment) RecyclerView list_comment;
-    @Bind(R.id.detail_scrollgridview) NoScrollGridView noScrollGridView;
-    @Bind(R.id.btn_comment) Button btnComment;
+    @Bind(R.id.expand_text_view)
+    ExpandableTextView expTv1;
+    @Bind(R.id.ll_image)
+    LinearLayout ll_image;
+    @Bind(R.id.list_comment)
+    RecyclerView list_comment;
+    @Bind(R.id.detail_scrollgridview)
+    NoScrollGridView noScrollGridView;
+    @Bind(R.id.btn_comment)
+    Button btnComment;
     @Bind(R.id.btn_favor) Button btnFavor;
     @Bind(R.id.btn_publish) Button btnPublish;
 
@@ -98,14 +96,14 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_detail);
+        setContentView(R.layout.project_info);
         ButterKnife.bind(this);
         initViews();
     }
 
     private void initViews() {
         imagePath = new ArrayList<>();
-        initTopBarForBoth("活动详情", R.drawable.share, new onRightImageButtonClickListener() {
+        initTopBarForBoth("活动详情", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();
@@ -149,10 +147,10 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             params.setMargins(0, 0, 15, 0);
             ll_image.addView(image, params);
 
-            image.setOnClickListener(new OnClickListener() {
+            image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ActivityInfo.this, FavoriteActivity.class);
+                    Intent intent = new Intent(ProjectInfo.this, FavoriteActivity.class);
                     intent.putExtra("likeList", (Serializable) lovedUsersList);
                     startActivity(intent);
 
@@ -251,7 +249,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String api = null;
         try {
-            api = "/loveThisActivityForApp?userName="+URLEncoder.encode(userName, "utf-8")+"&activityId="+ activity_id;
+            api = "/loveThisActivityForApp?userName="+ URLEncoder.encode(userName, "utf-8")+"&activityId="+ activity_id;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -335,3 +333,4 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
 
 }
+

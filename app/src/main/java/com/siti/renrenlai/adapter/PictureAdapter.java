@@ -45,7 +45,6 @@ public class PictureAdapter extends BaseAdapter {
     public PictureAdapter(Activity context, ArrayList<String> images) {
         this.context = context;
         this.list = images;
-        System.out.println("list size:" + list.size());
         inflater = LayoutInflater.from(context);
     }
 

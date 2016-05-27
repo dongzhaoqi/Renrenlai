@@ -47,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -348,6 +349,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void upload(String activity_id, Bitmap bitmap, String imageName) {
+        showProcessDialog();
         String api = "/myupload";
         String url = ConstantValue.urlRoot + api;
         JSONObject jsonObject = new JSONObject();
@@ -365,11 +367,18 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "response:" + response.toString());
+                        dismissProcessDialog();
+                        try {
+                            showToast(response.getString("message"));
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error: ", "error.getMessage():" + error.getMessage());
+                dismissProcessDialog();
                 showToast("出错了!");
             }
         });
@@ -400,7 +409,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         activity.setDeadline(tv_deadline.getText().toString());
         activity.setActivityAddress(et_place.getText().toString());
         activity.setParticipateNum(et_people.getText().toString());
-        activity.setActivityDescrip(et_detail.getText().toString());
+        activity.setactivityDetailDescrip(et_detail.getText().toString());
 
         return activity;
     }

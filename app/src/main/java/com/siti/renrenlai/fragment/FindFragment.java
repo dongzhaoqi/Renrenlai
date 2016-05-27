@@ -17,10 +17,12 @@ import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.NetworkResponse;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.RetryPolicy;
 import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
@@ -42,6 +44,7 @@ import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.util.CacheRequest;
@@ -62,7 +65,7 @@ import java.util.List;
 /**
  * Created by Dong on 3/22/2016.
  */
-public class FindFragment extends FragmentBase implements View.OnClickListener{
+public class FindFragment extends FragmentBase implements View.OnClickListener {
 
     private View view;
     private Context mContext;
@@ -72,6 +75,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     private ImageView iv_fund;
     private List<LovedUsers> lovedUsersList;
     private List<CommentContents> commentsList;
+    private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
     private String[] images = new String[]{
@@ -81,13 +85,13 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             "http://img2.imgtn.bdimg.com/it/u=4124932944,3228346692&fm=206&gp=0.jpg",
             "http://api.androidhive.info/music/images/mj.png"
     };
-    private String[] strs = new String[]{"缤纷广场舞","南新七色馆\n儿童绘画营","春季夜跑族","野外踏青","草莓音乐节"};
+    private String[] strs = new String[]{"缤纷广场舞", "南新七色馆\n儿童绘画营", "春季夜跑族", "野外踏青", "草莓音乐节"};
     private Boolean isFirst = true;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
-        view = inflater.inflate(R.layout.fragment_find,container,false);
+        view = inflater.inflate(R.layout.fragment_find, container, false);
         return view;
     }
 
@@ -106,7 +110,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             @Override
             public void onClick() {
                 DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
-                        .setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"上海","北京","广州","深圳"}))
+                        .setAdapter(new ArrayAdapter<>(getActivity(), android.R.layout.simple_list_item_1, new String[]{"上海", "北京", "广州", "深圳"}))
                         .setCancelable(true)
                         .setGravity(Gravity.TOP)
                         .setOnDismissListener(new OnDismissListener() {
@@ -138,7 +142,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
                 dialogPlus.show();
             }
-        }, R.drawable.ic_action_search, new onRightImageButtonClickListener(){
+        }, R.drawable.ic_action_search, new onRightImageButtonClickListener() {
 
             @Override
             public void onClick() {
@@ -203,13 +207,13 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         });
 
         search = (SearchBox) findViewById(R.id.searchbox);
-        mSearchView = (FloatingSearchView)findViewById(R.id.floating_search_view);
+        mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        View header = LayoutInflater.from(getActivity()).inflate(R.layout.recyclerview_header, (ViewGroup)findViewById(android.R.id.content),false);
-        iv_fund= (ImageView) header.findViewById(R.id.iv_fund);
+        View header = LayoutInflater.from(getActivity()).inflate(R.layout.recyclerview_header, (ViewGroup) findViewById(android.R.id.content), false);
+        iv_fund = (ImageView) header.findViewById(R.id.iv_fund);
         mXRecyclerView.addHeaderView(header);
 
         mXRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -235,34 +239,26 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     }
 
 
-    private void initData(){
+    private void initData() {
         String api = "/getActivityListForApp";
         String url = ConstantValue.urlRoot + api;
         Log.d("FindFragment", "url:" + url);
 
-        CacheRequest request = new CacheRequest(0, url, new Response.Listener<NetworkResponse>() {
-            @Override
-            public void onResponse(NetworkResponse response) {
-                try {
-                    final String jsonString = new String(response.data,
-                            HttpHeaderParser.parseCharset(response.headers));
-                    JSONObject jsonObject = new JSONObject(jsonString);
-                    getData(jsonObject);
-                    dismissProcessDialog();
-                    Log.d("response", "jsonobject:" + jsonObject.toString());
-                } catch (UnsupportedEncodingException | JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
+        JsonObjectRequest request = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getData(response);
+                        dismissProcessDialog();
+                        Log.d("response", "jsonobject:" + response.toString());
+                    }
+                }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 dismissProcessDialog();
             }
         });
-        /*int socketTimeout = 30000;//30 seconds - change to what you want
-        RetryPolicy policy = new DefaultRetryPolicy(socketTimeout, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT);
-        request.setRetryPolicy(policy);*/
+
         CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
 
     }
@@ -271,21 +267,37 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
 
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
+
         for (int i = 0; i < result.length(); i++) {
             lovedUsersList = new ArrayList<>();
             commentsList = new ArrayList<>();
+            imageList = new ArrayList<>();
             Activity activity = new Activity();
-            activity.setActivityImg(images[i]);
             try {
                 activity.setActivityId(result.getJSONObject(i).getInt("activityId"));
                 activity.setActivityName(result.getJSONObject(i).optString("activityName"));
                 activity.setActivityStartTime(result.getJSONObject(i).optString("activityStartTime"));
                 activity.setActivityEndTime(result.getJSONObject(i).optString("activityEndTime"));
-                activity.setContactTel(result.getJSONObject(i).optString("activityReleaserTel"));
+                activity.setactivityReleaserTel(result.getJSONObject(i).optString("activityReleaserTel"));
                 activity.setActivityAddress(result.getJSONObject(i).optString("activityAddress"));
-                activity.setActivityDescrip(result.getJSONObject(i).optString("activityDetailDescrip"));
+                activity.setactivityDetailDescrip(result.getJSONObject(i).optString("activityDetailDescrip"));
+
+                JSONArray imagesArray = result.getJSONObject(i).optJSONArray("activityImages");
+
+                if (imagesArray != null && imagesArray.length() > 0) {
+                    for (int m = 0; m < imagesArray.length(); m++) {
+                        ActivityImage image = new ActivityImage();
+                        image.setActivityImageId(imagesArray.optJSONObject(m).optInt("activityImageId"));
+                        image.setActivityImageName(imagesArray.optJSONObject(m).optString("activityImageName"));
+                        image.setActivityImagePath(ConstantValue.urlRoot + imagesArray.optJSONObject(m).optString("activityImagePath"));
+                        imageList.add(image);
+                        System.out.println("getActivityImagePath " + ConstantValue.urlRoot + imagesArray.optJSONObject(m).optString("activityImagePath"));
+                    }
+                }
+                activity.setActivityImages(imageList);
+
                 JSONArray lovedusersArray = result.getJSONObject(i).optJSONArray("lovedUsers");
-                for(int j = 0; j < lovedusersArray.length(); j++){
+                for (int j = 0; j < lovedusersArray.length(); j++) {
                     LovedUsers lovedUsers = new LovedUsers();
                     lovedUsers.setUserHeadPicImagePath(lovedusersArray.optJSONObject(j).optString("userHeadPicImagePath"));
                     lovedUsers.setUserId(lovedusersArray.optJSONObject(j).optString("userId"));
@@ -294,7 +306,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
                 activity.setLovedUsers(lovedUsersList);
 
                 JSONArray commentsArray = result.getJSONObject(i).optJSONArray("commentContents");
-                for(int k = 0; k < commentsArray.length(); k++){
+                for (int k = 0; k < commentsArray.length(); k++) {
                     CommentContents comment = new CommentContents();
                     comment.setUserName(commentsArray.optJSONObject(k).optString("userName"));
                     comment.setCommentContent(commentsArray.optJSONObject(k).optString("commentContent"));
@@ -305,6 +317,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             activityList.add(activity);
         }
 
@@ -336,7 +349,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
         adapter.notifyDataSetChanged();
     }
 
-    private void initEvent(){
+    private void initEvent() {
         iv_fund.setOnClickListener(this);
 
     }
@@ -344,7 +357,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener{
     @Override
     public void onClick(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.iv_fund:
                 startAnimActivity(FundIntroActivity.class);
                 break;

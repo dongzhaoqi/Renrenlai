@@ -17,6 +17,7 @@ import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.ActivityImage;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -32,6 +33,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     private Context mContext;
     private OnRecyclerViewItemClickListener mOnItemClickListener = null;
     static int pos = 0;
+    private String imagePath;
 
     public ActivityAdapter(Context context, List<Activity> activities) {
         this.mContext = context;
@@ -44,7 +46,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                 .showImageOnFail(R.drawable.icon_me)
                 .cacheInMemory()
                 .cacheOnDisc()
-                .displayer(new RoundedBitmapDisplayer(10))
+                .displayer(new RoundedBitmapDisplayer(2))
                 .build();
     }
 
@@ -75,11 +77,21 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         Activity p = activities.get(i);
         viewHolder.mTextView.setText(p.getActivityName());
         viewHolder.mImageView.setTag(activities.get(i));
+        List<ActivityImage>images = p.getActivityImages();
+        if(images != null){
+            System.out.println("images size:" + images.size());
 
+            imagePath = p.getActivityImages().get(0).getActivityImagePath();
+            System.out.println("getActivityImages:" + imagePath);
+        }else{
+            System.out.println("getActivityImages: null");
+        }
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
-        loader.displayImage(p.getActivityImg(), viewHolder.mImageView, options,
-                animateFirstListener);
+        if (imagePath != null){
+            loader.displayImage(imagePath, viewHolder.mImageView, options,
+                    animateFirstListener);
+        }
     }
 
     @Override

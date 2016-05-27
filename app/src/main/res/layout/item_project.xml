@@ -7,7 +7,8 @@
     android:layout_marginRight="@dimen/margin_8"
     android:layout_marginTop="@dimen/margin_8"
     android:foreground="?attr/selectableItemBackground"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    card_view:cardElevation="1dp">
 
     <RelativeLayout
         android:id="@+id/rl_project"
@@ -17,7 +18,7 @@
 
         <ImageView
             android:id="@+id/iv_project"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="@dimen/height_150"/>
 
         <TextView
@@ -25,7 +26,7 @@
             android:id="@+id/tv_project_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_project"
+            android:layout_below="@id/iv_project"
             android:layout_margin="@dimen/margin_8"
             android:text="与木为伴 让时光凝固-零基础木刻版画"
             android:textSize="@dimen/text_size_18" />

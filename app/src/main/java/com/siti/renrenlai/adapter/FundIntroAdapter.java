@@ -1,6 +1,7 @@
 package com.siti.renrenlai.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,10 +12,18 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.nostra13.universalimageloader.core.DisplayImageOptions;
+import com.nostra13.universalimageloader.core.ImageLoader;
+import com.nostra13.universalimageloader.core.display.FadeInBitmapDisplayer;
+import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
+import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
+import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.Project;
 import com.squareup.picasso.Picasso;
 
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.Bind;
@@ -24,20 +33,39 @@ import butterknife.OnClick;
 /**
  * Created by Dong on 2016/5/26.
  */
-public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.ViewHolder> {
+public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.ViewHolder> implements View.OnClickListener {
 
     private Context mContext;
     private List<Project> projectList;
+    private DisplayImageOptions options;
+    private ImageLoader loader;
+
+    private ImageLoadingListener animateFirstListener = new AnimateFirstDisplayListener();
+    private OnRecyclerViewItemClickListener mOnItemClickListener = null;
+
+    public static interface OnRecyclerViewItemClickListener {
+        void onItemClick(View view , Object data);
+    }
 
     public FundIntroAdapter(Context context, List<Project> list) {
         this.mContext = context;
         this.projectList = list;
-        android.util.Log.d("TAG", "FundIntroAdapter() returned: " +  projectList.size());
+        loader = ImageLoader.getInstance();
+        options = new DisplayImageOptions.Builder()
+                .showImageForEmptyUri(android.R.drawable.ic_delete)
+                .showImageForEmptyUri(android.R.drawable.ic_menu_share)
+                .showImageOnFail(R.drawable.icon_me)
+                .cacheInMemory()
+                .cacheOnDisc()
+                .displayer(new RoundedBitmapDisplayer(2))
+                .build();
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.item_project, parent, false);
+        //将创建的View注册点击事件
+        v.setOnClickListener(this);
         return new ViewHolder(v);
     }
 
@@ -54,7 +82,9 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
         Log.d("TAG", "getComment1() returned: " + project.getComment1());
         Log.d("TAG", "getComment2() returned: " + project.getComment2());
 
-        Picasso.with(mContext).load(project.getProjectImagePath()).into(holder.ivProject);
+        loader.displayImage(project.getProjectImagePath(), holder.ivProject, options,
+                animateFirstListener);
+        //Picasso.with(mContext).load(project.getProjectImagePath()).into(holder.ivProject);
         holder.tvProjectName.setText(project.getProjectName());
         holder.tvCommentsNumber.setText(project.getCommentCount());
         holder.tvLikeNumber.setText(project.getLovedCount());
@@ -62,11 +92,25 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
         holder.tvUsername2.setText(project.getUserName2());
         holder.tvComment1.setText(project.getComment1());
         holder.tvComment2.setText(project.getComment2());
+        //将数据保存在itemView的Tag中，以便点击时进行获取
+        holder.itemView.setTag(project.getProjectId());
     }
 
     @Override
     public int getItemCount() {
         return projectList == null ? 0 : projectList.size();
+    }
+
+    @Override
+    public void onClick(View v) {
+        if (mOnItemClickListener != null) {
+            //注意这里使用getTag方法获取数据
+            mOnItemClickListener.onItemClick(v,v.getTag());
+        }
+    }
+
+    public void setOnItemClickListener(OnRecyclerViewItemClickListener listener) {
+        this.mOnItemClickListener = listener;
     }
 
     @OnClick(R.id.rl_project)
@@ -91,6 +135,25 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+        }
+    }
+
+    /**
+     * 图片加载监听事件,当图片首次在屏幕上显示时,有一个淡入效果
+     **/
+    private static class AnimateFirstDisplayListener extends SimpleImageLoadingListener {
+        static final List<String> displayedImages = Collections.synchronizedList(new LinkedList<String>());
+
+        @Override
+        public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
+            if (loadedImage != null) {
+                ImageView imageView = (ImageView) view;
+                boolean firstDisplay = !displayedImages.contains(imageUri);
+                if (firstDisplay) {
+                    FadeInBitmapDisplayer.animate(imageView, 500); //设置image隐藏动画500ms
+                    displayedImages.add(imageUri); //将图片uri添加到集合中
+                }
+            }
         }
     }
 }

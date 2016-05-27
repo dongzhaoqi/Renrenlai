@@ -58,42 +58,6 @@
                     android:background="@color/background" />
 
                 <RelativeLayout
-                    android:id="@+id/layout_fund"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/base_action_bar_height"
-                    android:background="@drawable/row_selector"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:paddingRight="@dimen/padding_10">
-
-                    <ImageView
-                        android:id="@+id/img_fund"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/tag" />
-
-                    <TextView
-                        style="@style/me_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_toRightOf="@id/img_fund"
-                        android:text="@string/str_fund_support" />
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:duplicateParentState="true"
-                        android:src="@drawable/go" />
-
-                </RelativeLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/view_height"
-                    android:background="@color/background" />
-
-                <RelativeLayout
                     android:id="@+id/layout_time"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_action_bar_height"

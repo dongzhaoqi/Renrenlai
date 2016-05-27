@@ -55,6 +55,7 @@
         <activity android:name=".activity.MyActivity" />
         <activity android:name=".activity.SearchActivity" />
         <activity android:name=".activity.ActivityInfo" />
+        <activity android:name=".activity.ProjectInfo" />
         <activity android:name=".activity.IntroductionActivity" />
         <activity android:name=".activity.ApplyActivity" />
         <activity android:name=".activity.ViewProjectActivity" />

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -68,8 +69,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         });
         // 设置LinearLayoutManager
         fundList.setLayoutManager(new LinearLayoutManager(this));
-        View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup) findViewById(android.R.id.content), false);
-        fundList.addHeaderView(header);
+        /*View header = LayoutInflater.from(this).inflate(R.layout.recyclerview_header, (ViewGroup)findViewById(android.R.id.content),false);
+        fundList.addHeaderView(header);*/
         fundList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
@@ -126,6 +127,12 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         Log.d(TAG, "getData() returned: " + projectList.size());
 
         fundAdapter = new FundIntroAdapter(this, projectList);
+        fundAdapter.setOnItemClickListener(new FundIntroAdapter.OnRecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(View view, Object data) {
+                getProjectInfo(Integer.parseInt(data.toString()));
+            }
+        });
         fundList.setAdapter(fundAdapter);
         fundList.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         fundList.setArrowImageView(R.drawable.iconfont_downgrey);
@@ -138,6 +145,42 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 startAnimActivity(ApplyWishActivity.class);
                 break;
         }
+    }
+
+    public void getProjectInfo(int projectId){
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(FundIntroActivity.this, "login"), "userName");
+        String api = "/getProjectInfoForApp";
+        String url = ConstantValue.urlRoot + api;
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("projectId", projectId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "response:" + response.toString());
+                        String result = null;
+                        try {
+                            result = response.getString("result");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     private void showShare() {
