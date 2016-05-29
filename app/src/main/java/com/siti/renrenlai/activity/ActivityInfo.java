@@ -12,18 +12,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
-import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -34,13 +27,11 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.dialog.CommentDialog;
-import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -120,7 +111,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             contact_tel = activity.getactivityReleaserTel();
             activity_address = activity.getActivityAddress();
             activity_describ = activity.getactivityDetailDescrip();
-            activity_time = activity.getActivityStartTime() + "-" + activity.getActivityEndTime();
+            activity_time = activity.getActivityStartTime().substring(0, 16) + " - " + activity.getActivityEndTime().substring(0, 16);
             imageList = activity.getActivityImages();
             lovedUsersList = activity.getLovedUsers();
             commentsList = activity.getComments();
@@ -131,11 +122,12 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             System.out.println("info path:" + path);
             imagePath.add(path);
         }
-        Picasso.with(this).load(imagePath.get(0)).into(activity_img);
+        if(imagePath != null && imagePath.size() > 0){
+            Picasso.with(this).load(imagePath.get(0)).into(activity_img);
+        }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new ImageAdapter(this, imagePath);
         noScrollGridView.setAdapter(picAdapter);
-
 
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for(int i = 0; i < lovedUsersList.size(); i++){

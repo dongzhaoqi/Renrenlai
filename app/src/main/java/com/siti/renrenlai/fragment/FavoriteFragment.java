@@ -8,11 +8,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import com.android.volley.Cache;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
@@ -22,9 +21,9 @@ import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.siti.renrenlai.view.FragmentBase;
 import com.software.shell.fab.ActionButton;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -35,7 +34,7 @@ import java.util.List;
 /**
  * Created by Dong on 2016/4/1.
  */
-public class FavoriteFragment extends FragmentBase {
+public class FavoriteFragment extends BaseFragment {
     private View view;
     private ActionButton btn_to_top;
     private XRecyclerView mRecyclerView;
@@ -45,10 +44,11 @@ public class FavoriteFragment extends FragmentBase {
     private List<TimeLineModel> mDataList = new ArrayList<>();
     private int refreshTime = 0;
     private int times = 0;
+    String api = null;
+    String url = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_favorite, container, false);
         return view;
     }
@@ -57,8 +57,31 @@ public class FavoriteFragment extends FragmentBase {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
 
-        initData();
         initView();
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        try {
+            api = "/getLovedActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
+            url = ConstantValue.urlRoot + api;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(url);
+        if(entry != null){              // Cache is available
+            String data = null;
+            try {
+                data = new String(entry.data, "UTF-8");
+                JSONObject jsonObject = new JSONObject(data);
+                getData(jsonObject);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // Cache data
+            initData();
+        }
 
     }
 
@@ -125,20 +148,14 @@ public class FavoriteFragment extends FragmentBase {
     }
 
     private void initData() {
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
-        String api = null;
-        try {
-            api = "/getLovedActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String url = ConstantValue.urlRoot + api;
+
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "喜欢 response:" + response.toString());
+                        getData(response);
                         showToast("获取喜欢成功!");
                     }
                 }, new Response.ErrorListener() {
@@ -151,12 +168,15 @@ public class FavoriteFragment extends FragmentBase {
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
+    private void getData(JSONObject response) {
+
+    }
+
     private void refreshData(){
         for (int i = 0; i < 2; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-
-            model.setTitle("refresh:" + i + "春季亲子运动会喜欢");
+            model.setActivityStartTime("2016年4月3号");
+            model.setActivityName("refresh:" + i + "春季亲子运动会喜欢");
             mDataList.add(0, model);
         }
         mTimeLineAdapter.notifyDataSetChanged();
@@ -165,8 +185,8 @@ public class FavoriteFragment extends FragmentBase {
     private void loadData() {
         for (int i = 0; i < 3; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle("load:" + i + "春季亲子运动会喜欢");
+            model.setActivityStartTime("2016年4月3号");
+            model.setActivityName("load:" + i + "春季亲子运动会喜欢");
             mDataList.add(mDataList.size(), model);
         }
         mTimeLineAdapter.notifyDataSetChanged();

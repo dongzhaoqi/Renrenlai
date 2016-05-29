@@ -18,9 +18,7 @@ import com.siti.renrenlai.activity.LoginActivity;
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
-import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.siti.renrenlai.view.FragmentBase;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -31,7 +29,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 /**
  * Created by Dong on 3/22/2016.
  */
-public class MeFragment extends FragmentBase implements View.OnClickListener {
+public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Bind(R.id.layout_name) RelativeLayout layout_name;
     @Bind(R.id.layout_favorite) LinearLayout layout_favorite;

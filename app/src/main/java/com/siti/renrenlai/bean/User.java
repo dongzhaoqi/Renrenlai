@@ -4,6 +4,7 @@ public class User {
 
 	private int userId;
 	private String userName;
+	private String userHeadPicImagePath;
 
 	public int getUserId() {
 		return userId;
@@ -20,7 +21,12 @@ public class User {
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
-	
-	
 
+	public String getUserHeadPicImagePath() {
+		return userHeadPicImagePath;
+	}
+
+	public void setUserHeadPicImagePath(String userHeadPicImagePath) {
+		this.userHeadPicImagePath = userHeadPicImagePath;
+	}
 }

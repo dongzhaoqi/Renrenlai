@@ -7,24 +7,32 @@
     <RelativeLayout
         android:id="@+id/layout_like"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/height_36"
+        android:layout_height="@dimen/height_56"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
         android:paddingRight="@dimen/padding_10">
 
+        <ImageView
+            android:id="@+id/iv_received_like"
+            android:layout_width="@dimen/height_36"
+            android:layout_height="@dimen/height_36"
+            android:layout_centerVertical="true"
+            android:background="@drawable/like"/>
         <TextView
             android:id="@+id/str_like"
             style="@style/me_text_style"
             android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@id/iv_received_like"
             android:text="@string/str_like" />
 
         <ImageView
+            android:id="@+id/iv_expand"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:duplicateParentState="true"
-            android:src="@drawable/go" />
+            android:layout_centerVertical="true"
+            android:duplicateParentState="true"/>
     </RelativeLayout>
 
     <View

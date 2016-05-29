@@ -15,15 +15,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
-import com.android.volley.Request;
+import com.android.volley.Cache;
+import com.android.volley.Cache.Entry;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
-import com.android.volley.TimeoutError;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.arlib.floatingsearchview.FloatingSearchView;
 import com.arlib.floatingsearchview.suggestions.SearchSuggestionsAdapter;
@@ -47,10 +42,8 @@ import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.util.CacheRequest;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
-import com.siti.renrenlai.view.FragmentBase;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
@@ -65,7 +58,7 @@ import java.util.List;
 /**
  * Created by Dong on 3/22/2016.
  */
-public class FindFragment extends FragmentBase implements View.OnClickListener {
+public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     private View view;
     private Context mContext;
@@ -78,16 +71,8 @@ public class FindFragment extends FragmentBase implements View.OnClickListener {
     private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
-    private String[] images = new String[]{
-            "http://img1.imgtn.bdimg.com/it/u=1056505034,278532731&fm=206&gp=0.jpg",
-            "http://img5.imgtn.bdimg.com/it/u=19688821,301685728&fm=206&gp=0.jpg",
-            "http://img2.imgtn.bdimg.com/it/u=249146884,1242359836&fm=206&gp=0.jpg",
-            "http://img2.imgtn.bdimg.com/it/u=4124932944,3228346692&fm=206&gp=0.jpg",
-            "http://api.androidhive.info/music/images/mj.png"
-    };
-    private String[] strs = new String[]{"缤纷广场舞", "南新七色馆\n儿童绘画营", "春季夜跑族", "野外踏青", "草莓音乐节"};
-    private Boolean isFirst = true;
-
+    String api = "/getActivityListForApp";
+    String url = ConstantValue.urlRoot + api;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -98,9 +83,26 @@ public class FindFragment extends FragmentBase implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        showProcessDialog();
-        initData();
+
         initView();
+
+        Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
+        Entry entry = cache.get(url);
+        if(entry != null){              // Cache is available
+            String data = null;
+            try {
+                data = new String(entry.data, "UTF-8");
+                JSONObject jsonObject = new JSONObject(data);
+                getData(jsonObject);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // Cache data
+            initData();
+        }
         initEvent();
     }
 
@@ -240,8 +242,8 @@ public class FindFragment extends FragmentBase implements View.OnClickListener {
 
 
     private void initData() {
-        String api = "/getActivityListForApp";
-        String url = ConstantValue.urlRoot + api;
+        showProcessDialog();
+
         Log.d("FindFragment", "url:" + url);
 
         JsonObjectRequest request = new JsonObjectRequest(url, null,
@@ -260,7 +262,6 @@ public class FindFragment extends FragmentBase implements View.OnClickListener {
         });
 
         CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
-
     }
 
     private void getData(JSONObject response) {
@@ -340,13 +341,7 @@ public class FindFragment extends FragmentBase implements View.OnClickListener {
     }
 
     private void loadData() {
-        for (int i = 0; i < 3; i++) {
-            Activity activity = new Activity();
-            //activity.setImg(images[i]);
-            //activity.setTv(strs[i]);
-            activityList.add(activity);
-        }
-        adapter.notifyDataSetChanged();
+        initData();
     }
 
     private void initEvent() {

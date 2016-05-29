@@ -1,8 +1,6 @@
 package com.siti.renrenlai.activity;
 
 import android.content.Intent;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -17,32 +15,21 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.dialog.CommentDialog;
-import com.siti.renrenlai.util.ConstantValue;
-import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONObject;
-
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -62,8 +49,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     ImageView activity_img;
     @Bind(R.id.activity_name)
     TextView tv_avtivity_name;
-    @Bind(R.id.layout_fund)
-    RelativeLayout layoutFund;
     @Bind(R.id.layout_contact) RelativeLayout layout_contact;
     @Bind(R.id.tv_activity_address) TextView tv_activity_address;
     @Bind(R.id.tv_activity_time) TextView tv_activity_time;
@@ -80,15 +65,15 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.btn_favor) Button btnFavor;
     @Bind(R.id.btn_publish) Button btnPublish;
 
-    Activity activity;
-    String activity_title, contact_tel, activity_address, activity_describ, activity_time;
-    int activity_id, userId;
+    String projectName, telephone, projectAddress, projectDescrip, projectTime;
+    int projectId;
+    String userName;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
     private List<ActivityImage> imageList;              //活动封面
     private ArrayList<String> imagePath;
-
+    private Project project;
     private ImageAdapter picAdapter;
     private CommentAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
@@ -103,36 +88,24 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     private void initViews() {
         imagePath = new ArrayList<>();
-        initTopBarForBoth("活动详情", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
+        initTopBarForBoth("项目详情", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 showShare();
             }
         });
-        userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
-        activity = (Activity) getIntent().getExtras().getSerializable("activity");
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
+        project = (Project) getIntent().getExtras().getSerializable("project");
 
-        if(activity != null){
-            activity_id = activity.getActivityId();
-            activity_title = activity.getActivityName();
-            contact_tel = activity.getactivityReleaserTel();
-            activity_address = activity.getActivityAddress();
-            activity_describ = activity.getactivityDetailDescrip();
-            activity_time = activity.getActivityStartTime() + "-" + activity.getActivityEndTime();
-            imageList = activity.getActivityImages();
-            lovedUsersList = activity.getLovedUsers();
-            commentsList = activity.getComments();
+        if(project != null){
+            projectName = project.getProjectName();
+            telephone = project.getTelephone();
+            projectAddress = project.getProjectAddress();
+            projectDescrip = project.getProjectDescrip();
+            projectTime = project.getBeginTimeOfProject().substring(0, 16) + " - " + project.getEndTimeOfProject().substring(0, 16);
+            lovedUsersList = project.getLovedImages();
+            commentsList = project.getCommentList();
         }
-
-        for(int i = 0; i < imageList.size(); i++){
-            String path = imageList.get(i).getActivityImagePath();
-            System.out.println("info path:" + path);
-            imagePath.add(path);
-        }
-        Picasso.with(this).load(imagePath.get(0)).into(activity_img);
-        noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        picAdapter = new ImageAdapter(this, imagePath);
-        noScrollGridView.setAdapter(picAdapter);
 
 
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
@@ -158,10 +131,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             });
         }
 
-        expTv1.setText(activity_describ);
-        tv_avtivity_name.setText(activity_title);
-        tv_activity_address.setText(activity_address);
-        tv_activity_time.setText(activity_time);
+        expTv1.setText(projectDescrip);
+        tv_avtivity_name.setText(projectName);
+        tv_activity_address.setText(projectAddress);
+        tv_activity_time.setText(projectTime);
         //Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
 
         mAdapter = new CommentAdapter(this, commentsList);
@@ -178,13 +151,11 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         list_comment.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.layout_fund, R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
+    @OnClick({R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.layout_fund:
-                break;
             case R.id.layout_contact:
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + contact_tel));
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + telephone));
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
@@ -193,7 +164,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             case R.id.btn_favor:
                 if (!isFavorPressed) {
                     btnFavor.setSelected(true);         //喜欢
-                    like();
                 } else {
                     btnFavor.setSelected(false);        //取消喜欢
                     removeImage();
@@ -240,37 +210,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
-    /**
-     * 喜欢该活动
-     */
-    public void like(){
-        addImage();
-
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
-        String api = null;
-        try {
-            api = "/loveThisActivityForApp?userName="+ URLEncoder.encode(userName, "utf-8")+"&activityId="+ activity_id;
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        String url = ConstantValue.urlRoot + api;
-        System.out.println("url:" + url);
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        VolleyLog.d("response", response.toString());
-                        showToast("修改成功!");
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.e("Error: ", error.getMessage());
-                showToast("出错了!");
-            }
-        });
-        CustomApplication.getInstance().addToRequestQueue(req);
-    }
 
 
     /**
@@ -309,7 +248,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
         oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(activity_title);
+        oks.setText(projectName);
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         //oks.setImageUrl("http://img05.tooopen.com/images/20160108/tooopen_sy_153700436869.jpg");

@@ -3,7 +3,6 @@ package com.siti.renrenlai.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +18,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.Project;
-import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,6 +36,7 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
 
     private Context mContext;
     private List<Project> projectList;
+    private List<CommentContents> commentList;
     private DisplayImageOptions options;
     private ImageLoader loader;
 
@@ -72,26 +72,19 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Project project = projectList.get(position);
-        Log.d("TAG", "onBindViewHolder() returned: " + project.getProjectId());
-        Log.d("TAG", "getProjectImagePath() returned: " + project.getProjectImagePath());
-        Log.d("TAG", "getProjectName() returned: " + project.getProjectName());
-        Log.d("TAG", "getCommentCount() returned: " + project.getCommentCount());
-        Log.d("TAG", "getLovedCount() returned: " + project.getLovedCount());
-        Log.d("TAG", "getUserName1() returned: " + project.getUserName1());
-        Log.d("TAG", "getUserName2() returned: " + project.getUserName2());
-        Log.d("TAG", "getComment1() returned: " + project.getComment1());
-        Log.d("TAG", "getComment2() returned: " + project.getComment2());
-
+        commentList = project.getCommentList();
         loader.displayImage(project.getProjectImagePath(), holder.ivProject, options,
                 animateFirstListener);
         //Picasso.with(mContext).load(project.getProjectImagePath()).into(holder.ivProject);
         holder.tvProjectName.setText(project.getProjectName());
         holder.tvCommentsNumber.setText(project.getCommentCount());
         holder.tvLikeNumber.setText(project.getLovedCount());
-        holder.tvUsername1.setText(project.getUserName1());
-        holder.tvUsername2.setText(project.getUserName2());
-        holder.tvComment1.setText(project.getComment1());
-        holder.tvComment2.setText(project.getComment2());
+        if(commentList != null && commentList.size() >= 2) {
+            holder.tvUsername1.setText(commentList.get(0).getUserName());
+            holder.tvUsername2.setText(commentList.get(1).getUserName());
+            holder.tvComment1.setText(commentList.get(0).getCommentContent());
+            holder.tvComment2.setText(commentList.get(1).getCommentContent());
+        }
         //将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(project.getProjectId());
     }

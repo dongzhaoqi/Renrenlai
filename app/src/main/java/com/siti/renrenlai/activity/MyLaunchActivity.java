@@ -53,8 +53,8 @@ public class MyLaunchActivity extends BaseActivity {
     }
 
     public void initView(){
-        str_activity_name = model.getTitle();
-        str_activity_time = model.getTime();
+        str_activity_name = model.getActivityName();
+        str_activity_time = model.getActivityStartTime();
 
         activityName.setText(str_activity_name);
         activityTime.setText(str_activity_time);
@@ -73,7 +73,7 @@ public class MyLaunchActivity extends BaseActivity {
         // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
         oks.setTitleUrl("http://sharesdk.cn");
         // text是分享文本，所有平台都需要这个字段
-        oks.setText(model.getTitle());
+        oks.setText(model.getActivityName());
         // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
         //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
         //oks.setImageUrl("http://img05.tooopen.com/images/20160108/tooopen_sy_153700436869.jpg");

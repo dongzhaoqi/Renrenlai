@@ -1,18 +1,30 @@
 package com.siti.renrenlai.bean;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Created by Dong on 2016/5/26.
  */
-public class Project {
+public class Project implements Serializable{
     private int projectId;
     private String projectName;
     private String projectImagePath;
+    private String projectDescrip;
+    private String beginTimeOfProject;
+    private String endTimeOfProject;
+    private String projectReleaseTime;
+    private String projectAddress;
+    private String telephone;
+    private List<LovedUsers> lovedImages;
+    private List<CommentContents> commentList;
     private String userName1;
     private String comment1;
     private String userName2;
     private String comment2;
     private String commentCount;
     private String lovedCount;
+    private boolean lovedOrNot;
 
     public int getProjectId() {
         return projectId;
@@ -36,6 +48,70 @@ public class Project {
 
     public void setProjectImagePath(String projectImagePath) {
         this.projectImagePath = projectImagePath;
+    }
+
+    public String getProjectDescrip() {
+        return projectDescrip;
+    }
+
+    public void setProjectDescrip(String projectDescrip) {
+        this.projectDescrip = projectDescrip;
+    }
+
+    public String getBeginTimeOfProject() {
+        return beginTimeOfProject;
+    }
+
+    public void setBeginTimeOfProject(String beginTimeOfProject) {
+        this.beginTimeOfProject = beginTimeOfProject;
+    }
+
+    public String getEndTimeOfProject() {
+        return endTimeOfProject;
+    }
+
+    public void setEndTimeOfProject(String endTimeOfProject) {
+        this.endTimeOfProject = endTimeOfProject;
+    }
+
+    public String getProjectReleaseTime() {
+        return projectReleaseTime;
+    }
+
+    public void setProjectReleaseTime(String projectReleaseTime) {
+        this.projectReleaseTime = projectReleaseTime;
+    }
+
+    public String getProjectAddress() {
+        return projectAddress;
+    }
+
+    public void setProjectAddress(String projectAddress) {
+        this.projectAddress = projectAddress;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public List<LovedUsers> getLovedImages() {
+        return lovedImages;
+    }
+
+    public void setLovedImages(List<LovedUsers> lovedImages) {
+        this.lovedImages = lovedImages;
+    }
+
+    public List<CommentContents> getCommentList() {
+        return commentList;
+    }
+
+    public void setCommentList(List<CommentContents> commentList) {
+        this.commentList = commentList;
     }
 
     public String getUserName1() {
@@ -84,5 +160,13 @@ public class Project {
 
     public void setLovedCount(String lovedCount) {
         this.lovedCount = lovedCount;
+    }
+
+    public boolean isLovedOrNot() {
+        return lovedOrNot;
+    }
+
+    public void setLovedOrNot(boolean lovedOrNot) {
+        this.lovedOrNot = lovedOrNot;
     }
 }

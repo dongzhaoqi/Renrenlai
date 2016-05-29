@@ -80,7 +80,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
     }
 
     private void doLogin() {
-
+        showProcessDialog("登录中");
         String api = null;
         try {
             api = "/loginForApp?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
@@ -102,11 +102,13 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                     public void onResponse(JSONObject response) {
                         Log.d("loginResponse", "response:" + response.toString());
                         loginSuccess(response);
+                        dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                        dismissProcessDialog();
                 }
         });
 

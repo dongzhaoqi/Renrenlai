@@ -9,21 +9,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.android.volley.Request;
+import com.android.volley.Cache;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
-import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.TimeLineAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.siti.renrenlai.view.FragmentBase;
 import com.software.shell.fab.ActionButton;
 
 import org.json.JSONArray;
@@ -38,7 +35,7 @@ import java.util.List;
 /**
  * Created by Dong on 2016/4/1.
  */
-public class LaunchFragment extends FragmentBase {
+public class LaunchFragment extends BaseFragment {
 
     private View view;
     private ActionButton btn_to_top;
@@ -49,6 +46,8 @@ public class LaunchFragment extends FragmentBase {
     private List<TimeLineModel> mDataList = new ArrayList<>();
     private int refreshTime = 0;
     private int times = 0;
+    String api = null;
+    String url = null;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -60,9 +59,32 @@ public class LaunchFragment extends FragmentBase {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initData();
         initView();
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
 
+        try {
+            api = "/getPublishActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
+            url = ConstantValue.urlRoot + api;
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(url);
+        if(entry != null){              // Cache is available
+            String data = null;
+            try {
+                data = new String(entry.data, "UTF-8");
+                JSONObject jsonObject = new JSONObject(data);
+                getData(jsonObject);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // Cache data
+            initData();
+        }
     }
 
     private void initView() {
@@ -71,9 +93,6 @@ public class LaunchFragment extends FragmentBase {
         mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(linearLayoutManager);
-
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
 
         mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
@@ -128,22 +147,7 @@ public class LaunchFragment extends FragmentBase {
     }
 
     private void initData() {
-        /*for (int i = 0; i < 5; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle(i + "小明的童年影像展览及故事分享会");
-            mDataList.add(model);
-        }*/
 
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
-        String api = null;
-        try {
-            api = "/getPublishActivityList?userName="+URLEncoder.encode(userName, "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-
-        String url = ConstantValue.urlRoot + api;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -165,37 +169,42 @@ public class LaunchFragment extends FragmentBase {
 
     public void getData(JSONObject response){
         JSONArray result = response.optJSONArray("result");
-        for(int i = 0; i < result.length(); i++){
-            TimeLineModel model = new TimeLineModel();
+        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        mRecyclerView.setAdapter(mTimeLineAdapter);
+        /*for(int i = 0; i < mDataList.size(); i++){
             try {
-                model.setTitle(result.getJSONObject(i).getString("activityName"));
-                model.setStatus(result.getJSONObject(i).getString("activityStatus"));
-                model.setImg(result.getJSONObject(i).getString("activityImagePath"));
-                model.setTime(result.getJSONObject(i).getString("dateTimeForActiv"));
+                TimeLineModel model = mDataList.get(i);
+                model.setActivityId();
+                model.setStatus(model.getString("activityStatus"));
+                model.setImg(model.getString("activityImagePath"));
+                model.setTime(model.getString("dateTimeForActiv"));
                 mDataList.add(model);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     private void refreshData(){
-        for (int i = 0; i < 2; i++) {
+        initData();
+        /*for (int i = 0; i < 2; i++) {
             TimeLineModel model = new TimeLineModel();
             model.setTime("2016年4月3号");
             model.setTitle("refresh:" + i + "春季亲子运动会发起");
             mDataList.add(0, model);
         }
-        mTimeLineAdapter.notifyDataSetChanged();
+        mTimeLineAdapter.notifyDataSetChanged();*/
     }
 
     private void loadData() {
-        for (int i = 0; i < 3; i++) {
+        initData();
+        /*for (int i = 0; i < 3; i++) {
             TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle("load:" + i + "春季亲子运动会发起");
+            model.setActivityReleaseTime("2016年4月3号");
+            model.setActivityName("load:" + i + "春季亲子运动会发起");
             mDataList.add(mDataList.size(), model);
         }
-        mTimeLineAdapter.notifyDataSetChanged();
+        mTimeLineAdapter.notifyDataSetChanged();*/
     }
 }

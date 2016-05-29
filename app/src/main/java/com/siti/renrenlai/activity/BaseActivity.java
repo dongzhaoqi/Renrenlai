@@ -1,6 +1,7 @@
 package com.siti.renrenlai.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -9,11 +10,13 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.dialog.CustomProgressDialog;
 import com.siti.renrenlai.view.HeaderLayout;
+import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
 import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
-import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 
 public class BaseActivity extends FragmentActivity {
@@ -21,7 +24,8 @@ public class BaseActivity extends FragmentActivity {
 	protected HeaderLayout mHeaderLayout;
 	protected int mScreenWidth;
 	protected int mScreenHeight;
-	public CustomProgressDialog customProgressDialog;
+	private ACProgressFlower dialog;
+	private ACProgressFlower.Builder builder;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -30,10 +34,11 @@ public class BaseActivity extends FragmentActivity {
 		getWindowManager().getDefaultDisplay().getMetrics(metric);
 		mScreenWidth = metric.widthPixels;
 		mScreenHeight = metric.heightPixels;
-		customProgressDialog = new CustomProgressDialog(BaseActivity.this, "loading..");
-		customProgressDialog.setCancelable(true);
-		customProgressDialog.setCanceledOnTouchOutside(true);
 
+		builder = new ACProgressFlower.Builder(this)
+				.direction(ACProgressConstant.DIRECT_CLOCKWISE)
+				.themeColor(Color.WHITE)
+				.fadeColor(Color.DKGRAY);
 	}
 
 	Toast mToast;
@@ -62,7 +67,6 @@ public class BaseActivity extends FragmentActivity {
 			
 			@Override
 			public void run() {
-				// TODO Auto-generated method stub
 				if (mToast == null) {
 					mToast = Toast.makeText(BaseActivity.this.getApplicationContext(), resId,
 							Toast.LENGTH_SHORT);
@@ -162,23 +166,23 @@ public class BaseActivity extends FragmentActivity {
 	}
 
 	public void showProcessDialog() {
+		dialog = builder.build();
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
+	}
 
-		if (customProgressDialog == null){
-			customProgressDialog = new CustomProgressDialog(this,"loading...");
-			customProgressDialog.show();
-			customProgressDialog.setCanceledOnTouchOutside(true);
+	public void showProcessDialog(String message) {
+		dialog = builder.text(message).build();
+		dialog.setCanceledOnTouchOutside(true);
+		if(!dialog.isShowing()){
+			dialog.show();
 		}
-		if (customProgressDialog.isShowing() == false)
-			customProgressDialog.show();
-
 	}
 
 	public void dismissProcessDialog() {
-
-		if (customProgressDialog != null)
-			customProgressDialog.dismiss();
-
+		if(dialog != null){
+			dialog.dismiss();
+		}
 	}
-
 
 }

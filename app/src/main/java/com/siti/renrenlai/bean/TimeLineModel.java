@@ -1,45 +1,55 @@
 package com.siti.renrenlai.bean;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Created by HP-HP on 05-12-2015.
  */
 public class TimeLineModel implements Serializable{
-    private String time;
-    private String img;
-    private String title;
-    private String status;
+    private int activityId;
+    private int activityStatus;
+    private String activityName;
+    private String activityStartTime;
+    private List<ActivityImage>activityImageList;
 
-    public String getTime() {
-        return time;
+    public int getActivityId() {
+        return activityId;
     }
 
-    public void setTime(String time) {
-        this.time = time;
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 
-    public String getImg() {
-        return img;
+    public int getActivityStatus() {
+        return activityStatus;
     }
 
-    public void setImg(String img) {
-        this.img = img;
+    public void setActivityStatus(int activityStatus) {
+        this.activityStatus = activityStatus;
     }
 
-    public String getTitle() {
-        return title;
+    public String getActivityName() {
+        return activityName;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setActivityName(String activityName) {
+        this.activityName = activityName;
     }
 
-    public String getStatus() {
-        return status;
+    public String getActivityStartTime() {
+        return activityStartTime;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
+    public void setActivityStartTime(String activityStartTime) {
+        this.activityStartTime = activityStartTime;
+    }
+
+    public List<ActivityImage> getActivityImageList() {
+        return activityImageList;
+    }
+
+    public void setActivityImageList(List<ActivityImage> activityImageList) {
+        this.activityImageList = activityImageList;
     }
 }

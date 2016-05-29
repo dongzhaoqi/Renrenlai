@@ -63,8 +63,8 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
         GroupHolder holder;
         if(convertView == null){
             holder = new GroupHolder();
-            convertView = inflater.inflate(R.layout.group_system_item, parent, false);
-            holder.title = (TextView) convertView.findViewById(R.id.str_system_alarm);
+            convertView = inflater.inflate(R.layout.group_review_item, parent, false);
+            holder.title = (TextView) convertView.findViewById(R.id.str_review);
             holder.expand_imgView = (ImageView) convertView.findViewById(R.id.iv_expand);
             convertView.setTag(holder);
         }else{

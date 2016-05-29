@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class CommentContents implements Serializable{
     private String userName;
     private String commentContent;
+    private String commentTime;
 
     public CommentContents() {
     }
@@ -15,6 +16,14 @@ public class CommentContents implements Serializable{
     public CommentContents(String userName, String commentContent) {
         this.userName = userName;
         this.commentContent = commentContent;
+    }
+
+    public String getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
     }
 
     public String getCommentContent() {

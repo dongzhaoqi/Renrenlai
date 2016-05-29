@@ -20,6 +20,8 @@ import com.dev.sacot41.scviewpager.SCViewPagerAdapter;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
+import cn.jpush.android.api.JPushInterface;
+
 /**
  * Created by Dong on 4/17/2016.
  */
@@ -191,5 +193,17 @@ public class GuideActivity extends FragmentActivity {
             finish();
         }
 
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        JPushInterface.onPause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        JPushInterface.onResume(this);
     }
 }

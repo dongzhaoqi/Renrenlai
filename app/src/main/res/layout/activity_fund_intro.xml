@@ -3,8 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".SampleActivity$PlaceholderFragment">
+    android:orientation="vertical">
 
     <include
         android:id="@+id/common_actionbar"
@@ -12,29 +11,20 @@
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
-        <ScrollView
+        <com.jcodecraeer.xrecyclerview.XRecyclerView
+            android:id="@+id/fund_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/background"
-            android:scrollbars="none">
-
-
-            <com.jcodecraeer.xrecyclerview.XRecyclerView
-                android:id="@+id/fund_list"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-        </ScrollView>
+            android:layout_height="wrap_content"/>
 
         <RelativeLayout
             android:id="@+id/layout_dream_go"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:layout_gravity="bottom"
-            android:background="@drawable/row_selector">
+            android:background="@drawable/layout_top_border">
 
             <TextView
                 android:layout_width="match_parent"

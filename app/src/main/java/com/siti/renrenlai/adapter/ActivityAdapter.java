@@ -78,7 +78,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         viewHolder.mTextView.setText(p.getActivityName());
         viewHolder.mImageView.setTag(activities.get(i));
         List<ActivityImage>images = p.getActivityImages();
-        if(images != null){
+        if(images != null && images.size() > 0){
             System.out.println("images size:" + images.size());
 
             imagePath = p.getActivityImages().get(0).getActivityImagePath();

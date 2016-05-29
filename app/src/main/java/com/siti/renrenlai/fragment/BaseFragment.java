@@ -1,6 +1,7 @@
-package com.siti.renrenlai.view;
+package com.siti.renrenlai.fragment;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -9,22 +10,24 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.dialog.CustomProgressDialog;
-import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
-import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
-import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
-import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
+import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
+import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
+import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
+
+import cc.cloudist.acplibrary.ACProgressConstant;
+import cc.cloudist.acplibrary.ACProgressFlower;
 
 
-public abstract class FragmentBase extends Fragment {
+public abstract class BaseFragment extends Fragment {
 	
 	public HeaderLayout mHeaderLayout;
-
 	protected View contentView;
-	public CustomProgressDialog customProgressDialog;
 	public LayoutInflater mInflater;
-	
+	private ACProgressFlower dialog;
+	private ACProgressFlower.Builder builder;
 	private Handler handler = new Handler();
 	
 	public void runOnWorkThread(Runnable action) {
@@ -39,13 +42,14 @@ public abstract class FragmentBase extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setRetainInstance(true);
-		customProgressDialog = new CustomProgressDialog(getActivity(), "loading..");
-		customProgressDialog.setCancelable(true);
-		customProgressDialog.setCanceledOnTouchOutside(true);
+		builder = new ACProgressFlower.Builder(getActivity())
+				.direction(ACProgressConstant.DIRECT_CLOCKWISE)
+				.themeColor(Color.WHITE)
+				.fadeColor(Color.DKGRAY);
 	}
 
 	
-	public FragmentBase() {
+	public BaseFragment() {
 		
 	}
 
@@ -157,23 +161,21 @@ public abstract class FragmentBase extends Fragment {
 	}
 
 	public void showProcessDialog() {
+		dialog = builder.build();
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
+	}
 
-		if (customProgressDialog == null){
-			customProgressDialog = new CustomProgressDialog(getActivity(), "loading...");
-			customProgressDialog.show();
-			customProgressDialog.setCanceledOnTouchOutside(true);
-		}
-		if (customProgressDialog.isShowing() == false)
-			customProgressDialog.show();
-
+	public void showProcessDialog(String message) {
+		dialog = builder.text(message).build();
+		dialog.setCanceledOnTouchOutside(true);
+		dialog.show();
 	}
 
 	public void dismissProcessDialog() {
-
-		if (customProgressDialog != null)
-			customProgressDialog.dismiss();
-
+		if(dialog != null){
+			dialog.dismiss();
+		}
 	}
-
 
 }

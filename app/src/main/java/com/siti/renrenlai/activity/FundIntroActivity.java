@@ -1,15 +1,14 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.RelativeLayout;
-import android.widget.Toast;
 
+import com.android.volley.Cache;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -27,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import butterknife.Bind;
@@ -48,6 +48,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
+    String api = "/getProjectListForApp";
+    String url = ConstantValue.urlRoot + api;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -57,7 +59,23 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         ShareSDK.initSDK(this);
         initView();
 
-        initData();
+        Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(url);
+        if(entry != null){              // Cache is available
+            String data = null;
+            try {
+                data = new String(entry.data, "UTF-8");
+                JSONObject jsonObject = new JSONObject(data);
+                getData(jsonObject);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // Cache data
+            initData();
+        }
     }
 
     private void initView() {
@@ -93,8 +111,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initData() {
-        String api = "/getProjectListForApp";
-        String url = ConstantValue.urlRoot + api;
+        showProcessDialog();
         Log.d("FindFragment", "url:" + url);
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         JSONObject jsonObject = new JSONObject();
@@ -110,12 +127,14 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                     public void onResponse(JSONObject response) {
                         Log.d("response", response.toString());
                         getData(response);
+                        dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error: ", "error:" + error.getMessage());
                 showToast("出错了!");
+                dismissProcessDialog();
             }
         });
         CustomApplication.getInstance().addToRequestQueue(req);      //加入请求队列
@@ -165,9 +184,14 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "response:" + response.toString());
-                        String result = null;
                         try {
-                            result = response.getString("result");
+                            String result = response.getJSONObject("result").toString();
+                            Project project = (Project) com.alibaba.fastjson.JSONObject.parseObject(result, Project.class);
+                            Intent intent = new Intent(FundIntroActivity.this, ProjectInfo.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("project", project);
+                            intent.putExtras(bundle);
+                            startAnimActivity(intent);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }

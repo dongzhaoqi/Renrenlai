@@ -12,16 +12,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.activity.IntroductionActivity;
 import com.siti.renrenlai.activity.MyLaunchActivity;
 import com.siti.renrenlai.bean.TimeLineModel;
+import com.siti.renrenlai.util.ConstantValue;
+import com.squareup.picasso.Picasso;
 import com.vipul.hp_hp.timelineview.TimelineView;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 
 public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLineViewHolder> {
@@ -30,6 +30,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     RelativeLayout layout_activity_item;
     private static Context mContext;
     private static List<TimeLineModel> mFeedList;
+    int activityStatus;     //活动状态 1.报名中 2.审核通过3.报名截止4.活动结束
 
     public TimeLineAdapter(Context context, List<TimeLineModel> feedList) {
         this.mContext = context;
@@ -53,15 +54,21 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         TimeLineModel timeLineModel = mFeedList.get(position);
         holder.itemView.setTag(position);
-        holder.tvTime.setText(timeLineModel.getTime());
-        holder.tvTitle.setText(timeLineModel.getTitle());
-        if (position % 3 == 2) {
-            holder.tvPic.setImageResource(R.drawable.desert);
-            holder.btnProgress.setText(R.string.txt_already_end);
-            holder.btnProgress.setBackgroundColor(mContext.getResources().getColor(R.color.end));
-        } else if (position % 3 == 1) {
-            holder.tvPic.setImageResource(R.drawable.django_python);
+        holder.tvTime.setText(timeLineModel.getActivityStartTime().substring(0, 10));
+        holder.tvTitle.setText(timeLineModel.getActivityName());
+        if (timeLineModel.getActivityImageList() != null && timeLineModel.getActivityImageList().size() > 0){
+            System.out.println("TimeLine:" + ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath());
+            Picasso.with(mContext).load(ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath()).into(holder.tvPic);
+        }
+        activityStatus = timeLineModel.getActivityStatus();
+        if(activityStatus == 1){
+            holder.btnProgress.setText(R.string.txt_enrolling);
+            holder.btnProgress.setBackgroundColor(mContext.getResources().getColor(R.color.start));
+        }else if(activityStatus == 3){
             holder.btnProgress.setText(R.string.txt_close);
+            holder.btnProgress.setBackgroundColor(mContext.getResources().getColor(R.color.end));
+        }else{
+            holder.btnProgress.setText(R.string.txt_already_end);
             holder.btnProgress.setBackgroundColor(mContext.getResources().getColor(R.color.end));
         }
     }

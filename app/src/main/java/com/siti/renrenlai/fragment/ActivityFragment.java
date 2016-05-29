@@ -7,12 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.view.FragmentBase;
 
 /**
  * Created by Dong on 3/22/2016.
  */
-public class ActivityFragment extends FragmentBase {
+public class ActivityFragment extends BaseFragment {
 
     private View view;
 

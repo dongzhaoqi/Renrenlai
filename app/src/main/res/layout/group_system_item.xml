@@ -7,16 +7,23 @@
     <RelativeLayout
         android:id="@+id/layout_system_alarm"
         android:layout_width="fill_parent"
-        android:layout_height="@dimen/height_36"
+        android:layout_height="@dimen/height_56"
         android:background="@drawable/row_selector"
         android:paddingLeft="@dimen/padding_10"
         android:paddingRight="@dimen/padding_10">
 
+        <ImageView
+            android:id="@+id/iv_system_alarm"
+            android:layout_width="@dimen/height_36"
+            android:layout_height="@dimen/height_36"
+            android:layout_centerVertical="true"
+            android:background="@drawable/system_alarm"/>
         <TextView
             android:id="@+id/str_system_alarm"
             style="@style/me_text_style"
             android:layout_width="@dimen/height_96"
             android:layout_height="match_parent"
+            android:layout_toRightOf="@id/iv_system_alarm"
             android:text="@string/str_system_alarm" />
 
         <ImageView
