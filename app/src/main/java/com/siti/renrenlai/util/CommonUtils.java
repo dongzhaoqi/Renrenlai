@@ -8,6 +8,7 @@ import android.content.pm.PackageManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Looper;
 import android.telephony.TelephonyManager;
 import android.util.Log;
@@ -150,6 +151,25 @@ public class CommonUtils {
             Log.e(CommonUtils.class.getSimpleName(), e.getMessage());
         }
         return imei;
+    }
+
+    /* Checks if external storage is available for read and write */
+    public boolean isExternalStorageWritable(){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state)){
+            return true;
+        }
+        return false;
+    }
+
+    /* Checks if external storage is available to at least read */
+    public boolean isExternalStorageReadable(){
+        String state = Environment.getExternalStorageState();
+        if(Environment.MEDIA_MOUNTED.equals(state) ||
+                Environment.MEDIA_MOUNTED_READ_ONLY.equals(state)){
+            return true;
+        }
+        return false;
     }
 
     public static void showShare(Context context, String content) {

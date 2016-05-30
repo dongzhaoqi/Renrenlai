@@ -24,6 +24,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/base_edit_input"
         android:padding="@dimen/margin_8"
+        android:layout_marginTop="@dimen/margin_8"
         android:layout_toRightOf="@id/time_marker">
 
         <TextView

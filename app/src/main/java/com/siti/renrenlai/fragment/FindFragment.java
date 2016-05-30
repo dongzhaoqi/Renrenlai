@@ -16,7 +16,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
-import com.android.volley.Cache.Entry;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -86,13 +85,23 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
         initView();
 
+        cache();
+
+        initEvent();
+    }
+
+    /**
+     * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
+     */
+    private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
-        Entry entry = cache.get(url);
+        Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
             String data = null;
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -101,13 +110,12 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             }
         }else{
             // Cache data
+            System.out.println("initData");
             initData();
         }
-        initEvent();
     }
 
     private void initView() {
-
         initTopBarForLeftTextBoth("发现", "阳光小区", new onLeftTextClickListener() {
             @Override
             public void onClick() {

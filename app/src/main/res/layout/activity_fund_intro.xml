@@ -17,13 +17,15 @@
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/fund_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/item_height"/>
 
         <RelativeLayout
             android:id="@+id/layout_dream_go"
             android:layout_width="match_parent"
             android:layout_height="@dimen/item_height"
             android:layout_gravity="bottom"
+            android:visibility="invisible"
             android:background="@drawable/layout_top_border">
 
             <TextView

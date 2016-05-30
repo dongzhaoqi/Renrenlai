@@ -4,8 +4,12 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import com.android.volley.Cache;
@@ -34,7 +38,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 
 /**
  * Created by Dong on 2016/4/12.
@@ -45,7 +48,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     XRecyclerView fundList;
     @Bind(R.id.layout_dream_go)
     RelativeLayout layoutDreamGo;
-
+    private ImageView iv_project;
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
@@ -60,6 +63,13 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         ShareSDK.initSDK(this);
         initView();
 
+        cache();
+    }
+
+    /**
+     * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
+     */
+    private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -67,6 +77,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -75,6 +86,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             }
         }else{
             // Cache data
+            System.out.println("initData");
             initData();
         }
     }
@@ -88,13 +100,16 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         });
         // 设置LinearLayoutManager
         fundList.setLayoutManager(new LinearLayoutManager(this));
-        /*View header = LayoutInflater.from(this).inflate(R.layout.recyclerview_header, (ViewGroup)findViewById(android.R.id.content),false);
-        fundList.addHeaderView(header);*/
+        View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup)findViewById(android.R.id.content),false);
+        iv_project = (ImageView) header.findViewById(R.id.iv_project);
+        fundList.addHeaderView(header);
+
         fundList.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
+                        refreshData();
                         fundList.refreshComplete();
                     }
                 }, 1000);
@@ -104,6 +119,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
+                        loadData();
                         fundList.loadMoreComplete();
                     }
                 }, 1000);
@@ -156,7 +172,26 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         fundList.setAdapter(fundAdapter);
         fundList.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         fundList.setArrowImageView(R.drawable.iconfont_downgrey);
+        fundList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                if (dy > 0) {
+                    layoutDreamGo.setVisibility(View.VISIBLE);
+                } else {
+                    layoutDreamGo.setVisibility(View.INVISIBLE);
+                }
+            }
+        });
     }
+
+    private void refreshData(){
+        initData();
+    }
+    private void loadData() {
+        initData();
+    }
+
 
     @OnClick({R.id.layout_dream_go})
     public void onClick(View view) {
