@@ -28,29 +28,59 @@
                 android:orientation="vertical">
 
 
-                <RelativeLayout
+                <LinearLayout
                     android:id="@+id/layout_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/row_selector"
+                    android:orientation="horizontal"
                     android:padding="@dimen/activity_horizontal_margin">
 
                     <ImageView
                         android:id="@+id/activity_img"
                         android:layout_width="90dp"
                         android:layout_height="90dp"
-                        android:src="@drawable/launch" />
+                        android:background="@drawable/launch" />
 
-                    <TextView
-                        android:id="@+id/activity_name"
-                        style="@style/me_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_toRightOf="@id/activity_img"
-                        android:text="仁人来" />
+                    <RelativeLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="match_parent"
+                        android:paddingTop="@dimen/activity_horizontal_margin"
+                        android:paddingLeft="@dimen/activity_horizontal_margin">
 
-                </RelativeLayout>
+                        <TextView
+                            android:id="@+id/activity_name"
+                            style="@style/me_text_style"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/margin_8"
+                            android:text="仁人来"
+                            android:textSize="@dimen/text_size_20" />
+
+                        <TextView
+                            android:id="@+id/tv_comments_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@id/activity_name"
+                            android:layout_alignLeft="@id/activity_name"
+                            android:layout_marginRight="@dimen/margin_8"
+                            android:drawableLeft="@drawable/comment"
+                            android:gravity="center_vertical"
+                            android:text="10" />
+
+                        <TextView
+                            android:id="@+id/tv_like_number"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_toRightOf="@id/tv_comments_number"
+                            android:layout_below="@id/activity_name"
+                            android:drawableLeft="@drawable/heart"
+                            android:gravity="center_vertical"
+                            android:text="10" />
+                    </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
@@ -70,11 +100,11 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/time" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/activity_time"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_time"
@@ -101,11 +131,11 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/location" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/activity_location"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_locate"
@@ -117,7 +147,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/view_height"
                     android:background="@color/background" />
-
 
                 <RelativeLayout
                     android:id="@+id/layout_enroll_number"
@@ -132,11 +161,11 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/me" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/activity_enroll_number"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_enroll_number"
@@ -169,11 +198,11 @@
                         android:layout_width="30dp"
                         android:layout_height="30dp"
                         android:layout_centerVertical="true"
-                        android:src="@drawable/icon_me" />
+                        android:src="@drawable/like" />
 
                     <TextView
-                        style="@style/me_text_style"
                         android:id="@+id/activity_loved_number"
+                        style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_favor_number"
@@ -185,6 +214,42 @@
                         android:layout_alignParentRight="true"
                         android:duplicateParentState="true"
                         android:src="@drawable/go" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:id="@+id/layout_cover"
+                    android:layout_width="match_parent"
+                    android:minHeight="@dimen/height_96"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/layout_bottom_border"
+                    android:padding="@dimen/padding_10">
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:id="@+id/str_cover"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:text="@string/txt_activity_cover" />
+
+                    <com.siti.renrenlai.view.NoScrollGridView
+                        android:id="@+id/detail_scrollgridview"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:horizontalSpacing="3dp"
+                        android:listSelector="#00000000"
+                        android:numColumns="3"
+                        android:scrollbars="none"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:verticalSpacing="5dp" />
+
                 </RelativeLayout>
 
             </LinearLayout>

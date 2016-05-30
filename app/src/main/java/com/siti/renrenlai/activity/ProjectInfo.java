@@ -19,11 +19,12 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
+import com.siti.renrenlai.bean.ProjectImage;
 import com.siti.renrenlai.dialog.CommentDialog;
+import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
@@ -37,7 +38,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -65,13 +65,13 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     @Bind(R.id.btn_favor) Button btnFavor;
     @Bind(R.id.btn_publish) Button btnPublish;
 
-    String projectName, telephone, projectAddress, projectDescrip, projectTime;
+    String projectName, projectImagePath, telephone, projectAddress, projectDescrip, projectTime;
     int projectId;
     String userName;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
-    private List<ActivityImage> imageList;              //活动封面
+    private List<ProjectImage> imageList;              //活动封面
     private ArrayList<String> imagePath;
     private Project project;
     private ImageAdapter picAdapter;
@@ -88,25 +88,26 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     private void initViews() {
         imagePath = new ArrayList<>();
-        initTopBarForBoth("项目详情", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
-            @Override
-            public void onClick() {
-                showShare();
-            }
-        });
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
         project = (Project) getIntent().getExtras().getSerializable("project");
-
         if(project != null){
             projectName = project.getProjectName();
+            projectImagePath = project.getProjectImagePath();
             telephone = project.getTelephone();
             projectAddress = project.getProjectAddress();
             projectDescrip = project.getProjectDescrip();
             projectTime = project.getBeginTimeOfProject().substring(0, 16) + " - " + project.getEndTimeOfProject().substring(0, 16);
             lovedUsersList = project.getLovedImages();
+            imageList = project.getProjectImageList();
             commentsList = project.getCommentList();
         }
 
+        initTopBarForBoth("项目详情", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
+            @Override
+            public void onClick() {
+                CommonUtils.showShare(ProjectInfo.this, projectName);
+            }
+        });
 
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for(int i = 0; i < lovedUsersList.size(); i++){
@@ -135,7 +136,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         tv_avtivity_name.setText(projectName);
         tv_activity_address.setText(projectAddress);
         tv_activity_time.setText(projectTime);
-        //Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
+        if(imageList != null && imageList.size() > 0){
+            System.out.println("aaaa:" + imageList.get(0).getProjectImagePath());
+            Picasso.with(this).load(imageList.get(0).getProjectImagePath()).into(activity_img);
+        }
 
         mAdapter = new CommentAdapter(this, commentsList);
         mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {
@@ -234,34 +238,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         params.setMargins(0, 0, 15, 0);
         ll_image.removeViewAt(0);
         btnFavor.setText("喜欢(" + lovedUsersList.size() + ")");
-    }
-
-    private void showShare() {
-        ShareSDK.initSDK(this);
-        OnekeyShare oks = new OnekeyShare();
-        //关闭sso授权
-        oks.disableSSOWhenAuthorize();
-        // 分享时Notification的图标和文字  2.5.9以后的版本不调用此方法
-        //oks.setNotification(R.drawable.ic_launcher, getString(R.string.app_name));
-        // title标题，印象笔记、邮箱、信息、微信、人人网和QQ空间使用
-        oks.setTitle(getString(R.string.ssdk_oks_share));
-        // titleUrl是标题的网络链接，仅在人人网和QQ空间使用
-        oks.setTitleUrl("http://sharesdk.cn");
-        // text是分享文本，所有平台都需要这个字段
-        oks.setText(projectName);
-        // imagePath是图片的本地路径，Linked-In以外的平台都支持此参数
-        //oks.setImagePath("/sdcard/test.jpg");//确保SDcard下面存在此张图片
-        //oks.setImageUrl("http://img05.tooopen.com/images/20160108/tooopen_sy_153700436869.jpg");
-        // url仅在微信（包括好友和朋友圈）中使用
-        oks.setUrl("http://sharesdk.cn");
-        // comment是我对这条分享的评论，仅在人人网和QQ空间使用
-        oks.setComment("我是测试评论文本");
-        // site是分享此内容的网站名称，仅在QQ空间使用
-        oks.setSite(getString(R.string.app_name));
-        // siteUrl是分享此内容的网站地址，仅在QQ空间使用
-        oks.setSiteUrl("http://sharesdk.cn");
-        // 启动分享GUI
-        oks.show(this);
     }
 
     @Override

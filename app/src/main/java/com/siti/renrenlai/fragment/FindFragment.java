@@ -223,6 +223,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             public void onRefresh() {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
+                        refreshData();
                         mXRecyclerView.refreshComplete();
                     }
                 }, 1000);
@@ -340,6 +341,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         mXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     }
 
+    private void refreshData(){
+        initData();
+    }
     private void loadData() {
         initData();
     }

@@ -11,6 +11,8 @@ public class TimeLineModel implements Serializable{
     private int activityStatus;
     private String activityName;
     private String activityStartTime;
+    private String activityEndTime;
+    private String lovedPersonNum;
     private List<ActivityImage>activityImageList;
 
     public int getActivityId() {
@@ -43,6 +45,22 @@ public class TimeLineModel implements Serializable{
 
     public void setActivityStartTime(String activityStartTime) {
         this.activityStartTime = activityStartTime;
+    }
+
+    public String getActivityEndTime() {
+        return activityEndTime;
+    }
+
+    public void setActivityEndTime(String activityEndTime) {
+        this.activityEndTime = activityEndTime;
+    }
+
+    public String getLovedPersonNum() {
+        return lovedPersonNum;
+    }
+
+    public void setLovedPersonNum(String lovedPersonNum) {
+        this.lovedPersonNum = lovedPersonNum;
     }
 
     public List<ActivityImage> getActivityImageList() {

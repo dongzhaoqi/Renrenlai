@@ -23,6 +23,7 @@ import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.software.shell.fab.ActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -38,7 +39,7 @@ public class EnrollFragment extends BaseFragment {
 
     private View view;
     private ActionButton btn_to_top;
-    private XRecyclerView mRecyclerView;
+    private XRecyclerView enroll_recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TimeLineAdapter mTimeLineAdapter;
 
@@ -47,6 +48,7 @@ public class EnrollFragment extends BaseFragment {
     private int times = 0;
     String api = null;
     String url = null;
+    private static final String TAG = "EnrollFragment";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +69,14 @@ public class EnrollFragment extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        cache();
+    }
+
+    /**
+     * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
+     */
+    private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -74,6 +84,7 @@ public class EnrollFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -82,26 +93,26 @@ public class EnrollFragment extends BaseFragment {
             }
         }else{
             // Cache data
+            System.out.println("initData");
             initData();
         }
-
     }
 
     private void initView() {
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
-        mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
+        enroll_recyclerView = (XRecyclerView) findViewById(R.id.enroll_recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        enroll_recyclerView.setLayoutManager(linearLayoutManager);
 
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
+        enroll_recyclerView.setAdapter(mTimeLineAdapter);
 
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
-        mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+        enroll_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        enroll_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
+        enroll_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        enroll_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -117,11 +128,11 @@ public class EnrollFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                //ObjectAnimator.ofInt(mRecyclerView, "scrollY", 0).setDuration(1000).start();
+                //ObjectAnimator.ofInt(enroll_recyclerView, "scrollY", 0).setDuration(1000).start();
             }
         });
 
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        enroll_recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 refreshTime++;
@@ -130,19 +141,18 @@ public class EnrollFragment extends BaseFragment {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         refreshData();
-                        mRecyclerView.refreshComplete();
+                        enroll_recyclerView.refreshComplete();
                     }
                 }, 1000);
             }
 
             @Override
             public void onLoadMore() {
-                Log.d("refresh", "refreshTime:" + refreshTime);
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         loadData();
-                        mRecyclerView.loadMoreComplete();
+                        enroll_recyclerView.loadMoreComplete();
                     }
                 }, 1000);
             }
@@ -150,7 +160,6 @@ public class EnrollFragment extends BaseFragment {
     }
 
     private void initData() {
-
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -158,39 +167,38 @@ public class EnrollFragment extends BaseFragment {
                     public void onResponse(JSONObject response) {
                         Log.d("response", "报名 response:" + response.toString());
                         showToast("获取报名成功!");
+                        dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error: ", error.getMessage());
                 showToast("出错了!");
+                dismissProcessDialog();
             }
         });
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     private void getData(JSONObject response){
-
+        JSONArray result = response.optJSONArray("result");
+        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        enroll_recyclerView.setAdapter(mTimeLineAdapter);
     }
 
     private void refreshData(){
         initData();
-        /*for (int i = 0; i < 2; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle("refresh:" + i + "春季亲子运动会报名");
-            mDataList.add(0, model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();*/
     }
 
     private void loadData() {
-        for (int i = 0; i < 3; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setActivityStartTime("2016年4月3号");
-            model.setActivityName("load:" + i + "春季亲子运动会报名");
-            mDataList.add(mDataList.size(), model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();
+        initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called with: " + TAG);
+        cache();
     }
 }

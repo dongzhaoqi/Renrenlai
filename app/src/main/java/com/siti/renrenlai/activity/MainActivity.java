@@ -165,7 +165,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                     logs = "Failed with errorCode = " + code;
                     Log.e(TAG, logs);
             }
-            CommonUtils.showToast(logs, getApplicationContext());
+            //CommonUtils.showToast(logs, getApplicationContext());
         }
 
     };

@@ -18,6 +18,7 @@ public class Project implements Serializable{
     private String telephone;
     private List<LovedUsers> lovedImages;
     private List<CommentContents> commentList;
+    private List<ProjectImage> projectImageList;
     private String userName1;
     private String comment1;
     private String userName2;
@@ -104,6 +105,14 @@ public class Project implements Serializable{
 
     public void setLovedImages(List<LovedUsers> lovedImages) {
         this.lovedImages = lovedImages;
+    }
+
+    public List<ProjectImage> getProjectImageList() {
+        return projectImageList;
+    }
+
+    public void setProjectImageList(List<ProjectImage> projectImageList) {
+        this.projectImageList = projectImageList;
     }
 
     public List<CommentContents> getCommentList() {

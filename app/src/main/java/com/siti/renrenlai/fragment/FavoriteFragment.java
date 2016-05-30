@@ -23,6 +23,7 @@ import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.software.shell.fab.ActionButton;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -37,7 +38,7 @@ import java.util.List;
 public class FavoriteFragment extends BaseFragment {
     private View view;
     private ActionButton btn_to_top;
-    private XRecyclerView mRecyclerView;
+    private XRecyclerView favorite_recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TimeLineAdapter mTimeLineAdapter;
 
@@ -46,7 +47,7 @@ public class FavoriteFragment extends BaseFragment {
     private int times = 0;
     String api = null;
     String url = null;
-
+    private static final String TAG = "FavoriteFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_favorite, container, false);
@@ -59,12 +60,22 @@ public class FavoriteFragment extends BaseFragment {
 
         initView();
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+
         try {
             api = "/getLovedActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
             url = ConstantValue.urlRoot + api;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        cache();
+    }
+
+
+    /**
+     * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
+     */
+    private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -72,6 +83,7 @@ public class FavoriteFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -80,26 +92,26 @@ public class FavoriteFragment extends BaseFragment {
             }
         }else{
             // Cache data
+            System.out.println("initData");
             initData();
         }
-
     }
 
     private void initView() {
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
-        mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
+        favorite_recyclerView = (XRecyclerView) findViewById(R.id.favorite_recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        favorite_recyclerView.setLayoutManager(linearLayoutManager);
 
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
+        favorite_recyclerView.setAdapter(mTimeLineAdapter);
 
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
-        mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+        favorite_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        favorite_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
+        favorite_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        favorite_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -115,11 +127,11 @@ public class FavoriteFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                //ObjectAnimator.ofInt(mRecyclerView, "scrollY", 0).setDuration(1000).start();
+                //ObjectAnimator.ofInt(favorite_recyclerView, "scrollY", 0).setDuration(1000).start();
             }
         });
 
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        favorite_recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 refreshTime++;
@@ -128,7 +140,7 @@ public class FavoriteFragment extends BaseFragment {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         refreshData();
-                        mRecyclerView.refreshComplete();
+                        favorite_recyclerView.refreshComplete();
                     }
                 }, 1000);
             }
@@ -140,7 +152,7 @@ public class FavoriteFragment extends BaseFragment {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         loadData();
-                        mRecyclerView.loadMoreComplete();
+                        favorite_recyclerView.loadMoreComplete();
                     }
                 }, 1000);
             }
@@ -157,38 +169,38 @@ public class FavoriteFragment extends BaseFragment {
                         Log.d("response", "喜欢 response:" + response.toString());
                         getData(response);
                         showToast("获取喜欢成功!");
+                        dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error: ", error.getMessage().toString());
                 showToast("出错了!");
+                dismissProcessDialog();
             }
         });
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     private void getData(JSONObject response) {
-
+        JSONArray result = response.optJSONArray("result");
+        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        favorite_recyclerView.setAdapter(mTimeLineAdapter);
     }
 
     private void refreshData(){
-        for (int i = 0; i < 2; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setActivityStartTime("2016年4月3号");
-            model.setActivityName("refresh:" + i + "春季亲子运动会喜欢");
-            mDataList.add(0, model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();
+        initData();
     }
 
     private void loadData() {
-        for (int i = 0; i < 3; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setActivityStartTime("2016年4月3号");
-            model.setActivityName("load:" + i + "春季亲子运动会喜欢");
-            mDataList.add(mDataList.size(), model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();
+        initData();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called with: " + TAG);
+        cache();
     }
 }

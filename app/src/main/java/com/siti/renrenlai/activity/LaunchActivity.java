@@ -335,7 +335,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                                 upload(activity_id, myBitmap, imageName);
                             }
                         }
-
+                        dismissProcessDialog();
                         finish();
                     }
                 }, new Response.ErrorListener() {
@@ -366,14 +366,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "response:" + response.toString());
-                        dismissProcessDialog();
-
+                        showToast("发布成功!");
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e("Error: ", "error.getMessage():" + error.getMessage());
-                dismissProcessDialog();
                 showToast("出错了!");
             }
         });

@@ -1,64 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/layout_activity_item"
     android:layout_width="match_parent"
     android:layout_height="@dimen/height_150"
+    android:layout_marginTop="@dimen/margin_8"
     android:paddingRight="@dimen/margin_8">
 
     <com.vipul.hp_hp.timelineview.TimelineView
         android:id="@+id/time_marker"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:paddingTop="@dimen/width_60"
         android:paddingBottom="@dimen/width_60"
         android:paddingLeft="@dimen/padding_20"
         android:paddingRight="@dimen/padding_10"
-        app:marker_size="10dp"
+        android:paddingTop="@dimen/width_60"
+        app:line="@color/colorPrimary"
         app:line_size="1dp"
-        app:line="@color/colorPrimary"/>
+        app:marker_size="10dp" />
 
-    <TextView
-        android:id="@+id/tv_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@id/time_marker"
-        android:layout_marginTop="@dimen/margin_8"
-        android:text="2016年4月3号"
-        android:gravity="center_vertical"/>
-
-    <ImageView
-        android:id="@+id/tv_pic"
-        android:layout_width="@dimen/width_70"
-        android:layout_height="@dimen/width_70"
-        android:layout_below="@+id/tv_time"
-        android:layout_toRightOf="@id/time_marker"
-        android:src="@drawable/diploma"/>
-
-    <TextView
-        android:id="@+id/tv_title"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_time"
-        android:layout_marginRight="@dimen/width_60"
-        android:layout_marginTop="@dimen/activity_vertical_margin"
-        android:layout_marginLeft="@dimen/padding_20"
-        android:layout_toRightOf="@id/tv_pic"
-        android:text="小明的童年影像展览及分享会"/>
+        android:background="@drawable/base_edit_input"
+        android:padding="@dimen/margin_8"
+        android:layout_toRightOf="@id/time_marker">
 
-    <Button
-        android:id="@+id/btn_progress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/start"
-        android:padding="@dimen/drawable_padding_5"
-        android:minHeight="0dp"
-        android:minWidth="0dp"
-        android:layout_alignParentRight="true"
-        android:layout_centerVertical="true"
-        android:text="@string/txt_enrolling"
-        android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_8"
+            android:gravity="center_vertical"
+            android:text="2016年4月3号" />
 
+        <ImageView
+            android:id="@+id/tv_pic"
+            android:layout_width="@dimen/width_70"
+            android:layout_height="@dimen/width_70"
+            android:layout_below="@+id/tv_time"
+            android:src="@drawable/diploma" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_time"
+            android:layout_marginLeft="@dimen/padding_20"
+            android:layout_marginRight="@dimen/width_60"
+            android:layout_marginTop="@dimen/activity_vertical_margin"
+            android:layout_toRightOf="@id/tv_pic"
+            android:text="小明的童年影像展览及分享会" />
+
+        <Button
+            android:id="@+id/btn_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/start"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:padding="@dimen/drawable_padding_5"
+            android:text="@string/txt_enrolling"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_12" />
+    </RelativeLayout>
 </RelativeLayout>

@@ -39,7 +39,7 @@ public class LaunchFragment extends BaseFragment {
 
     private View view;
     private ActionButton btn_to_top;
-    private XRecyclerView mRecyclerView;
+    private XRecyclerView launch_recyclerView;
     private LinearLayoutManager linearLayoutManager;
     private TimeLineAdapter mTimeLineAdapter;
 
@@ -48,7 +48,8 @@ public class LaunchFragment extends BaseFragment {
     private int times = 0;
     String api = null;
     String url = null;
-
+    String userName = null;
+    private static final String TAG = "LaunchFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -60,7 +61,7 @@ public class LaunchFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
 
         try {
             api = "/getPublishActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
@@ -68,6 +69,14 @@ public class LaunchFragment extends BaseFragment {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
+
+        cache();
+    }
+
+    /**
+     * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
+     */
+    private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -75,6 +84,7 @@ public class LaunchFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -83,22 +93,24 @@ public class LaunchFragment extends BaseFragment {
             }
         }else{
             // Cache data
+            System.out.println("initData");
             initData();
         }
     }
 
     private void initView() {
+
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
-        mRecyclerView = (XRecyclerView) findViewById(R.id.recyclerView);
+        launch_recyclerView = (XRecyclerView) findViewById(R.id.launch_recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        mRecyclerView.setLayoutManager(linearLayoutManager);
+        launch_recyclerView.setLayoutManager(linearLayoutManager);
 
-        mRecyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        mRecyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
-        mRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+        launch_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+        launch_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
+        launch_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
 
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        launch_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
@@ -114,11 +126,11 @@ public class LaunchFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 linearLayoutManager.scrollToPositionWithOffset(0, 0);
-                //ObjectAnimator.ofInt(mRecyclerView, "scrollY", 0).setDuration(1000).start();
+                //ObjectAnimator.ofInt(launch_recyclerView, "scrollY", 0).setDuration(1000).start();
             }
         });
 
-        mRecyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
+        launch_recyclerView.setLoadingListener(new XRecyclerView.LoadingListener() {
             @Override
             public void onRefresh() {
                 refreshTime++;
@@ -127,7 +139,7 @@ public class LaunchFragment extends BaseFragment {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         refreshData();
-                        mRecyclerView.refreshComplete();
+                        launch_recyclerView.refreshComplete();
                     }
                 }, 1000);
             }
@@ -139,7 +151,7 @@ public class LaunchFragment extends BaseFragment {
                     public void run() {
                         Log.d("refresh", "refreshTime:" + refreshTime);
                         loadData();
-                        mRecyclerView.loadMoreComplete();
+                        launch_recyclerView.loadMoreComplete();
                     }
                 }, 1000);
             }
@@ -148,19 +160,21 @@ public class LaunchFragment extends BaseFragment {
 
     private void initData() {
 
-        System.out.println("url:" + url);
+        System.out.println("launch url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("response", "发起 response:" + response.toString());
+                        Log.d(TAG, "发起 response:" + response.toString());
                         getData(response);
+                        dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Error: ", error.getMessage());
+                Log.e(TAG, "error message:" + error.getMessage());
                 showToast("出错了!");
+                dismissProcessDialog();
             }
         });
         CustomApplication.getInstance().addToRequestQueue(req);
@@ -171,40 +185,22 @@ public class LaunchFragment extends BaseFragment {
         JSONArray result = response.optJSONArray("result");
         mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
-        mRecyclerView.setAdapter(mTimeLineAdapter);
-        /*for(int i = 0; i < mDataList.size(); i++){
-            try {
-                TimeLineModel model = mDataList.get(i);
-                model.setActivityId();
-                model.setStatus(model.getString("activityStatus"));
-                model.setImg(model.getString("activityImagePath"));
-                model.setTime(model.getString("dateTimeForActiv"));
-                mDataList.add(model);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }*/
+        launch_recyclerView.setAdapter(mTimeLineAdapter);
+        mTimeLineAdapter.notifyDataSetChanged();
     }
 
     private void refreshData(){
         initData();
-        /*for (int i = 0; i < 2; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setTime("2016年4月3号");
-            model.setTitle("refresh:" + i + "春季亲子运动会发起");
-            mDataList.add(0, model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();*/
     }
 
     private void loadData() {
         initData();
-        /*for (int i = 0; i < 3; i++) {
-            TimeLineModel model = new TimeLineModel();
-            model.setActivityReleaseTime("2016年4月3号");
-            model.setActivityName("load:" + i + "春季亲子运动会发起");
-            mDataList.add(mDataList.size(), model);
-        }
-        mTimeLineAdapter.notifyDataSetChanged();*/
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.d(TAG, "onResume() called with: " + TAG);
+        cache();
     }
 }
