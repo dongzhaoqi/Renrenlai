@@ -52,8 +52,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
-    String api = "/getProjectListForApp";
-    String url = ConstantValue.urlRoot + api;
+    String api, url, userName;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -61,6 +60,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_fund_intro);
         ButterKnife.bind(this);
         ShareSDK.initSDK(this);
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         initView();
 
         cache();
@@ -70,6 +70,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
      * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
      */
     private void cache() {
+        api = "/getProjectListForApp";
+        url = ConstantValue.urlRoot + api;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -100,7 +102,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         });
         // 设置LinearLayoutManager
         fundList.setLayoutManager(new LinearLayoutManager(this));
-        View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup)findViewById(android.R.id.content),false);
+        View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup) findViewById(android.R.id.content), false);
         iv_project = (ImageView) header.findViewById(R.id.iv_project);
         fundList.addHeaderView(header);
 
@@ -130,7 +132,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     private void initData() {
         showProcessDialog();
         Log.d("FindFragment", "url:" + url);
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -166,7 +167,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         fundAdapter.setOnItemClickListener(new FundIntroAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {
-                getProjectInfo(Integer.parseInt(data.toString()));
+                int projectId = Integer.parseInt(data.toString());
+                cacheProject(projectId);
             }
         });
         fundList.setAdapter(fundAdapter);
@@ -185,9 +187,16 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
+    /**
+     * 下拉刷新获取数据
+     */
     private void refreshData(){
         initData();
     }
+
+    /**
+     * 上拉加载更多
+     */
     private void loadData() {
         initData();
     }
@@ -202,8 +211,36 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 用户点击某一具体项目时,若有缓存则直接从缓存中拿数据,再跳转到项目详情, 若没有进行缓存
+     * @param projectId
+     */
+    private void cacheProject(int projectId){
+        api = "/getProjectInfoForApp";
+        url = ConstantValue.urlRoot + api;
+        String projectUrl = url + projectId;
+        Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
+        Cache.Entry entry = cache.get(projectUrl);
+        if(entry != null){              // Cache is available
+            String data = null;
+            try {
+                data = new String(entry.data, "UTF-8");
+                JSONObject jsonObject = new JSONObject(data);
+                System.out.println("data:"+jsonObject);
+                getProject(jsonObject);
+            } catch (UnsupportedEncodingException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }else{
+            // Cache data
+            System.out.println("initData");
+            getProjectInfo(projectId);
+        }
+    }
+
     public void getProjectInfo(int projectId){
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(FundIntroActivity.this, "login"), "userName");
         String api = "/getProjectInfoForApp";
         String url = ConstantValue.urlRoot + api;
 
@@ -220,17 +257,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "response:" + response.toString());
-                        try {
-                            String result = response.getJSONObject("result").toString();
-                            Project project = com.alibaba.fastjson.JSONObject.parseObject(result, Project.class);
-                            Intent intent = new Intent(FundIntroActivity.this, ProjectInfo.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("project", project);
-                            intent.putExtras(bundle);
-                            startAnimActivity(intent);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        getProject(response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -241,6 +268,20 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         });
 
         CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void getProject(JSONObject response) {
+        try {
+            String result = response.getJSONObject("result").toString();
+            Project project = com.alibaba.fastjson.JSONObject.parseObject(result, Project.class);
+            Intent intent = new Intent(FundIntroActivity.this, ProjectInfo.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("project", project);
+            intent.putExtras(bundle);
+            startAnimActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }

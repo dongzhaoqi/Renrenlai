@@ -18,6 +18,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -89,8 +90,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
         if (imagePath != null){
-            loader.displayImage(imagePath, viewHolder.mImageView, options,
-                    animateFirstListener);
+            Picasso.with(mContext).load(imagePath).into(viewHolder.mImageView);
+            //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
         }
     }
 

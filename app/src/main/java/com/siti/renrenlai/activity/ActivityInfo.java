@@ -12,11 +12,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -32,6 +34,7 @@ import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.dialog.CommentDialog;
+import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -60,19 +63,32 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ActivityInfo extends BaseActivity implements OnClickListener {
 
-    @Bind(R.id.activity_img) ImageView activity_img;
-    @Bind(R.id.activity_name) TextView tv_avtivity_name;
-    @Bind(R.id.layout_fund) RelativeLayout layoutFund;
-    @Bind(R.id.layout_contact) RelativeLayout layout_contact;
-    @Bind(R.id.tv_activity_address) TextView tv_activity_address;
-    @Bind(R.id.tv_activity_time) TextView tv_activity_time;
-    @Bind(R.id.expand_text_view) ExpandableTextView expTv1;
-    @Bind(R.id.ll_image) LinearLayout ll_image;
-    @Bind(R.id.list_comment) RecyclerView list_comment;
-    @Bind(R.id.detail_scrollgridview) NoScrollGridView noScrollGridView;
-    @Bind(R.id.btn_comment) Button btnComment;
-    @Bind(R.id.btn_favor) Button btnFavor;
-    @Bind(R.id.btn_publish) Button btnPublish;
+    @Bind(R.id.activity_img)
+    ImageView activity_img;
+    @Bind(R.id.activity_name)
+    TextView tv_avtivity_name;
+    @Bind(R.id.layout_fund)
+    RelativeLayout layoutFund;
+    @Bind(R.id.layout_contact)
+    RelativeLayout layout_contact;
+    @Bind(R.id.tv_activity_address)
+    TextView tv_activity_address;
+    @Bind(R.id.tv_activity_time)
+    TextView tv_activity_time;
+    @Bind(R.id.expand_text_view)
+    ExpandableTextView expTv1;
+    @Bind(R.id.ll_image)
+    LinearLayout ll_image;
+    @Bind(R.id.list_comment)
+    RecyclerView list_comment;
+    @Bind(R.id.detail_scrollgridview)
+    NoScrollGridView noScrollGridView;
+    @Bind(R.id.btn_comment)
+    Button btnComment;
+    @Bind(R.id.btn_favor)
+    Button btnFavor;
+    @Bind(R.id.btn_publish)
+    Button btnPublish;
 
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
@@ -100,7 +116,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
-        if(activity != null){
+        if (activity != null) {
             activity_id = activity.getActivityId();
             activity_title = activity.getActivityName();
             contact_tel = activity.getactivityReleaserTel();
@@ -120,20 +136,32 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             }
         });
 
-        for(int i = 0; i < imageList.size(); i++){
+        for (int i = 0; i < imageList.size(); i++) {
             String path = imageList.get(i).getActivityImagePath();
             System.out.println("info path:" + path);
             imagePath.add(path);
         }
-        if(imagePath != null && imagePath.size() > 0){
+        if (imagePath != null && imagePath.size() > 0) {
             Picasso.with(this).load(imagePath.get(0)).into(activity_img);
+        } else {
+            Picasso.with(this).load(R.drawable.no_img).into(activity_img);
         }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new ImageAdapter(this, imagePath);
+        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Toast.makeText(ActivityInfo.this, "i:" + imagePath.get(i), Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(ActivityInfo.this, GalleryActivity.class);
+                intent.putStringArrayListExtra("imagePath", imagePath);
+                intent.putExtra("ID", i);
+                startActivity(intent);
+
+            }
+        });
         noScrollGridView.setAdapter(picAdapter);
 
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
-        for(int i = 0; i < lovedUsersList.size(); i++){
+        for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
@@ -204,10 +232,11 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     /**
      * 点击某个人的评论，弹出评论框，进行回复
+     *
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(List<CommentContents> commentsList, int position){
+    public void showCommentDialog(List<CommentContents> commentsList, int position) {
         CommentDialog dialog = new CommentDialog(this, position);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -224,7 +253,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     /**
      * 点击评论按钮，弹出评论框
      */
-    public void showCommentDialog(){
+    public void showCommentDialog() {
         CommentDialog dialog = new CommentDialog(this);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -240,13 +269,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     /**
      * 喜欢该活动
      */
-    public void like(){
+    public void like() {
         addImage();
 
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String api = null;
         try {
-            api = "/loveThisActivityForApp?userName="+URLEncoder.encode(userName, "utf-8")+"&activityId="+ activity_id;
+            api = "/loveThisActivityForApp?userName=" + URLEncoder.encode(userName, "utf-8") + "&activityId=" + activity_id;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -273,19 +302,19 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     /**
      * 点赞,将头像添加到最前面
      */
-    public void addImage(){
+    public void addImage() {
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(0, 0, 15, 0);
         ll_image.addView(image, 0, params);
-        btnFavor.setText("喜欢(" + (lovedUsersList.size()+1) + ")");
+        btnFavor.setText("喜欢(" + (lovedUsersList.size() + 1) + ")");
     }
 
     /**
      * 取消点赞,去除头像
      */
-    public void removeImage(){
+    public void removeImage() {
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

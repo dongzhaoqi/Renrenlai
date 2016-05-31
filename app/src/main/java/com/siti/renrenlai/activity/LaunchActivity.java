@@ -135,6 +135,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    /**
+     * 弹出时间选择对话框
+     * 开始时间、结束时间、报名截止
+     * @param v
+     */
     public void showTimeDialog(View v) {
 
         final int id = v.getId();
@@ -164,6 +169,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
+    /**
+     * 从相册选择或拍照弹出框
+     */
     public void showPicDialog() {
         BottomDialog dialog = new BottomDialog(LaunchActivity.this);
         dialog.title(R.string.str_select);
@@ -190,6 +198,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         dialog.show();
     }
 
+    /**
+     * 调用拍照
+     */
     private void goCamera() {
         File imgFolder = new File(Environment.getExternalStorageDirectory(), "RenrenLai");
         imgFolder.mkdirs();
@@ -288,6 +299,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    /**
+     * 发布活动
+     */
     public void publishActivity() {
         showProcessDialog("发布中");
         Log.d(TAG, "publishActivity() returned: ");
@@ -348,6 +362,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
+    /**
+     * 上传图片
+     * @param activity_id   活动id(可关联多张照片)
+     * @param bitmap        上传的bitmap图片
+     * @param imageName     图片名字
+     */
     private void upload(String activity_id, Bitmap bitmap, String imageName) {
         String api = "/myupload";
         String url = ConstantValue.urlRoot + api;
@@ -407,6 +427,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         return activity;
     }
 
+    /**
+     * 选择活动活动类型处
+     */
     public void unselectedAll() {
         ll_interest.setSelected(false);
         ll_help.setSelected(false);
