@@ -28,6 +28,7 @@ import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.bean.ProjectImage;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
+import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
@@ -143,7 +144,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             for (int i = 0; i < imageList.size(); i++) {
                 String path = imageList.get(i).getProjectImagePath();
                 System.out.println("ProjectInfo path:" + path);
-                imagePath.add(path);
+                imagePath.add(ConstantValue.urlRoot + path);
             }
         }
         if (imagePath != null && imagePath.size() > 0) {

@@ -280,7 +280,6 @@
                     android:layout_width="match_parent"
                     android:minHeight="@dimen/height_96"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/layout_bottom_border"
                     android:padding="@dimen/padding_10">
 
                     <TextView
@@ -312,7 +311,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/bottom_height"
+            android:layout_height="@dimen/height_56"
             android:layout_gravity="bottom"
             android:orientation="horizontal">
 

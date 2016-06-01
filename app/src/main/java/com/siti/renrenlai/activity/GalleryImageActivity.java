@@ -3,7 +3,6 @@ package com.siti.renrenlai.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -68,15 +67,24 @@ public class GalleryImageActivity extends Activity {
 
         pager.setOnPageChangeListener(pageChangeListener);
 
-        for (int i = 0; i < imageSize; i++) {
+        /*for (int i = 0; i < imageSize; i++) {
             initListViews(BitmapUtils.loadBitmap(imagePath.get(i)));
-        }
+        }*/
+        runOnUiThread(new Runnable() {
+            public void run() {
+                for (int i = 0; i < imageSize; i++) {
+                    initListViews(BitmapUtils.loadBitmap(imagePath.get(i)));
+                }
+            }
+        });
+
         adapter = new MyPageAdapter(listViews, this);
         pager.setAdapter(adapter);
         pager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.padding_10));
         int id = intent.getIntExtra("ID", 0);
         pager.setCurrentItem(id);
     }
+
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 

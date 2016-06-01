@@ -5,8 +5,8 @@ import android.app.Dialog;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
@@ -16,15 +16,11 @@ import com.siti.renrenlai.util.SharedPreferencesUtil;
 
 import java.util.List;
 
-import butterknife.Bind;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
 
 public class CommentDialog extends Dialog implements OnClickListener{
 
     private EditText etContent;
-    private Button btnSend;
+    private ImageView btnSend;
 
     private Activity mActivity;
     private Dialog dialog;
@@ -58,7 +54,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.dialog_comment);
         etContent = (EditText) findViewById(R.id.et_content);
-        btnSend = (Button) findViewById(R.id.btn_send);
+        btnSend = (ImageView) findViewById(R.id.iv_send);
         btnSend.setOnClickListener(this);
         if(commentsList != null) {
             CommentContents comment = commentsList.get(position);

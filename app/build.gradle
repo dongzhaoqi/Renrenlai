@@ -65,4 +65,6 @@ dependencies {
     compile 'com.alibaba:fastjson:1.1.46.android'
     compile 'se.emilsjolander:stickylistheaders:2.7.0'
     compile 'cc.cloudist.acplibrary:library:1.2.1'
+    compile files('libs/MobCommons-2016.0418.1137.jar')
+    compile files('libs/MobTools-2016.0418.1137.jar')
 }
