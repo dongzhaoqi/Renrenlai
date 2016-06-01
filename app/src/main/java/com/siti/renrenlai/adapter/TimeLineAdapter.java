@@ -34,9 +34,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     public TimeLineAdapter(Context context, List<TimeLineModel> feedList) {
         this.mContext = context;
-        mFeedList = feedList;
+        this.mFeedList = feedList;
     }
-
 
     @Override
     public int getItemViewType(int position) {
@@ -54,10 +53,12 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
         TimeLineModel timeLineModel = mFeedList.get(position);
         holder.itemView.setTag(position);
-        holder.tvTime.setText(timeLineModel.getActivityStartTime().substring(0, 10));
+        if(timeLineModel.getDateTimeForActiv() != null){
+            holder.tvTime.setText(timeLineModel.getDateTimeForActiv().substring(0, 10));
+        }
         holder.tvTitle.setText(timeLineModel.getActivityName());
         if (timeLineModel.getActivityImageList() != null && timeLineModel.getActivityImageList().size() > 0){
-            System.out.println("TimeLine:" + ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath());
+            //System.out.println("TimeLine:" + ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath());
             Picasso.with(mContext).load(ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath()).into(holder.tvPic);
         }
         activityStatus = timeLineModel.getActivityStatus();

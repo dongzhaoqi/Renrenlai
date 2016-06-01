@@ -181,7 +181,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 if (dy > 0) {
                     layoutDreamGo.setVisibility(View.VISIBLE);
                 } else {
-                    layoutDreamGo.setVisibility(View.INVISIBLE);
+                    layoutDreamGo.setVisibility(View.GONE);
                 }
             }
         });

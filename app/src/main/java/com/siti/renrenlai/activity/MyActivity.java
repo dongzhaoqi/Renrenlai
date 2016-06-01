@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +25,7 @@ import java.util.Locale;
 public class MyActivity extends BaseActivity implements OnClickListener{
 
     private int pos;
+    private Fragment[] mFragments;
     private static FavoriteFragment mFavoriteFragment;
     private EnrollFragment mEnrollFragment;
     private LaunchFragment mLaunchFragment;
@@ -37,7 +39,6 @@ public class MyActivity extends BaseActivity implements OnClickListener{
 
         initTab();
         initViews();
-
     }
 
     private void initTab(){
@@ -62,8 +63,9 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         mFavoriteFragment = new FavoriteFragment();
         mEnrollFragment = new EnrollFragment();
         mLaunchFragment = new LaunchFragment();
+        mFragments = new Fragment[]{mFavoriteFragment, mEnrollFragment, mLaunchFragment};
 
-        pos = getIntent().getIntExtra("pos",0);
+        pos = getIntent().getIntExtra("pos", -1);
         System.out.println("pos:" + pos);
 
         final ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
@@ -97,7 +99,9 @@ public class MyActivity extends BaseActivity implements OnClickListener{
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
 
-            switch (position) {
+            return mFragments[position];
+
+            /*switch (position) {
                 case 0:
                     return mFavoriteFragment;
                 case 1:
@@ -106,7 +110,7 @@ public class MyActivity extends BaseActivity implements OnClickListener{
                     return mLaunchFragment;
                 default:
                     return null;
-            }
+            }*/
 
         }
 

@@ -9,7 +9,6 @@ import android.os.Environment;
 import android.util.Log;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * 缓存工具类
@@ -41,7 +40,7 @@ public class ConfigCacheUtil {
             return null;
         }
         String result = null;
-        String path = ConstantValue.ENVIROMENT_DIR_CACHE + MD5Utils.md5Encrypt(url) + ".txt";
+        String path = ConstantValue.ENVIRONMENT_DIR_CACHE + MD5Utils.md5Encrypt(url) + ".txt";
         File file = new File(path);
         if (file.exists() && file.isFile()) {
             long expiredTime = System.currentTimeMillis() - file.lastModified();
@@ -87,14 +86,14 @@ public class ConfigCacheUtil {
      * 设置缓存 * @param data * @param url
      */
     public static void setUrlCache(String data, String url) {
-        if (ConstantValue.ENVIROMENT_DIR_CACHE == null) {
+        if (ConstantValue.ENVIRONMENT_DIR_CACHE == null) {
             return;
         }
-        File dir = new File(ConstantValue.ENVIROMENT_DIR_CACHE);
+        File dir = new File(ConstantValue.ENVIRONMENT_DIR_CACHE);
         if (!dir.exists() && Environment.getExternalStorageState().equals(android.os.Environment.MEDIA_MOUNTED)) {
             dir.mkdirs();
         }
-        File file = new File(ConstantValue.ENVIROMENT_DIR_CACHE + MD5Utils.md5Encrypt(url) + ".txt");
+        File file = new File(ConstantValue.ENVIRONMENT_DIR_CACHE + MD5Utils.md5Encrypt(url) + ".txt");
         /*try {
 // 创建缓存数据到磁盘，就是创建文件
             //FileUtils.writeTextFile(file, data);

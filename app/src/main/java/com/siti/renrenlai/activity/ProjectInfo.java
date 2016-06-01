@@ -1,6 +1,8 @@
 package com.siti.renrenlai.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -9,6 +11,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -115,7 +118,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
             //image.setBorderWidth(2);
-            System.out.println("imagePath:" + imagePath);
+            System.out.println("ProjectInfo imagePath:" + imagePath);
             Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(0, 0, 15, 0);
@@ -127,7 +130,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                     Intent intent = new Intent(ProjectInfo.this, FavoriteActivity.class);
                     intent.putExtra("likeList", (Serializable) lovedUsersList);
                     startActivity(intent);
-
                 }
             });
         }
@@ -136,10 +138,31 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         tv_avtivity_name.setText(projectName);
         tv_activity_address.setText(projectAddress);
         tv_activity_time.setText(projectTime);
-        if(imageList != null && imageList.size() > 0){
-            System.out.println("aaaa:" + imageList.get(0).getProjectImagePath());
-            Picasso.with(this).load(imageList.get(0).getProjectImagePath()).into(activity_img);
+
+        if (imageList != null && imageList.size() > 0) {
+            for (int i = 0; i < imageList.size(); i++) {
+                String path = imageList.get(i).getProjectImagePath();
+                System.out.println("ProjectInfo path:" + path);
+                imagePath.add(path);
+            }
         }
+        if (imagePath != null && imagePath.size() > 0) {
+            Picasso.with(this).load(imagePath.get(0)).into(activity_img);
+        } else {
+            Picasso.with(this).load(R.drawable.no_img).into(activity_img);
+        }
+
+        noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        picAdapter = new ImageAdapter(this, imagePath);
+        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(ProjectInfo.this, GalleryImageActivity.class);
+                intent.putStringArrayListExtra("imagePath", imagePath);
+                intent.putExtra("ID", i);
+                startActivity(intent);
+            }
+        });
+        noScrollGridView.setAdapter(picAdapter);
 
         mAdapter = new CommentAdapter(this, commentsList);
         mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {

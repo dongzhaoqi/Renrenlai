@@ -83,7 +83,7 @@ public class FavoriteFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                System.out.println(TAG+"data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -138,7 +138,7 @@ public class FavoriteFragment extends BaseFragment {
                 times = 0;
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"refresh", "refreshTime:" + refreshTime);
                         refreshData();
                         favorite_recyclerView.refreshComplete();
                     }
@@ -150,7 +150,7 @@ public class FavoriteFragment extends BaseFragment {
                 Log.d("refresh", "refreshTime:" + refreshTime);
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"load", "refreshTime:" + refreshTime);
                         loadData();
                         favorite_recyclerView.loadMoreComplete();
                     }
@@ -184,7 +184,9 @@ public class FavoriteFragment extends BaseFragment {
 
     private void getData(JSONObject response) {
         JSONArray result = response.optJSONArray("result");
-        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        if(result != null){
+            mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        }
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
         favorite_recyclerView.setAdapter(mTimeLineAdapter);
     }
@@ -197,10 +199,5 @@ public class FavoriteFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called with: " + TAG);
-        cache();
-    }
+
 }

@@ -1,11 +1,14 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ImageAdapter;
@@ -88,16 +91,26 @@ public class MyLaunchActivity extends BaseActivity {
         tvLikeNumber.setText(str_activity_loved_number);
 
         for(int i = 0; i < imageList.size(); i++){
-            String path = imageList.get(i).getActivityImagePath();
+            String path = ConstantValue.urlRoot + imageList.get(i).getActivityImagePath();
             System.out.println("info path:" + path);
             imagePath.add(path);
         }
         if(imagePath != null && imagePath.size() > 0){
-            Picasso.with(this).load(ConstantValue.urlRoot + imagePath.get(0)).into(activityImg);
+            Picasso.with(this).load(imagePath.get(0)).into(activityImg);
         }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new ImageAdapter(this, imagePath);
+        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(MyLaunchActivity.this, GalleryImageActivity.class);
+                intent.putStringArrayListExtra("imagePath", imagePath);
+                intent.putExtra("ID", i);
+                startActivity(intent);
+
+            }
+        });
         noScrollGridView.setAdapter(picAdapter);
+
     }
 
     @Override

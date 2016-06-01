@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -43,6 +44,7 @@ import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
@@ -87,11 +89,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     Button btnComment;
     @Bind(R.id.btn_favor)
     Button btnFavor;
-    @Bind(R.id.btn_publish)
-    Button btnPublish;
+    @Bind(R.id.btn_participate)
+    Button btnParticipate;
 
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
+    String userName;
+    String url;             //接口地址
     int activity_id, userId;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
@@ -114,6 +118,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     private void initViews() {
         imagePath = new ArrayList<>();
         userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         if (activity != null) {
@@ -128,7 +133,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             commentsList = activity.getComments();
         }
 
-
         initTopBarForBoth("活动详情", R.drawable.share, new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
@@ -136,10 +140,12 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             }
         });
 
-        for (int i = 0; i < imageList.size(); i++) {
-            String path = imageList.get(i).getActivityImagePath();
-            System.out.println("info path:" + path);
-            imagePath.add(path);
+        if (imageList != null && imageList.size() > 0) {
+            for (int i = 0; i < imageList.size(); i++) {
+                String path = imageList.get(i).getActivityImagePath();
+                System.out.println("ActivityInfo path:" + path);
+                imagePath.add(path);
+            }
         }
         if (imagePath != null && imagePath.size() > 0) {
             Picasso.with(this).load(imagePath.get(0)).into(activity_img);
@@ -150,12 +156,10 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         picAdapter = new ImageAdapter(this, imagePath);
         noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Toast.makeText(ActivityInfo.this, "i:" + imagePath.get(i), Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(ActivityInfo.this, GalleryActivity.class);
+                Intent intent = new Intent(ActivityInfo.this, GalleryImageActivity.class);
                 intent.putStringArrayListExtra("imagePath", imagePath);
                 intent.putExtra("ID", i);
                 startActivity(intent);
-
             }
         });
         noScrollGridView.setAdapter(picAdapter);
@@ -203,7 +207,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         list_comment.setAdapter(mAdapter);
     }
 
-    @OnClick({R.id.layout_fund, R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
+    @OnClick({R.id.layout_fund, R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_participate})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_fund:
@@ -213,7 +217,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
-                showCommentDialog();
+                showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
                 if (!isFavorPressed) {
@@ -225,9 +229,45 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 }
                 isFavorPressed = !isFavorPressed;
                 break;
-            case R.id.btn_publish:
+            case R.id.btn_participate:
+                participate(activity_id);
                 break;
         }
+    }
+
+    /**
+     * 报名活动
+     * @param activity_id   活动的id
+     */
+    private void participate(int activity_id) {
+        String api = "/participateActivity";
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("userName:" + userName + " activityId:" + activity_id);
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("activityId", activity_id);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        url = ConstantValue.urlRoot + api;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("活动报名response", response.toString());
+                        showToast("报名成功!");
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("活动报名Error: ","error:" + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        CustomApplication.getInstance().addToRequestQueue(req);
+
     }
 
     /**
@@ -253,8 +293,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     /**
      * 点击评论按钮，弹出评论框
      */
-    public void showCommentDialog() {
-        CommentDialog dialog = new CommentDialog(this);
+    public void showCommentDialog(CommentAdapter mAdapter) {
+        CommentDialog dialog = new CommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -272,14 +312,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     public void like() {
         addImage();
 
-        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String api = null;
         try {
             api = "/loveThisActivityForApp?userName=" + URLEncoder.encode(userName, "utf-8") + "&activityId=" + activity_id;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = ConstantValue.urlRoot + api;
+        url = ConstantValue.urlRoot + api;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {

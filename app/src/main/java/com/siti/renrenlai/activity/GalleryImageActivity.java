@@ -1,10 +1,9 @@
 package com.siti.renrenlai.activity;
 
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Color;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
@@ -15,81 +14,75 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.adapter.HSVAdapter;
-import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.adapter.MyPageAdapter;
-import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.BitmapUtils;
 import com.siti.renrenlai.view.ViewPagerFixed;
 import com.siti.renrenlai.view.ZoomableImageView;
 
 import java.util.ArrayList;
-import java.util.List;
+
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by EasyShare005 on 2015/7/1.
  */
 public class GalleryImageActivity extends Activity {
 
+    @Bind(R.id.gallery_back)
+    Button back_bt;
+    @Bind(R.id.tv_pos)
+    TextView positionTextView;      //顶部显示预览图片位置的textview
+    @Bind(R.id.gallery_del)
+    Button gallery_del;
+    @Bind(R.id.bottom_layout)
+    RelativeLayout rlBottom;
+    @Bind(R.id.gallery01)
+    ViewPagerFixed pager;
+
     private Intent intent;
-    // 返回按钮
-    private Button back_bt;
-    // 发送按钮
-    private Button send_bt;
-    //删除按钮
-    private Button del_bt;
-    //顶部显示预览图片位置的textview
-    private TextView positionTextView;
-    //获取前一个activity传过来的position
-    private int position;
     //当前的位置
-    private int location = 0;
+    int location = 0;
+    int imageSize;
 
-    private ArrayList<View> listViews = null;
-    private ViewPagerFixed pager;
-    private HSVAdapter adapter;
-
-    public ArrayList<String> imagePath = new ArrayList<>();
-
-    private Context mContext;
-
-
-    private RelativeLayout rlBottom;
+    ArrayList<View> listViews = null;
+    ArrayList<String> imagePath = new ArrayList<>();
+    MyPageAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gallery);
+        ButterKnife.bind(this);
 
-        mContext = this;
-        back_bt = (Button) findViewById(R.id.gallery_back);
-        send_bt = (Button) findViewById(R.id.send_button);
-        del_bt = (Button)findViewById(R.id.gallery_del);
-        rlBottom = (RelativeLayout) findViewById(R.id.bottom_layout);
-        back_bt.setOnClickListener(new BackListener());
         intent = getIntent();
-        Bundle bundle = intent.getExtras();
         location = intent.getIntExtra("ID", 0);
         imagePath = intent.getStringArrayListExtra("imagePath");
-        del_bt.setVisibility(View.GONE);
+        imageSize = imagePath.size();
+
+        positionTextView.setText((location + 1) + "/" + imageSize);
+
         rlBottom.setVisibility(View.GONE);
+        gallery_del.setVisibility(View.GONE);
 
-        // 为发送按钮设置文字
-
-        pager = (ViewPagerFixed) findViewById(R.id.gallery01);
         pager.setOnPageChangeListener(pageChangeListener);
 
-        adapter = new HSVAdapter(this, imagePath);
+        for (int i = 0; i < imageSize; i++) {
+            initListViews(BitmapUtils.loadBitmap(imagePath.get(i)));
+        }
+        adapter = new MyPageAdapter(listViews, this);
         pager.setAdapter(adapter);
         pager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.padding_10));
         int id = intent.getIntExtra("ID", 0);
         pager.setCurrentItem(id);
-
     }
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 
         public void onPageSelected(int arg0) {
             location = arg0;
+            positionTextView.setText((location + 1) + "/" + imageSize);
         }
 
         public void onPageScrolled(int arg0, float arg1, int arg2) {
@@ -101,13 +94,9 @@ public class GalleryImageActivity extends Activity {
         }
     };
 
-
-    // 返回按钮添加的监听器
-    private class BackListener implements View.OnClickListener {
-
-        public void onClick(View v) {
-            finish();
-        }
+    @OnClick(R.id.gallery_back)
+    public void onClick() {
+        finish();
     }
 
     private void initListViews(Bitmap bm) {

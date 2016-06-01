@@ -10,6 +10,7 @@ public class TimeLineModel implements Serializable{
     private int activityId;
     private int activityStatus;
     private String activityName;
+    private String dateTimeForActiv;
     private String activityStartTime;
     private String activityEndTime;
     private String lovedPersonNum;
@@ -41,6 +42,14 @@ public class TimeLineModel implements Serializable{
 
     public String getActivityStartTime() {
         return activityStartTime;
+    }
+
+    public String getDateTimeForActiv() {
+        return dateTimeForActiv;
+    }
+
+    public void setDateTimeForActiv(String dateTimeForActiv) {
+        this.dateTimeForActiv = dateTimeForActiv;
     }
 
     public void setActivityStartTime(String activityStartTime) {

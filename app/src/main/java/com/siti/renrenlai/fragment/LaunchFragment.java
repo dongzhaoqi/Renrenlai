@@ -84,7 +84,7 @@ public class LaunchFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                System.out.println(TAG+"data:"+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -137,7 +137,7 @@ public class LaunchFragment extends BaseFragment {
                 times = 0;
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"refresh", "refreshTime:" + refreshTime);
                         refreshData();
                         launch_recyclerView.refreshComplete();
                     }
@@ -149,7 +149,7 @@ public class LaunchFragment extends BaseFragment {
                 Log.d("refresh", "refreshTime:" + refreshTime);
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"load", "refreshTime:" + refreshTime);
                         loadData();
                         launch_recyclerView.loadMoreComplete();
                     }
@@ -183,7 +183,9 @@ public class LaunchFragment extends BaseFragment {
 
     public void getData(JSONObject response){
         JSONArray result = response.optJSONArray("result");
-        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        if(result != null){
+            mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        }
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
         launch_recyclerView.setAdapter(mTimeLineAdapter);
         mTimeLineAdapter.notifyDataSetChanged();
@@ -197,10 +199,5 @@ public class LaunchFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called with: " + TAG);
-        cache();
-    }
+
 }

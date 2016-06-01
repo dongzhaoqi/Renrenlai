@@ -84,7 +84,7 @@ public class EnrollFragment extends BaseFragment {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                System.out.println(TAG+"data: "+jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -104,9 +104,6 @@ public class EnrollFragment extends BaseFragment {
         enroll_recyclerView = (XRecyclerView) findViewById(R.id.enroll_recyclerView);
         linearLayoutManager = new LinearLayoutManager(getActivity());
         enroll_recyclerView.setLayoutManager(linearLayoutManager);
-
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
-        enroll_recyclerView.setAdapter(mTimeLineAdapter);
 
         enroll_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         enroll_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
@@ -139,7 +136,7 @@ public class EnrollFragment extends BaseFragment {
                 times = 0;
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"refresh", "refreshTime:" + refreshTime);
                         refreshData();
                         enroll_recyclerView.refreshComplete();
                     }
@@ -150,7 +147,7 @@ public class EnrollFragment extends BaseFragment {
             public void onLoadMore() {
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        Log.d("refresh", "refreshTime:" + refreshTime);
+                        Log.d(TAG+"load", "refreshTime:" + refreshTime);
                         loadData();
                         enroll_recyclerView.loadMoreComplete();
                     }
@@ -165,14 +162,15 @@ public class EnrollFragment extends BaseFragment {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("response", "报名 response:" + response.toString());
+                        Log.d(TAG+"response", "报名 response:" + response.toString());
                         showToast("获取报名成功!");
+                        getData(response);
                         dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Error: ", error.getMessage());
+                Log.e(TAG+"Error: ", error.getMessage());
                 showToast("出错了!");
                 dismissProcessDialog();
             }
@@ -182,8 +180,12 @@ public class EnrollFragment extends BaseFragment {
 
     private void getData(JSONObject response){
         JSONArray result = response.optJSONArray("result");
-        mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        if(result != null){
+            mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+        }
+        System.out.println("mDataList:" + mDataList.size());
         mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        mTimeLineAdapter.notifyDataSetChanged();
         enroll_recyclerView.setAdapter(mTimeLineAdapter);
     }
 
@@ -195,10 +197,4 @@ public class EnrollFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        Log.d(TAG, "onResume() called with: " + TAG);
-        cache();
-    }
 }

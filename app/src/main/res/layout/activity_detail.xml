@@ -341,7 +341,7 @@
                 android:textSize="@dimen/text_size_15" />
 
             <Button
-                android:id="@+id/btn_publish"
+                android:id="@+id/btn_participate"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="2"

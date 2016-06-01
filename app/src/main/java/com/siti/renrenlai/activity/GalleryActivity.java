@@ -87,10 +87,7 @@ public class GalleryActivity extends Activity {
         pager.setPageMargin(getResources().getDimensionPixelOffset(R.dimen.padding_10));
         int id = intent.getIntExtra("ID", 0);
         pager.setCurrentItem(id);
-
-
     }
-
 
     private ViewPager.OnPageChangeListener pageChangeListener = new ViewPager.OnPageChangeListener() {
 

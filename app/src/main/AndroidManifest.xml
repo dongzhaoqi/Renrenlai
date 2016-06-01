@@ -70,6 +70,7 @@
         <activity android:name=".activity.MyLaunchActivity" />
         <activity android:name=".activity.EditNameActivity" />
         <activity android:name=".activity.GalleryActivity" />
+        <activity android:name=".activity.GalleryImageActivity" />
         <activity android:name=".activity.AlbumActivity" />
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.PreviewActivity" />

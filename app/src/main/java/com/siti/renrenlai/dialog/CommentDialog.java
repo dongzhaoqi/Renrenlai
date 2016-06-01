@@ -10,6 +10,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
@@ -28,11 +29,18 @@ public class CommentDialog extends Dialog implements OnClickListener{
     private Activity mActivity;
     private Dialog dialog;
     private List<CommentContents> commentsList;
+    private CommentAdapter mAdapter;
     private int position;
 
     public CommentDialog(Activity activity, int theme) {
         super(activity, theme);
         this.mActivity = activity;
+    }
+
+    public CommentDialog(Activity activity, CommentAdapter mAdapter) {
+        super(activity);
+        this.mActivity = activity;
+        this.mAdapter = mAdapter;
     }
 
     public CommentDialog(Activity activity) {
@@ -68,7 +76,9 @@ public class CommentDialog extends Dialog implements OnClickListener{
                 SharedPreferencesUtil.getSharedPreference(
                         mActivity, "login"), "userName");
         String contents = etContent.getText().toString();
+        System.out.println("userName:" + userName + " contents:" + contents);
         CommentContents comment = new CommentContents(userName, contents);
         //commentsList.add(0, comment);
+        mAdapter.notifyDataSetChanged();
     }
 }
