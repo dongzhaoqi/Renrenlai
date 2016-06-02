@@ -253,7 +253,6 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     private void initData() {
         showProcessDialog();
-
         Log.d("FindFragment", "url:" + url);
 
         JsonObjectRequest request = new JsonObjectRequest(url, null,
