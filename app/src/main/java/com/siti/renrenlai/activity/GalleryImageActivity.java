@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v4.view.ViewPager;
 import android.view.KeyEvent;
 import android.view.View;
@@ -54,7 +55,10 @@ public class GalleryImageActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gallery);
         ButterKnife.bind(this);
-
+        if (android.os.Build.VERSION.SDK_INT > 9) {
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+        }
         intent = getIntent();
         location = intent.getIntExtra("ID", 0);
         imagePath = intent.getStringArrayListExtra("imagePath");

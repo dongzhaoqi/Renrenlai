@@ -98,8 +98,11 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-
-            return mFragments[position];
+            Fragment fragment = mFragments[position];
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            fragment.setArguments(bundle);
+            return fragment;
 
             /*switch (position) {
                 case 0:

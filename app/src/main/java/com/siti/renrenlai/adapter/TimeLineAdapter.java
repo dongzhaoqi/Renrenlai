@@ -30,7 +30,14 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     RelativeLayout layout_activity_item;
     private static Context mContext;
     private static List<TimeLineModel> mFeedList;
+    static int position;
     int activityStatus;     //活动状态 1.报名中 2.审核通过3.报名截止4.活动结束
+
+    public TimeLineAdapter(Context context, List<TimeLineModel> feedList, int position) {
+        this.mContext = context;
+        this.mFeedList = feedList;
+        this.position = position;
+    }
 
     public TimeLineAdapter(Context context, List<TimeLineModel> feedList) {
         this.mContext = context;
@@ -102,6 +109,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     Bundle bundle = new Bundle();
                     TimeLineModel model = mFeedList.get(Integer.parseInt(v.getTag().toString()));
                     bundle.putSerializable("model", model);
+                    bundle.putInt("position", position);
                     mContext.startActivity(new Intent(mContext, MyLaunchActivity.class).putExtras(bundle));
                 }
             });

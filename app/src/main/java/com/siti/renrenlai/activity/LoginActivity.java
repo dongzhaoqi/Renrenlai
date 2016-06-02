@@ -32,7 +32,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
     private EditText et_email;
     private EditText et_password;
     private String str_email,str_password;
-
+    private User user;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,13 +88,6 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
             e.printStackTrace();
         }
         String url = ConstantValue.urlRoot + api;
-        /*JSONObject json = new JSONObject();
-        try {
-            json.put("userName", str_email);
-            json.put("password", str_password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }*/
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -119,21 +112,32 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         JSONObject result = arg0.optJSONObject("result");
         int code = arg0.optInt("errorCode");
         if (code == 0) {
-            User user = new User();
-            user.setUserId(result.optInt("userId"));
-            user.setUserName(result.optString("userName"));
+            user = com.alibaba.fastjson.JSONObject.parseObject(result.toString(), User.class);
             ((CustomApplication) getApplication()).setUser(user);
             startAnimActivity(MainActivity.class);
             finish();
             SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                    "userName", user.getUserName());
-            SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                    "userId", user.getUserId());
+                    "user", result.toString());
 
             showToast("登录成功");
         }else{
             showToast("登录失败,请检查用户名或密码");
         }
 
+    }
+
+    private void saveUser() {
+        /*SharedPreferencesUtil.writeObject(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "user", user);
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "userName", user.getUserName());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "userHeadPicImagePath", user.getUserHeadPicImagePath());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "sex", user.getSex());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "interetsAndHobbies", user.getInteretsAndHobbies());
+        SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "userId", user.getUserId());*/
     }
 }

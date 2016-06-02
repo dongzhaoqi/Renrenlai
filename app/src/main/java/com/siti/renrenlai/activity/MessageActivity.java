@@ -78,7 +78,7 @@ public class MessageActivity extends BaseActivity {
         for(int i = 0; i < str_message.length; i++){
             MessageChild child = new MessageChild();
             child.message = str_message[i];
-            child.name = str_name[i];
+            child.activity_name = str_name[i];
             item.items.add(child);
         }
         items.add(item);

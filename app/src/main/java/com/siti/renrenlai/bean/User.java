@@ -1,10 +1,14 @@
 package com.siti.renrenlai.bean;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 
 	private int userId;
 	private String userName;
 	private String userHeadPicImagePath;
+	private String sex;
+	private String interetsAndHobbies;
 
 	public int getUserId() {
 		return userId;
@@ -28,5 +32,21 @@ public class User {
 
 	public void setUserHeadPicImagePath(String userHeadPicImagePath) {
 		this.userHeadPicImagePath = userHeadPicImagePath;
+	}
+
+	public String getSex() {
+		return sex;
+	}
+
+	public void setSex(String sex) {
+		this.sex = sex;
+	}
+
+	public String getInteretsAndHobbies() {
+		return interetsAndHobbies;
+	}
+
+	public void setInteretsAndHobbies(String interetsAndHobbies) {
+		this.interetsAndHobbies = interetsAndHobbies;
 	}
 }

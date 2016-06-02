@@ -12,100 +12,109 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.RelativeLayout;
 
+import com.alibaba.fastjson.JSONObject;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 
+import java.lang.ref.WeakReference;
+
 
 public class SplashActivity extends BaseActivity {
 
-	private static final int GO_HOME = 100;
-	private static final int GO_LOGIN = 200;
-	private static final int WAITE = 300;
-	public static final String TAG = "SplashActivity";
-	private RelativeLayout relative;
-	private SharedPreferences preferences;
-	private Editor editor;
+    private static final int GO_HOME = 100;
+    private static final int GO_LOGIN = 200;
+    private static final int WAITE = 300;
+    public static final String TAG = "SplashActivity";
+    private RelativeLayout relative;
+    private static User user;
+    private MyHandler handler = new MyHandler(this);
+    static String userName;
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_splash);
 
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash);
+        relative = (RelativeLayout) findViewById(R.id.relative);
+        startAnimation(relative);
+        //SharedPreferencesUtil.writeString(getSharedPreferences("login", Context.MODE_PRIVATE),"userName","0");
 
-		relative = (RelativeLayout) findViewById(R.id.relative);
-		startAnimation(relative);
-		//SharedPreferencesUtil.writeString(getSharedPreferences("login", Context.MODE_PRIVATE),"userName","0");
+    }
 
-	}
+    private void startAnimation(RelativeLayout relative) {
+        AnimationSet set = new AnimationSet(false);
 
-	private void startAnimation(RelativeLayout relative) {
-		AnimationSet set = new AnimationSet(false);
+        AlphaAnimation alpha = new AlphaAnimation(0, 1);
+        alpha.setDuration(2000);
+        alpha.setFillAfter(true);
 
-		AlphaAnimation alpha = new AlphaAnimation(0, 1);
-		alpha.setDuration(2000);
-		alpha.setFillAfter(true);
+        set.addAnimation(alpha);
 
-		set.addAnimation(alpha);
+        set.setAnimationListener(new Animation.AnimationListener() {
 
-		set.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(Animation animation) {
+            }
 
-			@Override
-			public void onAnimationStart(Animation animation) {
-			}
+            @Override
+            public void onAnimationRepeat(Animation animation) {
 
-			@Override
-			public void onAnimationRepeat(Animation animation) {
+            }
 
-			}
+            @Override
+            public void onAnimationEnd(Animation animation) {
+                handler.sendEmptyMessageDelayed(1, 1000);
+            }
 
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				handler.sendEmptyMessageDelayed(1, 1000);
-			}
+        });
+        relative.startAnimation(set);
+    }
 
-		});
-		relative.startAnimation(set);
-	}
+    private static class MyHandler extends Handler {
+        private final WeakReference<SplashActivity> mActivity;
 
-	private Handler handler = new Handler(){
-		public void handleMessage(Message msg) {
+        public MyHandler(SplashActivity splashActivity) {
+            mActivity = new WeakReference<>(splashActivity);
+        }
 
-			switch (msg.what) {
-				case 1:
-					String userName = SharedPreferencesUtil.readString(
-							SharedPreferencesUtil.getSharedPreference(
-									getApplicationContext(), "login"), "userName");
+        @Override
+        public void handleMessage(Message msg) {
+            SplashActivity activity = mActivity.get();
+            if (activity != null) {
+                switch (msg.what) {
+                    case 1:
+                        String strUser = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(activity, "login"), "user");
+                        System.out.println("strUser======" + strUser);
+                        if(strUser.startsWith("{")) {
+                            user = JSONObject.parseObject(strUser, User.class);
+                            userName = user.getUserName();
+                            Log.e("GO_HOME", userName);
+                        }
 
-					Log.e("GO_HOME", userName);
-					if (!userName.equals("0")) {
+                        if (!strUser.equals("0")) {
+                            ((CustomApplication) activity.getApplication()).setUser(user);
+                            activity.startActivity(new Intent(activity, MainActivity.class));
+                            activity.finish();
+                        } else {
+                            activity.startActivity(new Intent(activity, LoginActivity.class));
+                            activity.finish();
+                        }
+                }
+            }
+        }
+    }
 
-						User user = new User();
-						user.setUserName(userName);
-						((CustomApplication)getApplication()).setUser(user);
-						startActivity(new Intent(SplashActivity.this,MainActivity.class));
-						finish();
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
 
-					} else {
-						startActivity(new Intent(SplashActivity.this,LoginActivity.class));
-						finish();
-					}
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
 
-			}
-		}
-	};
-
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-	
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-	
 
 }

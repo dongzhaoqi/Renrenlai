@@ -7,9 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_review_icon"
-        android:layout_width="@dimen/height_50"
-        android:layout_height="@dimen/height_50"
-        android:src="@android:drawable/ic_partial_secure" />
+        android:layout_width="@dimen/height_36"
+        android:layout_height="@dimen/height_36"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/arduino" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -24,6 +26,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_vertical"
+            android:textSize="@dimen/text_size_12"
             android:text="活动通知" />
 
         <TextView
@@ -31,6 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/margin_8"
+            android:textSize="@dimen/text_size_12"
             android:text="活动通知" />
 
         <TextView
@@ -38,6 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/margin_8"
+            android:textSize="@dimen/text_size_12"
             android:text="活动通知" />
     </LinearLayout>
 
@@ -48,8 +53,9 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/iv_activity_img"
+            android:layout_width="@dimen/height_50"
+            android:layout_height="@dimen/height_50"
             android:src="@drawable/diploma" />
 
         <TextView
@@ -57,6 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_8"
+            android:textSize="@dimen/text_size_12"
             android:text="环小区挑战赛" />
     </LinearLayout>
 </LinearLayout>

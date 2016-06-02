@@ -97,9 +97,10 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
             holder = (ChildHolder) convertView.getTag();
         }
 
-        holder.iv_system_icon.setImageResource(R.drawable.system_alarm);
+        //holder.iv_system_icon.setImageResource(R.drawable.system_alarm);
         holder.tv_system_message.setText(item.message);
-        holder.tv_activity_name.setText(item.name);
+        holder.tv_activity_name.setText(item.activity_name);
+        //holder.iv_activity_img
 
         return convertView;
     }
@@ -120,8 +121,10 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
     }
 
     public static class MessageChild {
+        public String icon_system;
         public String message;
-        public String name;
+        public String activity_image;
+        public String activity_name;
     }
 
     public static class GroupHolder {
@@ -131,8 +134,8 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class ChildHolder {
         ImageView iv_system_icon;
-        ImageView iv_activity_img;
         TextView tv_system_message;
+        ImageView iv_activity_img;
         TextView tv_activity_name;
 
     }

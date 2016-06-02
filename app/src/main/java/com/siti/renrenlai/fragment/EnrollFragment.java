@@ -46,6 +46,7 @@ public class EnrollFragment extends BaseFragment {
     private List<TimeLineModel> mDataList = new ArrayList<>();
     private int refreshTime = 0;
     private int times = 0;
+    int position;
     String api = null;
     String url = null;
     private static final String TAG = "EnrollFragment";
@@ -99,6 +100,7 @@ public class EnrollFragment extends BaseFragment {
     }
 
     private void initView() {
+        position = getArguments().getInt("position");
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
         enroll_recyclerView = (XRecyclerView) findViewById(R.id.enroll_recyclerView);
@@ -184,7 +186,7 @@ public class EnrollFragment extends BaseFragment {
             mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
         }
         System.out.println("mDataList:" + mDataList.size());
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
         mTimeLineAdapter.notifyDataSetChanged();
         enroll_recyclerView.setAdapter(mTimeLineAdapter);
     }

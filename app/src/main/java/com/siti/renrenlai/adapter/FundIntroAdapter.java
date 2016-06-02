@@ -20,6 +20,7 @@ import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListene
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.Project;
+import com.siti.renrenlai.util.ConstantValue;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -73,7 +74,7 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         Project project = projectList.get(position);
         commentList = project.getCommentList();
-        loader.displayImage(project.getProjectImagePath(), holder.ivProject, options,
+        loader.displayImage(ConstantValue.urlRoot + project.getProjectImagePath(), holder.ivProject, options,
                 animateFirstListener);
         //Picasso.with(mContext).load(project.getProjectImagePath()).into(holder.ivProject);
         holder.tvProjectName.setText(project.getProjectName());

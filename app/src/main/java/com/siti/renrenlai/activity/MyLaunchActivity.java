@@ -58,14 +58,26 @@ public class MyLaunchActivity extends BaseActivity {
     private List<ActivityImage> imageList;              //活动封面
     private ArrayList<String> imagePath;
     private ImageAdapter picAdapter;
+    private int position;
+    private String title;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_launch);
         ButterKnife.bind(this);
+
+        position = getIntent().getExtras().getInt("position");
+        if(position == 0){
+            title = "我喜欢的活动";
+        }else if(position == 1){
+            title = "我报名的活动";
+        }else if(position == 2){
+            title = "我发起的活动";
+        }
+
         model = (TimeLineModel) getIntent().getExtras().getSerializable("model");
-        initTopBarForBoth("我发起的活动", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
+        initTopBarForBoth(title, R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 CommonUtils.showShare(MyLaunchActivity.this, model.getActivityName());

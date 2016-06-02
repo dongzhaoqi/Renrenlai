@@ -60,7 +60,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         setContentView(R.layout.activity_fund_intro);
         ButterKnife.bind(this);
         ShareSDK.initSDK(this);
-        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+        userName = CustomApplication.getInstance().getUser().getUserName();
+        Log.d(TAG, "onCreate() called with: " + userName);
         initView();
 
         cache();

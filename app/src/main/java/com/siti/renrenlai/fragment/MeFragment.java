@@ -12,20 +12,26 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.alibaba.fastjson.JSONObject;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FeedbackActivity;
 import com.siti.renrenlai.activity.LoginActivity;
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
+import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.CommonUtils;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
+import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.onekeyshare.OnekeyShare;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Dong on 3/22/2016.
@@ -33,6 +39,7 @@ import cn.sharesdk.onekeyshare.OnekeyShare;
 public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     @Bind(R.id.layout_name) RelativeLayout layout_name;
+    @Bind(R.id.img_photo) CircleImageView img_photo;
     @Bind(R.id.layout_favorite) LinearLayout layout_favorite;
     @Bind(R.id.layout_enroll) LinearLayout layout_enroll;
     @Bind(R.id.layout_launch) LinearLayout layout_launch;
@@ -42,7 +49,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Bind(R.id.layout_logout) RelativeLayout layout_logout;
     @Bind(R.id.tv_userName) TextView tv_userName;
     private View view;
-    String userName;
+    private User user;
+    String userHeadImagePath, userName;
     boolean isSignedin = false;
 
     @Override
@@ -57,18 +65,24 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initTopBarForOnlyTitle("我的");
-        userName = SharedPreferencesUtil.readString(
-                SharedPreferencesUtil.getSharedPreference(
-                        getActivity(), "login"), "userName");
-        if(userName.equals("0")){
+        String strUser = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "user");
+        if(strUser.startsWith("{")){
+            user = JSONObject.parseObject(strUser, User.class);
+        }
+        System.out.println("strUser:"+strUser);
+        if(strUser.equals("0")){
             tv_userName.setText("请登录");
         }else{
+            userName = user.getUserName();
             tv_userName.setText(userName);
             isSignedin = true;
+            user = JSONObject.parseObject(strUser, User.class);
+            userHeadImagePath = ConstantValue.urlRoot + user.getUserHeadPicImagePath();
+            userName = user.getUserName();
+            Picasso.with(getActivity()).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         }
+
     }
-
-
 
     @Override
     public void onDestroy() {

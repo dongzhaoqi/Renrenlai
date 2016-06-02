@@ -45,6 +45,7 @@ public class LaunchFragment extends BaseFragment {
 
     private List<TimeLineModel> mDataList = new ArrayList<>();
     private int refreshTime = 0;
+    int position;
     private int times = 0;
     String api = null;
     String url = null;
@@ -99,7 +100,7 @@ public class LaunchFragment extends BaseFragment {
     }
 
     private void initView() {
-
+        position = getArguments().getInt("position");
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
 
         launch_recyclerView = (XRecyclerView) findViewById(R.id.launch_recyclerView);
@@ -186,7 +187,7 @@ public class LaunchFragment extends BaseFragment {
         if(result != null){
             mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
         }
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList);
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
         launch_recyclerView.setAdapter(mTimeLineAdapter);
         mTimeLineAdapter.notifyDataSetChanged();
     }

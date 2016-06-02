@@ -7,10 +7,11 @@
 
     <ImageView
         android:id="@+id/iv_user_icon"
-        android:layout_width="@dimen/height_50"
-        android:layout_height="@dimen/height_50"
-        android:layout_centerVertical="true"
-        android:src="@android:drawable/ic_partial_secure" />
+        android:layout_width="@dimen/height_36"
+        android:layout_height="@dimen/height_36"
+        android:layout_marginLeft="@dimen/margin_8"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/arduino" />
 
     <TextView
         android:id="@+id/tv_received_time"
@@ -19,6 +20,7 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:layout_marginLeft="@dimen/padding_10"
+        android:textSize="@dimen/text_size_12"
         android:text="活动通知" />
 
     <LinearLayout
@@ -38,6 +40,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/margin_8"
+            android:textSize="@dimen/text_size_12"
             android:text="环小区挑战赛" />
 
     </LinearLayout>

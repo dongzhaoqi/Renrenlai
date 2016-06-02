@@ -27,6 +27,7 @@ import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.orhanobut.dialogplus.DialogPlus;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.dialog.HobbyDialog;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -34,6 +35,7 @@ import com.siti.renrenlai.util.FileUtils;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
 
@@ -81,7 +83,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     private static final int TAKE_PICTURE = 1;
     private static int MODIFY_NAME = 2;         //修改昵称
     private static int MODIFY_INTRO = 3;        //修改个人简介
-    private String filepath;
+    private String userHeadImagePath;
+    private User user = CustomApplication.getInstance().getUser();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -89,19 +93,20 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         tv_hobby = (TextView) findViewById(R.id.tv_hobby);
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
-        nickName = SharedPreferencesUtil.readString(
-                SharedPreferencesUtil.getSharedPreference(
-                        getApplicationContext(), "login"), "userName");
+
+        userHeadImagePath = ConstantValue.urlRoot + user.getUserHeadPicImagePath();
+        Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
+        nickName = user.getUserName();
         tv_nickName.setText(nickName);
 
-        gender = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "gender");
+        gender = user.getSex();
         if("0".equals(gender)){
             tv_gender.setText("请选择");
         }else{
             tv_gender.setText(gender);
         }
 
-        hobby = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "hobby");
+        hobby = user.getInteretsAndHobbies();
         if("0".equals(hobby)){
             tv_hobby.setText("请选择");
         }else{
