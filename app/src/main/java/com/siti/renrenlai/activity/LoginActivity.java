@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
@@ -105,6 +106,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                 }
         });
 
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
@@ -118,7 +121,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
             finish();
             SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                     "user", result.toString());
-
+            SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                    "userName", user.getUserName());
             showToast("登录成功");
         }else{
             showToast("登录失败,请检查用户名或密码");
