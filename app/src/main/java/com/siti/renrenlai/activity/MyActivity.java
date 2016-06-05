@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -83,7 +82,6 @@ public class MyActivity extends BaseActivity implements OnClickListener{
     @Override
     public void onClick(View v) {
         int id = v.getId();
-
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {

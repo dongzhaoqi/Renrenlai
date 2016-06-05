@@ -372,5 +372,4 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         ShareSDK.stopSDK(this);
     }
 
-
 }
