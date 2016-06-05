@@ -33,27 +33,26 @@
                     android:layout_height="wrap_content"
                     android:background="@drawable/row_selector"
                     android:orientation="horizontal"
-                    android:padding="@dimen/activity_horizontal_margin">
+                    android:padding="@dimen/margin_8">
 
                     <ImageView
                         android:id="@+id/activity_img"
-                        android:layout_width="90dp"
-                        android:layout_height="90dp"
-                        android:src="@drawable/launch" />
+                        android:layout_width="@dimen/height_150"
+                        android:layout_height="@dimen/height_110"
+                        android:src="@drawable/desert" />
 
                     <RelativeLayout
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="match_parent"
-                        android:paddingTop="@dimen/activity_horizontal_margin"
+                        android:paddingTop="@dimen/margin_8"
                         android:paddingLeft="@dimen/activity_horizontal_margin">
 
                         <TextView
                             android:id="@+id/activity_name"
-                            style="@style/me_text_style"
+                            style="@style/project_name"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
                             android:layout_marginBottom="@dimen/margin_8"
                             android:text="仁人来"
                             android:textSize="@dimen/text_size_20" />
@@ -64,6 +63,7 @@
                             android:layout_height="wrap_content"
                             android:layout_below="@id/activity_name"
                             android:layout_alignLeft="@id/activity_name"
+                            android:layout_alignParentBottom="true"
                             android:layout_marginRight="@dimen/margin_8"
                             android:drawableLeft="@drawable/comment"
                             android:gravity="center_vertical"
@@ -74,8 +74,10 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_toRightOf="@id/tv_comments_number"
+                            android:layout_alignParentBottom="true"
                             android:layout_below="@id/activity_name"
                             android:drawableLeft="@drawable/heart"
+                            android:layout_marginLeft="@dimen/activity_horizontal_margin"
                             android:gravity="center_vertical"
                             android:text="10" />
                     </RelativeLayout>
@@ -163,12 +165,21 @@
                         android:src="@drawable/me" />
 
                     <TextView
-                        android:id="@+id/activity_enroll_number"
+                        android:id="@+id/str_enroll_number"
                         style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_enroll_number"
                         android:text="@string/txt_enroll_number" />
+
+                    <TextView
+                        android:id="@+id/activity_enroll_number"
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/height_36"
+                        />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -200,12 +211,21 @@
                         android:src="@drawable/like" />
 
                     <TextView
-                        android:id="@+id/activity_loved_number"
+                        android:id="@+id/str_loved_number"
                         style="@style/me_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:layout_toRightOf="@id/img_favor_number"
                         android:text="@string/txt_favor_number" />
+
+                    <TextView
+                        android:id="@+id/activity_loved_number"
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/height_36"
+                        />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -233,6 +253,7 @@
                         android:id="@+id/str_cover"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/margin_8"
                         android:text="@string/txt_activity_cover" />
 
                     <com.siti.renrenlai.view.NoScrollGridView

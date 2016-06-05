@@ -8,14 +8,13 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.bean.ActivityImage;
+import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.util.CommonUtils;
-import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
@@ -56,6 +55,7 @@ public class MyLaunchActivity extends BaseActivity {
     private String str_activity_name, str_activity_begin_time, str_activity_end_time, str_activity_location,
             str_activity_enroll_number, str_activity_loved_number;
     private List<ActivityImage> imageList;              //活动封面
+    private List<CommentContents> commentContentsList;
     private ArrayList<String> imagePath;
     private ImageAdapter picAdapter;
     private int position;
@@ -94,16 +94,25 @@ public class MyLaunchActivity extends BaseActivity {
         str_activity_begin_time = model.getActivityStartTime();
         str_activity_end_time = model.getActivityEndTime();
         str_activity_loved_number = model.getLovedPersonNum();
+        str_activity_enroll_number = model.getSignPersonNum();
+        commentContentsList = model.getCommentContents();
         imageList = model.getActivityImageList();
         activity_time.append(str_activity_begin_time.substring(0, 10)).append("  ").append(str_activity_begin_time.substring(11, 16))
-                .append("-").append(str_activity_end_time.substring(11, 16));
+                .append(" - ").append(str_activity_end_time.substring(11, 16));
 
         activityName.setText(str_activity_name);
         activityTime.setText(activity_time);
+        if(commentContentsList != null && commentContentsList.size() > 0){
+            tvCommentsNumber.setText(String.valueOf(commentContentsList.size()));
+        }else{
+            tvCommentsNumber.setText("0");
+        }
         tvLikeNumber.setText(str_activity_loved_number);
+        activityLovedNumber.setText(str_activity_loved_number);
+        activityEnrollNumber.setText(str_activity_enroll_number);
 
         for(int i = 0; i < imageList.size(); i++){
-            String path = ConstantValue.urlRoot + imageList.get(i).getActivityImagePath();
+            String path = imageList.get(i).getActivityImagePath();
             System.out.println("info path:" + path);
             imagePath.add(path);
         }

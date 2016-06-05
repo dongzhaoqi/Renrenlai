@@ -20,6 +20,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -91,7 +92,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     Activity activity;
     String activity_title, contact_tel, activity_address, activity_describ, activity_time;
-    String userName;
+    String userName, userHeadImgePath;
     String url;             //接口地址
     int activity_id, userId;
     boolean isFavorPressed = false;
@@ -116,6 +117,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         imagePath = new ArrayList<>();
         userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+        userHeadImgePath = CustomApplication.getInstance().getUser().getUserHeadPicImagePath();
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         if (activity != null) {
@@ -161,6 +163,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         });
         noScrollGridView.setAdapter(picAdapter);
 
+        btnComment.setText("评论(" + (commentsList.size()) + ")");
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
@@ -170,7 +173,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             System.out.println("imagePath:" + imagePath);
             Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 15, 0);
+            params.setMargins(15, 0, 0, 0);
             ll_image.addView(image, params);
 
             image.setOnClickListener(new OnClickListener() {
@@ -263,6 +266,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showToast("出错了!");
             }
         });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
 
     }
@@ -281,7 +286,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.BOTTOM;
         lp.dimAmount = 0.5f;
-        dialog.setCommentList(commentsList, position);
+        dialog.setCommentList(commentsList, position, activity_id);
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
@@ -291,7 +296,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(CommentAdapter mAdapter) {
-        CommentDialog dialog = new CommentDialog(this, mAdapter);
+        CommentDialog dialog = new CommentDialog(this, mAdapter, activity_id);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -331,6 +336,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showToast("出错了!");
             }
         });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
@@ -340,9 +347,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      */
     public void addImage() {
         CircleImageView image = new CircleImageView(this);
-        Picasso.with(this).load(R.drawable.arduino).resize(96, 96).into(image);
+        Picasso.with(this).load(userHeadImgePath).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 15, 0);
+        params.setMargins(15, 0, 0, 0);
         ll_image.addView(image, 0, params);
         btnFavor.setText("喜欢(" + (lovedUsersList.size() + 1) + ")");
     }

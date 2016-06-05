@@ -398,6 +398,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 showToast("出错了!");
             }
         });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 

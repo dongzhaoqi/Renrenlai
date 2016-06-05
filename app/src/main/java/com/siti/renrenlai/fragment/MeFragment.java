@@ -21,8 +21,6 @@ import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
 import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.CommonUtils;
-import com.siti.renrenlai.util.ConstantValue;
-import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.squareup.picasso.Picasso;
 
@@ -30,7 +28,6 @@ import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
-import cn.sharesdk.onekeyshare.OnekeyShare;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
@@ -77,7 +74,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             tv_userName.setText(userName);
             isSignedin = true;
             user = JSONObject.parseObject(strUser, User.class);
-            userHeadImagePath = ConstantValue.urlRoot + user.getUserHeadPicImagePath();
+            userHeadImagePath = user.getUserHeadPicImagePath();
             userName = user.getUserName();
             Picasso.with(getActivity()).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         }

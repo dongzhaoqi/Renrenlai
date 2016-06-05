@@ -9,11 +9,13 @@ import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.CommentContents;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 /**
  * Created by Dong on 2016/5/5.
@@ -43,7 +45,9 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         CommentContents comment = comments.get(position);
-        holder.tvUsername.setText(comment.getUserName() + "：");
+        Picasso.with(mContext).load(comment.getUserHeadPicImagePath()).placeholder(R.drawable.no_img).into(holder.ivUserHead);
+        holder.tvUsername.setText(comment.getUserName());
+        holder.tvCommentTime.setText(comment.getCommentTime());
         holder.tvComment.setText(comment.getCommentContent());
         holder.itemView.setTag(position);
     }
@@ -66,8 +70,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.ViewHold
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        @Bind(R.id.iv_user_head) CircleImageView ivUserHead;
         @Bind(R.id.tv_username) TextView tvUsername;
         @Bind(R.id.tv_comment) TextView tvComment;
+        @Bind(R.id.tv_comment_time) TextView tvCommentTime;
 
         public ViewHolder(View itemView) {
             super(itemView);

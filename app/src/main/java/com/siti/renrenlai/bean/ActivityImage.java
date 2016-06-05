@@ -1,5 +1,7 @@
 package com.siti.renrenlai.bean;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import java.io.Serializable;
 
 /**
@@ -28,7 +30,7 @@ public class ActivityImage implements Serializable {
     }
 
     public String getActivityImagePath() {
-        return activityImagePath;
+        return ConstantValue.urlRoot +  activityImagePath;
     }
 
     public void setActivityImagePath(String activityImagePath) {

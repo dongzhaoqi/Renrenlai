@@ -1,5 +1,7 @@
 package com.siti.renrenlai.bean;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import java.io.Serializable;
 
 public class User implements Serializable{
@@ -27,7 +29,7 @@ public class User implements Serializable{
 	}
 
 	public String getUserHeadPicImagePath() {
-		return userHeadPicImagePath;
+		return ConstantValue.urlRoot + userHeadPicImagePath;
 	}
 
 	public void setUserHeadPicImagePath(String userHeadPicImagePath) {

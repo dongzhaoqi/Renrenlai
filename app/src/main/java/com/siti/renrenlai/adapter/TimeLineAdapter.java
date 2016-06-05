@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.MyLaunchActivity;
 import com.siti.renrenlai.bean.TimeLineModel;
-import com.siti.renrenlai.util.ConstantValue;
 import com.squareup.picasso.Picasso;
 import com.vipul.hp_hp.timelineview.TimelineView;
 
@@ -66,7 +65,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         holder.tvTitle.setText(timeLineModel.getActivityName());
         if (timeLineModel.getActivityImageList() != null && timeLineModel.getActivityImageList().size() > 0){
             //System.out.println("TimeLine:" + ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath());
-            Picasso.with(mContext).load(ConstantValue.urlRoot + timeLineModel.getActivityImageList().get(0).getActivityImagePath()).into(holder.tvPic);
+            Picasso.with(mContext).load(timeLineModel.getActivityImageList().get(0).getActivityImagePath()).into(holder.tvPic);
         }
         activityStatus = timeLineModel.getActivityStatus();
         if(activityStatus == 1){

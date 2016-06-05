@@ -216,7 +216,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.gravity = Gravity.BOTTOM;
         lp.dimAmount = 0.5f;
-        dialog.setCommentList(commentsList, position);
+        dialog.setCommentList(commentsList, position, projectId);
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);

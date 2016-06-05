@@ -279,8 +279,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
+        activityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
 
-        for (int i = 0; i < result.length(); i++) {
+        /*for (int i = 0; i < result.length(); i++) {
             lovedUsersList = new ArrayList<>();
             commentsList = new ArrayList<>();
             imageList = new ArrayList<>();
@@ -331,7 +332,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             }
 
             activityList.add(activity);
-        }
+        }*/
 
         adapter = new ActivityAdapter(getActivity(), activityList);
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {

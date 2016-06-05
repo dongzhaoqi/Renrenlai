@@ -13,8 +13,10 @@ public class TimeLineModel implements Serializable{
     private String dateTimeForActiv;
     private String activityStartTime;
     private String activityEndTime;
+    private String signPersonNum;
     private String lovedPersonNum;
     private List<ActivityImage>activityImageList;
+    private List<CommentContents>commentContents;
 
     public int getActivityId() {
         return activityId;
@@ -78,5 +80,21 @@ public class TimeLineModel implements Serializable{
 
     public void setActivityImageList(List<ActivityImage> activityImageList) {
         this.activityImageList = activityImageList;
+    }
+
+    public String getSignPersonNum() {
+        return signPersonNum;
+    }
+
+    public void setSignPersonNum(String signPersonNum) {
+        this.signPersonNum = signPersonNum;
+    }
+
+    public List<CommentContents> getCommentContents() {
+        return commentContents;
+    }
+
+    public void setCommentContents(List<CommentContents> commentContents) {
+        this.commentContents = commentContents;
     }
 }

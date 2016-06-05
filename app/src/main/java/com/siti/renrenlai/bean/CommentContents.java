@@ -1,5 +1,7 @@
 package com.siti.renrenlai.bean;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import java.io.Serializable;
 
 /**
@@ -9,6 +11,7 @@ public class CommentContents implements Serializable{
     private String userName;
     private String commentContent;
     private String commentTime;
+    private String userHeadPicImagePath;
 
     public CommentContents() {
     }
@@ -40,5 +43,13 @@ public class CommentContents implements Serializable{
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getUserHeadPicImagePath() {
+        return ConstantValue.urlRoot + userHeadPicImagePath;
+    }
+
+    public void setUserHeadPicImagePath(String userHeadPicImagePath) {
+        this.userHeadPicImagePath = userHeadPicImagePath;
     }
 }

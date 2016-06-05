@@ -89,7 +89,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
 
-        userHeadImagePath = ConstantValue.urlRoot + user.getUserHeadPicImagePath();
+        userHeadImagePath = user.getUserHeadPicImagePath();
         Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         nickName = user.getUserName();
         tv_nickName.setText(nickName);
