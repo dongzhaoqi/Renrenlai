@@ -25,6 +25,8 @@ import com.siti.renrenlai.util.SharedPreferencesUtil;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 
@@ -32,17 +34,19 @@ public class CommentDialog extends Dialog implements OnClickListener{
 
     private EditText etContent;
     private ImageView btnSend;
-
     private Activity mActivity;
     private Dialog dialog;
     private List<CommentContents> commentsList;
     private CommentAdapter mAdapter;
-    private int position;
-    private int activity_id;
+    int position = -1;
+    int activity_id;
+    int replyId;
+    String userName, userHeadImagePath, contents, commentTime;
 
     public CommentDialog(Activity activity, int theme) {
         super(activity, theme);
         this.mActivity = activity;
+        dialog = new Dialog(activity);
     }
 
     public CommentDialog(Activity activity, CommentAdapter mAdapter) {
@@ -51,12 +55,13 @@ public class CommentDialog extends Dialog implements OnClickListener{
         this.mAdapter = mAdapter;
     }
 
-    public CommentDialog(Activity activity, CommentAdapter mAdapter, int activity_id) {
+    public CommentDialog(Activity activity, CommentAdapter mAdapter, List<CommentContents> commentsList, int activity_id) {
         super(activity);
         this.mActivity = activity;
         this.mAdapter = mAdapter;
+        this.commentsList = commentsList;
         this.activity_id = activity_id;
-
+        dialog = new Dialog(activity);
     }
 
     public CommentDialog(Activity activity) {
@@ -77,7 +82,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
         etContent = (EditText) findViewById(R.id.et_content);
         btnSend = (ImageView) findViewById(R.id.iv_send);
         btnSend.setOnClickListener(this);
-        if(commentsList != null) {
+        if(position != -1) {
             CommentContents comment = commentsList.get(position);
             String userName = comment.getUserName();
             etContent.setHint("回复 " + userName + ":");
@@ -88,21 +93,31 @@ public class CommentDialog extends Dialog implements OnClickListener{
 
     @Override
     public void onClick(View v) {
-        String userName = SharedPreferencesUtil.readString(
+        userName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         mActivity, "login"), "userName");
-        String contents = etContent.getText().toString();
-        comment(userName, contents, activity_id);
-        System.out.println("userName:" + userName + " contents:" + contents);
-        CommentContents comment = new CommentContents(userName, contents);
-        //commentsList.add(0, comment);
+        userHeadImagePath = CustomApplication.getInstance().getUser().getUserHeadPicImagePath();
+        contents = etContent.getText().toString();
+        commentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+
+        CommentContents comment = new CommentContents(userName, contents, userHeadImagePath, commentTime);
+        commentsList.add(0, comment);
         mAdapter.notifyDataSetChanged();
+        if(position == -1){
+            comment(userName, contents, activity_id);
+        }else{
+            comment(userName, contents, activity_id, replyId);
+        }
     }
 
+    /**
+     * 发表评论
+     * @param userName  评论人用户名
+     * @param commentContent    评论内容
+     * @param activityId    评论的活动id
+     */
     private void comment(String userName, String commentContent, int activityId) {
-        System.out.println("userName:" + userName + " commentContent:" + commentContent + " activityId:" + activityId);
-        String api = "/insertCommentForApp";
-        String url = ConstantValue.urlRoot + api;
+        String url = ConstantValue.COMMENT_ACTIVITY;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -116,8 +131,9 @@ public class CommentDialog extends Dialog implements OnClickListener{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("response", "response:" + response.toString());
+                        //Log.d("response", "response:" + response.toString());
                         Toast.makeText(mActivity, "评论成功", Toast.LENGTH_SHORT).show();
+                        CommentDialog.this.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -129,5 +145,9 @@ public class CommentDialog extends Dialog implements OnClickListener{
         req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void comment(String userName, String commentContent, int activityId, int replyId ){
+
     }
 }

@@ -66,8 +66,7 @@ public class EnrollFragment extends BaseFragment {
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
 
         try {
-            api = "/getParticipateActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
-            url = ConstantValue.urlRoot + api;
+            url = ConstantValue.GET_PARTICIPATE_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

@@ -82,13 +82,12 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
     private void doLogin() {
         showProcessDialog("登录中");
-        String api = null;
+        String url = null;
         try {
-            api = "/loginForApp?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
+            url = ConstantValue.USER_LOGIN + "?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = ConstantValue.urlRoot + api;
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -116,13 +115,15 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         int code = arg0.optInt("errorCode");
         if (code == 0) {
             user = com.alibaba.fastjson.JSONObject.parseObject(result.toString(), User.class);
+            Log.d("TAG", "loginSuccess: " + user);
             ((CustomApplication) getApplication()).setUser(user);
             startAnimActivity(MainActivity.class);
             finish();
-            SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+            saveUser();
+            /*SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                     "user", result.toString());
             SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                    "userName", user.getUserName());
+                    "userName", user.getUserName());*/
             showToast("登录成功");
         }else{
             showToast("登录失败,请检查用户名或密码");
@@ -132,16 +133,18 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
 
     private void saveUser() {
         /*SharedPreferencesUtil.writeObject(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                "user", user);
+                "user", user);*/
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userName", user.getUserName());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userHeadPicImagePath", user.getUserHeadPicImagePath());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                "sex", user.getSex());
+                "gender", user.getSex());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "interetsAndHobbies", user.getInteretsAndHobbies());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "intro", user.getInteretsAndHobbies());
         SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                "userId", user.getUserId());*/
+                "userId", user.getUserId());
     }
 }

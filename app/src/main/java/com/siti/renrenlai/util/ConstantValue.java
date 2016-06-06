@@ -15,4 +15,52 @@ public class ConstantValue {
 
     /*缓存目录*/
     public static final String ENVIRONMENT_DIR_CACHE = "/activityCache";
+
+    //用户登录
+    public static final String USER_LOGIN = urlRoot + "/loginForApp";
+
+    //更改用户昵称
+    public static final String UPDATE_USER_NAME = urlRoot + "/updateUserName";
+
+    //更改用户性别
+    public static final String UPDATE_USER_GENDER = urlRoot + "/updateUserGender";
+
+    //更改用户兴趣
+    public static final String UPDATE_USER_HOBBY = urlRoot + "/updateUserHobby";
+
+    //更改用户简介
+    public static final String UPDATE_USER_INTRODUCTION = urlRoot + "/updateUserIntroduction";
+
+    //获取活动列表
+    public static final String GET_ACTIVITY_LIST = urlRoot + "/getActivityListForApp";
+
+    //报名活动
+    public static final String PARTICIPATE_ACTIVITY = urlRoot + "/participateActivity";
+
+    //评论活动
+    public static final String COMMENT_ACTIVITY = urlRoot + "/insertCommentForApp";
+
+    //喜欢该活动
+    public static final String LOVE_THIS_ACTIVITY = urlRoot + "/loveThisActivityForApp";
+
+    //报名活动
+    public static final String LAUNCH_ACTIVITY = urlRoot + "/launchActivityForApp";
+
+    //获取我喜欢的活动
+    public static final String GET_LOVED_ACTIVITY_LIST = urlRoot + "/getLovedActivityList";
+
+    //获取我发起的活动
+    public static final String GET_PUBLISH_ACTIVITY_LIST = urlRoot + "/getPublishActivityList";
+
+    //获取我报名的活动
+    public static final String GET_PARTICIPATE_ACTIVITY_LIST = urlRoot + "/getParticipateActivityList";
+
+
+    //获取项目列表
+    public static final String GET_PROJECT_LIST = urlRoot + "/getProjectListForApp";
+
+    //获取项目详情
+    public static final String GET_PROJECT_INFO = urlRoot + "/getProjectInfoForApp";
+
+
 }

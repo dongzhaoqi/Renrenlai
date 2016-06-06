@@ -324,8 +324,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             e.printStackTrace();
         }
 
-        api = "/launchActivityForApp";
-        String url = ConstantValue.urlRoot + api;
+        String url = ConstantValue.LAUNCH_ACTIVITY;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, activityContent,
                 new Response.Listener<JSONObject>() {

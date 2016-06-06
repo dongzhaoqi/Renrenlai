@@ -71,11 +71,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
-    String api = "/getActivityListForApp";
-    String url = ConstantValue.urlRoot + api;
+    String url = ConstantValue.GET_ACTIVITY_LIST;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
         view = inflater.inflate(R.layout.fragment_find, container, false);
         return view;
     }
@@ -187,13 +185,11 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
                     @Override
                     public void onFocus() {
-
                         Log.d("TAG", "onFocus()");
                     }
 
                     @Override
                     public void onFocusCleared() {
-
                         Log.d("TAG", "onFocusCleared()");
                     }
                 });
@@ -205,15 +201,11 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
 
-
                 mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
                     @Override
                     public void onBindSuggestion(IconImageView leftIcon, BodyTextView bodyText, SearchSuggestion item, int itemPosition) {
-
                     }
-
                 });
-
             }
         });
 
@@ -280,59 +272,6 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
         activityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
-
-        /*for (int i = 0; i < result.length(); i++) {
-            lovedUsersList = new ArrayList<>();
-            commentsList = new ArrayList<>();
-            imageList = new ArrayList<>();
-            Activity activity = new Activity();
-            try {
-                activity.setActivityId(result.getJSONObject(i).getInt("activityId"));
-                activity.setActivityName(result.getJSONObject(i).optString("activityName"));
-                activity.setActivityStartTime(result.getJSONObject(i).optString("activityStartTime"));
-                activity.setActivityEndTime(result.getJSONObject(i).optString("activityEndTime"));
-                activity.setactivityReleaserTel(result.getJSONObject(i).optString("activityReleaserTel"));
-                activity.setActivityAddress(result.getJSONObject(i).optString("activityAddress"));
-                activity.setactivityDetailDescrip(result.getJSONObject(i).optString("activityDetailDescrip"));
-
-                JSONArray imagesArray = result.getJSONObject(i).optJSONArray("activityImages");
-
-                if (imagesArray != null && imagesArray.length() > 0) {
-                    for (int m = 0; m < imagesArray.length(); m++) {
-                        ActivityImage image = new ActivityImage();
-                        image.setActivityImageId(imagesArray.optJSONObject(m).optInt("activityImageId"));
-                        image.setActivityImageName(imagesArray.optJSONObject(m).optString("activityImageName"));
-                        image.setActivityImagePath(ConstantValue.urlRoot + imagesArray.optJSONObject(m).optString("activityImagePath"));
-                        imageList.add(image);
-                        System.out.println("getActivityImagePath " + ConstantValue.urlRoot + imagesArray.optJSONObject(m).optString("activityImagePath"));
-                    }
-                }
-                activity.setActivityImages(imageList);
-
-                JSONArray lovedusersArray = result.getJSONObject(i).optJSONArray("lovedUsers");
-                for (int j = 0; j < lovedusersArray.length(); j++) {
-                    LovedUsers lovedUsers = new LovedUsers();
-                    lovedUsers.setUserHeadPicImagePath(lovedusersArray.optJSONObject(j).optString("userHeadPicImagePath"));
-                    lovedUsers.setUserId(lovedusersArray.optJSONObject(j).optString("userId"));
-                    lovedUsersList.add(lovedUsers);
-                }
-                activity.setLovedUsers(lovedUsersList);
-
-                JSONArray commentsArray = result.getJSONObject(i).optJSONArray("commentContents");
-                for (int k = 0; k < commentsArray.length(); k++) {
-                    CommentContents comment = new CommentContents();
-                    comment.setUserName(commentsArray.optJSONObject(k).optString("userName"));
-                    comment.setCommentContent(commentsArray.optJSONObject(k).optString("commentContent"));
-                    commentsList.add(comment);
-                }
-                activity.setComments(commentsList);
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            activityList.add(activity);
-        }*/
 
         adapter = new ActivityAdapter(getActivity(), activityList);
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {

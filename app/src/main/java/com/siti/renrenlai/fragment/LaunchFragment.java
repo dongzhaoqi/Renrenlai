@@ -66,8 +66,7 @@ public class LaunchFragment extends BaseFragment {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
 
         try {
-            api = "/getPublishActivityList?userName="+ URLEncoder.encode(userName, "utf-8");
-            url = ConstantValue.urlRoot + api;
+            url = ConstantValue.GET_PUBLISH_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }

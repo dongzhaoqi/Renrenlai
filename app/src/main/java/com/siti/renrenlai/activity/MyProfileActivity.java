@@ -89,19 +89,31 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         ButterKnife.bind(this);
         initTopBarForLeft("我的资料");
 
+        initProfile();
+    }
+
+    private void initProfile() {
         userHeadImagePath = user.getUserHeadPicImagePath();
         Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
-        nickName = user.getUserName();
+        nickName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "userName");
         tv_nickName.setText(nickName);
 
-        gender = user.getSex();
+        gender = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "gender");
+
         if("0".equals(gender)){
             tv_gender.setText("请选择");
         }else{
             tv_gender.setText(gender);
         }
 
-        hobby = user.getInteretsAndHobbies();
+        hobby = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "interetsAndHobbies");
+
         if("0".equals(hobby)){
             tv_hobby.setText("请选择");
         }else{
@@ -211,14 +223,12 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
 
     public void updateGender(final String gender){
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
-
-        String api = null;
+        String url = null;
         try {
-            api = "/updateUserGender?userName="+URLEncoder.encode(userName, "utf-8")+"&userGender="+ URLEncoder.encode(gender, "utf-8");
+            url = ConstantValue.UPDATE_USER_GENDER + "?userName="+URLEncoder.encode(userName, "utf-8")+"&userGender="+ URLEncoder.encode(gender, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = ConstantValue.urlRoot + api;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {

@@ -240,7 +240,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * @param activity_id   活动的id
      */
     private void participate(int activity_id) {
-        String api = "/participateActivity";
         JSONObject jsonObject = new JSONObject();
         System.out.println("userName:" + userName + " activityId:" + activity_id);
         try {
@@ -249,7 +248,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        url = ConstantValue.urlRoot + api;
+        url = ConstantValue.PARTICIPATE_ACTIVITY;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
                 new Response.Listener<JSONObject>() {
@@ -296,7 +295,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(CommentAdapter mAdapter) {
-        CommentDialog dialog = new CommentDialog(this, mAdapter, activity_id);
+        CommentDialog dialog = new CommentDialog(this, mAdapter, commentsList, activity_id);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -313,14 +312,12 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      */
     public void like() {
         addImage();
-
-        String api = null;
+        url = null;
         try {
-            api = "/loveThisActivityForApp?userName=" + URLEncoder.encode(userName, "utf-8") + "&activityId=" + activity_id;
+            url = ConstantValue.LOVE_THIS_ACTIVITY + "?userName=" + URLEncoder.encode(userName, "utf-8") + "&activityId=" + activity_id;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        url = ConstantValue.urlRoot + api;
         System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {

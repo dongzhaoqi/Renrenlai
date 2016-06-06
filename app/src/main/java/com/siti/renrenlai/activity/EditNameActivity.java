@@ -49,13 +49,12 @@ public class EditNameActivity extends BaseActivity {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         newName = etModifyName.getText().toString();
 
-        String api = null;
+        String url = null;
         try {
-            api = "/updateUserName?userName="+ URLEncoder.encode(userName, "utf-8") +"&userNameChange="+ URLEncoder.encode(newName, "utf-8");
+            url = ConstantValue.UPDATE_USER_NAME + "?userName="+ URLEncoder.encode(userName, "utf-8") +"&userNameChange="+ URLEncoder.encode(newName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = ConstantValue.urlRoot + api;
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {

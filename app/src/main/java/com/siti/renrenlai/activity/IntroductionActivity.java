@@ -62,13 +62,12 @@ public class IntroductionActivity extends BaseActivity{
 
     public void modifyIntroduction(String intro){
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
-        String api = null;
+        String url = null;
         try {
-            api = "/updateUserIntroduction?userName="+URLEncoder.encode(userName, "utf-8")+"&userIntroduction="+ URLEncoder.encode(intro, "utf-8");
+            url = ConstantValue.UPDATE_USER_INTRODUCTION + "?userName="+URLEncoder.encode(userName, "utf-8")+"&userIntroduction="+ URLEncoder.encode(intro, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        String url = ConstantValue.urlRoot + api;
 
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {

@@ -62,20 +62,14 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initTopBarForOnlyTitle("我的");
-        String strUser = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "user");
-        if(strUser.startsWith("{")){
-            user = JSONObject.parseObject(strUser, User.class);
-        }
-        System.out.println("strUser:"+strUser);
-        if(strUser.equals("0")){
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+
+        if(userName.equals("0")){
             tv_userName.setText("请登录");
         }else{
-            userName = user.getUserName();
             tv_userName.setText(userName);
             isSignedin = true;
-            user = JSONObject.parseObject(strUser, User.class);
             userHeadImagePath = user.getUserHeadPicImagePath();
-            userName = user.getUserName();
             Picasso.with(getActivity()).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         }
 

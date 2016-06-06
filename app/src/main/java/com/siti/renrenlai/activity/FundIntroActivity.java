@@ -72,8 +72,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
      * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
      */
     private void cache() {
-        api = "/getProjectListForApp";
-        url = ConstantValue.urlRoot + api;
+        url = ConstantValue.GET_PROJECT_LIST;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if(entry != null){              // Cache is available
@@ -218,8 +217,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
      * @param projectId
      */
     private void cacheProject(int projectId){
-        api = "/getProjectInfoForApp";
-        url = ConstantValue.urlRoot + api;
+        url = ConstantValue.GET_PROJECT_INFO;
         String projectUrl = url + projectId;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(projectUrl);
@@ -243,8 +241,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     public void getProjectInfo(int projectId){
-        String api = "/getProjectInfoForApp";
-        String url = ConstantValue.urlRoot + api;
+        String url = ConstantValue.GET_PROJECT_INFO;
 
         JSONObject json = new JSONObject();
         try {

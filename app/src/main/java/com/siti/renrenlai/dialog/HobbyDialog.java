@@ -85,14 +85,12 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 
 	public void modifyHobby(final String hobby){
 		String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userName");
-
-		String api = null;
+		String url = null;
 		try {
-			api = "/updateUserHobby?userName="+URLEncoder.encode(userName, "utf-8")+"&userHobby="+ URLEncoder.encode(hobby, "utf-8");
+			url = ConstantValue.UPDATE_USER_HOBBY + "?userName="+URLEncoder.encode(userName, "utf-8")+"&userHobby="+ URLEncoder.encode(hobby, "utf-8");
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		String url = ConstantValue.urlRoot + api;
 		System.out.println("url:" + url);
 		JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
 				new Response.Listener<JSONObject>() {
