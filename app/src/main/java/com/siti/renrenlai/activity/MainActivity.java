@@ -14,11 +14,11 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.fragment.FindFragment;
 import com.siti.renrenlai.fragment.MeFragment;
 import com.siti.renrenlai.util.CommonUtils;
-import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.software.shell.fab.ActionButton;
 
-import java.util.LinkedHashSet;
 import java.util.Set;
+
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
@@ -114,7 +114,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     }
 
     private void setAlias(){
-        String alias = CustomApplication.getInstance().getUser().getUserName();
+        String alias = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         Log.d(TAG, "setAlias() returned: " + alias);
         // 检查 tag 的有效性
         if (TextUtils.isEmpty(alias)) {

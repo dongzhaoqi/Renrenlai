@@ -1,18 +1,14 @@
 package com.siti.renrenlai.activity;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.util.Log;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
 import android.widget.RelativeLayout;
 
-import com.alibaba.fastjson.JSONObject;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.CustomApplication;
@@ -85,15 +81,9 @@ public class SplashActivity extends BaseActivity {
             if (activity != null) {
                 switch (msg.what) {
                     case 1:
-                        String strUser = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(activity, "login"), "user");
-                        System.out.println("strUser======" + strUser);
-                        if(strUser.startsWith("{")) {
-                            user = JSONObject.parseObject(strUser, User.class);
-                            userName = user.getUserName();
-                            Log.e("GO_HOME", userName);
-                        }
+                        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(activity, "login"), "userName");
 
-                        if (!strUser.equals("0")) {
+                        if (!userName.equals("0")) {
                             ((CustomApplication) activity.getApplication()).setUser(user);
                             activity.startActivity(new Intent(activity, MainActivity.class));
                             activity.finish();

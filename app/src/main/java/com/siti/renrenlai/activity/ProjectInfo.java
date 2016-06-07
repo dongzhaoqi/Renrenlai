@@ -113,6 +113,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             }
         });
 
+        btnComment.setText("评论(" + (commentsList.size()) + ")");
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for(int i = 0; i < lovedUsersList.size(); i++){
             CircleImageView image = new CircleImageView(this);
@@ -122,7 +123,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             System.out.println("ProjectInfo imagePath:" + imagePath);
             Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-            params.setMargins(0, 0, 15, 0);
+            params.setMargins(15, 0, 0, 0);
             ll_image.addView(image, params);
 
             image.setOnClickListener(new View.OnClickListener() {
@@ -247,7 +248,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.setMargins(0, 0, 15, 0);
+        params.setMargins(15, 0, 0, 0);
         ll_image.addView(image, 0, params);
         btnFavor.setText("喜欢(" + (lovedUsersList.size()+1) + ")");
     }

@@ -93,7 +93,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     }
 
     private void initProfile() {
-        userHeadImagePath = user.getUserHeadPicImagePath();
+        userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
         Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(

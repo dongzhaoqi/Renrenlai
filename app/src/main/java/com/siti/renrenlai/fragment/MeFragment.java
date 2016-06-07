@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
-import com.alibaba.fastjson.JSONObject;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FeedbackActivity;
 import com.siti.renrenlai.activity.LoginActivity;
@@ -47,7 +46,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Bind(R.id.tv_userName) TextView tv_userName;
     private View view;
     private User user;
-    String userHeadImagePath, userName;
+    String userHeadPicImagePath, userName;
     boolean isSignedin = false;
 
     @Override
@@ -63,14 +62,14 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         super.onActivityCreated(savedInstanceState);
         initTopBarForOnlyTitle("我的");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
 
         if(userName.equals("0")){
             tv_userName.setText("请登录");
         }else{
             tv_userName.setText(userName);
             isSignedin = true;
-            userHeadImagePath = user.getUserHeadPicImagePath();
-            Picasso.with(getActivity()).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
+            Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
         }
 
     }

@@ -88,7 +88,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        System.out.println("login:" + url);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
