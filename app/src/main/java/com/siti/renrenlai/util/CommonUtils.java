@@ -86,6 +86,14 @@ public class CommonUtils {
         return m.matches();
     }
 
+    //判断手机号是否合法
+    public static boolean isMobilePhone(String phone) {//
+        Pattern pattern = Pattern
+                .compile("^((13[0-9])|(14[5,7])|(15[^4,\\D])|(17[6-8])|(18[0-9]))\\d{8}$");
+        Matcher matcher = pattern.matcher(phone);
+        return matcher.matches();
+    }
+
     // 取得AppKey
     public static String getAppKey(Context context) {
         Bundle metaData = null;

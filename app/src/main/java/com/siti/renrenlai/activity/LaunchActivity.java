@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -88,6 +89,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     NoScrollGridView noScrollGridView;
     @Bind(R.id.et_detail)
     EditText et_detail;
+    @Bind(R.id.spinner_project)
+    Spinner spinner_project;
     @Bind(R.id.btn_preview)
     Button btn_preview;
     @Bind(R.id.btn_publish)

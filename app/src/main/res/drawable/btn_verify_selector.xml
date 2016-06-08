@@ -4,21 +4,21 @@
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
             <solid  android:color="#F7B340"/>
-            <padding android:left="12dp" android:right="12dp" android:top="10dp" android:bottom="10dp"/>
+            <padding android:left="@dimen/padding_10" android:right="@dimen/padding_10" android:top="@dimen/margin_8" android:bottom="@dimen/margin_8"/>
         </shape>
     </item>
     <item android:state_focused="true">
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
             <solid  android:color="#F7B340"/>
-            <padding android:left="12dp" android:right="12dp" android:top="10dp" android:bottom="10dp"/>
+            <padding android:left="@dimen/padding_10" android:right="@dimen/padding_10" android:top="@dimen/margin_8" android:bottom="@dimen/margin_8"/>
         </shape>
     </item>
     <item >
         <shape android:shape="rectangle"  >
             <corners android:radius="3dip" />
             <stroke android:width="1dip" android:color="#F5A623" />
-            <padding android:left="12dp" android:right="12dp" android:top="10dp" android:bottom="10dp"/>
+            <padding android:left="@dimen/padding_10" android:right="@dimen/padding_10" android:top="@dimen/margin_8" android:bottom="@dimen/margin_8"/>
             <solid android:color="#F5A623"/>
         </shape>
     </item>

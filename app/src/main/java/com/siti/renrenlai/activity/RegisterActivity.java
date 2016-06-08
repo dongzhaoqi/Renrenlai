@@ -1,9 +1,11 @@
 package com.siti.renrenlai.activity;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.AddressInitTask;
 import com.siti.renrenlai.util.AddressInitTask.AsyncResponse;
+import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 
 import butterknife.Bind;
@@ -34,6 +37,7 @@ public class RegisterActivity extends BaseActivity {
 
     private static final int GET_VERIFY_CODE = 1;
     private static final int REGET_VERIFY_CODE = 2;
+    private static final String TAG = "RegisterActivity";
     int i = 60;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,9 +78,11 @@ public class RegisterActivity extends BaseActivity {
                 case GET_VERIFY_CODE:
                     btnVerify.setText("获取验证码");
                     btnVerify.setClickable(true);
+                    btnVerify.setBackgroundColor(Color.parseColor("#F5A623"));
+                    i = 60;
                     break;
                 case REGET_VERIFY_CODE:
-                    btnVerify.setText("重新发送(" + i-- + ")");
+                    btnVerify.setText("重新发送(" + i + ")");
                     break;
                 default:
                     int event = msg.arg1;
@@ -98,12 +104,11 @@ public class RegisterActivity extends BaseActivity {
                             ((Throwable) data).printStackTrace();
                         }
                     }
-
             }
         }
     };
 
-    @OnClick({R.id.tv_city, R.id.btn_sign_up})
+    @OnClick({R.id.btn_verify, R.id.tv_city, R.id.btn_sign_up})
     public void onClick(View view) {
         String phoneNums = et_phone.getText().toString();
         switch (view.getId()) {
@@ -118,13 +123,16 @@ public class RegisterActivity extends BaseActivity {
                 break;
             case R.id.btn_verify:
                 SMSSDK.getVerificationCode("86", phoneNums);
+                Log.d(TAG, "onClick: " + phoneNums);
+                if(!isValidPhone(phoneNums)) return;
                 // 3. 把按钮变成不可点击，并且显示倒计时（正在获取）
                 btnVerify.setClickable(false);
-                btnVerify.setText("重新发送(" + i-- + ")");
+                btnVerify.setBackgroundColor(Color.parseColor("#66F5A623"));
+                btnVerify.setText("重新发送(" + i + ")");
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        for (int i = 30; i > 0; i--) {
+                        for (; i > 0; i--) {
                             handler.sendEmptyMessage(REGET_VERIFY_CODE);
                             if (i <= 0) {
                                 break;
@@ -142,6 +150,17 @@ public class RegisterActivity extends BaseActivity {
             case R.id.btn_sign_up:
                 break;
         }
+    }
+
+    private boolean isValidPhone(String phone){
+        if(TextUtils.isEmpty(phone)){
+            showToast(R.string.hint_empty_phone);
+            return false;
+        }else if(!CommonUtils.isMobilePhone(phone)){
+            showToast(R.string.hint_invalid_phone);
+            return false;
+        }
+        return true;
     }
 
     protected void onDestroy() {

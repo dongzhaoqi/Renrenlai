@@ -117,7 +117,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         imagePath = new ArrayList<>();
         userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
-        userHeadImgePath = CustomApplication.getInstance().getUser().getUserHeadPicImagePath();
+        userHeadImgePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
+
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         if (activity != null) {

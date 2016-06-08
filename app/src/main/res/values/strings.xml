@@ -13,6 +13,8 @@
     <string name="action_sign_in">登录</string>
 
     <string name="register">注册</string>
+    <string name="hint_empty_phone">手机号不能为空</string>
+    <string name="hint_invalid_phone">请输入有效的手机号</string>
 
     <string name="search_hint">请输入关键字</string>
 
@@ -95,6 +97,7 @@
     <string name="txt_end">报名截止:</string>
     <string name="txt_place">活动地点:</string>
     <string name="txt_people">活动人数:</string>
+    <string name="txt_project">所属项目:</string>
     <string name="txt_detail">活动详情:</string>
     <string name="txt_cover">选择封面:</string>
     <string name="txt_activity_cover">活动封面:</string>

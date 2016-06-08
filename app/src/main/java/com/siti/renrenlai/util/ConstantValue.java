@@ -16,6 +16,9 @@ public class ConstantValue {
     /*缓存目录*/
     public static final String ENVIRONMENT_DIR_CACHE = "/activityCache";
 
+    public static final String APPKEY = "105e175f4413e";
+    public static final String APPSECRET = "c70863113ae6d83a2867234b5f9f25da";
+
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
 

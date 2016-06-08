@@ -75,19 +75,19 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         url = ConstantValue.GET_PROJECT_LIST;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
-        if(entry != null){              // Cache is available
+        if (entry != null) {              // Cache is available
             String data = null;
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                System.out.println("data:" + jsonObject);
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             // Cache data
             System.out.println("initData");
             initData();
@@ -161,37 +161,39 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     private void getData(JSONObject response) {
         JSONArray result = response.optJSONArray("result");
-        projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Project.class);
-        Log.d(TAG, "getData() returned: " + projectList.size());
+        if (result != null) {
+            projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Project.class);
+            Log.d(TAG, "getData() returned: " + projectList.size());
 
-        fundAdapter = new FundIntroAdapter(this, projectList);
-        fundAdapter.setOnItemClickListener(new FundIntroAdapter.OnRecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(View view, Object data) {
-                int projectId = Integer.parseInt(data.toString());
-                cacheProject(projectId);
-            }
-        });
-        fundList.setAdapter(fundAdapter);
-        fundList.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
-        fundList.setArrowImageView(R.drawable.iconfont_downgrey);
-        fundList.addOnScrollListener(new RecyclerView.OnScrollListener() {
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                if (dy > 0) {
-                    layoutDreamGo.setVisibility(View.VISIBLE);
-                } else {
-                    layoutDreamGo.setVisibility(View.GONE);
+            fundAdapter = new FundIntroAdapter(this, projectList);
+            fundAdapter.setOnItemClickListener(new FundIntroAdapter.OnRecyclerViewItemClickListener() {
+                @Override
+                public void onItemClick(View view, Object data) {
+                    int projectId = Integer.parseInt(data.toString());
+                    cacheProject(projectId);
                 }
-            }
-        });
+            });
+            fundList.setAdapter(fundAdapter);
+            fundList.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
+            fundList.setArrowImageView(R.drawable.iconfont_downgrey);
+            fundList.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+                @Override
+                public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                    if (dy > 0) {
+                        layoutDreamGo.setVisibility(View.VISIBLE);
+                    } else {
+                        layoutDreamGo.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
     }
 
     /**
      * 下拉刷新获取数据
      */
-    private void refreshData(){
+    private void refreshData() {
         initData();
     }
 
@@ -214,33 +216,34 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     /**
      * 用户点击某一具体项目时,若有缓存则直接从缓存中拿数据,再跳转到项目详情, 若没有进行缓存
+     *
      * @param projectId
      */
-    private void cacheProject(int projectId){
+    private void cacheProject(int projectId) {
         url = ConstantValue.GET_PROJECT_INFO;
         String projectUrl = url + projectId;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(projectUrl);
-        if(entry != null){              // Cache is available
+        if (entry != null) {              // Cache is available
             String data = null;
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                System.out.println("data:" + jsonObject);
                 getProject(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
+        } else {
             // Cache data
             System.out.println("initData");
             getProjectInfo(projectId);
         }
     }
 
-    public void getProjectInfo(int projectId){
+    public void getProjectInfo(int projectId) {
         String url = ConstantValue.GET_PROJECT_INFO;
 
         JSONObject json = new JSONObject();
