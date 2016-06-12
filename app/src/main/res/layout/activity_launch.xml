@@ -302,13 +302,29 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_project" />
 
-                <Spinner
-                    android:id="@+id/spinner_project"
+                <TextView
+                    android:id="@+id/tv_project_name"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/str_project">
+                    android:layout_marginLeft="@dimen/padding_10"
+                    android:layout_marginRight="@dimen/padding_10"
+                    android:layout_centerVertical="true"
+                    android:layout_toRightOf="@id/str_project"
+                    android:textColor="#666666"
+                    android:text="aaaa"
+                    android:textSize="@dimen/text_size_16" />
 
-                </Spinner>
+                <ImageButton
+                    android:id="@+id/expand_collapse"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="@dimen/activity_horizontal_margin"
+                    android:background="@drawable/ic_expand_small_holo_light"
+                    android:paddingBottom="@dimen/activity_vertical_margin"
+                    android:paddingRight="@dimen/activity_vertical_margin" />
 
             </RelativeLayout>
 

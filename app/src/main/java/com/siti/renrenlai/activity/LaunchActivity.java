@@ -12,11 +12,14 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -28,7 +31,10 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
+import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.Project;
+import com.siti.renrenlai.bean.ProjectBaseInfo;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -49,6 +55,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -83,14 +90,13 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     EditText et_place;
     @Bind(R.id.et_epople)
     EditText et_people;
+    @Bind(R.id.tv_project_name) TextView tv_project_name;
     @Bind(R.id.layout_cover)
     RelativeLayout layout_cover;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollGridView;
     @Bind(R.id.et_detail)
     EditText et_detail;
-    @Bind(R.id.spinner_project)
-    Spinner spinner_project;
     @Bind(R.id.btn_preview)
     Button btn_preview;
     @Bind(R.id.btn_publish)
@@ -109,13 +115,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private Calendar calendar = Calendar.getInstance();
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static final String TAG = "LaunchActivity";
+    private List<ProjectBaseInfo> projectList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
+        initProjects();
         initViews();
+
     }
 
     private void initViews() {
@@ -137,6 +146,40 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         });
         noScrollGridView.setAdapter(picAdapter);
 
+    }
+
+    public void initProjects(){
+        String url = ConstantValue.GET_LAUNCHED_PROJECTS;
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //getData(response);
+                        try {
+                            String result = response.getString("result");
+                            Log.d("response", "result:" + result);
+                            projectList = com.alibaba.fastjson.JSONArray.parseArray(result, ProjectBaseInfo.class);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        Log.d("response", "jsonobject:" + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+
+        request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
     }
 
     /**
@@ -252,7 +295,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
 
     @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.tv_start_time, R.id.tv_end_time,
-            R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
+            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_interest:
@@ -279,6 +322,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_deadline:
                 showTimeDialog(view);
                 break;
+            case R.id.tv_project_name:
+                showProjectsDialog();
+                break;
             case R.id.layout_cover:
                 showPicDialog();
                 break;
@@ -301,6 +347,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 publishActivity();
                 break;
         }
+    }
+
+    public void showProjectsDialog(){
+        Log.d(TAG, "showProjectsDialog: ");
+        ListView listView = new ListView(this);
+        PopupWindow popupWindow = new PopupWindow(this);
+        popupWindow.showAtLocation(tv_project_name, Gravity.BOTTOM, 10, 10);
+        listView.setAdapter(new SpinnerProjectAdapter(this, projectList));
+        popupWindow.setContentView(listView);
     }
 
     /**

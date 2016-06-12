@@ -58,6 +58,9 @@ public class ConstantValue {
     //获取我报名的活动
     public static final String GET_PARTICIPATE_ACTIVITY_LIST = urlRoot + "/getParticipateActivityList";
 
+    //获取用户发起的项目
+    public static final String GET_LAUNCHED_PROJECTS = urlRoot + "/getLaunchedProjects";
+
 
     //获取项目列表
     public static final String GET_PROJECT_LIST = urlRoot + "/getProjectListForApp";
