@@ -378,6 +378,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             activityContent.put("activityDescrip", et_detail.getText().toString());
             activityContent.put("activityTypeId", activity_type);
             activityContent.put("groupId", 2);
+            activityContent.put("projectId", 2);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -429,8 +430,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      * @param imageName     图片名字
      */
     private void upload(String activity_id, Bitmap bitmap, String imageName) {
-        String api = "/myupload";
-        String url = ConstantValue.urlRoot + api;
+        String url = ConstantValue.UPLOAD_IMAGES;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("activityId", activity_id);

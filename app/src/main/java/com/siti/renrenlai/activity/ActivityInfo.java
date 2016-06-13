@@ -95,7 +95,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     String userName, userHeadImgePath;
     String url;             //接口地址
     int activity_id, userId;
-    boolean isFavorPressed = false;
+    boolean lovedIs, isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
     private List<ActivityImage> imageList;              //活动封面
@@ -122,6 +122,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         activity = (Activity) getIntent().getExtras().getSerializable("activity");
 
         if (activity != null) {
+            lovedIs = activity.isLovedIs();
             activity_id = activity.getActivityId();
             activity_title = activity.getActivityName();
             contact_tel = activity.getactivityReleaserTel();
@@ -140,6 +141,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             }
         });
 
+        if(lovedIs){
+            btnFavor.setSelected(true);
+        }
         if (imageList != null && imageList.size() > 0) {
             for (int i = 0; i < imageList.size(); i++) {
                 String path = imageList.get(i).getActivityImagePath();
@@ -199,7 +203,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             @Override
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
-                showCommentDialog(commentsList, pos);
+                showCommentDialog(mAdapter, commentsList, pos);
 
             }
         });
@@ -278,8 +282,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(List<CommentContents> commentsList, int position) {
-        CommentDialog dialog = new CommentDialog(this, position);
+    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
+        CommentDialog dialog = new CommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;

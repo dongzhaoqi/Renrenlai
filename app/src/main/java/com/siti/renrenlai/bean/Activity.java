@@ -17,6 +17,7 @@ public class Activity implements Serializable {
     private String activityReleaserTel;
     private String activityReleaseTime;
     private String activityStatus;
+    private boolean lovedIs;
     private List<ActivityImage> activityImages;
     private List<LovedUsers> lovedUsers;
     private List<CommentContents> commentContents;
@@ -83,6 +84,14 @@ public class Activity implements Serializable {
 
     public void setActivityAddress(String activityAddress) {
         this.activityAddress = activityAddress;
+    }
+
+    public boolean isLovedIs() {
+        return lovedIs;
+    }
+
+    public void setLovedIs(boolean lovedIs) {
+        this.lovedIs = lovedIs;
     }
 
     public String getParticipateNum() {

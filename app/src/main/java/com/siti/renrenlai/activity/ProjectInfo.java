@@ -18,6 +18,12 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
@@ -29,12 +35,18 @@ import com.siti.renrenlai.bean.ProjectImage;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.Serializable;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -71,7 +83,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     String projectName, projectImagePath, telephone, projectAddress, projectDescrip, projectTime;
     int projectId;
-    String userName;
+    String userName, userHeadImgePath;
     boolean isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
@@ -93,8 +105,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     private void initViews() {
         imagePath = new ArrayList<>();
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
+        userHeadImgePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
         project = (Project) getIntent().getExtras().getSerializable("project");
         if(project != null){
+            projectId = project.getProjectId();
             projectName = project.getProjectName();
             projectImagePath = project.getProjectImagePath();
             telephone = project.getTelephone();
@@ -188,11 +202,12 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
-                showCommentDialog();
+                showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
                 if (!isFavorPressed) {
                     btnFavor.setSelected(true);         //喜欢
+                    like();
                 } else {
                     btnFavor.setSelected(false);        //取消喜欢
                     removeImage();
@@ -226,8 +241,8 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     /**
      * 点击评论按钮，弹出评论框
      */
-    public void showCommentDialog(){
-        CommentDialog dialog = new CommentDialog(this);
+    public void showCommentDialog(CommentAdapter mAdapter) {
+        CommentDialog dialog = new CommentDialog(this, mAdapter, commentsList, projectId);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -239,18 +254,48 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
+    public void like() {
+        addImage();
+        String url = ConstantValue.LOVE_THIS_PROJECT;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("projectId", projectId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        VolleyLog.d("response", response.toString());
+                        showToast("修改成功!");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.e("Error: ", error.getMessage());
+                //showToast("出错了!");
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
 
 
     /**
      * 点赞,将头像添加到最前面
      */
-    public void addImage(){
+    public void addImage() {
         CircleImageView image = new CircleImageView(this);
-        Picasso.with(this).load(R.drawable.arduino).resize(96, 96).into(image);
+        Picasso.with(this).load(userHeadImgePath).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(15, 0, 0, 0);
         ll_image.addView(image, 0, params);
-        btnFavor.setText("喜欢(" + (lovedUsersList.size()+1) + ")");
+        btnFavor.setText("喜欢(" + (lovedUsersList.size() + 1) + ")");
     }
 
     /**
@@ -270,7 +315,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         super.onDestroy();
         ShareSDK.stopSDK(this);
     }
-
 
 }
 

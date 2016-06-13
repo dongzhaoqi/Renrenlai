@@ -143,7 +143,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "interetsAndHobbies", user.getInteretsAndHobbies());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                "intro", user.getInteretsAndHobbies());
+                "intro", user.getIntroduction());
         SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userId", user.getUserId());
     }

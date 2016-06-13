@@ -7,8 +7,8 @@ public class ConstantValue {
 
     /*本机测试*/
 //   public static final String urlRoot = "http://192.168.1.108:8080/RenrenLai";
-//    public static final String urlRoot = "http://10.1.40.51:8080/RenrenLai";
-    public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
+    public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
+ //   public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/
     //public static final String urlRoot = "http://116.228.3.125/RenrenLai";
@@ -37,6 +37,9 @@ public class ConstantValue {
     //获取活动列表
     public static final String GET_ACTIVITY_LIST = urlRoot + "/getActivityListForApp";
 
+    //上传图片
+    public static final String UPLOAD_IMAGES = urlRoot + "/myupload";
+
     //报名活动
     public static final String PARTICIPATE_ACTIVITY = urlRoot + "/participateActivity";
 
@@ -46,7 +49,7 @@ public class ConstantValue {
     //喜欢该活动
     public static final String LOVE_THIS_ACTIVITY = urlRoot + "/loveThisActivityForApp";
 
-    //报名活动
+    //发起活动
     public static final String LAUNCH_ACTIVITY = urlRoot + "/launchActivityForApp";
 
     //获取我喜欢的活动
@@ -61,6 +64,11 @@ public class ConstantValue {
     //获取用户发起的项目
     public static final String GET_LAUNCHED_PROJECTS = urlRoot + "/getLaunchedProjects";
 
+    //发起项目意愿
+    public static final String LAUNCH_PROJECT_INTENTION = urlRoot + "/launchProjectIntention";
+
+    //喜欢该项目
+    public static final String LOVE_THIS_PROJECT = urlRoot + "/loveThisProjectForApp";
 
     //获取项目列表
     public static final String GET_PROJECT_LIST = urlRoot + "/getProjectListForApp";
