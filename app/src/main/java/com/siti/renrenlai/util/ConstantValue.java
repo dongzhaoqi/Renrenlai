@@ -6,18 +6,21 @@ package com.siti.renrenlai.util;
 public class ConstantValue {
 
     /*本机测试*/
-//   public static final String urlRoot = "http://192.168.1.108:8080/RenrenLai";
+   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
 //    public static final String urlRoot = "http://10.1.40.51:8080/RenrenLai";
-    public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
+//    public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/
     //public static final String urlRoot = "http://116.228.3.125/RenrenLai";
 
+
+    //Mob
+    public static final String APPKEY = "105e175f4413e";
+    public static final String APPSECRET = "c70863113ae6d83a2867234b5f9f25da";
+
     /*缓存目录*/
     public static final String ENVIRONMENT_DIR_CACHE = "/activityCache";
 
-    public static final String APPKEY = "105e175f4413e";
-    public static final String APPSECRET = "c70863113ae6d83a2867234b5f9f25da";
 
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
@@ -46,7 +49,7 @@ public class ConstantValue {
     //喜欢该活动
     public static final String LOVE_THIS_ACTIVITY = urlRoot + "/loveThisActivityForApp";
 
-    //报名活动
+    //发起活动
     public static final String LAUNCH_ACTIVITY = urlRoot + "/launchActivityForApp";
 
     //获取我喜欢的活动
