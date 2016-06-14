@@ -124,6 +124,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
         if (activity != null) {
             lovedIs = activity.isLovedIs();
+            signUpIs = activity.isSignUpIs();
             activity_id = activity.getActivityId();
             activity_title = activity.getActivityName();
             contact_tel = activity.getactivityReleaserTel();
@@ -143,6 +144,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         });
 
         if(lovedIs){
+            btnFavor.setText("已喜欢(" + (lovedUsersList.size()) + ")");
             btnFavor.setSelected(true);
         }
         if(signUpIs){

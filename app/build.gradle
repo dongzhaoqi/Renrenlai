@@ -26,6 +26,7 @@ android {
         flatDir {
             dirs 'libs'
         }
+
         maven { url 'http://yanzm.github.io/MaterialTabHost/repository' }
         maven {url 'http://dl.bintray.com/raphaelbussa/maven'}
         maven {url "https://oss.sonatype.org/content/repositories/snapshots"}
@@ -59,6 +60,7 @@ dependencies {
     compile('com.github.afollestad.material-dialogs:core:0.8.5.8@aar') {
         transitive = true
     }
+    compile 'com.github.orhanobut:logger:1.12'
     compile 'com.github.arimorty:floatingsearchview:1.1.2'
     compile 'com.google.code.gson:gson:2.3.1'
     compile 'cn.qqtheme.framework:WheelPicker:1.1.2'

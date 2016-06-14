@@ -32,6 +32,7 @@ import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
+import com.orhanobut.logger.Logger;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 import com.siti.renrenlai.R;
@@ -67,8 +68,8 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<Activity> activityList;
     private ActivityAdapter adapter;
     private ImageView iv_fund;
-    private List<LovedUsers> lovedUsersList;
-    private List<CommentContents> commentsList;
+    private List<LovedUsers> lovedUsersList = new ArrayList<>();
+    private List<CommentContents> commentsList = new ArrayList<>();
     private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
@@ -100,20 +101,20 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private void cache() {
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
-        if(entry != null){              // Cache is available
+        if (entry != null) {              // Cache is available
             String data = null;
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:"+jsonObject);
+                Logger.d(jsonObject.toString());
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }else{
-            // Cache data
+        } else {
+            // Cache
             System.out.println("initData");
             initData();
         }
@@ -258,7 +259,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         getData(response);
                         dismissProcessDialog();
-                        Log.d("response", "jsonobject:" + response.toString());
+                        Logger.t(TAG).d(response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -299,9 +300,10 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         mXRecyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
     }
 
-    private void refreshData(){
+    private void refreshData() {
         initData();
     }
+
     private void loadData() {
         initData();
     }
@@ -311,7 +313,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    public void getActivityInfo(int activityId){
+    public void getActivityInfo(final int activityId) {
         String url = ConstantValue.GET_ACTIVITY_INFO;
 
         JSONObject json = new JSONObject();
@@ -326,21 +328,8 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "response:" + response.toString());
-                        String result = null;
-                        try {
-                            result = response.getJSONObject("result").toString();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        Activity activity = com.alibaba.fastjson.JSONObject.parseObject(result, Activity.class);
-                        Intent intent = new Intent(getActivity(), ActivityInfo.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putSerializable("activity", activity);
-                        intent.putExtras(bundle);
-                        startAnimActivity(intent);
-
+                        Logger.json(response.toString());
+                        getActivityNewData(activityId, response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -353,6 +342,24 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+
+    public void getActivityNewData(int activityId, JSONObject response) {
+        Log.d(TAG, "getActivityNewData: " + response);
+        JSONObject result = response.optJSONObject("result");
+        commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
+        lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
+        Activity activity = activityList.get(activityId);
+        activity.setLovedIs(result.optBoolean("lovedIs"));
+        activity.setSignUpIs(result.optBoolean("signUpIs"));
+        activity.setCommentContents(commentsList);
+        activity.setLovedUsers(lovedUsersList);
+        Intent intent = new Intent(getActivity(), ActivityInfo.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("activity", activity);
+        intent.putExtras(bundle);
+        startAnimActivity(intent);
     }
 
     @Override
