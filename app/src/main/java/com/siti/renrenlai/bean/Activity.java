@@ -17,7 +17,8 @@ public class Activity implements Serializable {
     private String activityReleaserTel;
     private String activityReleaseTime;
     private String activityStatus;
-    private boolean lovedIs;
+    private boolean lovedIs;                        //用户是否已喜欢
+    private boolean signUpIs;                       //用户是否已报名
     private List<ActivityImage> activityImages;
     private List<LovedUsers> lovedUsers;
     private List<CommentContents> commentContents;
@@ -140,6 +141,14 @@ public class Activity implements Serializable {
 
     public void setactivityReleaserTel(String activityReleaserTel) {
         this.activityReleaserTel = activityReleaserTel;
+    }
+
+    public boolean isSignUpIs() {
+        return signUpIs;
+    }
+
+    public void setSignUpIs(boolean signUpIs) {
+        this.signUpIs = signUpIs;
     }
 
     public String getActivityReleaseTime() {

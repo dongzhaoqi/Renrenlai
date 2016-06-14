@@ -96,23 +96,30 @@ public class MyActivity extends BaseActivity implements OnClickListener{
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            Fragment fragment = mFragments[position];
+            /*Fragment fragment = mFragments[position];
+            Bundle bundle = new Bundle();
+            bundle.putInt("position", position);
+            fragment.setArguments(bundle);
+            return fragment;*/
+
+            Fragment fragment;
+            switch (position) {
+                case 0:
+                    fragment = new FavoriteFragment();
+                    break;
+                case 1:
+                    fragment = new EnrollFragment();
+                    break;
+                case 2:
+                    fragment = new LaunchFragment();
+                    break;
+                default:
+                    return null;
+            }
             Bundle bundle = new Bundle();
             bundle.putInt("position", position);
             fragment.setArguments(bundle);
             return fragment;
-
-            /*switch (position) {
-                case 0:
-                    return mFavoriteFragment;
-                case 1:
-                    return mEnrollFragment;
-                case 2:
-                    return mLaunchFragment;
-                default:
-                    return null;
-            }*/
-
         }
 
         @Override
@@ -134,6 +141,11 @@ public class MyActivity extends BaseActivity implements OnClickListener{
             }
             return null;
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        //空操作解决Fragment重叠问题
     }
 
 }

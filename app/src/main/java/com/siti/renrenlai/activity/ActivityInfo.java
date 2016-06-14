@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -95,7 +96,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     String userName, userHeadImgePath;
     String url;             //接口地址
     int activity_id, userId;
-    boolean lovedIs, isFavorPressed = false;
+    boolean lovedIs, signUpIs, isFavorPressed = false;
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
     private List<ActivityImage> imageList;              //活动封面
@@ -143,6 +144,10 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
         if(lovedIs){
             btnFavor.setSelected(true);
+        }
+        if(signUpIs){
+            btnParticipate.setText("已报名");
+            btnParticipate.setClickable(false);
         }
         if (imageList != null && imageList.size() > 0) {
             for (int i = 0; i < imageList.size(); i++) {
@@ -225,14 +230,17 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
-                if (!isFavorPressed) {
-                    btnFavor.setSelected(true);         //喜欢
+                if (!lovedIs) {
                     like();
+                    lovedIs = true;
+                    btnFavor.setSelected(true);         //喜欢
+                    btnFavor.setText("已喜欢(" + (lovedUsersList.size()+1) + ")");
                 } else {
-                    btnFavor.setSelected(false);        //取消喜欢
-                    removeImage();
+                    Toast.makeText(ActivityInfo.this, "已经喜欢!", Toast.LENGTH_SHORT).show();
+                    //btnFavor.setSelected(false);        //取消喜欢
+                    //removeImage();
+                    //btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
                 }
-                isFavorPressed = !isFavorPressed;
                 break;
             case R.id.btn_participate:
                 participate(activity_id);

@@ -138,7 +138,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             switch (msg.what) {
                 case MSG_SET_ALIAS:
                     Log.d(TAG, "Set alias in handler.");
-                    JPushInterface.setAliasAndTags(getApplicationContext(), (String) msg.obj, null, mAliasCallback);
+                    JPushInterface.setAlias(getApplicationContext(), (String) msg.obj, mAliasCallback);
                     break;
                 default:
                     Log.i(TAG, "Unhandled msg - " + msg.what);

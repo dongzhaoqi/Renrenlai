@@ -37,6 +37,9 @@ public class ConstantValue {
     //获取活动列表
     public static final String GET_ACTIVITY_LIST = urlRoot + "/getActivityListForApp";
 
+    //获取活动详情
+    public static final String GET_ACTIVITY_INFO = urlRoot + "/getActivityDynamicInfoForApp";
+
     //上传图片
     public static final String UPLOAD_IMAGES = urlRoot + "/myupload";
 
