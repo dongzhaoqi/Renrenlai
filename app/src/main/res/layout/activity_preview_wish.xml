@@ -18,15 +18,6 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/tv_fund_intro"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/height_96"
-                android:background="?attr/selectableItemBackground"
-                android:gravity="center"
-                android:text="@string/fund_intro"
-                android:textSize="@dimen/text_size_20" />
-
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/view_height"
@@ -47,14 +38,16 @@
                     android:layout_height="match_parent"
                     android:text="@string/str_how" />
 
-                <EditText
+                <TextView
+                    style="@style/project_name"
                     android:id="@+id/et_how"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_toRightOf="@id/str_how"
                     android:layout_marginLeft="@dimen/margin_8"
-                    android:singleLine="true"
-                    android:background="@null" />
+                    android:layout_toRightOf="@id/str_how"
+                    android:background="@null"
+                    android:gravity="center_vertical"
+                    android:singleLine="true" />
             </RelativeLayout>
 
             <View
@@ -76,14 +69,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_which" />
 
-                <EditText
+                <TextView
+                    style="@style/project_name"
                     android:id="@+id/et_which"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/str_which"
                     android:background="@null"
                     android:gravity="top"
-                    android:minLines="3"
                     android:padding="@dimen/margin_8" />
             </RelativeLayout>
 
@@ -106,14 +99,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_what" />
 
-                <EditText
+                <TextView
+                    style="@style/project_name"
                     android:id="@+id/et_what"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/str_what"
                     android:background="@null"
                     android:gravity="top"
-                    android:minLines="3"
                     android:padding="@dimen/margin_8" />
             </RelativeLayout>
 
@@ -137,14 +130,14 @@
                     android:layout_height="wrap_content"
                     android:text="@string/str_who" />
 
-                <EditText
+                <TextView
+                    style="@style/project_name"
                     android:id="@+id/et_who"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/str_who"
                     android:background="@null"
                     android:gravity="top"
-                    android:minLines="3"
                     android:padding="@dimen/margin_8" />
             </RelativeLayout>
 
@@ -177,39 +170,6 @@
                     android:gravity="center_vertical"
                     android:paddingLeft="@dimen/activity_horizontal_margin"
                     android:singleLine="true" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="bottom">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_alignParentBottom="true"
-                    android:background="@drawable/layout_bottom_border"
-                    android:orientation="horizontal">
-
-                    <Button
-                        android:id="@+id/btn_preview"
-                        style="@style/me_text_style"
-                        android:layout_width="0dp"
-                        android:layout_height="match_parent"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_background"
-                        android:text="@string/txt_preview" />
-
-                    <Button
-                        android:id="@+id/btn_publish"
-                        style="@style/me_text_style"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_toRightOf="@id/btn_preview"
-                        android:layout_weight="1"
-                        android:background="@drawable/btn_background"
-                        android:text="@string/txt_publish" />
-                </LinearLayout>
             </RelativeLayout>
         </LinearLayout>
     </ScrollView>

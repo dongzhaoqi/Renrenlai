@@ -41,7 +41,9 @@ public class CommentDialog extends Dialog implements OnClickListener{
     int position = -1;
     int activity_id;
     int replyId;
+    String url = ConstantValue.COMMENT_ACTIVITY;
     String userName, userHeadImagePath, contents, commentTime;
+    private static final String TAG = "CommentDialog";
 
     public CommentDialog(Activity activity, int theme) {
         super(activity, theme);
@@ -84,6 +86,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
         btnSend.setOnClickListener(this);
         if(position != -1) {
             CommentContents comment = commentsList.get(position);
+            replyId = comment.getCommentId();
             String userName = comment.getUserName();
             etContent.setHint("回复 " + userName + ":");
         }else{
@@ -96,10 +99,12 @@ public class CommentDialog extends Dialog implements OnClickListener{
         userName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         mActivity, "login"), "userName");
-        userHeadImagePath = CustomApplication.getInstance().getUser().getUserHeadPicImagePath();
-        contents = etContent.getText().toString();
+        userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userHeadPicImagePath");
         commentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-
+        contents = etContent.getText().toString();
+        if(position != -1) {
+            contents = "回复" + commentsList.get(position).getUserName() + ": " + contents;
+        }
         CommentContents comment = new CommentContents(userName, contents, userHeadImagePath, commentTime);
         commentsList.add(0, comment);
         mAdapter.notifyDataSetChanged();
@@ -117,7 +122,6 @@ public class CommentDialog extends Dialog implements OnClickListener{
      * @param activityId    评论的活动id
      */
     private void comment(String userName, String commentContent, int activityId) {
-        String url = ConstantValue.COMMENT_ACTIVITY;
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -147,7 +151,42 @@ public class CommentDialog extends Dialog implements OnClickListener{
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
+    /**
+     * 回复某人的评论
+     * @param userName
+     * @param commentContent
+     * @param activityId
+     * @param replyId
+     */
     private void comment(String userName, String commentContent, int activityId, int replyId ){
+        Log.d(TAG, "comment: " + userName + " " + commentContent + " " + activityId + " " + replyId);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("commentContent", commentContent);
+            jsonObject.put("activityId", activityId);
+            jsonObject.put("replyId", replyId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
 
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        //Log.d("response", "response:" + response.toString());
+                        Toast.makeText(mActivity, "回复成功", Toast.LENGTH_SHORT).show();
+                        CommentDialog.this.dismiss();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", "error.getMessage():" + error.getMessage());
+                Toast.makeText(mActivity, "回复出错", Toast.LENGTH_SHORT).show();
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 }

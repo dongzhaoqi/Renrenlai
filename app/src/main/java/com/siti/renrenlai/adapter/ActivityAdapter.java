@@ -93,6 +93,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             Picasso.with(mContext).load(imagePath).into(viewHolder.mImageView);
             //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
         }
+
+        viewHolder.itemView.setTag(p.getActivityId());
     }
 
     @Override

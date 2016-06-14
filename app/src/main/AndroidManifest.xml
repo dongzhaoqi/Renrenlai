@@ -76,6 +76,7 @@
         <activity android:name=".activity.AlbumActivity" />
         <activity android:name=".activity.FavoriteActivity" />
         <activity android:name=".activity.PreviewActivity" />
+        <activity android:name=".activity.PreviewWish" />
 
 
         <!-- Required SDK 核心功能-->

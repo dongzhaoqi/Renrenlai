@@ -11,6 +11,7 @@ public class User implements Serializable{
 	private String userHeadPicImagePath;
 	private String sex;
 	private String interetsAndHobbies;
+	private String introduction;
 
 	public int getUserId() {
 		return userId;
@@ -50,5 +51,13 @@ public class User implements Serializable{
 
 	public void setInteretsAndHobbies(String interetsAndHobbies) {
 		this.interetsAndHobbies = interetsAndHobbies;
+	}
+
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
 	}
 }

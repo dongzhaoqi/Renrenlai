@@ -32,10 +32,11 @@
     <string name="txt_home">我的家园</string>
     <string name="txt_dream">更多梦想</string>
 
-    <string name="str_theme">主题：</string>
-    <string name="str_time">时间：</string>
-    <string name="str_location">活动地点：</string>
-    <string name="str_detail">活动详情：</string>
+    <string name="str_how">怎么称呼您？</string>
+    <string name="str_which">简单说说您的点子吧~</string>
+    <string name="str_what">您想达到什么样的目标？</string>
+    <string name="str_who">您的点子将为谁带来益处？</string>
+    <string name="str_when">您计划在什么时候做？</string>
 
     <string name="str_fund_support">基金支持专项活动</string>
 

@@ -44,6 +44,7 @@ import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
@@ -71,10 +72,14 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
+    private static final String TAG = "FindFragment";
     String url = ConstantValue.GET_ACTIVITY_LIST;
+    String userName;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_find, container, false);
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
         return view;
     }
 
@@ -277,13 +282,16 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {
+
                 int pos = Integer.parseInt(data.toString());
-                Activity activity = activityList.get(pos);
+                getActivityInfo(pos);
+
+                /*Activity activity = activityList.get(pos);
                 Intent intent = new Intent(getActivity(), ActivityInfo.class);
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("activity", activity);
                 intent.putExtras(bundle);
-                startAnimActivity(intent);
+                startAnimActivity(intent);*/
             }
         });
         mXRecyclerView.setAdapter(adapter);
@@ -301,6 +309,50 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private void initEvent() {
         iv_fund.setOnClickListener(this);
 
+    }
+
+    public void getActivityInfo(int activityId){
+        String url = ConstantValue.GET_ACTIVITY_INFO;
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("activityId", activityId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "response:" + response.toString());
+                        String result = null;
+                        try {
+                            result = response.getJSONObject("result").toString();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        Activity activity = com.alibaba.fastjson.JSONObject.parseObject(result, Activity.class);
+                        Intent intent = new Intent(getActivity(), ActivityInfo.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("activity", activity);
+                        intent.putExtras(bundle);
+                        startAnimActivity(intent);
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     @Override
