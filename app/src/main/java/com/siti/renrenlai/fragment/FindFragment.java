@@ -32,7 +32,6 @@ import com.orhanobut.dialogplus.OnBackPressListener;
 import com.orhanobut.dialogplus.OnCancelListener;
 import com.orhanobut.dialogplus.OnDismissListener;
 import com.orhanobut.dialogplus.OnItemClickListener;
-import com.orhanobut.logger.Logger;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 import com.siti.renrenlai.R;
@@ -107,7 +106,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                Logger.d(jsonObject.toString());
+                Log.d(TAG, jsonObject.toString());
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -260,7 +259,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         getData(response);
                         dismissProcessDialog();
-                        Logger.t(TAG).d(response.toString());
+                        Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -323,7 +322,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.json(response.toString());
+                        Log.d(TAG, response.toString());
                         getActivityNewData(pos, response);
                     }
                 }, new Response.ErrorListener() {

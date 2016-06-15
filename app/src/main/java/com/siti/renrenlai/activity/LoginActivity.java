@@ -13,7 +13,6 @@ import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.orhanobut.logger.Logger;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
 import com.siti.renrenlai.util.ConstantValue;
@@ -35,6 +34,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
     private EditText et_password;
     private String str_email,str_password;
     private User user;
+    private static final String TAG = "LoginActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +95,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.json(response.toString());
+                        Log.d(TAG, response.toString());
                         loginSuccess(response);
                         dismissProcessDialog();
                     }

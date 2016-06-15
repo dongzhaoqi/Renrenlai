@@ -75,38 +75,6 @@ public class GuideActivity extends FragmentActivity {
         nameTagAnimation.addPageAnimation(new SCPositionAnimation(this, 0, 0, -size.y / 2));
         mViewPager.addAnimation(nameTagAnimation);
 
-        View currentlyWork = findViewById(R.id.imageview_main_activity_currently_work);
-        SCViewAnimation currentlyWorkAnimation = new SCViewAnimation(currentlyWork);
-        currentlyWorkAnimation.addPageAnimation(new SCPositionAnimation(this, 0, -size.x, 0));
-        mViewPager.addAnimation(currentlyWorkAnimation);
-
-        View atSkex = findViewById(R.id.imageview_main_activity_at_skex);
-        SCViewAnimationUtil.prepareViewToGetSize(atSkex);
-        SCViewAnimation atSkexAnimation = new SCViewAnimation(atSkex);
-        atSkexAnimation.addPageAnimation(new SCPositionAnimation(getApplicationContext(), 0, 0, -( size.y - atSkex.getHeight() )));
-        atSkexAnimation.addPageAnimation(new SCPositionAnimation(getApplicationContext(), 1, -size.x, 0));
-        mViewPager.addAnimation(atSkexAnimation);
-
-        View mobileView = findViewById(R.id.imageview_main_activity_mobile);
-        SCViewAnimation mobileAnimation = new SCViewAnimation(mobileView);
-        mobileAnimation.startToPosition((int)(size.x*1.5), null);
-        mobileAnimation.addPageAnimation(new SCPositionAnimation(this, 0, -(int)(size.x*1.5), 0));
-        mobileAnimation.addPageAnimation(new SCPositionAnimation(this, 1, -(int)(size.x*1.5), 0));
-        mViewPager.addAnimation(mobileAnimation);
-
-        View djangoView = findViewById(R.id.imageview_main_activity_django_python);
-        SCViewAnimation djangoAnimation = new SCViewAnimation(djangoView);
-        djangoAnimation.startToPosition(null, -size.y);
-        djangoAnimation.addPageAnimation(new SCPositionAnimation(this, 0, 0, size.y));
-        djangoAnimation.addPageAnimation(new SCPositionAnimation(this, 1, 0, size.y));
-        mViewPager.addAnimation(djangoAnimation);
-
-        View commonlyView = findViewById(R.id.imageview_main_activity_commonly);
-        SCViewAnimation commonlyAnimation = new SCViewAnimation(commonlyView);
-        commonlyAnimation.startToPosition(size.x, null);
-        commonlyAnimation.addPageAnimation(new SCPositionAnimation(this, 0, -size.x, 0));
-        commonlyAnimation.addPageAnimation(new SCPositionAnimation(this, 1, -size.x, 0));
-        mViewPager.addAnimation(commonlyAnimation);
 
         View butView = findViewById(R.id.imageview_main_activity_but);
         SCViewAnimation butAnimation = new SCViewAnimation(butView);
@@ -122,12 +90,6 @@ public class GuideActivity extends FragmentActivity {
         diplomeAnimation.addPageAnimation(new SCPositionAnimation(this, 2, -size.x*2 ,0));
         mViewPager.addAnimation(diplomeAnimation);
 
-        View whyView = findViewById(R.id.imageview_main_activity_why);
-        SCViewAnimation whyAnimation = new SCViewAnimation(whyView);
-        whyAnimation.startToPosition(size.x, null);
-        whyAnimation.addPageAnimation(new SCPositionAnimation(this, 1, -size.x, 0));
-        whyAnimation.addPageAnimation(new SCPositionAnimation(this, 2, -size.x, 0));
-        mViewPager.addAnimation(whyAnimation);
 
         View futureView = findViewById(R.id.imageview_main_future);
         SCViewAnimation futureAnimation = new SCViewAnimation(futureView);
@@ -143,12 +105,6 @@ public class GuideActivity extends FragmentActivity {
         arduinoAnimation.addPageAnimation(new SCPositionAnimation(this, 3, - size.x, 0));
         mViewPager.addAnimation(arduinoAnimation);
 
-        View raspberryView = findViewById(R.id.imageview_main_raspberry_pi);
-        SCViewAnimation raspberryAnimation = new SCViewAnimation(raspberryView);
-        raspberryAnimation.startToPosition(-size.x, null);
-        raspberryAnimation.addPageAnimation(new SCPositionAnimation(this, 2, size.x, 0));
-        raspberryAnimation.addPageAnimation(new SCPositionAnimation(this, 3, -size.x, 0));
-        mViewPager.addAnimation(raspberryAnimation);
 
         View connectedDeviceView = findViewById(R.id.imageview_main_connected_device);
         SCViewAnimation connectedDeviceAnimation = new SCViewAnimation(connectedDeviceView);

@@ -6,8 +6,8 @@ package com.siti.renrenlai.util;
 public class ConstantValue {
 
     /*本机测试*/
-//   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
-    public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
+   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
+//    public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
  //   public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/

@@ -16,7 +16,6 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
-import com.orhanobut.logger.Logger;
 import com.siti.renrenlai.bean.User;
 
 import java.io.File;
@@ -68,7 +67,6 @@ public class CustomApplication extends Application {
 		initImageLoader(getApplicationContext());
 		JPushInterface.setDebugMode(true);
 		JPushInterface.init(this);
-		Logger.init();
 	}
 
 

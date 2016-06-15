@@ -3,8 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clipChildren="true"
-    android:clipToPadding="true"
-    tools:context=".MainActivity">
+    android:clipToPadding="true">
 
     <com.dev.sacot41.scviewpager.SCViewPager
         android:id="@+id/viewpager_main_activity"
@@ -32,44 +31,6 @@
         android:rotation="-10"
         android:src="@drawable/name_tag"/>
 
-    <ImageView
-        android:id="@+id/imageview_main_activity_currently_work"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="225dp"
-        android:src="@drawable/currently_work"/>
-
-    <ImageView
-        android:id="@+id/imageview_main_activity_at_skex"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="450dp"
-        android:src="@drawable/at_skex_2"/>
-
-    <ImageView
-        android:id="@+id/imageview_main_activity_commonly"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="95dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/commonly"/>
-
-    <ImageView
-        android:id="@+id/imageview_main_activity_django_python"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="75dp"
-        android:layout_marginTop="400dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/django_python"/>
-
-    <ImageView
-        android:id="@+id/imageview_main_activity_mobile"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="180dp"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/mobile"/>
 
     <ImageView
         android:id="@+id/imageview_main_activity_but"
@@ -86,14 +47,6 @@
         android:layout_centerHorizontal="true"
         android:src="@drawable/diploma"/>
 
-    <ImageView
-        android:id="@+id/imageview_main_activity_why"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:src="@drawable/why"/>
 
     <ImageView
         android:id="@+id/imageview_main_future"
@@ -111,15 +64,6 @@
         android:layout_marginLeft="50dp"
         android:src="@drawable/arduino"/>
 
-    <ImageView
-        android:id="@+id/imageview_main_raspberry_pi"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/imageview_main_arduino"
-        android:layout_marginTop="40dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="50dp"
-        android:src="@drawable/raspberry_pi_logo"/>
 
     <ImageView
         android:id="@+id/imageview_main_connected_device"

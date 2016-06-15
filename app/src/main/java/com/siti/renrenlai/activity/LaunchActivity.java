@@ -12,7 +12,6 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -22,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -30,12 +28,11 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.orhanobut.logger.Logger;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.Activity;
-import com.siti.renrenlai.bean.Project;
+import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
@@ -120,6 +117,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static final String TAG = "LaunchActivity";
     private List<ProjectBaseInfo> projectList;
+    private List<ActivityImagePre> imagePreList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -273,7 +271,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Logger.t(TAG).json(response.toString());
+                        Log.d(TAG, response.toString());
+                        imagePreList = com.alibaba.fastjson.JSONArray.parseArray(
+                                response.optJSONArray("result").toString(), ActivityImagePre.class);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -397,7 +397,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
         if (!popupWindow.isShowing()) {
-            popupWindow.showAsDropDown(tv_project_name);
+            popupWindow.showAsDropDown(tv_project_name, 0, 30);
         }
     }
 
