@@ -121,10 +121,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
             startAnimActivity(MainActivity.class);
             finish();
             saveUser();
-            /*SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                    "user", result.toString());
-            SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
-                    "userName", user.getUserName());*/
+
             showToast("登录成功");
         }else{
             showToast("登录失败,请检查用户名或密码");

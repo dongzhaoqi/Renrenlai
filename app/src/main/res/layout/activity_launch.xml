@@ -311,7 +311,6 @@
                     android:layout_centerVertical="true"
                     android:layout_toRightOf="@id/str_project"
                     android:textColor="#666666"
-                    android:text="aaaa"
                     android:textSize="@dimen/text_size_16" />
 
                 <ImageButton

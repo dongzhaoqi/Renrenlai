@@ -42,6 +42,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         initTab();
 
         setAlias();		//为设备设置别名,以便可以定向推送
+        String rid = JPushInterface.getRegistrationID(getApplicationContext());
+        Log.d(TAG, "onCreate: " + rid);
     }
 
     private void initTab() {
@@ -139,6 +141,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
                 case MSG_SET_ALIAS:
                     Log.d(TAG, "Set alias in handler.");
                     JPushInterface.setAlias(getApplicationContext(), (String) msg.obj, mAliasCallback);
+
                     break;
                 default:
                     Log.i(TAG, "Unhandled msg - " + msg.what);

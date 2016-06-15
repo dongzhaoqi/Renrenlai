@@ -146,6 +146,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         if(lovedIs){
             btnFavor.setText("已喜欢(" + (lovedUsersList.size()) + ")");
             btnFavor.setSelected(true);
+        }else{
+            btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         }
         if(signUpIs){
             btnParticipate.setText("已报名");
@@ -176,7 +178,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         noScrollGridView.setAdapter(picAdapter);
 
         btnComment.setText("评论(" + (commentsList.size()) + ")");
-        btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
+
         for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");

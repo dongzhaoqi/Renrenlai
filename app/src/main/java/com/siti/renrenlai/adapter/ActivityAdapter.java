@@ -94,7 +94,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
             //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
         }
 
-        viewHolder.itemView.setTag(p.getActivityId());
+        //viewHolder.itemView.setTag(p.getActivityId());
     }
 
     @Override

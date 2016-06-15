@@ -76,6 +76,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private static final String TAG = "FindFragment";
     String url = ConstantValue.GET_ACTIVITY_LIST;
     String userName;
+    int activityId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -285,14 +286,8 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             public void onItemClick(View view, Object data) {
 
                 int pos = Integer.parseInt(data.toString());
-                getActivityInfo(pos);
-
-                /*Activity activity = activityList.get(pos);
-                Intent intent = new Intent(getActivity(), ActivityInfo.class);
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("activity", activity);
-                intent.putExtras(bundle);
-                startAnimActivity(intent);*/
+                activityId = activityList.get(pos).getActivityId();
+                getActivityInfo(pos, activityId);
             }
         });
         mXRecyclerView.setAdapter(adapter);
@@ -313,7 +308,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    public void getActivityInfo(final int activityId) {
+    public void getActivityInfo(final int pos, final int activityId) {
         String url = ConstantValue.GET_ACTIVITY_INFO;
 
         JSONObject json = new JSONObject();
@@ -329,7 +324,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         Logger.json(response.toString());
-                        getActivityNewData(activityId, response);
+                        getActivityNewData(pos, response);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -345,12 +340,12 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    public void getActivityNewData(int activityId, JSONObject response) {
+    public void getActivityNewData(int pos, JSONObject response) {
         Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
-        Activity activity = activityList.get(activityId);
+        Activity activity = activityList.get(pos);
         activity.setLovedIs(result.optBoolean("lovedIs"));
         activity.setSignUpIs(result.optBoolean("signUpIs"));
         activity.setCommentContents(commentsList);

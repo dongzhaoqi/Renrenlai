@@ -13,6 +13,7 @@ import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -29,6 +30,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.orhanobut.logger.Logger;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
@@ -44,6 +46,7 @@ import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.NoScrollGridView;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -90,7 +93,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     EditText et_place;
     @Bind(R.id.et_epople)
     EditText et_people;
-    @Bind(R.id.tv_project_name) TextView tv_project_name;
+    @Bind(R.id.tv_project_name)
+    TextView tv_project_name;
     @Bind(R.id.layout_cover)
     RelativeLayout layout_cover;
     @Bind(R.id.noScrollgridview)
@@ -148,7 +152,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    public void initProjects(){
+    public void initProjects() {
         String url = ConstantValue.GET_LAUNCHED_PROJECTS;
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         JSONObject jsonObject = new JSONObject();
@@ -161,14 +165,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //getData(response);
-                        try {
-                            String result = response.getString("result");
-                            Log.d("response", "result:" + result);
-                            projectList = com.alibaba.fastjson.JSONArray.parseArray(result, ProjectBaseInfo.class);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        getProjects(response);
                         Log.d("response", "jsonobject:" + response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -182,9 +179,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
     }
 
+    public void getProjects(JSONObject response) {
+        JSONArray result = response.optJSONArray("result");
+        Log.d("response", "result:" + result);
+        projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), ProjectBaseInfo.class);
+    }
+
     /**
      * 弹出时间选择对话框
      * 开始时间、结束时间、报名截止
+     *
      * @param v
      */
     public void showTimeDialog(View v) {
@@ -233,7 +237,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         startAnimActivity(AlbumActivity.class);
                         return true;
                     case R.id.item_take_pic:
-                        goCamera();
+                        //goCamera();
+                        getImagesFromLib();
                         return true;
                     default:
                         return false;
@@ -256,6 +261,31 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         Uri imgUri = Uri.fromFile(img);
         camera.putExtra(MediaStore.EXTRA_OUTPUT, imgUri);
         startActivityForResult(camera, TAKE_PICTURE);
+    }
+
+    /**
+     * 从库图片中选择
+     */
+    private void getImagesFromLib(){
+        String url = ConstantValue.GET_IMAGES_FROM_LIB;
+
+        JsonObjectRequest req = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Logger.t(TAG).json(response.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     @Override
@@ -349,13 +379,26 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
-    public void showProjectsDialog(){
+    public void showProjectsDialog() {
         Log.d(TAG, "showProjectsDialog: ");
-        ListView listView = new ListView(this);
-        PopupWindow popupWindow = new PopupWindow(this);
-        popupWindow.showAtLocation(tv_project_name, Gravity.BOTTOM, 10, 10);
+        PopupWindow popupWindow;
+        View view = LayoutInflater.from(this).inflate(R.layout.list_project, null);
+        ListView listView = (ListView) view.findViewById(R.id.ll_project);
         listView.setAdapter(new SpinnerProjectAdapter(this, projectList));
-        popupWindow.setContentView(listView);
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                tv_project_name.setText(projectList.get(position).getProjectName());
+            }
+        });
+        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.base_edit_input));
+        popupWindow.setOutsideTouchable(true);
+        popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
+        if (!popupWindow.isShowing()) {
+            popupWindow.showAsDropDown(tv_project_name);
+        }
     }
 
     /**
@@ -425,9 +468,10 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * 上传图片
-     * @param activity_id   活动id(可关联多张照片)
-     * @param bitmap        上传的bitmap图片
-     * @param imageName     图片名字
+     *
+     * @param activity_id 活动id(可关联多张照片)
+     * @param bitmap      上传的bitmap图片
+     * @param imageName   图片名字
      */
     private void upload(String activity_id, Bitmap bitmap, String imageName) {
         String url = ConstantValue.UPLOAD_IMAGES;
