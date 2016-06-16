@@ -82,15 +82,16 @@ public class SplashActivity extends BaseActivity {
                 switch (msg.what) {
                     case 1:
                         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(activity, "login"), "userName");
-
-                        if (!userName.equals("0")) {
+                        activity.startActivity(new Intent(activity, MainActivity.class));
+                        activity.finish();
+                        /*if (!userName.equals("0")) {
                             ((CustomApplication) activity.getApplication()).setUser(user);
                             activity.startActivity(new Intent(activity, MainActivity.class));
                             activity.finish();
                         } else {
                             activity.startActivity(new Intent(activity, LoginActivity.class));
                             activity.finish();
-                        }
+                        }*/
                 }
             }
         }

@@ -198,6 +198,7 @@
                         android:layout_height="match_parent"
                         android:layout_weight="1"
                         android:background="@drawable/btn_background"
+                        android:gravity="center"
                         android:text="@string/txt_preview" />
 
                     <Button
@@ -208,6 +209,7 @@
                         android:layout_toRightOf="@id/btn_preview"
                         android:layout_weight="1"
                         android:background="@drawable/btn_background"
+                        android:gravity="center"
                         android:text="@string/txt_publish" />
                 </LinearLayout>
             </RelativeLayout>

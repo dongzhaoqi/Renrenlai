@@ -243,7 +243,6 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("Error: ", error.getMessage());
                 showToast("出错了!");
             }
         });

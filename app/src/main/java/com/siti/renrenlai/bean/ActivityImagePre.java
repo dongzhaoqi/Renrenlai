@@ -1,9 +1,11 @@
 package com.siti.renrenlai.bean;
 
+import java.io.Serializable;
+
 /**
  * Created by Dong on 6/15/2016.
  */
-public class ActivityImagePre {
+public class ActivityImagePre implements Serializable{
     private int activityImagePreId;
     private String activityImagePreName;
     private String activityImagePath;

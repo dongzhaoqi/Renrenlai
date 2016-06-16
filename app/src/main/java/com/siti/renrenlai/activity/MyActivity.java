@@ -59,10 +59,10 @@ public class MyActivity extends BaseActivity implements OnClickListener{
     private void initViews() {
         initTopBarForLeft("我的活动");
 
-        mFavoriteFragment = new FavoriteFragment();
+       /* mFavoriteFragment = new FavoriteFragment();
         mEnrollFragment = new EnrollFragment();
         mLaunchFragment = new LaunchFragment();
-        mFragments = new Fragment[]{mFavoriteFragment, mEnrollFragment, mLaunchFragment};
+        mFragments = new Fragment[]{mFavoriteFragment, mEnrollFragment, mLaunchFragment};*/
 
         pos = getIntent().getIntExtra("pos", -1);
         System.out.println("pos:" + pos);

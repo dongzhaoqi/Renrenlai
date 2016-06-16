@@ -200,5 +200,8 @@ public class FavoriteFragment extends BaseFragment {
         initData();
     }
 
-
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        //空操作解决Fragment重叠问题
+    }
 }

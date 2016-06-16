@@ -231,6 +231,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
+                goToLogin();
                 showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
@@ -257,6 +258,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * @param activity_id   活动的id
      */
     private void participate(int activity_id) {
+        goToLogin();
         JSONObject jsonObject = new JSONObject();
         System.out.println("userName:" + userName + " activityId:" + activity_id);
         try {
@@ -328,6 +330,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * 喜欢该活动
      */
     public void like() {
+        goToLogin();
         addImage();
         url = null;
         try {
@@ -378,6 +381,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         params.setMargins(0, 0, 15, 0);
         ll_image.removeViewAt(0);
         btnFavor.setText("喜欢(" + lovedUsersList.size() + ")");
+    }
+
+    public void goToLogin(){
+        if(userName.equals("0")){
+            startActivity(new Intent(this, LoginActivity.class));
+            return;
+        }
     }
 
     @Override

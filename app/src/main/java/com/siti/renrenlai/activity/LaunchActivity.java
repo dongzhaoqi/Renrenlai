@@ -50,6 +50,7 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -90,6 +91,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     EditText et_place;
     @Bind(R.id.et_epople)
     EditText et_people;
+    @Bind(R.id.layout_projects) RelativeLayout layout_projects;
     @Bind(R.id.tv_project_name)
     TextView tv_project_name;
     @Bind(R.id.layout_cover)
@@ -181,6 +183,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         JSONArray result = response.optJSONArray("result");
         Log.d("response", "result:" + result);
         projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), ProjectBaseInfo.class);
+        if(projectList.size() == 0){
+            layout_projects.setVisibility(View.GONE);
+        }
     }
 
     /**
@@ -266,7 +271,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      */
     private void getImagesFromLib(){
         String url = ConstantValue.GET_IMAGES_FROM_LIB;
-
+        final Intent intent = new Intent(LaunchActivity.this, LibImageActivity.class);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
@@ -274,6 +279,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         Log.d(TAG, response.toString());
                         imagePreList = com.alibaba.fastjson.JSONArray.parseArray(
                                 response.optJSONArray("result").toString(), ActivityImagePre.class);
+                        intent.putExtra("libImageList", (Serializable) imagePreList);
+                        startActivity(intent);
                     }
                 }, new Response.ErrorListener() {
             @Override

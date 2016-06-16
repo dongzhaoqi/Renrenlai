@@ -65,8 +65,6 @@ public class CustomApplication extends Application {
 		Log.e("", "application");
 		mInstance = this;
 		initImageLoader(getApplicationContext());
-		JPushInterface.setDebugMode(true);
-		JPushInterface.init(this);
 	}
 
 

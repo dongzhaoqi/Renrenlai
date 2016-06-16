@@ -26,6 +26,7 @@ import com.squareup.picasso.Picasso;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.jpush.android.api.JPushInterface;
 import cn.sharesdk.framework.ShareSDK;
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -78,6 +79,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onDestroy() {
         super.onDestroy();
         ShareSDK.stopSDK(getActivity());
+        JPushInterface.setAlias(getActivity(), "", null);
     }
 
     @Override
