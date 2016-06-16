@@ -51,6 +51,8 @@ public class EnrollFragment extends BaseFragment {
     String api = null;
     String url = null;
     private static final String TAG = "EnrollFragment";
+    boolean isVisibleToUser = false;
+    boolean isPrepared = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,14 +66,38 @@ public class EnrollFragment extends BaseFragment {
         super.onActivityCreated(savedInstanceState);
         initView();
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        //String userName = CustomApplication.getInstance().getUser().getUserName();
 
         try {
             url = ConstantValue.GET_PARTICIPATE_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        isPrepared = true;
         cache();
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cache();
+    }
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            this.isVisibleToUser = true;
+            if(isPrepared)
+                cache();
+        } else {
+            //相当于Fragment的onPause
+            this.isVisibleToUser = false;
+        }
+        Log.e("canyu","canyu"+isVisibleToUser);
     }
 
     /**
@@ -110,6 +136,9 @@ public class EnrollFragment extends BaseFragment {
         enroll_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         enroll_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
         enroll_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+        enroll_recyclerView.setAdapter(mTimeLineAdapter);
 
         enroll_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -165,7 +194,6 @@ public class EnrollFragment extends BaseFragment {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG+"response", "报名 response:" + response.toString());
-                        showToast("获取报名成功!");
                         getData(response);
                         dismissProcessDialog();
                     }
@@ -183,14 +211,21 @@ public class EnrollFragment extends BaseFragment {
     }
 
     private void getData(JSONObject response){
+
+        if(!this.isVisibleToUser)
+            return;
         JSONArray result = response.optJSONArray("result");
         if(result != null){
             mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
         }
-        System.out.println("mDataList:" + mDataList.size());
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+        Log.e("mDataList:","+"+ mDataList.size());
+
+        //mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+        //enroll_recyclerView.setAdapter(mTimeLineAdapter);
+        //mTimeLineAdapter.changeData(mDataList);
+        mTimeLineAdapter.changeData(mDataList);
         mTimeLineAdapter.notifyDataSetChanged();
-        enroll_recyclerView.setAdapter(mTimeLineAdapter);
+        Log.e("baoming","notifyDataSetChanged");
     }
 
     private void refreshData(){
@@ -201,8 +236,4 @@ public class EnrollFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //空操作解决Fragment重叠问题
-    }
 }

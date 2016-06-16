@@ -2,6 +2,7 @@ package com.siti.renrenlai.dialog;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -16,6 +17,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.activity.LoginActivity;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.util.ConstantValue;
@@ -99,19 +101,24 @@ public class CommentDialog extends Dialog implements OnClickListener{
         userName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         mActivity, "login"), "userName");
-        userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userHeadPicImagePath");
-        commentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-        contents = etContent.getText().toString();
-        if(position != -1) {
-            contents = "回复" + commentsList.get(position).getUserName() + ": " + contents;
-        }
-        CommentContents comment = new CommentContents(userName, contents, userHeadImagePath, commentTime);
-        commentsList.add(0, comment);
-        mAdapter.notifyDataSetChanged();
-        if(position == -1){
-            comment(userName, contents, activity_id);
-        }else{
-            comment(userName, contents, activity_id, replyId);
+        if("0".equals(userName)){
+            mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
+            CommentDialog.this.dismiss();
+        }else {
+            userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userHeadPicImagePath");
+            commentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+            contents = etContent.getText().toString();
+            if (position != -1) {
+                contents = "回复" + commentsList.get(position).getUserName() + ": " + contents;
+            }
+            CommentContents comment = new CommentContents(userName, contents, userHeadImagePath, commentTime);
+            commentsList.add(0, comment);
+            mAdapter.notifyDataSetChanged();
+            if (position == -1) {
+                comment(userName, contents, activity_id);
+            } else {
+                comment(userName, contents, activity_id, replyId);
+            }
         }
     }
 

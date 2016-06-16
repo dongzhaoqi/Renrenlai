@@ -50,6 +50,9 @@ public class FavoriteFragment extends BaseFragment {
     String api = null;
     String url = null;
     private static final String TAG = "FavoriteFragment";
+    boolean isVisibleToUser = false;
+    boolean isPrepared = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_favorite, container, false);
@@ -62,16 +65,35 @@ public class FavoriteFragment extends BaseFragment {
 
         initView();
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
-
+        //String userName = CustomApplication.getInstance().getUser().getUserName();
         try {
             url = ConstantValue.GET_LOVED_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        isPrepared = true;
         cache();
+
+
+
     }
 
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            this.isVisibleToUser = true;
+            if(isPrepared)
+                cache();
+        } else {
+            //相当于Fragment的onPause
+            this.isVisibleToUser = false;
+        }
+        Log.e("xihuan","xihuan"+isVisibleToUser);
+    }
 
     /**
      * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
@@ -98,6 +120,12 @@ public class FavoriteFragment extends BaseFragment {
         }
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        cache();
+    }
+
     private void initView() {
         position = getArguments().getInt("position");
         btn_to_top = (ActionButton) findViewById(R.id.btn_to_top);
@@ -109,6 +137,9 @@ public class FavoriteFragment extends BaseFragment {
         favorite_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         favorite_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
         favorite_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+        favorite_recyclerView.setAdapter(mTimeLineAdapter);
 
         favorite_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -167,7 +198,6 @@ public class FavoriteFragment extends BaseFragment {
                     public void onResponse(JSONObject response) {
                         Log.d("response", "喜欢 response:" + response.toString());
                         getData(response);
-                        showToast("获取喜欢成功!");
                         dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
@@ -184,24 +214,25 @@ public class FavoriteFragment extends BaseFragment {
     }
 
     private void getData(JSONObject response) {
+
+        if(!this.isVisibleToUser)
+            return;
         JSONArray result = response.optJSONArray("result");
         if(result != null){
             mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
         }
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
-        favorite_recyclerView.setAdapter(mTimeLineAdapter);
-    }
-
-    private void refreshData(){
-        initData();
+        mTimeLineAdapter.changeData(mDataList);
+        mTimeLineAdapter.notifyDataSetChanged();
+        Log.e("xihuan","notifyDataSetChanged");
     }
 
     private void loadData() {
         initData();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //空操作解决Fragment重叠问题
+    private void refreshData(){
+        initData();
     }
+
+
 }

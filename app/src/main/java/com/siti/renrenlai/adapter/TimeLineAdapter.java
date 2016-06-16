@@ -27,9 +27,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     @Bind(R.id.layout_activity_item)
     RelativeLayout layout_activity_item;
-    private static Context mContext;
-    private static List<TimeLineModel> mFeedList;
-    static int position;
+    private  static Context mContext;
+    private  List<TimeLineModel> mFeedList;
+    int position;
     int activityStatus;     //活动状态 1.报名中 2.审核通过3.报名截止4.活动结束
 
     public TimeLineAdapter(Context context, List<TimeLineModel> feedList, int position) {
@@ -51,7 +51,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
     @Override
     public TimeLineViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = View.inflate(parent.getContext(), R.layout.item_favorite, null);
-        return new TimeLineViewHolder(view, viewType);
+        return new TimeLineViewHolder(view, viewType,position);
     }
 
     @Override
@@ -85,7 +85,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         return (mFeedList != null ? mFeedList.size() : 0);
     }
 
-    public static class TimeLineViewHolder extends RecyclerView.ViewHolder {
+    public class TimeLineViewHolder extends RecyclerView.ViewHolder {
 
         @Bind(R.id.time_marker)
         TimelineView mTimelineView;
@@ -98,10 +98,9 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
         @Bind(R.id.btn_progress)
         Button btnProgress;
 
-        public TimeLineViewHolder(View itemView, int viewType) {
+        public TimeLineViewHolder(View itemView, int viewType, final int position) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -116,6 +115,11 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mTimelineView.initLine(viewType);
         }
 
+    }
+
+    public void changeData( List<TimeLineModel> mDataList){
+        this.mFeedList.clear();
+        this.mFeedList.addAll(mDataList);
     }
 
 }

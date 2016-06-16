@@ -24,10 +24,10 @@ import java.util.Locale;
 public class MyActivity extends BaseActivity implements OnClickListener{
 
     private int pos;
-    private Fragment[] mFragments;
-    private static FavoriteFragment mFavoriteFragment;
-    private EnrollFragment mEnrollFragment;
-    private LaunchFragment mLaunchFragment;
+    //private Fragment[] mFragments;
+    private FavoriteFragment mFavoriteFragment = new FavoriteFragment();
+    private EnrollFragment mEnrollFragment = new EnrollFragment();
+    private LaunchFragment mLaunchFragment = new LaunchFragment();
     private SectionsPagerAdapter pagerAdapter;
     private MaterialTabHost tabHost;
 
@@ -105,13 +105,13 @@ public class MyActivity extends BaseActivity implements OnClickListener{
             Fragment fragment;
             switch (position) {
                 case 0:
-                    fragment = new FavoriteFragment();
+                    fragment = mFavoriteFragment;
                     break;
                 case 1:
-                    fragment = new EnrollFragment();
+                    fragment = mEnrollFragment;
                     break;
                 case 2:
-                    fragment = new LaunchFragment();
+                    fragment = mLaunchFragment;
                     break;
                 default:
                     return null;

@@ -231,24 +231,31 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 startActivity(intent);
                 break;
             case R.id.btn_comment:
-                goToLogin();
                 showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
-                if (!lovedIs) {
-                    like();
-                    lovedIs = true;
-                    btnFavor.setSelected(true);         //喜欢
-                    btnFavor.setText("已喜欢(" + (lovedUsersList.size()+1) + ")");
-                } else {
-                    Toast.makeText(ActivityInfo.this, "已经喜欢!", Toast.LENGTH_SHORT).show();
-                    //btnFavor.setSelected(false);        //取消喜欢
-                    //removeImage();
-                    //btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
+                if(userName.equals("0")){
+                    startActivity(new Intent(this, LoginActivity.class));
+                }else {
+                    if (!lovedIs) {
+                        like();
+                        lovedIs = true;
+                        btnFavor.setSelected(true);         //喜欢
+                        btnFavor.setText("已喜欢(" + (lovedUsersList.size() + 1) + ")");
+                    } else {
+                        Toast.makeText(ActivityInfo.this, "已经喜欢!", Toast.LENGTH_SHORT).show();
+                        //btnFavor.setSelected(false);        //取消喜欢
+                        //removeImage();
+                        //btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
+                    }
                 }
                 break;
             case R.id.btn_participate:
-                participate(activity_id);
+                if(userName.equals("0")){
+                    startActivity(new Intent(this, LoginActivity.class));
+                }else{
+                    participate(activity_id);
+                }
                 break;
         }
     }
@@ -258,7 +265,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * @param activity_id   活动的id
      */
     private void participate(int activity_id) {
-        goToLogin();
         JSONObject jsonObject = new JSONObject();
         System.out.println("userName:" + userName + " activityId:" + activity_id);
         try {
@@ -330,7 +336,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * 喜欢该活动
      */
     public void like() {
-        goToLogin();
         addImage();
         url = null;
         try {
@@ -383,12 +388,6 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         btnFavor.setText("喜欢(" + lovedUsersList.size() + ")");
     }
 
-    public void goToLogin(){
-        if(userName.equals("0")){
-            startActivity(new Intent(this, LoginActivity.class));
-            return;
-        }
-    }
 
     @Override
     protected void onDestroy() {

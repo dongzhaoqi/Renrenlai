@@ -52,6 +52,9 @@ public class LaunchFragment extends BaseFragment {
     String url = null;
     String userName = null;
     private static final String TAG = "LaunchFragment";
+    boolean isVisibleToUser = false;
+    boolean isPrepared = false;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -63,15 +66,41 @@ public class LaunchFragment extends BaseFragment {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initView();
-        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
-
+        // String userName = CustomApplication.getInstance().getUser().getUserName();
+        String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
         try {
             url = ConstantValue.GET_PUBLISH_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
+        isPrepared = true;
         cache();
+
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cache();
+    }
+
+
+    @Override
+    public void setUserVisibleHint(boolean isVisibleToUser) {
+        super.setUserVisibleHint(isVisibleToUser);
+
+        if (isVisibleToUser) {
+            //相当于Fragment的onResume
+            this.isVisibleToUser = true;
+            if(isPrepared)
+                cache();
+        } else {
+            //相当于Fragment的onPause
+            this.isVisibleToUser = false;
+        }
+
+        Log.e("faqi","faqi"+isVisibleToUser);
     }
 
     /**
@@ -110,6 +139,9 @@ public class LaunchFragment extends BaseFragment {
         launch_recyclerView.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
         launch_recyclerView.setLaodingMoreProgressStyle(ProgressStyle.SquareSpin);
         launch_recyclerView.setArrowImageView(R.drawable.iconfont_downgrey);
+
+        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+        launch_recyclerView.setAdapter(mTimeLineAdapter);
 
         launch_recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
 
@@ -185,13 +217,20 @@ public class LaunchFragment extends BaseFragment {
     }
 
     public void getData(JSONObject response){
+
+        if(!this.isVisibleToUser)
+            return;
         JSONArray result = response.optJSONArray("result");
         if(result != null){
             mDataList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), TimeLineModel.class);
+            //mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
+            //launch_recyclerView.setAdapter(mTimeLineAdapter);
+
         }
-        mTimeLineAdapter = new TimeLineAdapter(getActivity(), mDataList, position);
-        launch_recyclerView.setAdapter(mTimeLineAdapter);
+        mTimeLineAdapter.changeData(mDataList);
         mTimeLineAdapter.notifyDataSetChanged();
+        Log.e("faqi","notifyDataSetChanged");
+
     }
 
     private void refreshData(){
@@ -202,9 +241,5 @@ public class LaunchFragment extends BaseFragment {
         initData();
     }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        //空操作解决Fragment重叠问题
-    }
 
 }
