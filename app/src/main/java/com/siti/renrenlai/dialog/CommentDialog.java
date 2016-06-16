@@ -143,8 +143,8 @@ public class CommentDialog extends Dialog implements OnClickListener{
                     @Override
                     public void onResponse(JSONObject response) {
                         //Log.d("response", "response:" + response.toString());
-                        Toast.makeText(mActivity, "评论成功", Toast.LENGTH_SHORT).show();
                         CommentDialog.this.dismiss();
+                        Toast.makeText(mActivity, "评论成功", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
             @Override
