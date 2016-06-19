@@ -64,7 +64,7 @@
         AppKey="1359181083"
         AppSecret="429e7fe77455a74dcc17f08d3cc80bc1"
         RedirectUrl="http://www.baidu.com"
-        ShareByAppClient="true"
+        ShareByAppClient="false"
         Enable="true" />
 
     <TencentWeibo
@@ -98,7 +98,7 @@
         SortId="4"
         AppId="wx7c67a86d7d1a5c23"
         AppSecret="fcea9c0f3bf25d8a3af22be56d436672"
-        BypassApproval="false"
+        BypassApproval="true"
         Enable="true" />
     
     <WechatMoments
@@ -106,7 +106,7 @@
         SortId="5"
         AppId="wx7c67a86d7d1a5c23"
         AppSecret="fcea9c0f3bf25d8a3af22be56d436672"
-        BypassApproval="false"
+        BypassApproval="true"
         Enable="true" />
         
 	<WechatFavorite

@@ -44,7 +44,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
             @Override
             public void onClick() {
                 super.onClick();
-                startAnimActivity(RegisterActivity.class);
+                startAnimActivity(VerifyPhoneActivity.class);
             }
         });
         initViews();

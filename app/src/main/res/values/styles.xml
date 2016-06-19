@@ -74,6 +74,9 @@
         <!--半透明-->
         <item name="android:windowIsTranslucent">true</item>
 
+
+        <item name="android:windowFullscreen">true</item>
+
         <!-- 是否模糊 -->
         <item name="android:backgroundDimEnabled">true</item>
         <item name="android:windowFrame">@null</item>

@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class CommentDialog extends Dialog implements OnClickListener{
+public class ProjectCommentDialog extends Dialog implements OnClickListener{
 
     private EditText etContent;
     private ImageView btnSend;
@@ -41,38 +41,38 @@ public class CommentDialog extends Dialog implements OnClickListener{
     private List<CommentContents> commentsList;
     private CommentAdapter mAdapter;
     int position = -1;
-    int activity_id;
+    int project_id;
     int replyId;
-    String url = ConstantValue.COMMENT_ACTIVITY;
+    String url = ConstantValue.COMMENT_THIS_PROJECT;
     String userName, userHeadImagePath, contents, commentTime;
     private static final String TAG = "CommentDialog";
 
-    public CommentDialog(Activity activity, int theme) {
+    public ProjectCommentDialog(Activity activity, int theme) {
         super(activity, theme);
         this.mActivity = activity;
         dialog = new Dialog(activity);
     }
 
-    public CommentDialog(Activity activity, CommentAdapter mAdapter) {
+    public ProjectCommentDialog(Activity activity, CommentAdapter mAdapter) {
         this(activity, R.style.dialog_comment);
         this.mActivity = activity;
         this.mAdapter = mAdapter;
     }
 
-    public CommentDialog(Activity activity, CommentAdapter mAdapter, List<CommentContents> commentsList, int activity_id) {
+    public ProjectCommentDialog(Activity activity, CommentAdapter mAdapter, List<CommentContents> commentsList, int project_id) {
         this(activity, R.style.dialog_comment);
         this.mActivity = activity;
         this.mAdapter = mAdapter;
         this.commentsList = commentsList;
-        this.activity_id = activity_id;
+        this.project_id = project_id;
         dialog = new Dialog(activity);
     }
 
 
-    public void setCommentList(List<CommentContents> commentsList, int pos, int activity_id){
+    public void setCommentList(List<CommentContents> commentsList, int pos, int project_id){
         this.commentsList = commentsList;
         this.position = pos;
-        this.activity_id = activity_id;
+        this.project_id = project_id;
     }
 
     @Override
@@ -99,7 +99,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
                         mActivity, "login"), "userName");
         if("0".equals(userName)){
             mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
-            CommentDialog.this.dismiss();
+            ProjectCommentDialog.this.dismiss();
         }else {
             userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "userHeadPicImagePath");
             commentTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -111,9 +111,9 @@ public class CommentDialog extends Dialog implements OnClickListener{
             commentsList.add(0, comment);
             mAdapter.notifyDataSetChanged();
             if (position == -1) {
-                comment(userName, contents, activity_id);
+                comment(userName, contents, project_id);
             } else {
-                comment(userName, contents, activity_id, replyId);
+                comment(userName, contents, project_id, replyId);
             }
         }
     }
@@ -122,14 +122,14 @@ public class CommentDialog extends Dialog implements OnClickListener{
      * 发表评论
      * @param userName  评论人用户名
      * @param commentContent    评论内容
-     * @param activityId    评论的活动id
+     * @param projectId    评论的项目id
      */
-    private void comment(String userName, String commentContent, int activityId) {
+    private void comment(String userName, String commentContent, int projectId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
             jsonObject.put("commentContent", commentContent);
-            jsonObject.put("activityId", activityId);
+            jsonObject.put("projectId", projectId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -139,7 +139,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
                     @Override
                     public void onResponse(JSONObject response) {
                         //Log.d("response", "response:" + response.toString());
-                        CommentDialog.this.dismiss();
+                        ProjectCommentDialog.this.dismiss();
                         Toast.makeText(mActivity, "评论成功", Toast.LENGTH_SHORT).show();
                     }
                 }, new Response.ErrorListener() {
@@ -158,16 +158,16 @@ public class CommentDialog extends Dialog implements OnClickListener{
      * 回复某人的评论
      * @param userName
      * @param commentContent
-     * @param activityId
+     * @param projectId
      * @param replyId
      */
-    private void comment(String userName, String commentContent, int activityId, int replyId ){
-        Log.d(TAG, "comment: " + userName + " " + commentContent + " " + activityId + " " + replyId);
+    private void comment(String userName, String commentContent, int projectId, int replyId ){
+        Log.d(TAG, "comment: " + userName + " " + commentContent + " " + projectId + " " + replyId);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
             jsonObject.put("commentContent", commentContent);
-            jsonObject.put("activityId", activityId);
+            jsonObject.put("projectId", projectId);
             jsonObject.put("replyId", replyId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -179,7 +179,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
                     public void onResponse(JSONObject response) {
                         //Log.d("response", "response:" + response.toString());
                         Toast.makeText(mActivity, "回复成功", Toast.LENGTH_SHORT).show();
-                        CommentDialog.this.dismiss();
+                        ProjectCommentDialog.this.dismiss();
                     }
                 }, new Response.ErrorListener() {
             @Override

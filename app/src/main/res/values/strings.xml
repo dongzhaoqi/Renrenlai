@@ -6,16 +6,19 @@
 
 
     <!-- Strings related to login register-->
-    <string name="prompt_email">用户名</string>
+    <string name="prompt_username">用户名</string>
     <string name="prompt_password">密码</string>
     <string name="prompt_confirm">确认密码</string>
     <string name="prompt_tel">手机号码</string>
     <string name="action_sign_in">登录</string>
 
+    <string name="verify">验证</string>
     <string name="register">注册</string>
     <string name="hint_empty_phone">手机号不能为空</string>
     <string name="hint_invalid_phone">请输入有效的手机号</string>
 
+    <string name="getcode_hint">获取验证码</string>
+    <string name="smscode_hint">请输入手机验证码</string>
     <string name="search_hint">请输入关键字</string>
 
     <!--bottom item-->

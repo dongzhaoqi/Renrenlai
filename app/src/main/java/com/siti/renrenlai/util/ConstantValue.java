@@ -19,6 +19,11 @@ public class ConstantValue {
     public static final String APPKEY = "105e175f4413e";
     public static final String APPSECRET = "c70863113ae6d83a2867234b5f9f25da";
 
+    public static final String SMS_APPKEY = "14082f53c4a96";
+    public static final String SMS_APPSECRET = "d7a064e16f8889d65ce78a7bf83295e7";
+
+
+
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
 
@@ -75,6 +80,9 @@ public class ConstantValue {
 
     //喜欢该项目
     public static final String LOVE_THIS_PROJECT = urlRoot + "/loveThisProjectForApp";
+
+    //评论该项目
+    public static final String COMMENT_THIS_PROJECT = urlRoot + "/addProjectCommentForApp";
 
     //获取项目列表
     public static final String GET_PROJECT_LIST = urlRoot + "/getProjectListForApp";

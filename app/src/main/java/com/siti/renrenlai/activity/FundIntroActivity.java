@@ -182,6 +182,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     if (dy > 0) {
                         layoutDreamGo.setVisibility(View.VISIBLE);
+                        layoutDreamGo.setBackgroundResource(R.drawable.layout_top_border);
                     } else {
                         layoutDreamGo.setVisibility(View.GONE);
                     }

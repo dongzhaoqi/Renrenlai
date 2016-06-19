@@ -32,7 +32,7 @@ import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.bean.ProjectImage;
-import com.siti.renrenlai.dialog.CommentDialog;
+import com.siti.renrenlai.dialog.ProjectCommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -45,8 +45,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.Serializable;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -185,7 +183,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
-                showCommentDialog(commentsList, pos);
+                showCommentDialog(mAdapter, commentsList, pos);
 
             }
         });
@@ -224,8 +222,8 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(List<CommentContents> commentsList, int position){
-        CommentDialog dialog = new CommentDialog(this, position);
+    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position){
+        ProjectCommentDialog dialog = new ProjectCommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -242,7 +240,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
      * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(CommentAdapter mAdapter) {
-        CommentDialog dialog = new CommentDialog(this, mAdapter, commentsList, projectId);
+        ProjectCommentDialog dialog = new ProjectCommentDialog(this, mAdapter, commentsList, projectId);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
         lp.width = WindowManager.LayoutParams.MATCH_PARENT;
