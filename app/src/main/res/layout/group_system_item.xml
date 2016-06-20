@@ -17,7 +17,8 @@
             android:layout_width="@dimen/height_36"
             android:layout_height="@dimen/height_36"
             android:layout_centerVertical="true"
-            android:background="@drawable/system_alarm"/>
+            android:background="@drawable/system_alarm" />
+
         <TextView
             android:id="@+id/str_system_alarm"
             style="@style/me_text_style"
@@ -26,13 +27,34 @@
             android:layout_toRightOf="@id/iv_system_alarm"
             android:text="@string/str_system_alarm" />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/height_36">
+
+            <ImageView
+                android:id="@+id/iv_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:src="@drawable/circle" />
+            <TextView
+                android:id="@+id/tv_message_nums"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="111"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_expand"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:duplicateParentState="true"/>
+            android:duplicateParentState="true" />
     </RelativeLayout>
 
     <View

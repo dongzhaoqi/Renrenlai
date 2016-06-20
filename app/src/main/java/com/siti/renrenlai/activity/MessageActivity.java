@@ -1,19 +1,26 @@
 package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ExpandableListView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter;
-import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter.ReceivedLikeGroup;
 import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter.ReceivedLikeChild;
+import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter.ReceivedLikeGroup;
 import com.siti.renrenlai.adapter.ReviewExpandAdapter;
-import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewChild;
+import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
-import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
+import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
+import com.siti.renrenlai.db.Message;
+import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.AnimatedExpandableListView;
+
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -42,6 +49,9 @@ public class MessageActivity extends BaseActivity {
     private String[] str_name = {"环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑"};
     private String[] users = {"张三", "李四", "小王","张三", "李四", "小王", "张三", "李四", "小王"};
     private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
+    private DbManager db;
+    private List<Message> messageList;
+    private static final String TAG = "MessageActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +59,17 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
         initViews();
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
+        try {
+            messageList = db.selector(Message.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        for(Message message : messageList){
+            Log.d(TAG, "onCreate: " + message.getMsgId() + " " + message.getMsgTitle() + " " + message.getMsgContent());
+        }
+
+
     }
 
     private void initViews() {

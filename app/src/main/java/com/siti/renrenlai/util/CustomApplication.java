@@ -18,9 +18,10 @@ import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.utils.StorageUtils;
 import com.siti.renrenlai.bean.User;
 
-import java.io.File;
+import org.xutils.DbManager;
+import org.xutils.x;
 
-import cn.jpush.android.api.JPushInterface;
+import java.io.File;
 
 
 /**
@@ -34,6 +35,9 @@ public class CustomApplication extends Application {
 	public User user = new User();
 	public static int mScreenWidth;
 	public static int mScreenHight;
+	private DbManager.DaoConfig daoConfig;
+	private DbManager db;
+
 	/**
 	 * Log or request TAG
 	 */
@@ -65,10 +69,39 @@ public class CustomApplication extends Application {
 		Log.e("", "application");
 		mInstance = this;
 		initImageLoader(getApplicationContext());
+
+		x.Ext.init(this);
+		x.Ext.setDebug(true); // 是否输出debug日志
+
 	}
 
+	public DbManager.DaoConfig getDaoConfig() {
+		DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
+				.setDbName("test.db")
+				// 不设置dbDir时, 默认存储在app的私有目录.
+				.setDbDir(new File("/RenrenLai/db")) // "sdcard"的写法并非最佳实践, 这里为了简单, 先这样写了.
+				.setDbVersion(2)
+				.setDbOpenListener(new DbManager.DbOpenListener() {
+					@Override
+					public void onDbOpened(DbManager db) {
+						// 开启WAL, 对写入加速提升巨大
+						db.getDatabase().enableWriteAheadLogging();
+					}
+				});
+		return daoConfig;
+	}
 
+	public void setDaoConfig(DbManager.DaoConfig daoConfig) {
+		this.daoConfig = daoConfig;
+	}
 
+	public DbManager getDb() {
+		return db;
+	}
+
+	public void setDb(DbManager db) {
+		this.db = db;
+	}
 
 	public RequestQueue getRequestQueue() {
 		// lazy initialize the request queue, the queue instance will be

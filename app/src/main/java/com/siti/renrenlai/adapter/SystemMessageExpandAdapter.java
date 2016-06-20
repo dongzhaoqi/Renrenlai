@@ -20,6 +20,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
 
     private LayoutInflater inflater;
     private List<MessageGroup> items;
+
     public SystemMessageExpandAdapter(Context context) {
         inflater = LayoutInflater.from(context);
     }
@@ -65,12 +66,18 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
             holder = new GroupHolder();
             convertView = inflater.inflate(R.layout.group_system_item, parent, false);
             holder.title = (TextView) convertView.findViewById(R.id.str_system_alarm);
+            holder.tv_message_nums = (TextView) convertView.findViewById(R.id.tv_message_nums);
+            holder.iv_circle = (ImageView) convertView.findViewById(R.id.iv_circle);
             holder.expand_imgView = (ImageView) convertView.findViewById(R.id.iv_expand);
             convertView.setTag(holder);
         }else{
             holder = (GroupHolder) convertView.getTag();
         }
 
+        if(items.size() > 0 ){
+            holder.iv_circle.setImageResource(R.drawable.circle);
+            holder.tv_message_nums.setTextColor(items.size());
+        }
         if(!isExpanded){
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_expand_small_holo_light);
         }else{
@@ -129,6 +136,8 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class GroupHolder {
         TextView title;
+        TextView tv_message_nums;
+        ImageView iv_circle;
         ImageView expand_imgView;
     }
 
