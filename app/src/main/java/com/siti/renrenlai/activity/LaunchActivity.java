@@ -388,20 +388,21 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     public void showProjectsDialog() {
         Log.d(TAG, "showProjectsDialog: ");
-        PopupWindow popupWindow;
+        final PopupWindow popupWindow;
         View view = LayoutInflater.from(this).inflate(R.layout.list_project, null);
         ListView listView = (ListView) view.findViewById(R.id.ll_project);
+        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.base_edit_input));
+        popupWindow.setOutsideTouchable(true);
         listView.setAdapter(new SpinnerProjectAdapter(this, projectList));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 tv_project_name.setText(projectList.get(position).getProjectName());
+                popupWindow.dismiss();
             }
         });
-        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.base_edit_input));
-        popupWindow.setOutsideTouchable(true);
         popupWindow.setAnimationStyle(android.R.style.Animation_Dialog);
         if (!popupWindow.isShowing()) {
             popupWindow.showAsDropDown(tv_project_name, 0, 30);

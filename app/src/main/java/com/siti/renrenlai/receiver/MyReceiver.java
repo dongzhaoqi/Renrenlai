@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.siti.renrenlai.activity.MessageActivity;
-import com.siti.renrenlai.db.Message;
+import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.util.CustomApplication;
 
 import org.json.JSONException;
@@ -49,16 +49,18 @@ public class MyReceiver extends BroadcastReceiver {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
             String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
             String content = bundle.getString(JPushInterface.EXTRA_ALERT);
+            String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
             Log.d(TAG, "onReceive: 接收到推送下来的通知标题:" + title);
             Log.d(TAG, "onReceive: 接收到推送下来的通知内容:" + content);
+            Log.d(TAG, "onReceive: 接收到推送下来的extras:" + extras);
 
-            Message message = new Message();
-            message.setMsgId(notifactionId);
-            message.setMsgTitle(title);
-            message.setMsgContent(content);
+            SystemMessage systemMessage = new SystemMessage();
+            systemMessage.setMsgId(notifactionId);
+            systemMessage.setMsgTitle(title);
+            systemMessage.setMsgContent(content);
             try {
-                db.save(message);
+                db.save(systemMessage);
             } catch (DbException e) {
                 e.printStackTrace();
             }

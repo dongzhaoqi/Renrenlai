@@ -6,8 +6,8 @@ import org.xutils.db.annotation.Table;
 /**
  * Created by Dong on 6/20/2016.
  */
-@Table(name = "message")
-public class Message {
+@Table(name = "system_message")
+public class SystemMessage {
 
     @Column(name = "msgId", isId = true, autoGen = false)
     private int msgId;

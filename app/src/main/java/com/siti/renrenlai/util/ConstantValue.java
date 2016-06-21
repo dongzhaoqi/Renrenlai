@@ -91,4 +91,8 @@ public class ConstantValue {
     public static final String GET_PROJECT_INFO = urlRoot + "/getProjectInfoForApp";
 
 
+    //获取该项目相关活动
+    public static final String GET_RELATED_ACTIVITY = urlRoot + "/getActivityInfoOfProjectForApp";
+
+
 }

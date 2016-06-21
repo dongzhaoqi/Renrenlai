@@ -2,7 +2,10 @@ package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ExpandableListView;
+import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter;
@@ -14,7 +17,7 @@ import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
-import com.siti.renrenlai.db.Message;
+import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.AnimatedExpandableListView;
 
@@ -42,6 +45,7 @@ public class MessageActivity extends BaseActivity {
     AnimatedExpandableListView listReview;
     @Bind(R.id.list_received_like)
     AnimatedExpandableListView listReceivedLike;
+
     private SystemMessageExpandAdapter systemAdapter;
     private ReviewExpandAdapter reviewAdapter;
     private ReceivedLikeExpandAdapter receivedLikeAdapter;
@@ -50,7 +54,7 @@ public class MessageActivity extends BaseActivity {
     private String[] users = {"张三", "李四", "小王","张三", "李四", "小王", "张三", "李四", "小王"};
     private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
     private DbManager db;
-    private List<Message> messageList;
+    private List<SystemMessage> systemMessageList;
     private static final String TAG = "MessageActivity";
 
     @Override
@@ -59,22 +63,12 @@ public class MessageActivity extends BaseActivity {
         setContentView(R.layout.activity_message);
         ButterKnife.bind(this);
         initViews();
-        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-        try {
-            messageList = db.selector(Message.class).findAll();
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
-        for(Message message : messageList){
-            Log.d(TAG, "onCreate: " + message.getMsgId() + " " + message.getMsgTitle() + " " + message.getMsgContent());
-        }
-
 
     }
 
     private void initViews() {
         initTopBarForLeft("消息");
-
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
         initSystemMessage();
         initReview();
         initReceivedLike();
@@ -93,19 +87,35 @@ public class MessageActivity extends BaseActivity {
         });*/
     }
 
+    /**
+     * 初始化"系统消息"
+     */
     public void initSystemMessage(){
-        List<MessageGroup> items = new ArrayList<>();
-        MessageGroup item = new MessageGroup();
-        for(int i = 0; i < str_message.length; i++){
-            MessageChild child = new MessageChild();
-            child.message = str_message[i];
-            child.activity_name = str_name[i];
-            item.items.add(child);
+        try {
+            systemMessageList = db.selector(SystemMessage.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
         }
-        items.add(item);
+        if(systemMessageList != null){
+            for(SystemMessage systemMessage : systemMessageList){
+                Log.d(TAG, "onCreate: " + systemMessage.getMsgId() + " " + systemMessage.getMsgTitle() + " " + systemMessage.getMsgContent());
+            }
+        }
+
+        List<MessageGroup> systemMessageGroupList = new ArrayList<>();
+        MessageGroup systemMessageGroup = new MessageGroup();
+        if(systemMessageList != null && systemMessageList.size() > 0) {
+            for (int i = 0; i < systemMessageList.size(); i++) {
+                MessageChild child = new MessageChild();
+                child.message = systemMessageList.get(i).getMsgContent();
+                child.activity_name = systemMessageList.get(i).getMsgTitle();
+                systemMessageGroup.systemMessageChildList.add(child);
+            }
+            systemMessageGroupList.add(systemMessageGroup);
+        }
 
         systemAdapter = new SystemMessageExpandAdapter(this);
-        systemAdapter.setData(items);
+        systemAdapter.setData(systemMessageGroupList, systemMessageList);
         // 去掉默认的箭头
         listSystem.setGroupIndicator(null);
         listSystem.setAdapter(systemAdapter);
@@ -119,8 +129,12 @@ public class MessageActivity extends BaseActivity {
                 }
             }
         });
+
     }
 
+    /**
+     * 初始化"评论"
+     */
     public void initReview(){
         List<ReviewGroup> items = new ArrayList<>();
         ReviewGroup item = new ReviewGroup();
@@ -151,7 +165,9 @@ public class MessageActivity extends BaseActivity {
         });
     }
 
-
+    /**
+     * 初始化"收到的喜欢"
+     */
     public void initReceivedLike(){
         List<ReceivedLikeGroup> items = new ArrayList<>();
         ReceivedLikeGroup item = new ReceivedLikeGroup();

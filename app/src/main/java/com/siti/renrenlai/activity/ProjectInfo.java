@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,6 +29,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
@@ -41,6 +43,7 @@ import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -87,6 +90,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     private List<CommentContents> commentsList;         //评论列表
     private List<ProjectImage> imageList;              //活动封面
     private ArrayList<String> imagePath;
+    private List<Activity> relatedActivityList;          //项目的相关活动
     private Project project;
     private ImageAdapter picAdapter;
     private CommentAdapter mAdapter;
@@ -98,6 +102,8 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         setContentView(R.layout.project_info);
         ButterKnife.bind(this);
         initViews();
+
+        getRelatedActivity();
     }
 
     private void initViews() {
@@ -192,6 +198,36 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         list_comment.setAdapter(mAdapter);
     }
 
+    public void getRelatedActivity(){
+        String url = ConstantValue.GET_RELATED_ACTIVITY;
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("userName:" + userName + " projectId:" + projectId);
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("projectId", projectId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("获取相关活动response: ", response.toString());
+                        JSONArray result = response.optJSONArray("result");
+                        relatedActivityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                showToast("出错了!");
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
     @OnClick({R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -213,8 +249,44 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                 isFavorPressed = !isFavorPressed;
                 break;
             case R.id.btn_publish:
+                if(userName.equals("0")){
+                    startActivity(new Intent(this, LoginActivity.class));
+                }else{
+                    participate(projectId);
+                }
                 break;
         }
+    }
+
+    public void participate(int projectId){
+        JSONObject jsonObject = new JSONObject();
+        System.out.println("userName:" + userName + " projectId:" + projectId);
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("projectId", projectId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        String url = ConstantValue.PARTICIPATE_ACTIVITY;
+        System.out.println("url:" + url);
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("活动报名response", response.toString());
+                        showToast("报名成功!");
+                        finish();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("活动报名Error: ","error:" + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
     }
 
     /**

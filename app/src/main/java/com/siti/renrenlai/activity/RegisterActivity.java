@@ -19,7 +19,7 @@ import butterknife.OnClick;
  */
 public class RegisterActivity extends BaseActivity {
 
-    @Bind(R.id.tv_city) TextView tvCity;
+    //@Bind(R.id.tv_city) TextView tvCity;
     @Bind(R.id.btn_sign_up) Button btnSignUp;
     @Bind(R.id.et_username) EditText etUsername;
     @Bind(R.id.et_password) EditText etPassword;
@@ -38,10 +38,10 @@ public class RegisterActivity extends BaseActivity {
     }
 
 
-    @OnClick({R.id.tv_city, R.id.btn_sign_up})
+    @OnClick({R.id.btn_sign_up})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_city:
+            /*case R.id.tv_city:
                 AddressInitTask task = new AddressInitTask(this, new AsyncResponse() {
                     @Override
                     public void processFinish(String output) {
@@ -49,7 +49,7 @@ public class RegisterActivity extends BaseActivity {
                     }
                 });
                 task.execute("上海", "上海市", "浦东新区");
-                break;
+                break;*/
 
             case R.id.btn_sign_up:
                 break;
