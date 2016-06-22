@@ -6,12 +6,12 @@ package com.siti.renrenlai.util;
 public class ConstantValue {
 
     /*本机测试*/
-//   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
+   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
 //    public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
  //   public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/
-    public static final String urlRoot = "http://116.228.3.125/RenrenLai";
+//    public static final String urlRoot = "http://116.228.3.125/RenrenLai";
 
     /*缓存目录*/
     public static final String ENVIRONMENT_DIR_CACHE = "/activityCache";
@@ -23,9 +23,11 @@ public class ConstantValue {
     public static final String SMS_APPSECRET = "d7a064e16f8889d65ce78a7bf83295e7";
 
 
-
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
+
+    //用户注册
+    public static final String USER_REGISTER = urlRoot + "/registerForApp";
 
     //更改用户昵称
     public static final String UPDATE_USER_NAME = urlRoot + "/updateUserName";

@@ -91,6 +91,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                             Toast.makeText(VerifyPhoneActivity.this, "已验证成功，前去注册", Toast.LENGTH_SHORT).show();
                             Intent intent = new Intent(VerifyPhoneActivity.this,
                                     RegisterActivity.class);
+                            intent.putExtra("tel", et_phone.getText().toString());
                             startActivity(intent);
                         }else {
 
@@ -100,6 +101,7 @@ public class VerifyPhoneActivity extends BaseActivity {
                                         Toast.LENGTH_SHORT).show();
                                 Intent intent = new Intent(VerifyPhoneActivity.this,
                                         RegisterActivity.class);
+                                intent.putExtra("tel", et_phone.getText().toString());
                                 startActivity(intent);
                             } else if (event == SMSSDK.EVENT_GET_VERIFICATION_CODE) {
                                 /*Toast.makeText(getApplicationContext(), "验证码已经发送",

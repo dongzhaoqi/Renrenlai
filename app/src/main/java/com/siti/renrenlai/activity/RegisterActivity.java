@@ -1,14 +1,22 @@
 package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.util.AddressInitTask;
-import com.siti.renrenlai.util.AddressInitTask.AsyncResponse;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -24,7 +32,7 @@ public class RegisterActivity extends BaseActivity {
     @Bind(R.id.et_username) EditText etUsername;
     @Bind(R.id.et_password) EditText etPassword;
     @Bind(R.id.et_confirm_password) EditText etConfirmPassword;
-
+    String telphone, userName, password;
     private static final String TAG = "RegisterActivity";
     int i = 60;
     @Override
@@ -34,7 +42,6 @@ public class RegisterActivity extends BaseActivity {
         ButterKnife.bind(this);
 
         initTopBarForLeft("注册");
-
     }
 
 
@@ -52,10 +59,51 @@ public class RegisterActivity extends BaseActivity {
                 break;*/
 
             case R.id.btn_sign_up:
+                register();
                 break;
         }
     }
 
+    private void register(){
+        showProcessDialog("正在注册...");
+        String url = ConstantValue.USER_REGISTER ;
+        telphone = getIntent().getStringExtra("tel");
+        userName = etUsername.getText().toString();
+        password = etPassword.getText().toString();
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("telephone", telphone);
+            jsonObject.put("userName", userName);
+            jsonObject.put("password", password);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        System.out.println("register:" + url + " tel:" + telphone + " userName:" + userName +
+        " password:" + password);
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, response.toString());
+                        registerSuccess(response);
+                        dismissProcessDialog();
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(RegisterActivity.this, "注册失败", Toast.LENGTH_SHORT).show();
+                dismissProcessDialog();
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void registerSuccess(JSONObject response){
+
+    }
 
     protected void onDestroy() {
         // 销毁回调监听接口
