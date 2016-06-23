@@ -1,27 +1,72 @@
-package com.siti.renrenlai.bean;
+package com.siti.renrenlai.db;
+
+import com.siti.renrenlai.bean.ActivityImage;
+import com.siti.renrenlai.bean.CommentContents;
+import com.siti.renrenlai.bean.LovedUsers;
+
+import org.xutils.db.annotation.Column;
+import org.xutils.db.annotation.Table;
 
 import java.io.Serializable;
 import java.util.List;
 
-public class Activity implements Serializable {
+/**
+ * Created by Dong on 2016/6/23.
+ */
 
+@Table(name = "activity")
+public class Activity implements Serializable{
+    @Column(name = "activityId", isId = true, autoGen = true)
     private int activityId;
+
+    @Column(name = "activityName")
     private String activityName;
+
+    @Column(name = "activityType")
     private String activityType;                    //活动类型
+
+    @Column(name = "activityAddress")
     private String activityAddress;                 //活动地点
+
+    @Column(name = "participateNum")
     private String participateNum;                     //活动人数
+
+    @Column(name = "activityDetailDescrip")
     private String activityDetailDescrip;                 //活动详情
+
+    @Column(name = "activityStartTime")
     private String activityStartTime;               //开始时间
+
+    @Column(name = "activityEndTime")
     private String activityEndTime;                 //结束时间
+
+    @Column(name = "deadline")
     private String deadline;                        //报名截止时间
+
+    @Column(name = "activityReleaserTel")
     private String activityReleaserTel;
+
+    @Column(name = "activityReleaseTime")
     private String activityReleaseTime;
+
+    @Column(name = "activityStatus")
     private String activityStatus;
+
+    @Column(name = "lovedIs")
     private boolean lovedIs;                        //用户是否已喜欢
+
+    @Column(name = "signUpIs")
     private boolean signUpIs;                       //用户是否已报名
+
+    @Column(name = "activityImages")
     private List<ActivityImage> activityImages;
+
+    @Column(name = "lovedUsers")
     private List<LovedUsers> lovedUsers;
+
+    @Column(name = "commentContents")
     private List<CommentContents> commentContents;
+
 
     public int getActivityId() {
         return activityId;

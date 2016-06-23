@@ -81,8 +81,8 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
         holder.tvCommentsNumber.setText(project.getCommentCount());
         holder.tvLikeNumber.setText(project.getLovedCount());
         if(commentList != null && commentList.size() >= 2) {
-            holder.tvUsername1.setText(commentList.get(0).getUserName());
-            holder.tvUsername2.setText(commentList.get(1).getUserName());
+            holder.tvUsername1.setText(commentList.get(0).getUserName() + ": ");
+            holder.tvUsername2.setText(commentList.get(1).getUserName() + ": ");
             holder.tvComment1.setText(commentList.get(0).getCommentContent());
             holder.tvComment2.setText(commentList.get(1).getCommentContent());
         }

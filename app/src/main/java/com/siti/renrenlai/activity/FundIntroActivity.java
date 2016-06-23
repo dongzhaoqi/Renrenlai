@@ -170,7 +170,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 @Override
                 public void onItemClick(View view, Object data) {
                     int projectId = Integer.parseInt(data.toString());
-                    cacheProject(projectId);
+                    //cacheProject(projectId);
+                    getProjectInfo(projectId);
                 }
             });
             fundList.setAdapter(fundAdapter);
@@ -220,7 +221,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
      *
      * @param projectId
      */
-    private void cacheProject(int projectId) {
+    /*private void cacheProject(int projectId) {
         url = ConstantValue.GET_PROJECT_INFO;
         String projectUrl = url + projectId;
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
@@ -242,7 +243,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             System.out.println("initData");
             getProjectInfo(projectId);
         }
-    }
+    }*/
 
     public void getProjectInfo(int projectId) {
         String url = ConstantValue.GET_PROJECT_INFO;

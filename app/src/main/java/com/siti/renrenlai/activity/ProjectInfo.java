@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -29,11 +30,11 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.bean.ProjectImage;
+import com.siti.renrenlai.db.Activity;
 import com.siti.renrenlai.dialog.ProjectCommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -66,7 +67,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     ImageView activity_img;
     @Bind(R.id.activity_name)
     TextView tv_avtivity_name;
+    @Bind(R.id.img_relative_activity) ImageView img_relative_activity;
+    @Bind(R.id.tv_relative_activity_name) TextView tv_relative_activity_name;
     @Bind(R.id.layout_contact) RelativeLayout layout_contact;
+    @Bind(R.id.layout_relative_activity) RelativeLayout layout_relative_activity;
     @Bind(R.id.tv_activity_address) TextView tv_activity_address;
     @Bind(R.id.tv_activity_time) TextView tv_activity_time;
     @Bind(R.id.expand_text_view)
@@ -95,6 +99,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     private ImageAdapter picAdapter;
     private CommentAdapter mAdapter;
     private RecyclerView.LayoutManager layoutManager;
+    private boolean lovedOrNot;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,6 +118,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         project = (Project) getIntent().getExtras().getSerializable("project");
         if(project != null){
             projectId = project.getProjectId();
+            lovedOrNot = project.isLovedOrNot();
             projectName = project.getProjectName();
             projectImagePath = project.getProjectImagePath();
             telephone = project.getTelephone();
@@ -130,6 +136,13 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                 CommonUtils.showShare(ProjectInfo.this, projectName);
             }
         });
+
+        if(lovedOrNot){
+            btnFavor.setText("已喜欢(" + (lovedUsersList.size()) + ")");
+            btnFavor.setSelected(true);
+        }else{
+            btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
+        }
 
         btnComment.setText("评论(" + (commentsList.size()) + ")");
         btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
@@ -216,6 +229,12 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                         Log.d("获取相关活动response: ", response.toString());
                         JSONArray result = response.optJSONArray("result");
                         relatedActivityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
+                        if(relatedActivityList == null || relatedActivityList.size() == 0){
+                            layout_relative_activity.setVisibility(View.GONE);
+                        }else{
+                            tv_relative_activity_name.setText(relatedActivityList.get(0).getActivityName());
+                            Picasso.with(ProjectInfo.this).load(relatedActivityList.get(0).getActivityImages().get(0).getActivityImagePath()).into(img_relative_activity);
+                        }
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -228,25 +247,32 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
-    @OnClick({R.id.layout_contact, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
+    @OnClick({R.id.layout_contact, R.id.layout_relative_activity, R.id.btn_comment, R.id.btn_favor, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_contact:
                 Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("tel:" + telephone));
                 startActivity(intent);
                 break;
+            case R.id.layout_relative_activity:
+                Intent relativeIntent = new Intent(ProjectInfo.this, ActivityList.class);
+                relativeIntent.putExtra("activityList", (Serializable) relatedActivityList);
+                startActivity(relativeIntent);
+                break;
             case R.id.btn_comment:
                 showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
-                if (!isFavorPressed) {
-                    btnFavor.setSelected(true);         //喜欢
+                if (!lovedOrNot) {
                     like();
+                    btnFavor.setSelected(true);         //喜欢
+                    btnFavor.setText("已喜欢(" + (lovedUsersList.size() + 1) + ")");
                 } else {
-                    btnFavor.setSelected(false);        //取消喜欢
-                    removeImage();
+                    //btnFavor.setSelected(false);        //取消喜欢
+                    //removeImage();
+                    Toast.makeText(ProjectInfo.this, "已经喜欢!", Toast.LENGTH_SHORT).show();
                 }
-                isFavorPressed = !isFavorPressed;
+                //isFavorPressed = !isFavorPressed;
                 break;
             case R.id.btn_publish:
                 if(userName.equals("0")){

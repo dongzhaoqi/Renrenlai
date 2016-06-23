@@ -31,9 +31,9 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
+import com.siti.renrenlai.db.Activity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -536,7 +536,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         activity.setDeadline(tv_deadline.getText().toString());
         activity.setActivityAddress(et_place.getText().toString());
         activity.setParticipateNum(et_people.getText().toString());
-        activity.setactivityDetailDescrip(et_detail.getText().toString());
+        activity.setActivityDetailDescrip(et_detail.getText().toString());
 
         return activity;
     }

@@ -103,17 +103,22 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-            try {
-                systemMessageList = db.selector(SystemMessage.class).findAll();
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
+            initMessage();
+        }
+    }
+
+    private void initMessage() {
+        try {
+            systemMessageList = db.selector(SystemMessage.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
         }
 
         if (systemMessageList != null && systemMessageList.size() > 0) {
             iv_circle.setVisibility(View.VISIBLE);
             tv_message_nums.setText(String.valueOf(systemMessageList.size()));
         }
+
     }
 
     @Override
@@ -186,5 +191,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     }
                 })
                 .show();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initMessage();
     }
 }

@@ -31,10 +31,10 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.db.Activity;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -127,13 +127,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             signUpIs = activity.isSignUpIs();
             activity_id = activity.getActivityId();
             activity_title = activity.getActivityName();
-            contact_tel = activity.getactivityReleaserTel();
+            contact_tel = activity.getActivityReleaserTel();
             activity_address = activity.getActivityAddress();
-            activity_describ = activity.getactivityDetailDescrip();
+            activity_describ = activity.getActivityDetailDescrip();
             activity_time = activity.getActivityStartTime().substring(0, 16) + " - " + activity.getActivityEndTime().substring(0, 16);
             imageList = activity.getActivityImages();
             lovedUsersList = activity.getLovedUsers();
-            commentsList = activity.getComments();
+            commentsList = activity.getCommentContents();
         }
 
         initTopBarForBoth("活动详情", R.drawable.share, new onRightImageButtonClickListener() {

@@ -51,6 +51,13 @@ public class MyReceiver extends BroadcastReceiver {
             String content = bundle.getString(JPushInterface.EXTRA_ALERT);
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
+            try {
+                JSONObject jsonObject = new JSONObject(extras);
+
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
             Log.d(TAG, "onReceive: 接收到推送下来的通知标题:" + title);
             Log.d(TAG, "onReceive: 接收到推送下来的通知内容:" + content);
             Log.d(TAG, "onReceive: 接收到推送下来的extras:" + extras);

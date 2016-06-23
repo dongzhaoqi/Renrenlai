@@ -51,6 +51,8 @@ public class Project implements Serializable{
         this.projectImagePath = projectImagePath;
     }
 
+
+
     public String getProjectDescrip() {
         return projectDescrip;
     }

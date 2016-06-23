@@ -46,15 +46,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_8"
-                android:layout_marginRight="@dimen/margin_8"
-                android:text="阳光:" />
+                android:layout_marginRight="@dimen/margin_8"/>
 
             <TextView
                 style="@style/project_comment"
                 android:id="@+id/tv_comment1"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="哈哈哈,还不错;哈哈哈,还不错;哈哈哈,还不错;哈哈哈,还不错" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <LinearLayout
@@ -72,15 +70,13 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/margin_8"
-                android:layout_marginRight="@dimen/margin_8"
-                android:text="阳光:" />
+                android:layout_marginRight="@dimen/margin_8"/>
 
             <TextView
                 style="@style/project_comment"
                 android:id="@+id/tv_comment2"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="最喜欢听着电音跑步了,最喜欢听着电音跑步了,我也是的" />
+                android:layout_height="wrap_content"/>
         </LinearLayout>
 
         <TextView

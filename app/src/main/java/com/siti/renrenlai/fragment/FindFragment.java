@@ -38,10 +38,10 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.db.Activity;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -51,6 +51,9 @@ import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
@@ -76,6 +79,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     String url = ConstantValue.GET_ACTIVITY_LIST;
     String userName;
     int activityId;
+    private DbManager db;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -121,6 +125,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initView() {
+
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
+
         initTopBarForLeftTextBoth("发现", "阳光小区", new onLeftTextClickListener() {
             @Override
             public void onClick() {
@@ -175,18 +182,14 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
                     @Override
                     public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
-
                         Log.d("TAG", "onSuggestionClicked()");
-
                     }
 
                     @Override
                     public void onSearchAction() {
-
                         Log.d("TAG", "onSearchAction()");
                     }
                 });
-
 
                 mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
                     @Override
@@ -278,7 +281,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
         activityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
-
+        for(Activity activity : activityList){
+            try {
+                db.save(activity);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
         adapter = new ActivityAdapter(getActivity(), activityList);
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {
             @Override

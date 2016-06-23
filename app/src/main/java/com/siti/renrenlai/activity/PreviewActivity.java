@@ -66,7 +66,7 @@ public class PreviewActivity extends BaseActivity {
         tvDeadline.setText(activity.getDeadline());
         tvPlace.setText(activity.getActivityAddress());
         tvPeople.setText(activity.getParticipateNum());
-        tvDetail.setText(activity.getactivityDetailDescrip());
+        tvDetail.setText(activity.getActivityDetailDescrip());
 
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new PictureAdapter(this, images);

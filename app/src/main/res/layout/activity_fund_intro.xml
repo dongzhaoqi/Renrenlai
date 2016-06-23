@@ -18,7 +18,7 @@
             android:id="@+id/fund_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/bottom_height"/>
+            android:layout_marginBottom="@dimen/item_height"/>
 
         <RelativeLayout
             android:id="@+id/layout_dream_go"
