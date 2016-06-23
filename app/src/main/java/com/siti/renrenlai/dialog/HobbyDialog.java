@@ -71,7 +71,7 @@ public class HobbyDialog extends Dialog implements OnClickListener{
 				String choosen = TagGroup.getCheckedTags();
 				//Toast.makeText(mActivity, choosen, Toast.LENGTH_SHORT).show();
 				MyProfileActivity.setHobby(choosen);
-				SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "hobby", choosen);
+				SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(mActivity, "login"), "interetsAndHobbies", choosen);
 				HobbyDialog.this.dismiss();
 				modifyHobby(choosen);
 				break;

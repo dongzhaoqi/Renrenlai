@@ -86,6 +86,17 @@ public class CommonUtils {
         return m.matches();
     }
 
+    /**
+     * 六位以上的数字密码
+     * @param s
+     * @return
+     */
+    public static boolean isValidPassword(String s){
+        Pattern p = Pattern.compile("^[0-9]{6,}$");
+        Matcher m = p.matcher(s);
+        return m.matches();
+    }
+
     //判断手机号是否合法
     public static boolean isMobilePhone(String phone) {//
         Pattern pattern = Pattern
