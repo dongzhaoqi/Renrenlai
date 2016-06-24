@@ -23,6 +23,30 @@ public class ConstantValue {
     public static final String SMS_APPSECRET = "d7a064e16f8889d65ce78a7bf83295e7";
 
 
+    /**
+     * 消息类型
+     *
+     * 0 -> **报名了活动
+     *
+     * 1 -> **评论了活动
+     *
+     * 2 -> **喜欢了活动
+     *
+     * 11 -> **评论了项目
+     *
+     * 22 -> **喜欢了项目
+     *
+     */
+    public static final int Activity_SYSTEM_MESSAGE = 0;
+
+    public static final int ACTIVITY_RECEIVED_COMMENT = 1;
+
+    public static final int ACTIVITY_RECEIVED_LIKE = 2;
+
+    public static final int PROJECT_RECEIVED_COMMENT = 11;
+
+    public static final int PROJECT_RECEIVED_LIKE = 22;
+
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
 

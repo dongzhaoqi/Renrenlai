@@ -8,7 +8,9 @@ import android.util.Log;
 
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.db.ReceivedComment;
+import com.siti.renrenlai.db.ReceivedLike;
 import com.siti.renrenlai.db.SystemMessage;
+import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 
 import org.json.JSONException;
@@ -29,7 +31,8 @@ public class MyReceiver extends BroadcastReceiver {
     private DbManager db;
     int type;  //消息类型
     JSONObject jsonObject;
-    String userHeadImagePath, userName, commentContent;
+    String userHeadImagePath, userName, commentContent, time;
+    int projectId, activityId;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -65,28 +68,35 @@ public class MyReceiver extends BroadcastReceiver {
             Log.d(TAG, "onReceive: 接收到推送下来的通知内容:" + content);
             Log.d(TAG, "onReceive: 接收到推送下来的extras:" + extras);
 
-            SystemMessage systemMessage = new SystemMessage();
-            systemMessage.setMsgId(notifactionId);
-            systemMessage.setMsgTitle(title);
-            systemMessage.setMsgContent(content);
-            try {
-                db.save(systemMessage);
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
 
             //收到的系统消息---用户报名了活动
-            if(type == 0){
+            if(type == ConstantValue.Activity_SYSTEM_MESSAGE){
+                try {
+                    activityId = jsonObject.getInt("activityId");
+                    time = jsonObject.getString("time");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
 
+                SystemMessage systemMessage = new SystemMessage();
+                systemMessage.setMsgContent(content);
+                systemMessage.setActivityId(activityId);
+                systemMessage.setTime(time);
+                try {
+                    db.save(systemMessage);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
 
             }
 
-            //收到的评论
-            if(type == 11){
+            //收到的活动评论
+            if(type == ConstantValue.ACTIVITY_RECEIVED_COMMENT){
                 try {
                     userHeadImagePath = jsonObject.getString("userHeadImagePath");
                     userName = jsonObject.getString("userName");
                     commentContent = jsonObject.getString("content");
+                    activityId = jsonObject.getInt("activityId");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -95,6 +105,7 @@ public class MyReceiver extends BroadcastReceiver {
                 receivedComment.setContent(commentContent);
                 receivedComment.setUserName(userName);
                 receivedComment.setUserHeadImagePath(userHeadImagePath);
+                receivedComment.setActivityId(activityId);
 
                 try {
                     db.save(receivedComment);
@@ -102,6 +113,50 @@ public class MyReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
             }
+
+            //收到的活动喜欢
+            if(type == ConstantValue.ACTIVITY_RECEIVED_LIKE){
+                try {
+                    time = jsonObject.getString("time");
+                    activityId = jsonObject.getInt("activityId");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ReceivedLike receivedLike = new ReceivedLike();
+                receivedLike.setActivityId(activityId);
+                receivedLike.setLikeTime(time);
+                try {
+                    db.save(receivedLike);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //收到的项目评论
+            if(type == ConstantValue.PROJECT_RECEIVED_COMMENT){
+                try {
+                    userHeadImagePath = jsonObject.getString("userHeadImagePath");
+                    userName = jsonObject.getString("userName");
+                    commentContent = jsonObject.getString("content");
+                    projectId = jsonObject.getInt("projectId");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ReceivedComment receivedComment = new ReceivedComment();
+                receivedComment.setContent(commentContent);
+                receivedComment.setUserName(userName);
+                receivedComment.setUserHeadImagePath(userHeadImagePath);
+                receivedComment.setProjectId(projectId);
+
+                try {
+                    db.save(receivedComment);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+            }
+
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");

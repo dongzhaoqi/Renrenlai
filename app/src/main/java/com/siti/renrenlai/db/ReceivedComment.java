@@ -1,5 +1,7 @@
 package com.siti.renrenlai.db;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
@@ -21,6 +23,12 @@ public class ReceivedComment {
 
     @Column(name = "userHeadImagePath")
     private String userHeadImagePath;
+
+    @Column(name = "projectId")
+    private int projectId;
+
+    @Column(name = "activityId")
+    private int activityId;
 
     public String getUserName() {
         return userName;
@@ -47,10 +55,26 @@ public class ReceivedComment {
     }
 
     public String getUserHeadImagePath() {
-        return userHeadImagePath;
+        return ConstantValue.urlRoot + userHeadImagePath;
     }
 
     public void setUserHeadImagePath(String userHeadImagePath) {
         this.userHeadImagePath = userHeadImagePath;
+    }
+
+    public int getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 }

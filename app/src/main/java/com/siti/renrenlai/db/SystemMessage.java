@@ -18,6 +18,12 @@ public class SystemMessage {
     @Column(name = "msgContent")
     private String msgContent;
 
+    @Column(name = "activityId")
+    private int activityId;
+
+    @Column(name = "time")
+    private String time;
+
     public int getMsgId() {
         return msgId;
     }
@@ -40,5 +46,21 @@ public class SystemMessage {
 
     public void setMsgContent(String msgContent) {
         this.msgContent = msgContent;
+    }
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 }
