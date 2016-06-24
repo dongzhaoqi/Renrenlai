@@ -26,6 +26,28 @@
             android:layout_toRightOf="@id/iv_review"
             android:text="@string/str_review" />
 
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/height_36">
+
+            <ImageView
+                android:id="@+id/iv_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:visibility="gone"
+                android:src="@drawable/circle" />
+            <TextView
+                android:id="@+id/tv_message_nums"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textSize="@dimen/text_size_10"
+                android:textColor="@color/white"/>
+        </RelativeLayout>
+
         <ImageView
             android:id="@+id/iv_expand"
             android:layout_width="wrap_content"

@@ -17,6 +17,8 @@ import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
+import com.siti.renrenlai.db.ReceivedComment;
+import com.siti.renrenlai.db.ReceivedLike;
 import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.AnimatedExpandableListView;
@@ -55,6 +57,8 @@ public class MessageActivity extends BaseActivity {
     private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
     private DbManager db;
     private List<SystemMessage> systemMessageList;
+    private List<ReceivedComment> receivedCommentList;
+    private List<ReceivedLike> receivedLikeList;
     private static final String TAG = "MessageActivity";
 
     @Override
@@ -136,20 +140,35 @@ public class MessageActivity extends BaseActivity {
      * 初始化"评论"
      */
     public void initReview(){
-        List<ReviewGroup> items = new ArrayList<>();
-        ReviewGroup item = new ReviewGroup();
-        for(int i = 0; i < users.length; i++){
-            ReviewChild child = new ReviewChild();
-            child.username = users[i];
-            child.review = contents[i];
-            child.review_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            child.activity_name = str_name[i];
-            item.items.add(child);
+
+        try {
+            receivedCommentList = db.selector(ReceivedComment.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
         }
-        items.add(item);
+
+        if(receivedCommentList != null){
+            for(ReceivedComment comment : receivedCommentList){
+                Log.d(TAG, "评论内容："+comment.getContent() + " 评论人：" + comment.getUserName());
+            }
+        }
+
+        List<ReviewGroup> receivedCommentGroupList = new ArrayList<>();
+        ReviewGroup reviewGroup = new ReviewGroup();
+        if(receivedCommentList != null && receivedCommentList.size() > 0) {
+            for (int i = 0; i < receivedCommentList.size(); i++) {
+                ReviewChild child = new ReviewChild();
+                child.username = receivedCommentList.get(i).getUserName();
+                child.review = receivedCommentList.get(i).getContent();
+                child.review_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                child.activity_name = str_name[i];
+                reviewGroup.receivedCommentChildList.add(child);
+            }
+        }
+        receivedCommentGroupList.add(reviewGroup);
 
         reviewAdapter = new ReviewExpandAdapter(this);
-        reviewAdapter.setData(items);
+        reviewAdapter.setData(receivedCommentGroupList, receivedCommentList);
         // 去掉默认的箭头
         listReview.setGroupIndicator(null);
         listReview.setAdapter(reviewAdapter);
@@ -169,18 +188,34 @@ public class MessageActivity extends BaseActivity {
      * 初始化"收到的喜欢"
      */
     public void initReceivedLike(){
-        List<ReceivedLikeGroup> items = new ArrayList<>();
-        ReceivedLikeGroup item = new ReceivedLikeGroup();
-        for(int i = 0; i < users.length; i++){
-            ReceivedLikeChild child = new ReceivedLikeChild();
-            child.received_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-            child.activity_name = str_name[i];
-            item.items.add(child);
+
+        try {
+            receivedLikeList = db.selector(ReceivedLike.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
         }
-        items.add(item);
+
+        if(receivedLikeList != null){
+            for(ReceivedLike like : receivedLikeList){
+                Log.d(TAG, "用户头像："+like.getUserHeadImagePath());
+            }
+        }
+
+        List<ReceivedLikeGroup> receivedLikeGroupList = new ArrayList<>();
+        ReceivedLikeGroup receivedLikeGroup = new ReceivedLikeGroup();
+
+        if(receivedLikeList != null && receivedLikeList.size() > 0) {
+            for (int i = 0; i < receivedLikeList.size(); i++) {
+                ReceivedLikeChild child = new ReceivedLikeChild();
+                child.received_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+                child.activity_name = str_name[i];
+                receivedLikeGroup.receivedLikeChildList.add(child);
+            }
+        }
+        receivedLikeGroupList.add(receivedLikeGroup);
 
         receivedLikeAdapter = new ReceivedLikeExpandAdapter(this);
-        receivedLikeAdapter.setData(items);
+        receivedLikeAdapter.setData(receivedLikeGroupList, receivedLikeList);
         // 去掉默认的箭头
         listReceivedLike.setGroupIndicator(null);
         listReceivedLike.setAdapter(receivedLikeAdapter);

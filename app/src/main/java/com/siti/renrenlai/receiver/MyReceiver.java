@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.siti.renrenlai.activity.MessageActivity;
+import com.siti.renrenlai.db.ReceivedComment;
 import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.util.CustomApplication;
 
@@ -26,7 +27,9 @@ import cn.jpush.android.api.JPushInterface;
 public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "MyReceiver";
     private DbManager db;
-
+    int type;  //消息类型
+    JSONObject jsonObject;
+    String userHeadImagePath, userName, commentContent;
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -52,8 +55,8 @@ public class MyReceiver extends BroadcastReceiver {
             String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
             try {
-                JSONObject jsonObject = new JSONObject(extras);
-
+                jsonObject = new JSONObject(extras);
+                type = jsonObject.getInt("type");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -70,6 +73,34 @@ public class MyReceiver extends BroadcastReceiver {
                 db.save(systemMessage);
             } catch (DbException e) {
                 e.printStackTrace();
+            }
+
+            //收到的系统消息---用户报名了活动
+            if(type == 0){
+
+
+            }
+
+            //收到的评论
+            if(type == 11){
+                try {
+                    userHeadImagePath = jsonObject.getString("userHeadImagePath");
+                    userName = jsonObject.getString("userName");
+                    commentContent = jsonObject.getString("content");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                ReceivedComment receivedComment = new ReceivedComment();
+                receivedComment.setContent(commentContent);
+                receivedComment.setUserName(userName);
+                receivedComment.setUserHeadImagePath(userHeadImagePath);
+
+                try {
+                    db.save(receivedComment);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
             }
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {

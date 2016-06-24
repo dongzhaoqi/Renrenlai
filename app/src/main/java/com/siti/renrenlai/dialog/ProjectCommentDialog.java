@@ -134,7 +134,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
             e.printStackTrace();
         }
 
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

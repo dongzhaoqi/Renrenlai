@@ -362,7 +362,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         }
 
         System.out.println("url:" + url);
-        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+        JsonObjectRequest req = new JsonObjectRequest(url, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {

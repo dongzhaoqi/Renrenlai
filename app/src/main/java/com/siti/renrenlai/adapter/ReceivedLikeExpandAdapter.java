@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.db.ReceivedLike;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
 
 import java.util.ArrayList;
@@ -19,28 +20,33 @@ import java.util.List;
 public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter {
 
     private LayoutInflater inflater;
-    private List<ReceivedLikeGroup> items;
+    private List<ReceivedLikeGroup> receivedLikeGroupList;
+    private List<ReceivedLike> receivedLikeList;
+    private Context mContext;
+
     public ReceivedLikeExpandAdapter(Context context) {
         inflater = LayoutInflater.from(context);
+        this.mContext = context;
     }
 
-    public void setData(List<ReceivedLikeGroup> items) {
-        this.items = items;
+    public void setData(List<ReceivedLikeGroup> receivedLikeGroupList, List<ReceivedLike> receivedLikeList) {
+        this.receivedLikeGroupList = receivedLikeGroupList;
+        this.receivedLikeList = receivedLikeList;
     }
 
     @Override
     public int getGroupCount() {
-        return items.size();
+        return receivedLikeGroupList.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return items.get(groupPosition);
+        return receivedLikeGroupList.get(groupPosition);
     }
 
     @Override
     public ReceivedLikeChild getChild(int groupPosition, int childPosition) {
-        return items.get(groupPosition).items.get(childPosition);
+        return receivedLikeGroupList.get(groupPosition).receivedLikeChildList.get(childPosition);
     }
 
     @Override
@@ -65,10 +71,17 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter {
             holder = new GroupHolder();
             convertView = inflater.inflate(R.layout.group_received_like_item, parent, false);
             holder.title = (TextView) convertView.findViewById(R.id.str_like);
+            holder.tv_message_nums = (TextView) convertView.findViewById(R.id.tv_message_nums);
+            holder.iv_circle = (ImageView) convertView.findViewById(R.id.iv_circle);
             holder.expand_imgView = (ImageView) convertView.findViewById(R.id.iv_expand);
             convertView.setTag(holder);
         }else{
             holder = (GroupHolder) convertView.getTag();
+        }
+
+        if(receivedLikeList != null && receivedLikeList.size() > 0 ){
+            holder.iv_circle.setVisibility(View.VISIBLE);
+            holder.tv_message_nums.setText(String.valueOf(receivedLikeList.size()));
         }
 
         if(!isExpanded){
@@ -106,7 +119,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter {
 
     @Override
     public int getRealChildrenCount(int groupPosition) {
-        return items.get(groupPosition).items.size();
+        return receivedLikeGroupList.get(groupPosition).receivedLikeChildList.size();
     }
 
     @Override
@@ -116,7 +129,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class ReceivedLikeGroup {
         public String title;
-        public List<ReceivedLikeChild> items = new ArrayList<ReceivedLikeChild>();
+        public List<ReceivedLikeChild> receivedLikeChildList = new ArrayList<ReceivedLikeChild>();
     }
 
     public static class ReceivedLikeChild {
@@ -126,6 +139,8 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class GroupHolder {
         TextView title;
+        TextView tv_message_nums;
+        ImageView iv_circle;
         ImageView expand_imgView;
     }
 

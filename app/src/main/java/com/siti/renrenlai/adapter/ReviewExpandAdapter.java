@@ -8,6 +8,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.db.ReceivedComment;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
 
 import java.util.ArrayList;
@@ -19,28 +20,33 @@ import java.util.List;
 public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
 
     private LayoutInflater inflater;
-    private List<ReviewGroup> items;
+    private List<ReviewGroup> receivedCommentGroupList;
+    private List<ReceivedComment> receivedCommentList;
+    private Context mContext;
+
     public ReviewExpandAdapter(Context context) {
         inflater = LayoutInflater.from(context);
+        mContext = context;
     }
 
-    public void setData(List<ReviewGroup> items) {
-        this.items = items;
+    public void setData(List<ReviewGroup> receivedCommentGroupList, List<ReceivedComment> receivedCommentList) {
+        this.receivedCommentGroupList = receivedCommentGroupList;
+        this.receivedCommentList = receivedCommentList;
     }
 
     @Override
     public int getGroupCount() {
-        return items.size();
+        return receivedCommentGroupList.size();
     }
 
     @Override
     public Object getGroup(int groupPosition) {
-        return items.get(groupPosition);
+        return receivedCommentGroupList.get(groupPosition);
     }
 
     @Override
     public ReviewChild getChild(int groupPosition, int childPosition) {
-        return items.get(groupPosition).items.get(childPosition);
+        return receivedCommentGroupList.get(groupPosition).receivedCommentChildList.get(childPosition);
     }
 
     @Override
@@ -65,12 +71,18 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
             holder = new GroupHolder();
             convertView = inflater.inflate(R.layout.group_review_item, parent, false);
             holder.title = (TextView) convertView.findViewById(R.id.str_review);
+            holder.tv_message_nums = (TextView) convertView.findViewById(R.id.tv_message_nums);
+            holder.iv_circle = (ImageView) convertView.findViewById(R.id.iv_circle);
             holder.expand_imgView = (ImageView) convertView.findViewById(R.id.iv_expand);
             convertView.setTag(holder);
         }else{
             holder = (GroupHolder) convertView.getTag();
         }
 
+        if(receivedCommentList != null && receivedCommentList.size() > 0){
+            holder.iv_circle.setVisibility(View.VISIBLE);
+            holder.tv_message_nums.setText(String.valueOf(receivedCommentList.size()));
+        }
         if(!isExpanded){
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_expand_small_holo_light);
         }else{
@@ -110,7 +122,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
 
     @Override
     public int getRealChildrenCount(int groupPosition) {
-        return items.get(groupPosition).items.size();
+        return receivedCommentGroupList.get(groupPosition).receivedCommentChildList.size();
     }
 
     @Override
@@ -120,7 +132,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class ReviewGroup {
         public String title;
-        public List<ReviewChild> items = new ArrayList<ReviewChild>();
+        public List<ReviewChild> receivedCommentChildList = new ArrayList<ReviewChild>();
     }
 
     public static class ReviewChild {
@@ -132,6 +144,8 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter {
 
     public static class GroupHolder {
         TextView title;
+        TextView tv_message_nums;
+        ImageView iv_circle;
         ImageView expand_imgView;
     }
 

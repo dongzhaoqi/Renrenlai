@@ -82,7 +82,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
             holder = (GroupHolder) convertView.getTag();
         }
 
-        if(systemMessageGroupList.size() > 0 ){
+        if(systemMessageList != null && systemMessageList.size() > 0 ){
             holder.iv_circle.setVisibility(View.VISIBLE);
             holder.tv_message_nums.setText(String.valueOf(systemMessageList.size()));
         }
@@ -126,7 +126,6 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
 
         return convertView;
     }
-
 
     @Override
     public int getRealChildrenCount(int groupPosition) {

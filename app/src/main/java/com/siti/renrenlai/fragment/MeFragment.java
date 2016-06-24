@@ -20,6 +20,8 @@ import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
 import com.siti.renrenlai.bean.User;
+import com.siti.renrenlai.db.ReceivedComment;
+import com.siti.renrenlai.db.ReceivedLike;
 import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.CustomApplication;
@@ -74,6 +76,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     boolean isSignedin = false;
     private DbManager db;
     private List<SystemMessage> systemMessageList;
+    private List<ReceivedComment> receivedCommentList;
+    private List<ReceivedLike> receivedLikeList;
+    int systemMessageSize, receivedReviewSize, receivedLikeSize;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -114,9 +119,26 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        if (systemMessageList != null && systemMessageList.size() > 0) {
+        try {
+            receivedCommentList = db.selector(ReceivedComment.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+        try {
+            receivedLikeList = db.selector(ReceivedLike.class).findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+        systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
+        receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
+        receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
+
+        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() >0)
+                || (receivedLikeList != null && receivedLikeList.size() > 0)) {
             iv_circle.setVisibility(View.VISIBLE);
-            tv_message_nums.setText(String.valueOf(systemMessageList.size()));
+            tv_message_nums.setText(String.valueOf(systemMessageSize + receivedReviewSize + receivedLikeSize));
         }
 
     }
