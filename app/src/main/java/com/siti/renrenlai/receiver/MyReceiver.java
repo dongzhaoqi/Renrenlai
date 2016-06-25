@@ -33,6 +33,7 @@ public class MyReceiver extends BroadcastReceiver {
     JSONObject jsonObject;
     String userHeadImagePath, userName, commentContent, time;
     int projectId, activityId;
+
     @Override
     public void onReceive(Context context, Intent intent) {
 
@@ -70,7 +71,7 @@ public class MyReceiver extends BroadcastReceiver {
 
 
             //收到的系统消息---用户报名了活动
-            if(type == ConstantValue.Activity_SYSTEM_MESSAGE){
+            if (type == ConstantValue.Activity_SYSTEM_MESSAGE) {
                 try {
                     activityId = jsonObject.getInt("activityId");
                     time = jsonObject.getString("time");
@@ -91,21 +92,19 @@ public class MyReceiver extends BroadcastReceiver {
             }
 
             //收到的活动评论
-            if(type == ConstantValue.ACTIVITY_RECEIVED_COMMENT){
-                try {
-                    userHeadImagePath = jsonObject.getString("userHeadImagePath");
-                    userName = jsonObject.getString("userName");
-                    commentContent = jsonObject.getString("content");
-                    activityId = jsonObject.getInt("activityId");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+            if (type == ConstantValue.ACTIVITY_RECEIVED_COMMENT) {
+                userHeadImagePath = jsonObject.optString("userHeadImagePath");
+                userName = jsonObject.optString("userName");
+                commentContent = jsonObject.optString("content");
+                activityId = jsonObject.optInt("activityId");
+                time = jsonObject.optString("time");
 
                 ReceivedComment receivedComment = new ReceivedComment();
                 receivedComment.setContent(commentContent);
                 receivedComment.setUserName(userName);
                 receivedComment.setUserHeadImagePath(userHeadImagePath);
                 receivedComment.setActivityId(activityId);
+                receivedComment.setCommentTime(time);
 
                 try {
                     db.save(receivedComment);
@@ -115,7 +114,7 @@ public class MyReceiver extends BroadcastReceiver {
             }
 
             //收到的活动喜欢
-            if(type == ConstantValue.ACTIVITY_RECEIVED_LIKE){
+            if (type == ConstantValue.ACTIVITY_RECEIVED_LIKE) {
                 try {
                     time = jsonObject.getString("time");
                     activityId = jsonObject.getInt("activityId");
@@ -134,7 +133,7 @@ public class MyReceiver extends BroadcastReceiver {
             }
 
             //收到的项目评论
-            if(type == ConstantValue.PROJECT_RECEIVED_COMMENT){
+            if (type == ConstantValue.PROJECT_RECEIVED_COMMENT) {
                 try {
                     userHeadImagePath = jsonObject.getString("userHeadImagePath");
                     userName = jsonObject.getString("userName");
@@ -165,16 +164,16 @@ public class MyReceiver extends BroadcastReceiver {
             Intent i = new Intent(context, MessageActivity.class);
             i.putExtras(bundle);
             //i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             context.startActivity(i);
 
         } else if (JPushInterface.ACTION_RICHPUSH_CALLBACK.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户收到到RICH PUSH CALLBACK: " + bundle.getString(JPushInterface.EXTRA_EXTRA));
             //在这里根据 JPushInterface.EXTRA_EXTRA 的内容处理代码，比如打开新的Activity， 打开一个网页等..
 
-        } else if(JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
+        } else if (JPushInterface.ACTION_CONNECTION_CHANGE.equals(intent.getAction())) {
             boolean connected = intent.getBooleanExtra(JPushInterface.EXTRA_CONNECTION_CHANGE, false);
-            Log.w(TAG, "[MyReceiver]" + intent.getAction() +" connected state change to "+connected);
+            Log.w(TAG, "[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
         } else {
             Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
         }
@@ -186,7 +185,7 @@ public class MyReceiver extends BroadcastReceiver {
         for (String key : bundle.keySet()) {
             if (key.equals(JPushInterface.EXTRA_NOTIFICATION_ID)) {
                 sb.append("\nkey:" + key + ", value:" + bundle.getInt(key));
-            }else if(key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)){
+            } else if (key.equals(JPushInterface.EXTRA_CONNECTION_CHANGE)) {
                 sb.append("\nkey:" + key + ", value:" + bundle.getBoolean(key));
             } else if (key.equals(JPushInterface.EXTRA_EXTRA)) {
                 if (bundle.getString(JPushInterface.EXTRA_EXTRA).isEmpty()) {
@@ -196,12 +195,12 @@ public class MyReceiver extends BroadcastReceiver {
 
                 try {
                     JSONObject json = new JSONObject(bundle.getString(JPushInterface.EXTRA_EXTRA));
-                    Iterator<String> it =  json.keys();
+                    Iterator<String> it = json.keys();
 
                     while (it.hasNext()) {
                         String myKey = it.next().toString();
                         sb.append("\nkey:" + key + ", value: [" +
-                                myKey + " - " +json.optString(myKey) + "]");
+                                myKey + " - " + json.optString(myKey) + "]");
                     }
                 } catch (JSONException e) {
                     Log.e(TAG, "Get message extra JSON error!");

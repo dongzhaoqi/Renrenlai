@@ -31,10 +31,10 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
-import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.db.Activity;
+import com.siti.renrenlai.db.ActivityImage;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -369,7 +369,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      */
     public void addImage() {
         CircleImageView image = new CircleImageView(this);
-        Picasso.with(this).load(userHeadImgePath).resize(96, 96).into(image);
+        Picasso.with(this).load(userHeadImgePath).placeholder(R.drawable.no_img).resize(96, 96).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
         params.setMargins(15, 0, 0, 0);
         ll_image.addView(image, 0, params);

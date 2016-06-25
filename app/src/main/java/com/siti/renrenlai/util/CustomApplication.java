@@ -77,10 +77,10 @@ public class CustomApplication extends Application {
 
 	public DbManager.DaoConfig getDaoConfig() {
 		DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()
-				.setDbName("test.db")
+				.setDbName("renrenactivity.db")
 				// 不设置dbDir时, 默认存储在app的私有目录.
 				.setDbDir(new File("/RenrenLai/db")) // "sdcard"的写法并非最佳实践, 这里为了简单, 先这样写了.
-				.setDbVersion(2)
+				.setDbVersion(6)
 				.setDbOpenListener(new DbManager.DbOpenListener() {
 					@Override
 					public void onDbOpened(DbManager db) {

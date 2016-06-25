@@ -30,6 +30,12 @@ public class ReceivedComment {
     @Column(name = "activityId")
     private int activityId;
 
+    @Column(name = "commentTime")
+    private String commentTime;
+
+    @Column(name = "isRead")
+    private boolean isRead;
+
     public String getUserName() {
         return userName;
     }
@@ -76,5 +82,13 @@ public class ReceivedComment {
 
     public void setActivityId(int activityId) {
         this.activityId = activityId;
+    }
+
+    public String getCommentTime() {
+        return commentTime;
+    }
+
+    public void setCommentTime(String commentTime) {
+        this.commentTime = commentTime;
     }
 }

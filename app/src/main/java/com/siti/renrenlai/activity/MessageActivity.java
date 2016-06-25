@@ -17,6 +17,7 @@ import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
+import com.siti.renrenlai.db.Activity;
 import com.siti.renrenlai.db.ReceivedComment;
 import com.siti.renrenlai.db.ReceivedLike;
 import com.siti.renrenlai.db.SystemMessage;
@@ -111,6 +112,7 @@ public class MessageActivity extends BaseActivity {
         if(systemMessageList != null && systemMessageList.size() > 0) {
             for (int i = 0; i < systemMessageList.size(); i++) {
                 MessageChild child = new MessageChild();
+                child.activityId = systemMessageList.get(i).getActivityId();
                 child.message = systemMessageList.get(i).getMsgContent();
                 child.activity_name = systemMessageList.get(i).getMsgTitle();
                 systemMessageGroup.systemMessageChildList.add(child);
@@ -157,11 +159,21 @@ public class MessageActivity extends BaseActivity {
         ReviewGroup reviewGroup = new ReviewGroup();
         if(receivedCommentList != null && receivedCommentList.size() > 0) {
             for (int i = 0; i < receivedCommentList.size(); i++) {
+                Activity activity = new Activity();
                 ReviewChild child = new ReviewChild();
+                child.commentId = receivedCommentList.get(i).getCommentId();
                 child.username = receivedCommentList.get(i).getUserName();
+                child.userHeadImagePath = receivedCommentList.get(i).getUserHeadImagePath();
                 child.review = receivedCommentList.get(i).getContent();
-                child.review_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                child.activity_name = str_name[i];
+                child.review_time = receivedCommentList.get(i).getCommentTime();
+                child.activityId = receivedCommentList.get(i).getActivityId();
+                try {
+                    activity = db.selector(Activity.class).where("activityId", "=", child.activityId).findFirst();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+                child.activity_name = activity.getActivityName();
+                //child.activityImagePath = activity.getActivityImages().get(0).getActivityImagePath();
                 reviewGroup.receivedCommentChildList.add(child);
             }
         }
@@ -206,9 +218,16 @@ public class MessageActivity extends BaseActivity {
 
         if(receivedLikeList != null && receivedLikeList.size() > 0) {
             for (int i = 0; i < receivedLikeList.size(); i++) {
+                Activity activity = new Activity();
                 ReceivedLikeChild child = new ReceivedLikeChild();
-                child.received_time = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-                child.activity_name = str_name[i];
+                child.received_time = receivedLikeList.get(i).getLikeTime();
+                child.activityId = receivedLikeList.get(i).getActivityId();
+                try {
+                    activity = db.selector(Activity.class).where("activityId", "=", child.activityId).findFirst();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+                child.activity_name = activity.getActivityName();
                 receivedLikeGroup.receivedLikeChildList.add(child);
             }
         }

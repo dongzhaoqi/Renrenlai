@@ -1,6 +1,5 @@
 package com.siti.renrenlai.db;
 
-import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 
@@ -16,7 +15,7 @@ import java.util.List;
 
 @Table(name = "activity")
 public class Activity implements Serializable{
-    @Column(name = "activityId", isId = true, autoGen = true)
+    @Column(name = "activityId", isId = true, autoGen = false)
     private int activityId;
 
     @Column(name = "activityName")

@@ -16,8 +16,8 @@ import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.nostra13.universalimageloader.core.listener.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.db.Activity;
+import com.siti.renrenlai.db.ActivityImage;
 import com.squareup.picasso.Picasso;
 
 import java.util.Collections;

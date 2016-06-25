@@ -13,6 +13,8 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.db.SystemMessage;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -99,7 +101,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
     @Override
     public View getRealChildView(int groupPosition, final int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         ChildHolder holder;
-        MessageChild messageChild = getChild(groupPosition, childPosition);
+        final MessageChild messageChild = getChild(groupPosition, childPosition);
         if(convertView == null){
             holder = new ChildHolder();
             convertView = inflater.inflate(R.layout.child_system_item, parent, false);
@@ -112,17 +114,20 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         }else{
             holder = (ChildHolder) convertView.getTag();
         }
+
+        holder.tv_system_message.setText(messageChild.message);
+        holder.tv_activity_name.setText(messageChild.activity_name);
+
         convertView.setOnClickListener(this);
         //holder.iv_system_icon.setImageResource(R.drawable.system_alarm);
 
         holder.ll_system_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "position:" + childPosition, Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "position:" + messageChild.activityId, Toast.LENGTH_SHORT).show();
             }
         });
-        holder.tv_system_message.setText(messageChild.message);
-        holder.tv_activity_name.setText(messageChild.activity_name);
+
 
         return convertView;
     }
@@ -154,6 +159,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         public String message;
         public String activity_image;
         public String activity_name;
+        public int activityId;
     }
 
     public static class GroupHolder {
@@ -165,6 +171,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
 
     public static class ChildHolder {
         LinearLayout ll_system_message;
+        TextView tv_activity_id;
         ImageView iv_system_icon;
         TextView tv_system_message;
         ImageView iv_activity_img;
