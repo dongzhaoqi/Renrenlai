@@ -10,7 +10,7 @@ import org.xutils.db.annotation.Table;
  */
 
 @Table(name = "received_comment")
-public class ReceivedComment {
+public class DbReceivedComment {
 
     @Column(name = "commentId", isId = true, autoGen = true)
     private int commentId;
@@ -61,6 +61,9 @@ public class ReceivedComment {
     }
 
     public String getUserHeadImagePath() {
+        if(userHeadImagePath.contains("http")){
+            return userHeadImagePath;
+        }
         return ConstantValue.urlRoot + userHeadImagePath;
     }
 

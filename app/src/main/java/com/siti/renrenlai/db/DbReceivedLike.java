@@ -7,7 +7,7 @@ import org.xutils.db.annotation.Table;
  * Created by Dong on 2016/6/24.
  */
 @Table(name = "received_like")
-public class ReceivedLike {
+public class DbReceivedLike {
 
     @Column(name = "likeId", isId = true, autoGen = true)
     private int likeId;

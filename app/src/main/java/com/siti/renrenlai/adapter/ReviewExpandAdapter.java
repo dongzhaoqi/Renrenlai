@@ -10,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -18,10 +17,13 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
+import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.db.Activity;
-import com.siti.renrenlai.db.ReceivedComment;
+import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbActivityImage;
+import com.siti.renrenlai.db.DbReceivedComment;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -31,8 +33,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
-import org.xutils.db.Selector;
-import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
 import org.xutils.x;
 
@@ -48,7 +48,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
 
     private LayoutInflater inflater;
     private List<ReviewGroup> receivedCommentGroupList;
-    private List<ReceivedComment> receivedCommentList;
+    private List<DbReceivedComment> receivedCommentList;
     private OnChildItemClickListener mOnChildItemClickListener;
     private Context mContext;
     private DbManager db;
@@ -64,7 +64,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mContext, "login"), "userName");
     }
 
-    public void setData(List<ReviewGroup> receivedCommentGroupList, List<ReceivedComment> receivedCommentList) {
+    public void setData(List<ReviewGroup> receivedCommentGroupList, List<DbReceivedComment> receivedCommentList) {
         this.receivedCommentGroupList = receivedCommentGroupList;
         this.receivedCommentList = receivedCommentList;
     }
@@ -146,7 +146,9 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         }else{
             holder = (ChildHolder) convertView.getTag();
         }
-        Picasso.with(mContext).load(reviewChild.userHeadImagePath).into(holder.iv_review_icon);
+        Log.d(TAG, "getRealChildView: " + reviewChild.userHeadImagePath);
+        Log.d(TAG, "getRealChildImageView: " + reviewChild.activityImagePath);
+        Picasso.with(mContext).load(reviewChild.userHeadImagePath).placeholder(R.drawable.no_img).into(holder.iv_review_icon);
         holder.tv_username.setText(reviewChild.username);
         holder.tv_review.setText(reviewChild.review);
         holder.tv_review_time.setText(reviewChild.review_time);
@@ -198,11 +200,35 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
-        Activity activity = null;
+        DbActivity dbActivity = null;
+        List<DbActivityImage> dbActivityImage = null;
+        List<ActivityImage> activityImages;
+        Activity activity = new Activity();
         try {
-            activity = db.selector(Activity.class).where("activityId", "=", activityId).findFirst();
+            dbActivity = db.selector(DbActivity.class).where("activityId", "=", activityId).findFirst();
+            dbActivityImage = db.selector(DbActivityImage.class).where("activityId", "=", activityId).findAll();
+            Log.d(TAG, "getActivityNewData: " + dbActivityImage.size() + dbActivityImage.get(0).getActivityImagePath());
         } catch (DbException e) {
             e.printStackTrace();
+        }
+        if(dbActivity != null) {
+            activity.setActivityName(dbActivity.getActivityName());
+            activity.setActivityStartTime(dbActivity.getActivityStartTime());
+            activity.setActivityEndTime(dbActivity.getActivityEndTime());
+            activity.setActivityReleaserTel(dbActivity.getActivityReleaserTel());
+            activity.setActivityDetailDescrip(dbActivity.getActivityDetailDescrip());
+            activity.setActivityAddress(dbActivity.getActivityAddress());
+        }
+        if(dbActivityImage != null && dbActivityImage.size() > 0){
+            int dbActivityImageSize = dbActivityImage.size();
+            activityImages = new ArrayList<>(dbActivityImageSize);
+            for(int i = 0; i < dbActivityImageSize; i++){
+                ActivityImage activityImage = new ActivityImage();
+                activityImage.setActivityImagePath(dbActivityImage.get(i).getActivityImagePath());
+                Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
+                activityImages.add(activityImage);
+            }
+            activity.setActivityImages(activityImages);
         }
         activity.setLovedIs(result.optBoolean("lovedIs"));
         activity.setSignUpIs(result.optBoolean("signUpIs"));

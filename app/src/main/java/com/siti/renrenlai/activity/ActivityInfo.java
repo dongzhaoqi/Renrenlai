@@ -31,10 +31,10 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
+import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.db.Activity;
-import com.siti.renrenlai.db.ActivityImage;
 import com.siti.renrenlai.dialog.CommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -115,6 +115,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     }
 
     private void initViews() {
+        list_comment.setNestedScrollingEnabled(false);      //若不加上此句,ScrollView 嵌套RecylerView 会导致滑动不流畅
         imagePath = new ArrayList<>();
         userId = SharedPreferencesUtil.readInt(SharedPreferencesUtil.getSharedPreference(this, "login"), "userId");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");

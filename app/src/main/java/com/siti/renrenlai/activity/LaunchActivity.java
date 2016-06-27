@@ -33,7 +33,7 @@ import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
-import com.siti.renrenlai.db.Activity;
+import com.siti.renrenlai.db.DbActivity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -527,8 +527,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    public Activity getActivityInfo() {
-        Activity activity = new Activity();
+    public DbActivity getActivityInfo() {
+        DbActivity activity = new DbActivity();
         activity.setActivityType(activity_type + "");
         activity.setActivityName(et_subject.getText().toString());
         activity.setActivityStartTime(tv_start_time.getText().toString());

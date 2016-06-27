@@ -11,7 +11,7 @@ import java.io.Serializable;
  * Created by Dong on 2016/5/27.
  */
 @Table(name = "activity_image")
-public class ActivityImage implements Serializable {
+public class DbActivityImage implements Serializable {
 
     @Column(name = "activityImageId", isId = true, autoGen = true)
     private int activityImageId;
@@ -21,6 +21,9 @@ public class ActivityImage implements Serializable {
 
     @Column(name = "activityImagePath")
     private String activityImagePath;
+
+    @Column(name = "activityId")
+    private int activityId;
 
     public int getActivityImageId() {
         return activityImageId;
@@ -39,10 +42,21 @@ public class ActivityImage implements Serializable {
     }
 
     public String getActivityImagePath() {
-        return ConstantValue.urlRoot +  activityImagePath;
+        if(activityImagePath.contains("http")){
+            return activityImagePath;
+        }
+        return ConstantValue.urlRoot + activityImagePath;
     }
 
     public void setActivityImagePath(String activityImagePath) {
         this.activityImagePath = activityImagePath;
+    }
+
+    public int getActivityId() {
+        return activityId;
+    }
+
+    public void setActivityId(int activityId) {
+        this.activityId = activityId;
     }
 }

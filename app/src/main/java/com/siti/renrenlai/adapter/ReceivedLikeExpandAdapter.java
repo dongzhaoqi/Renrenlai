@@ -19,8 +19,8 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.db.Activity;
-import com.siti.renrenlai.db.ReceivedLike;
+import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.db.DbReceivedLike;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -42,7 +42,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
 
     private LayoutInflater inflater;
     private List<ReceivedLikeGroup> receivedLikeGroupList;
-    private List<ReceivedLike> receivedLikeList;
+    private List<DbReceivedLike> receivedLikeList;
     private OnChildItemClickListener mOnChildItemClickListener;
     private Context mContext;
     private DbManager db;
@@ -58,7 +58,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mContext, "login"), "userName");
     }
 
-    public void setData(List<ReceivedLikeGroup> receivedLikeGroupList, List<ReceivedLike> receivedLikeList) {
+    public void setData(List<ReceivedLikeGroup> receivedLikeGroupList, List<DbReceivedLike> receivedLikeList) {
         this.receivedLikeGroupList = receivedLikeGroupList;
         this.receivedLikeList = receivedLikeList;
     }

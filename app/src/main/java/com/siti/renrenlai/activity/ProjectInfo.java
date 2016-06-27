@@ -21,7 +21,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
@@ -34,7 +33,7 @@ import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.bean.ProjectImage;
-import com.siti.renrenlai.db.Activity;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.dialog.ProjectCommentDialog;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -112,6 +111,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     }
 
     private void initViews() {
+        list_comment.setNestedScrollingEnabled(false);  //若不加上此句,ScrollView 嵌套RecylerView 会导致滑动不流畅
         imagePath = new ArrayList<>();
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
         userHeadImgePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");

@@ -41,7 +41,9 @@ import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.db.Activity;
+import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -277,13 +279,42 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void getData(JSONObject response) {
-
+        int activityImageSize ;
+        try {
+            db.delete(DbActivity.class);
+            db.delete(DbActivityImage.class);
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
         activityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
         for(Activity activity : activityList){
+            DbActivity dbActivity = new DbActivity();
+            DbActivityImage dbActivityImage = new DbActivityImage();
+            dbActivity.setActivityId(activity.getActivityId());
+            dbActivity.setActivityAddress(activity.getActivityAddress());
+            dbActivity.setActivityDetailDescrip(activity.getActivityDetailDescrip());
+            dbActivity.setActivityName(activity.getActivityName());
+            dbActivity.setActivityEndTime(activity.getActivityEndTime());
+            dbActivity.setActivityStartTime(activity.getActivityStartTime());
+            dbActivity.setActivityReleaserTel(activity.getActivityReleaserTel());
+            dbActivity.setActivityStatus(activity.getActivityStatus());
+
+            dbActivityImage.setActivityId(activity.getActivityId());
+            if(activity.getActivityImages() != null) {
+                activityImageSize = activity.getActivityImages().size();
+                for (int i = 0; i < activityImageSize; i++) {
+                    dbActivityImage.setActivityImagePath(activity.getActivityImages().get(i).getActivityImagePath());
+                    try {
+                        db.save(dbActivityImage);
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
             try {
-                db.save(activity);
+                db.save(dbActivity);
             } catch (DbException e) {
                 e.printStackTrace();
             }
@@ -353,7 +384,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
-        Activity activity = activityList.get(pos);
+        com.siti.renrenlai.bean.Activity activity = activityList.get(pos);
         activity.setLovedIs(result.optBoolean("lovedIs"));
         activity.setSignUpIs(result.optBoolean("signUpIs"));
         activity.setCommentContents(commentsList);

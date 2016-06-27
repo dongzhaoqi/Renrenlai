@@ -7,7 +7,7 @@ import org.xutils.db.annotation.Table;
  * Created by Dong on 6/20/2016.
  */
 @Table(name = "system_message")
-public class SystemMessage {
+public class DbSystemMessage {
 
     @Column(name = "msgId", isId = true, autoGen = false)
     private int msgId;

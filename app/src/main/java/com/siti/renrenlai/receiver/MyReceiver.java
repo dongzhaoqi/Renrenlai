@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.util.Log;
 
 import com.siti.renrenlai.activity.MessageActivity;
-import com.siti.renrenlai.db.ReceivedComment;
-import com.siti.renrenlai.db.ReceivedLike;
-import com.siti.renrenlai.db.SystemMessage;
+import com.siti.renrenlai.db.DbReceivedComment;
+import com.siti.renrenlai.db.DbReceivedLike;
+import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 
@@ -79,7 +79,7 @@ public class MyReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
 
-                SystemMessage systemMessage = new SystemMessage();
+                DbSystemMessage systemMessage = new DbSystemMessage();
                 systemMessage.setMsgContent(content);
                 systemMessage.setActivityId(activityId);
                 systemMessage.setTime(time);
@@ -99,7 +99,7 @@ public class MyReceiver extends BroadcastReceiver {
                 activityId = jsonObject.optInt("activityId");
                 time = jsonObject.optString("time");
 
-                ReceivedComment receivedComment = new ReceivedComment();
+                DbReceivedComment receivedComment = new DbReceivedComment();
                 receivedComment.setContent(commentContent);
                 receivedComment.setUserName(userName);
                 receivedComment.setUserHeadImagePath(userHeadImagePath);
@@ -122,7 +122,7 @@ public class MyReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
 
-                ReceivedLike receivedLike = new ReceivedLike();
+                DbReceivedLike receivedLike = new DbReceivedLike();
                 receivedLike.setActivityId(activityId);
                 receivedLike.setLikeTime(time);
                 try {
@@ -143,7 +143,7 @@ public class MyReceiver extends BroadcastReceiver {
                     e.printStackTrace();
                 }
 
-                ReceivedComment receivedComment = new ReceivedComment();
+                DbReceivedComment receivedComment = new DbReceivedComment();
                 receivedComment.setContent(commentContent);
                 receivedComment.setUserName(userName);
                 receivedComment.setUserHeadImagePath(userHeadImagePath);

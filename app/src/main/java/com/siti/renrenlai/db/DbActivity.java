@@ -3,8 +3,10 @@ package com.siti.renrenlai.db;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 
+import org.xutils.DbManager;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
+import org.xutils.ex.DbException;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +16,7 @@ import java.util.List;
  */
 
 @Table(name = "activity")
-public class Activity implements Serializable{
+public class DbActivity implements Serializable{
     @Column(name = "activityId", isId = true, autoGen = false)
     private int activityId;
 
@@ -57,14 +59,10 @@ public class Activity implements Serializable{
     @Column(name = "signUpIs")
     private boolean signUpIs;                       //用户是否已报名
 
-    @Column(name = "activityImages")
-    private List<ActivityImage> activityImages;
 
-    @Column(name = "lovedUsers")
-    private List<LovedUsers> lovedUsers;
-
-    @Column(name = "commentContents")
-    private List<CommentContents> commentContents;
+    public List<DbActivityImage> getActivityImages(DbManager db) throws DbException{
+        return db.selector(DbActivityImage.class).where("activityId", "=", this.activityId).findAll();
+    }
 
 
     public int getActivityId() {
@@ -179,27 +177,5 @@ public class Activity implements Serializable{
         this.signUpIs = signUpIs;
     }
 
-    public List<ActivityImage> getActivityImages() {
-        return activityImages;
-    }
 
-    public void setActivityImages(List<ActivityImage> activityImages) {
-        this.activityImages = activityImages;
-    }
-
-    public List<LovedUsers> getLovedUsers() {
-        return lovedUsers;
-    }
-
-    public void setLovedUsers(List<LovedUsers> lovedUsers) {
-        this.lovedUsers = lovedUsers;
-    }
-
-    public List<CommentContents> getCommentContents() {
-        return commentContents;
-    }
-
-    public void setCommentContents(List<CommentContents> commentContents) {
-        this.commentContents = commentContents;
-    }
 }

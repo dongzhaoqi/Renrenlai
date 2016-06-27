@@ -2,10 +2,7 @@ package com.siti.renrenlai.activity;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ExpandableListView;
-import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ReceivedLikeExpandAdapter;
@@ -17,10 +14,10 @@ import com.siti.renrenlai.adapter.ReviewExpandAdapter.ReviewGroup;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
-import com.siti.renrenlai.db.Activity;
-import com.siti.renrenlai.db.ReceivedComment;
-import com.siti.renrenlai.db.ReceivedLike;
-import com.siti.renrenlai.db.SystemMessage;
+import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbReceivedComment;
+import com.siti.renrenlai.db.DbReceivedLike;
+import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.view.AnimatedExpandableListView;
 
@@ -28,9 +25,7 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.x;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.Bind;
@@ -57,9 +52,9 @@ public class MessageActivity extends BaseActivity {
     private String[] users = {"张三", "李四", "小王","张三", "李四", "小王", "张三", "李四", "小王"};
     private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
     private DbManager db;
-    private List<SystemMessage> systemMessageList;
-    private List<ReceivedComment> receivedCommentList;
-    private List<ReceivedLike> receivedLikeList;
+    private List<DbSystemMessage> systemMessageList;
+    private List<DbReceivedComment> receivedCommentList;
+    private List<DbReceivedLike> receivedLikeList;
     private static final String TAG = "MessageActivity";
 
     @Override
@@ -97,12 +92,12 @@ public class MessageActivity extends BaseActivity {
      */
     public void initSystemMessage(){
         try {
-            systemMessageList = db.selector(SystemMessage.class).findAll();
+            systemMessageList = db.selector(DbSystemMessage.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
         if(systemMessageList != null){
-            for(SystemMessage systemMessage : systemMessageList){
+            for(DbSystemMessage systemMessage : systemMessageList){
                 Log.d(TAG, "onCreate: " + systemMessage.getMsgId() + " " + systemMessage.getMsgTitle() + " " + systemMessage.getMsgContent());
             }
         }
@@ -117,8 +112,8 @@ public class MessageActivity extends BaseActivity {
                 child.activity_name = systemMessageList.get(i).getMsgTitle();
                 systemMessageGroup.systemMessageChildList.add(child);
             }
-            systemMessageGroupList.add(systemMessageGroup);
         }
+        systemMessageGroupList.add(systemMessageGroup);
 
         systemAdapter = new SystemMessageExpandAdapter(this);
         systemAdapter.setData(systemMessageGroupList, systemMessageList);
@@ -144,13 +139,13 @@ public class MessageActivity extends BaseActivity {
     public void initReview(){
 
         try {
-            receivedCommentList = db.selector(ReceivedComment.class).findAll();
+            receivedCommentList = db.selector(DbReceivedComment.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
 
         if(receivedCommentList != null){
-            for(ReceivedComment comment : receivedCommentList){
+            for(DbReceivedComment comment : receivedCommentList){
                 Log.d(TAG, "评论内容："+comment.getContent() + " 评论人：" + comment.getUserName());
             }
         }
@@ -159,7 +154,7 @@ public class MessageActivity extends BaseActivity {
         ReviewGroup reviewGroup = new ReviewGroup();
         if(receivedCommentList != null && receivedCommentList.size() > 0) {
             for (int i = 0; i < receivedCommentList.size(); i++) {
-                Activity activity = new Activity();
+                DbActivity dbActivity = new DbActivity();
                 ReviewChild child = new ReviewChild();
                 child.commentId = receivedCommentList.get(i).getCommentId();
                 child.username = receivedCommentList.get(i).getUserName();
@@ -168,12 +163,17 @@ public class MessageActivity extends BaseActivity {
                 child.review_time = receivedCommentList.get(i).getCommentTime();
                 child.activityId = receivedCommentList.get(i).getActivityId();
                 try {
-                    activity = db.selector(Activity.class).where("activityId", "=", child.activityId).findFirst();
+                    dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
-                child.activity_name = activity.getActivityName();
-                //child.activityImagePath = activity.getActivityImages().get(0).getActivityImagePath();
+                child.activity_name = dbActivity.getActivityName();
+                try {
+                    Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                    child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 reviewGroup.receivedCommentChildList.add(child);
             }
         }
@@ -202,13 +202,13 @@ public class MessageActivity extends BaseActivity {
     public void initReceivedLike(){
 
         try {
-            receivedLikeList = db.selector(ReceivedLike.class).findAll();
+            receivedLikeList = db.selector(DbReceivedLike.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
 
         if(receivedLikeList != null){
-            for(ReceivedLike like : receivedLikeList){
+            for(DbReceivedLike like : receivedLikeList){
                 Log.d(TAG, "用户头像："+like.getUserHeadImagePath());
             }
         }
@@ -218,12 +218,12 @@ public class MessageActivity extends BaseActivity {
 
         if(receivedLikeList != null && receivedLikeList.size() > 0) {
             for (int i = 0; i < receivedLikeList.size(); i++) {
-                Activity activity = new Activity();
+                DbActivity activity = new DbActivity();
                 ReceivedLikeChild child = new ReceivedLikeChild();
                 child.received_time = receivedLikeList.get(i).getLikeTime();
                 child.activityId = receivedLikeList.get(i).getActivityId();
                 try {
-                    activity = db.selector(Activity.class).where("activityId", "=", child.activityId).findFirst();
+                    activity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
                 } catch (DbException e) {
                     e.printStackTrace();
                 }

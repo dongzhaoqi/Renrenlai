@@ -10,10 +10,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.db.SystemMessage;
+import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +23,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
 
     private LayoutInflater inflater;
     private List<MessageGroup> systemMessageGroupList;
-    private List<SystemMessage> systemMessageList;
+    private List<DbSystemMessage> systemMessageList;
     private OnChildItemClickListener mOnChildItemClickListener;
     private Context mContext;
 
@@ -34,7 +32,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         mContext = context;
     }
 
-    public void setData(List<MessageGroup> items, List<SystemMessage> systemMessageList) {
+    public void setData(List<MessageGroup> items, List<DbSystemMessage> systemMessageList) {
         this.systemMessageGroupList = items;
         this.systemMessageList = systemMessageList;
     }

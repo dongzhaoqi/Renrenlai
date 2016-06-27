@@ -30,6 +30,9 @@ public class ActivityImage implements Serializable {
     }
 
     public String getActivityImagePath() {
+        if (activityImagePath.contains("http")){
+            return activityImagePath;
+        }
         return ConstantValue.urlRoot +  activityImagePath;
     }
 

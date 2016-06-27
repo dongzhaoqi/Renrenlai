@@ -3,6 +3,7 @@ package com.siti.renrenlai.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,10 @@ import android.widget.TextView;
 
 import com.afollestad.materialdialogs.DialogAction;
 import com.afollestad.materialdialogs.MaterialDialog;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FeedbackActivity;
 import com.siti.renrenlai.activity.LoginActivity;
@@ -20,14 +25,17 @@ import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
 import com.siti.renrenlai.bean.User;
-import com.siti.renrenlai.db.ReceivedComment;
-import com.siti.renrenlai.db.ReceivedLike;
-import com.siti.renrenlai.db.SystemMessage;
+import com.siti.renrenlai.db.DbReceivedComment;
+import com.siti.renrenlai.db.DbReceivedLike;
+import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.CommonUtils;
+import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.x;
@@ -72,14 +80,14 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tv_message_nums;
     private View view;
     private User user;
-    String userHeadPicImagePath, userName;
+    String userHeadPicImagePath, userName, url1, url2, url3;
     boolean isSignedin = false;
     private DbManager db;
-    private List<SystemMessage> systemMessageList;
-    private List<ReceivedComment> receivedCommentList;
-    private List<ReceivedLike> receivedLikeList;
+    private List<DbSystemMessage> systemMessageList;
+    private List<DbReceivedComment> receivedCommentList;
+    private List<DbReceivedLike> receivedLikeList;
     int systemMessageSize, receivedReviewSize, receivedLikeSize;
-
+    private static final String TAG = "MeFragment";
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
@@ -99,7 +107,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private void init() {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
         userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
-
+        initMessage2();
         if (userName.equals("0")) {
             tv_userName.setText("请登录");
         } else {
@@ -112,21 +120,94 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         }
     }
 
+    private void initMessage2(){
+        url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
+        JSONObject jsonObject1 = new JSONObject();
+        try {
+            jsonObject1.put("userName", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request1 = new JsonObjectRequest(url1, jsonObject1,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request1.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request1);      //加入请求队列
+
+
+        url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
+        JSONObject jsonObject2 = new JSONObject();
+        try {
+            jsonObject2.put("userName", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject2,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request2.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request2);      //加入请求队列
+
+
+        url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
+        JSONObject jsonObject3 = new JSONObject();
+        try {
+            jsonObject3.put("userName", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject3,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request3.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
+    }
+
     private void initMessage() {
         try {
-            systemMessageList = db.selector(SystemMessage.class).findAll();
+            systemMessageList = db.selector(DbSystemMessage.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
 
         try {
-            receivedCommentList = db.selector(ReceivedComment.class).findAll();
+            receivedCommentList = db.selector(DbReceivedComment.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
 
         try {
-            receivedLikeList = db.selector(ReceivedLike.class).findAll();
+            receivedLikeList = db.selector(DbReceivedLike.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
@@ -218,6 +299,8 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        initMessage();
+        if (!userName.equals("0")) {
+            initMessage();
+        }
     }
 }

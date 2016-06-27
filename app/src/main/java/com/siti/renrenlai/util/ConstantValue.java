@@ -47,6 +47,16 @@ public class ConstantValue {
 
     public static final int PROJECT_RECEIVED_LIKE = 22;
 
+
+   //获取系统消息
+   public static final String GET_SYSTEM_MESSAGE = "/getPaticipateMessage";
+
+   //获取评论消息
+   public static final String GET_COMMENT_MESSAGE = "/getCommentMessage";
+
+   //获取喜欢消息
+   public static final String GET_LIKE_MESSAGE = "/getLovedMessage";
+
     //用户登录
     public static final String USER_LOGIN = urlRoot + "/loginForApp";
 
