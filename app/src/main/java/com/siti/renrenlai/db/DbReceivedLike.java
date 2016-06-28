@@ -1,5 +1,7 @@
 package com.siti.renrenlai.db;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
 
@@ -9,33 +11,36 @@ import org.xutils.db.annotation.Table;
 @Table(name = "received_like")
 public class DbReceivedLike {
 
-    @Column(name = "likeId", isId = true, autoGen = true)
-    private int likeId;
+    @Column(name = "adviceId", isId = true, autoGen = false)
+    private int adviceId;
 
     @Column(name = "activityId")
     private int activityId;
 
-    @Column(name = "likeTime")
-    private String likeTime;
+    @Column(name = "projectId")
+    private int projectId;
+
+    @Column(name = "time")
+    private String time;
 
     @Column(name = "userHeadImagePath")
     private String userHeadImagePath;
 
+    @Column(name = "handleOrNot")
+    private int handleOrNot;
 
-    public int getLikeId() {
-        return likeId;
+    @Column(name = "type")
+    private int type;
+
+    @Column(name = "activOrProId")
+    private int activOrProId;
+
+    public int getAdviceId() {
+        return adviceId;
     }
 
-    public void setLikeId(int likeId) {
-        this.likeId = likeId;
-    }
-
-    public String getUserHeadImagePath() {
-        return userHeadImagePath;
-    }
-
-    public void setUserHeadImagePath(String userHeadImagePath) {
-        this.userHeadImagePath = userHeadImagePath;
+    public void setAdviceId(int adviceId) {
+        this.adviceId = adviceId;
     }
 
     public int getActivityId() {
@@ -46,11 +51,54 @@ public class DbReceivedLike {
         this.activityId = activityId;
     }
 
-    public String getLikeTime() {
-        return likeTime;
+    public int getProjectId() {
+        return projectId;
     }
 
-    public void setLikeTime(String likeTime) {
-        this.likeTime = likeTime;
+    public void setProjectId(int projectId) {
+        this.projectId = projectId;
+    }
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getUserHeadImagePath() {
+        if(userHeadImagePath != null && userHeadImagePath.contains("http")){
+            return userHeadImagePath;
+        }
+        return ConstantValue.urlRoot + userHeadImagePath;
+    }
+
+    public void setUserHeadImagePath(String userHeadImagePath) {
+        this.userHeadImagePath = userHeadImagePath;
+    }
+
+    public int getHandleOrNot() {
+        return handleOrNot;
+    }
+
+    public void setHandleOrNot(int handleOrNot) {
+        this.handleOrNot = handleOrNot;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getActivOrProId() {
+        return activOrProId;
+    }
+
+    public void setActivOrProId(int activOrProId) {
+        this.activOrProId = activOrProId;
     }
 }

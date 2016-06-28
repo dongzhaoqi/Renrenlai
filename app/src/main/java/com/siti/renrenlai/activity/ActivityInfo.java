@@ -152,6 +152,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         }
         if(signUpIs){
             btnParticipate.setText("已报名");
+            btnParticipate.setBackgroundColor(Color.parseColor("#E5E5E5"));
             btnParticipate.setClickable(false);
         }
         if (imageList != null && imageList.size() > 0) {

@@ -2,6 +2,7 @@ package com.siti.renrenlai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,13 +18,16 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
+import com.siti.renrenlai.activity.ProjectInfo;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.db.DbActivity;
 import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.db.DbReceivedComment;
+import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -33,6 +37,8 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
+import org.xutils.common.util.KeyValue;
+import org.xutils.db.sqlite.WhereBuilder;
 import org.xutils.ex.DbException;
 import org.xutils.x;
 
@@ -52,7 +58,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
     private OnChildItemClickListener mOnChildItemClickListener;
     private Context mContext;
     private DbManager db;
-    String userName;
+    String userName, url;
     private List<LovedUsers> lovedUsersList = new ArrayList<>();
     private List<CommentContents> commentsList = new ArrayList<>();
     private static final String TAG = "ReviewExpandAdapter";
@@ -114,10 +120,20 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
             holder = (GroupHolder) convertView.getTag();
         }
 
-        if(receivedCommentList != null && receivedCommentList.size() > 0){
-            holder.iv_circle.setVisibility(View.VISIBLE);
-            holder.tv_message_nums.setText(String.valueOf(receivedCommentList.size()));
+        if(receivedCommentList != null && receivedCommentList.size() > 0 ){
+            int count = 0;
+            for(int i = 0; i < receivedCommentList.size(); i++){
+                Log.d(TAG, "getGroupView: receivedCommentList.get(i).getHandleOrNot()------>" + receivedCommentList.get(i).getHandleOrNot());
+                if(receivedCommentList.get(i).getHandleOrNot() == 0){
+                    count ++ ;
+                }
+            }
+            if(count > 0){
+                holder.iv_circle.setVisibility(View.VISIBLE);
+                holder.tv_message_nums.setText(String.valueOf(count));
+            }
         }
+
         if(!isExpanded){
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_expand_small_holo_light);
         }else{
@@ -155,16 +171,58 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         holder.tv_activity_name.setText(reviewChild.activity_name);
         Picasso.with(mContext).load(reviewChild.activityImagePath).into(holder.iv_activity_img);
 
+        if(reviewChild.handleOrNot == 0){
+            holder.ll_review.setBackgroundColor(Color.parseColor("#FF646464"));
+        }
         holder.ll_review.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivityInfo(reviewChild.activityId);
+                if(reviewChild.handleOrNot == 0){
+                    Log.d(TAG, "onClick: 执行了==============" );
+                    changeStatus(userName, reviewChild.adviceId, 1);
+                }
+                if(reviewChild.activityId != 0){
+                    getActivityInfo(reviewChild.activityId);
+                }else{
+                    getProjectInfo(reviewChild.projectId);
+                }
                 Log.d(TAG, "onClick: " + reviewChild.activityId);
                 //Toast.makeText(mContext, "position:" + reviewChild.activityId, Toast.LENGTH_LONG).show();
             }
         });
 
         return convertView;
+    }
+
+    public void changeStatus(String userName, final long adviceId, int type){
+        url = ConstantValue.HANDLE_MESSAGE_STATUS;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("adviceId", adviceId);
+            jsonObject.put("type", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        try {
+                            db.update(DbReceivedComment.class, WhereBuilder.b("adviceId", "=", adviceId),new KeyValue("handleOrNot",1));
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
     }
 
     public void getActivityInfo(final int activityId) {
@@ -241,6 +299,52 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         mContext.startActivity(intent);
     }
 
+
+    public void getProjectInfo(int projectId) {
+        String url = ConstantValue.GET_PROJECT_INFO;
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("projectId", projectId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "response:" + response.toString());
+                        getProject(response);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e(TAG, "Error: " + error.getMessage());
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void getProject(JSONObject response) {
+        try {
+            String result = response.getJSONObject("result").toString();
+            Project project = com.alibaba.fastjson.JSONObject.parseObject(result, Project.class);
+            Intent intent = new Intent(mContext, ProjectInfo.class);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("project", project);
+            intent.putExtras(bundle);
+            mContext.startActivity(intent);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @Override
     public int getRealChildrenCount(int groupPosition) {
         return receivedCommentGroupList.get(groupPosition).receivedCommentChildList.size();
@@ -264,14 +368,16 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
     }
 
     public static class ReviewChild {
-        public int commentId;
+        public int adviceId;
         public String username;
         public String userHeadImagePath;
         public String review;
         public String review_time;
         public String activity_name;
         public int activityId;
+        public int projectId;
         public String activityImagePath;
+        public int handleOrNot;
     }
 
     public static class GroupHolder {

@@ -15,6 +15,7 @@ import com.siti.renrenlai.adapter.SystemMessageExpandAdapter;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageChild;
 import com.siti.renrenlai.adapter.SystemMessageExpandAdapter.MessageGroup;
 import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbProject;
 import com.siti.renrenlai.db.DbReceivedComment;
 import com.siti.renrenlai.db.DbReceivedLike;
 import com.siti.renrenlai.db.DbSystemMessage;
@@ -49,8 +50,8 @@ public class MessageActivity extends BaseActivity {
     private ReceivedLikeExpandAdapter receivedLikeAdapter;
     private String[] str_message = {"本活动将于两天后举行aaaaa啊啊啊啊啊!", "本活动取消了!"};
     private String[] str_name = {"环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑"};
-    private String[] users = {"张三", "李四", "小王","张三", "李四", "小王", "张三", "李四", "小王"};
-    private String[] contents = {"哈哈", "不错", "好玩","哈哈", "不错", "好玩","哈哈", "不错", "好玩"};
+    private String[] users = {"张三", "李四", "小王", "张三", "李四", "小王", "张三", "李四", "小王"};
+    private String[] contents = {"哈哈", "不错", "好玩", "哈哈", "不错", "好玩", "哈哈", "不错", "好玩"};
     private DbManager db;
     private List<DbSystemMessage> systemMessageList;
     private List<DbReceivedComment> receivedCommentList;
@@ -90,26 +91,45 @@ public class MessageActivity extends BaseActivity {
     /**
      * 初始化"系统消息"
      */
-    public void initSystemMessage(){
+    public void initSystemMessage() {
         try {
             systemMessageList = db.selector(DbSystemMessage.class).findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
-        if(systemMessageList != null){
-            for(DbSystemMessage systemMessage : systemMessageList){
-                Log.d(TAG, "onCreate: " + systemMessage.getMsgId() + " " + systemMessage.getMsgTitle() + " " + systemMessage.getMsgContent());
+        if (systemMessageList != null) {
+            for (DbSystemMessage systemMessage : systemMessageList) {
+                Log.d(TAG, "onCreate: " + systemMessage.getAdviceId() + " " + systemMessage.getMsgTitle() + " " + systemMessage.getContent());
             }
         }
 
         List<MessageGroup> systemMessageGroupList = new ArrayList<>();
         MessageGroup systemMessageGroup = new MessageGroup();
-        if(systemMessageList != null && systemMessageList.size() > 0) {
+        if (systemMessageList != null && systemMessageList.size() > 0) {
             for (int i = 0; i < systemMessageList.size(); i++) {
+                DbActivity dbActivity = new DbActivity();
                 MessageChild child = new MessageChild();
-                child.activityId = systemMessageList.get(i).getActivityId();
-                child.message = systemMessageList.get(i).getMsgContent();
-                child.activity_name = systemMessageList.get(i).getMsgTitle();
+                child.type = systemMessageList.get(i).getType();
+                child.adviceId = systemMessageList.get(i).getAdviceId();
+                child.activityId = systemMessageList.get(i).getActivOrProId();
+                child.message = systemMessageList.get(i).getContent();
+                child.userHeadImagePath = systemMessageList.get(i).getUserHeadImagePath();
+                child.alert_time = systemMessageList.get(i).getTime();
+                child.handleOrNot = systemMessageList.get(i).getHandleOrNot();
+
+                try {
+                    Log.d(TAG, "initSystemMessage: child.adviceId--->" + child.adviceId);
+                    dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+                child.activity_name = dbActivity.getActivityName();
+                try {
+                    Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                    child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
                 systemMessageGroup.systemMessageChildList.add(child);
             }
         }
@@ -136,7 +156,7 @@ public class MessageActivity extends BaseActivity {
     /**
      * 初始化"评论"
      */
-    public void initReview(){
+    public void initReview() {
 
         try {
             receivedCommentList = db.selector(DbReceivedComment.class).findAll();
@@ -144,36 +164,63 @@ public class MessageActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if(receivedCommentList != null){
-            for(DbReceivedComment comment : receivedCommentList){
-                Log.d(TAG, "评论内容："+comment.getContent() + " 评论人：" + comment.getUserName());
+        if (receivedCommentList != null) {
+            for (DbReceivedComment comment : receivedCommentList) {
+                Log.d(TAG, "评论内容：" + comment.getContent() + " 评论人：" + comment.getUserName());
             }
         }
 
         List<ReviewGroup> receivedCommentGroupList = new ArrayList<>();
         ReviewGroup reviewGroup = new ReviewGroup();
-        if(receivedCommentList != null && receivedCommentList.size() > 0) {
+        if (receivedCommentList != null && receivedCommentList.size() > 0) {
             for (int i = 0; i < receivedCommentList.size(); i++) {
                 DbActivity dbActivity = new DbActivity();
+                DbProject dbProject = new DbProject();
+                int type;
                 ReviewChild child = new ReviewChild();
-                child.commentId = receivedCommentList.get(i).getCommentId();
+                child.adviceId = receivedCommentList.get(i).getAdviceId();
                 child.username = receivedCommentList.get(i).getUserName();
                 child.userHeadImagePath = receivedCommentList.get(i).getUserHeadImagePath();
                 child.review = receivedCommentList.get(i).getContent();
-                child.review_time = receivedCommentList.get(i).getCommentTime();
-                child.activityId = receivedCommentList.get(i).getActivityId();
-                try {
-                    dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
-                } catch (DbException e) {
-                    e.printStackTrace();
+                child.review_time = receivedCommentList.get(i).getTime();
+                child.handleOrNot = receivedCommentList.get(i).getHandleOrNot();
+
+                type = receivedCommentList.get(i).getType();
+                if (type == 0 || type == 1 || type == 2) {//活动消息
+                    child.activityId = receivedCommentList.get(i).getActivOrProId();
+                    try {
+                        dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                    child.activity_name = dbActivity.getActivityName();
+                    try {
+                        //Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                        Log.d(TAG, "initReview: child.adviceId--->" + child.adviceId);
+                        if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
+                            child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                        }
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+
+                } else { //项目消息
+                    child.projectId = receivedCommentList.get(i).getActivOrProId();
+
+                    try {
+                        Log.d(TAG, "initReview: child.adviceId--->" + child.adviceId);
+                        dbProject = db.selector(DbProject.class).where("projectId", "=", child.projectId).findFirst();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                    if(dbProject != null) {
+                        child.activity_name = dbProject.getProjectName();
+                        if (dbProject.getProjectImagePath() != null) {
+                            child.activityImagePath = dbProject.getProjectImagePath();
+                        }
+                    }
                 }
-                child.activity_name = dbActivity.getActivityName();
-                try {
-                    Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                    child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
+
                 reviewGroup.receivedCommentChildList.add(child);
             }
         }
@@ -199,7 +246,7 @@ public class MessageActivity extends BaseActivity {
     /**
      * 初始化"收到的喜欢"
      */
-    public void initReceivedLike(){
+    public void initReceivedLike() {
 
         try {
             receivedLikeList = db.selector(DbReceivedLike.class).findAll();
@@ -207,27 +254,60 @@ public class MessageActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if(receivedLikeList != null){
-            for(DbReceivedLike like : receivedLikeList){
-                Log.d(TAG, "用户头像："+like.getUserHeadImagePath());
+        if (receivedLikeList != null) {
+            for (DbReceivedLike like : receivedLikeList) {
+                Log.d(TAG, "用户头像：" + like.getUserHeadImagePath());
             }
         }
 
         List<ReceivedLikeGroup> receivedLikeGroupList = new ArrayList<>();
         ReceivedLikeGroup receivedLikeGroup = new ReceivedLikeGroup();
 
-        if(receivedLikeList != null && receivedLikeList.size() > 0) {
+        if (receivedLikeList != null && receivedLikeList.size() > 0) {
             for (int i = 0; i < receivedLikeList.size(); i++) {
-                DbActivity activity = new DbActivity();
+                DbActivity dbActivity = new DbActivity();
+                DbProject dbProject = new DbProject();
+                int type;
                 ReceivedLikeChild child = new ReceivedLikeChild();
-                child.received_time = receivedLikeList.get(i).getLikeTime();
-                child.activityId = receivedLikeList.get(i).getActivityId();
-                try {
-                    activity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
-                } catch (DbException e) {
-                    e.printStackTrace();
+                child.adviceId = receivedLikeList.get(i).getAdviceId();
+                child.received_time = receivedLikeList.get(i).getTime();
+                child.handleOrNot = receivedLikeList.get(i).getHandleOrNot();
+
+                type = receivedLikeList.get(i).getType();
+                if (type == 0 || type == 1 || type == 2) {
+                    child.activityId = receivedLikeList.get(i).getActivOrProId();
+                    try {
+                        dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                    child.activity_name = dbActivity.getActivityName();
+                    try {
+                        Log.d(TAG, "initReceivedLike: adviceId--->" + child.adviceId);
+                        Log.d(TAG, "initReview: dbActivity " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                        child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    child.projectId = receivedLikeList.get(i).getActivOrProId();
+                    try {
+                        dbProject = db.selector(DbProject.class).where("projectId", "=", child.projectId).findFirst();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
+                    if(dbProject != null){
+                        child.activity_name = dbProject.getProjectName();
+                        try {
+                            Log.d(TAG, "initReceivedLike: adviceId--->" + child.adviceId);
+                            Log.d(TAG, "initReview: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
+                            child.activityImagePath = dbProject.getProjectImages(db).get(0).getProjectImagePath();
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 }
-                child.activity_name = activity.getActivityName();
+
                 receivedLikeGroup.receivedLikeChildList.add(child);
             }
         }
@@ -248,5 +328,13 @@ public class MessageActivity extends BaseActivity {
                 }
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        initSystemMessage();
+        initReview();
+        initReceivedLike();
     }
 }

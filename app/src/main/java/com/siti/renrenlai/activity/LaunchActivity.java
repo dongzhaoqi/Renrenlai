@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -33,7 +34,7 @@ import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
-import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -107,7 +108,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     public static Bitmap bitmap;
     private String imgName;
-    private int activity_type;
+    private int activity_type = 0;
+    int projectId;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private PictureAdapter picAdapter;
@@ -399,6 +401,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                projectId = projectList.get(position).getProjectId();
                 tv_project_name.setText(projectList.get(position).getProjectName());
                 popupWindow.dismiss();
             }
@@ -413,6 +416,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      * 发布活动
      */
     public void publishActivity() {
+
+        if(activity_type == 0){
+            Toast.makeText(LaunchActivity.this, "请选择活动类型", Toast.LENGTH_SHORT).show();
+        }
+        if("".equals(et_subject.getText().toString().trim())){
+            Toast.makeText(LaunchActivity.this, "请填写活动主题", Toast.LENGTH_SHORT).show();
+        }
+        if("".equals(et_place.getText().toString().trim())){
+            Toast.makeText(LaunchActivity.this, "请填写活动地点", Toast.LENGTH_SHORT).show();
+        }
+
         showProcessDialog("发布中");
         Log.d(TAG, "publishActivity() returned: ");
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
@@ -429,7 +443,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             activityContent.put("activityDescrip", et_detail.getText().toString());
             activityContent.put("activityTypeId", activity_type);
             activityContent.put("groupId", 2);
-            activityContent.put("projectId", 2);
+            activityContent.put("projectId", projectId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -527,8 +541,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     }
 
-    public DbActivity getActivityInfo() {
-        DbActivity activity = new DbActivity();
+    public Activity getActivityInfo() {
+        Activity activity = new Activity();
         activity.setActivityType(activity_type + "");
         activity.setActivityName(et_subject.getText().toString());
         activity.setActivityStartTime(tv_start_time.getText().toString());

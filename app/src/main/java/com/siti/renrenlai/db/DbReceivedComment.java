@@ -12,8 +12,8 @@ import org.xutils.db.annotation.Table;
 @Table(name = "received_comment")
 public class DbReceivedComment {
 
-    @Column(name = "commentId", isId = true, autoGen = true)
-    private int commentId;
+    @Column(name = "adviceId", isId = true, autoGen = false)
+    private int adviceId;
 
     @Column(name = "content")
     private String content;
@@ -30,26 +30,24 @@ public class DbReceivedComment {
     @Column(name = "activityId")
     private int activityId;
 
-    @Column(name = "commentTime")
-    private String commentTime;
+    @Column(name = "time")
+    private String time;
 
-    @Column(name = "isRead")
-    private boolean isRead;
+    @Column(name = "type")
+    private int type;
 
-    public String getUserName() {
-        return userName;
+    @Column(name = "handleOrNot")
+    private int handleOrNot;
+
+    @Column(name = "activOrProId")
+    private int activOrProId;
+
+    public int getAdviceId() {
+        return adviceId;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public int getCommentId() {
-        return commentId;
-    }
-
-    public void setCommentId(int commentId) {
-        this.commentId = commentId;
+    public void setAdviceId(int adviceId) {
+        this.adviceId = adviceId;
     }
 
     public String getContent() {
@@ -60,8 +58,16 @@ public class DbReceivedComment {
         this.content = content;
     }
 
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
     public String getUserHeadImagePath() {
-        if(userHeadImagePath.contains("http")){
+        if(userHeadImagePath != null && userHeadImagePath.contains("http")){
             return userHeadImagePath;
         }
         return ConstantValue.urlRoot + userHeadImagePath;
@@ -87,11 +93,35 @@ public class DbReceivedComment {
         this.activityId = activityId;
     }
 
-    public String getCommentTime() {
-        return commentTime;
+    public String getTime() {
+        return time;
     }
 
-    public void setCommentTime(String commentTime) {
-        this.commentTime = commentTime;
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    public int getHandleOrNot() {
+        return handleOrNot;
+    }
+
+    public void setHandleOrNot(int handleOrNot) {
+        this.handleOrNot = handleOrNot;
+    }
+
+    public int getActivOrProId() {
+        return activOrProId;
+    }
+
+    public void setActivOrProId(int activOrProId) {
+        this.activOrProId = activOrProId;
     }
 }

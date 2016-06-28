@@ -1,6 +1,10 @@
 package com.siti.renrenlai.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +13,33 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.activity.ActivityInfo;
+import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.bean.ActivityImage;
+import com.siti.renrenlai.bean.CommentContents;
+import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.db.DbSystemMessage;
+import com.siti.renrenlai.util.ConstantValue;
+import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
+import com.squareup.picasso.Picasso;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.common.util.KeyValue;
+import org.xutils.db.sqlite.WhereBuilder;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,10 +54,17 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
     private List<DbSystemMessage> systemMessageList;
     private OnChildItemClickListener mOnChildItemClickListener;
     private Context mContext;
+    private DbManager db;
+    String userName, url;
+    private List<LovedUsers> lovedUsersList = new ArrayList<>();
+    private List<CommentContents> commentsList = new ArrayList<>();
+    private static final String TAG = "SystemMessageAdapter";
 
     public SystemMessageExpandAdapter(Context context) {
         inflater = LayoutInflater.from(context);
         mContext = context;
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(mContext, "login"), "userName");
     }
 
     public void setData(List<MessageGroup> items, List<DbSystemMessage> systemMessageList) {
@@ -83,8 +118,17 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         }
 
         if(systemMessageList != null && systemMessageList.size() > 0 ){
-            holder.iv_circle.setVisibility(View.VISIBLE);
-            holder.tv_message_nums.setText(String.valueOf(systemMessageList.size()));
+            int count = 0;
+            for(int i = 0; i < systemMessageList.size(); i++){
+                Log.d(TAG, "getGroupView: systemMessageList.get(i).getHandleOrNot()------>" + systemMessageList.get(i).getHandleOrNot());
+                if(systemMessageList.get(i).getHandleOrNot() == 0){
+                    count ++ ;
+                }
+            }
+            if(count > 0){
+                holder.iv_circle.setVisibility(View.VISIBLE);
+                holder.tv_message_nums.setText(String.valueOf(count));
+            }
         }
         if(!isExpanded){
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_expand_small_holo_light);
@@ -106,15 +150,22 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
             holder.ll_system_message = (LinearLayout) convertView.findViewById(R.id.ll_system_message);
             holder.iv_system_icon = (ImageView) convertView.findViewById(R.id.iv_system_icon);
             holder.tv_system_message = (TextView) convertView.findViewById(R.id.system_message);
+            holder.tv_alert_time = (TextView) convertView.findViewById(R.id.tv_alert_time);
             holder.iv_activity_img = (ImageView) convertView.findViewById(R.id.iv_activity_img);
             holder.tv_activity_name = (TextView) convertView.findViewById(R.id.tv_activity_name);
             convertView.setTag(holder);
         }else{
             holder = (ChildHolder) convertView.getTag();
         }
-
+        Log.d(TAG, "getRealChildImageView: " + messageChild.activityImagePath);
         holder.tv_system_message.setText(messageChild.message);
         holder.tv_activity_name.setText(messageChild.activity_name);
+        holder.tv_alert_time.setText(messageChild.alert_time);
+        Picasso.with(mContext).load(messageChild.activityImagePath).into(holder.iv_activity_img);
+
+        if(messageChild.handleOrNot == 0){
+            holder.ll_system_message.setBackgroundColor(Color.parseColor("#FF646464"));
+        }
 
         convertView.setOnClickListener(this);
         //holder.iv_system_icon.setImageResource(R.drawable.system_alarm);
@@ -122,13 +173,123 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         holder.ll_system_message.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "position:" + messageChild.activityId, Toast.LENGTH_SHORT).show();
+                getActivityInfo(messageChild.activityId);
+                if(messageChild.handleOrNot == 0){
+                    Log.d(TAG, "onClick: " + "执行了");
+                    changeStatus(userName, messageChild.adviceId, 0);
+                }
+                //Toast.makeText(mContext, "position:" + messageChild.activityId, Toast.LENGTH_SHORT).show();
             }
         });
 
-
         return convertView;
     }
+
+    public void changeStatus(String userName, final long adviceId, int type){
+        url = ConstantValue.HANDLE_MESSAGE_STATUS;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("adviceId", adviceId);
+            jsonObject.put("type", type);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request = new JsonObjectRequest(url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        try {
+                            db.update(DbSystemMessage.class, WhereBuilder.b("adviceId", "=", adviceId),new KeyValue("handleOrNot",1));
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request);      //加入请求队列
+    }
+
+    public void getActivityInfo(final int activityId) {
+        String url = ConstantValue.GET_ACTIVITY_INFO;
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("activityId", activityId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(url, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        getActivityNewData(response, activityId);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    public void getActivityNewData(JSONObject response, int activityId) {
+        Log.d(TAG, "getActivityNewData: " + response);
+        JSONObject result = response.optJSONObject("result");
+        commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
+        lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
+        DbActivity dbActivity = null;
+        List<DbActivityImage> dbActivityImage = null;
+        List<ActivityImage> activityImages;
+        Activity activity = new Activity();
+        try {
+            dbActivity = db.selector(DbActivity.class).where("activityId", "=", activityId).findFirst();
+            dbActivityImage = db.selector(DbActivityImage.class).where("activityId", "=", activityId).findAll();
+            Log.d(TAG, "getActivityNewData: " + dbActivityImage.size() + dbActivityImage.get(0).getActivityImagePath());
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        if(dbActivity != null) {
+            activity.setActivityName(dbActivity.getActivityName());
+            activity.setActivityStartTime(dbActivity.getActivityStartTime());
+            activity.setActivityEndTime(dbActivity.getActivityEndTime());
+            activity.setActivityReleaserTel(dbActivity.getActivityReleaserTel());
+            activity.setActivityDetailDescrip(dbActivity.getActivityDetailDescrip());
+            activity.setActivityAddress(dbActivity.getActivityAddress());
+        }
+        if(dbActivityImage != null && dbActivityImage.size() > 0){
+            int dbActivityImageSize = dbActivityImage.size();
+            activityImages = new ArrayList<>(dbActivityImageSize);
+            for(int i = 0; i < dbActivityImageSize; i++){
+                ActivityImage activityImage = new ActivityImage();
+                activityImage.setActivityImagePath(dbActivityImage.get(i).getActivityImagePath());
+                Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
+                activityImages.add(activityImage);
+            }
+            activity.setActivityImages(activityImages);
+        }
+        activity.setLovedIs(result.optBoolean("lovedIs"));
+        activity.setSignUpIs(result.optBoolean("signUpIs"));
+        activity.setCommentContents(commentsList);
+        activity.setLovedUsers(lovedUsersList);
+        Intent intent = new Intent(mContext, ActivityInfo.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("activity", activity);
+        intent.putExtras(bundle);
+        mContext.startActivity(intent);
+    }
+
 
     @Override
     public int getRealChildrenCount(int groupPosition) {
@@ -153,11 +314,16 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
     }
 
     public static class MessageChild {
+        public int adviceId;
+        public int type;
         public String icon_system;
         public String message;
-        public String activity_image;
+        public String alert_time;
         public String activity_name;
         public int activityId;
+        public String userHeadImagePath;
+        public String activityImagePath;
+        public int handleOrNot;
     }
 
     public static class GroupHolder {
@@ -171,6 +337,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         LinearLayout ll_system_message;
         TextView tv_activity_id;
         ImageView iv_system_icon;
+        TextView  tv_alert_time;
         TextView tv_system_message;
         ImageView iv_activity_img;
         TextView tv_activity_name;

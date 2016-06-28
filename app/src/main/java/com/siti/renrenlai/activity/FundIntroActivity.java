@@ -21,7 +21,12 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.FundIntroAdapter;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.Project;
+import com.siti.renrenlai.db.DbActivity;
+import com.siti.renrenlai.db.DbActivityImage;
+import com.siti.renrenlai.db.DbProject;
+import com.siti.renrenlai.db.DbProjectImage;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -31,6 +36,9 @@ import com.siti.renrenlai.view.HeaderLayout;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.io.UnsupportedEncodingException;
 import java.util.List;
@@ -54,6 +62,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
     String api, url, userName;
+    private DbManager db;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +104,9 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void initView() {
+
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
+
         initTopBarForBoth("家园创变大赛", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
@@ -160,10 +172,46 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void getData(JSONObject response) {
+        int projectImageSize ;
+        try {
+            db.delete(DbProject.class);
+            db.delete(DbProjectImage.class);
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
         JSONArray result = response.optJSONArray("result");
         if (result != null) {
             projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Project.class);
             Log.d(TAG, "getData() returned: " + projectList.size());
+
+            for(Project project : projectList){
+                DbProject dbProject = new DbProject();
+                DbProjectImage dbProjectImage = new DbProjectImage();
+                dbProject.setProjectId(project.getProjectId());
+                dbProject.setProjectAddress(project.getProjectAddress());
+                dbProject.setProjectDescrip(project.getProjectDescrip());
+                dbProject.setProjectName(project.getProjectName());
+                dbProject.setProjectImagePath(project.getProjectImagePath());
+
+                dbProjectImage.setProjectId(project.getProjectId());
+
+                if(project.getProjectImagePath() != null) {
+                    //projectImageSize = project.getProjectImageList().size();
+                    //for (int i = 0; i < projectImageSize; i++) {
+                        dbProjectImage.setProjectImagePath(project.getProjectImagePath());
+                        try {
+                            db.save(dbProjectImage);
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
+                    //}
+                }
+                try {
+                    db.save(dbProject);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
+            }
 
             fundAdapter = new FundIntroAdapter(this, projectList);
             fundAdapter.setOnItemClickListener(new FundIntroAdapter.OnRecyclerViewItemClickListener() {

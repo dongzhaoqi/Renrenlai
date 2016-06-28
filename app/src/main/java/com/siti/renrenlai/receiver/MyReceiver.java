@@ -31,7 +31,7 @@ public class MyReceiver extends BroadcastReceiver {
     private DbManager db;
     int type;  //消息类型
     JSONObject jsonObject;
-    String userHeadImagePath, userName, commentContent, time;
+    String userHeadImagePath, userName, commentContent, time, title, content, extras;
     int projectId, activityId;
 
     @Override
@@ -54,9 +54,9 @@ public class MyReceiver extends BroadcastReceiver {
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知");
             int notifactionId = bundle.getInt(JPushInterface.EXTRA_NOTIFICATION_ID);
             Log.d(TAG, "[MyReceiver] 接收到推送下来的通知的ID: " + notifactionId);
-            String title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
-            String content = bundle.getString(JPushInterface.EXTRA_ALERT);
-            String extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
+            title = bundle.getString(JPushInterface.EXTRA_NOTIFICATION_TITLE);
+            content = bundle.getString(JPushInterface.EXTRA_ALERT);
+            extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
             try {
                 jsonObject = new JSONObject(extras);
@@ -71,91 +71,16 @@ public class MyReceiver extends BroadcastReceiver {
 
 
             //收到的系统消息---用户报名了活动
-            if (type == ConstantValue.Activity_SYSTEM_MESSAGE) {
-                try {
-                    activityId = jsonObject.getInt("activityId");
-                    time = jsonObject.getString("time");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                DbSystemMessage systemMessage = new DbSystemMessage();
-                systemMessage.setMsgContent(content);
-                systemMessage.setActivityId(activityId);
-                systemMessage.setTime(time);
-                try {
-                    db.save(systemMessage);
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
-
-            }
+            //saveSystemMessage();
 
             //收到的活动评论
-            if (type == ConstantValue.ACTIVITY_RECEIVED_COMMENT) {
-                userHeadImagePath = jsonObject.optString("userHeadImagePath");
-                userName = jsonObject.optString("userName");
-                commentContent = jsonObject.optString("content");
-                activityId = jsonObject.optInt("activityId");
-                time = jsonObject.optString("time");
-
-                DbReceivedComment receivedComment = new DbReceivedComment();
-                receivedComment.setContent(commentContent);
-                receivedComment.setUserName(userName);
-                receivedComment.setUserHeadImagePath(userHeadImagePath);
-                receivedComment.setActivityId(activityId);
-                receivedComment.setCommentTime(time);
-
-                try {
-                    db.save(receivedComment);
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
-            }
+            //saveReviewMessage();
 
             //收到的活动喜欢
-            if (type == ConstantValue.ACTIVITY_RECEIVED_LIKE) {
-                try {
-                    time = jsonObject.getString("time");
-                    activityId = jsonObject.getInt("activityId");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                DbReceivedLike receivedLike = new DbReceivedLike();
-                receivedLike.setActivityId(activityId);
-                receivedLike.setLikeTime(time);
-                try {
-                    db.save(receivedLike);
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
-            }
+            //saveActivityLikeMessage();
 
             //收到的项目评论
-            if (type == ConstantValue.PROJECT_RECEIVED_COMMENT) {
-                try {
-                    userHeadImagePath = jsonObject.getString("userHeadImagePath");
-                    userName = jsonObject.getString("userName");
-                    commentContent = jsonObject.getString("content");
-                    projectId = jsonObject.getInt("projectId");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-
-                DbReceivedComment receivedComment = new DbReceivedComment();
-                receivedComment.setContent(commentContent);
-                receivedComment.setUserName(userName);
-                receivedComment.setUserHeadImagePath(userHeadImagePath);
-                receivedComment.setProjectId(projectId);
-
-                try {
-                    db.save(receivedComment);
-                } catch (DbException e) {
-                    e.printStackTrace();
-                }
-            }
-
+            //saveProjectComment();
 
         } else if (JPushInterface.ACTION_NOTIFICATION_OPENED.equals(intent.getAction())) {
             Log.d(TAG, "[MyReceiver] 用户点击打开了通知");
@@ -176,6 +101,99 @@ public class MyReceiver extends BroadcastReceiver {
             Log.w(TAG, "[MyReceiver]" + intent.getAction() + " connected state change to " + connected);
         } else {
             Log.d(TAG, "[MyReceiver] Unhandled intent - " + intent.getAction());
+        }
+    }
+
+    public void saveSystemMessage(){
+        if (type == ConstantValue.Activity_SYSTEM_MESSAGE) {
+            try {
+                userHeadImagePath = jsonObject.optString("userHeadImagePath");
+                activityId = jsonObject.getInt("activityId");
+                time = jsonObject.getString("time");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            DbSystemMessage systemMessage = new DbSystemMessage();
+            systemMessage.setContent(content);
+            systemMessage.setActivityId(activityId);
+            systemMessage.setUserHeadImagePath(userHeadImagePath);
+            systemMessage.setTime(time);
+            try {
+                db.save(systemMessage);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void saveReviewMessage(){
+        if (type == ConstantValue.ACTIVITY_RECEIVED_COMMENT) {
+            userHeadImagePath = jsonObject.optString("userHeadImagePath");
+            userName = jsonObject.optString("userName");
+            commentContent = jsonObject.optString("content");
+            activityId = jsonObject.optInt("activityId");
+            time = jsonObject.optString("time");
+
+            DbReceivedComment receivedComment = new DbReceivedComment();
+            receivedComment.setContent(commentContent);
+            receivedComment.setUserName(userName);
+            receivedComment.setUserHeadImagePath(userHeadImagePath);
+            receivedComment.setActivityId(activityId);
+            receivedComment.setTime(time);
+
+            try {
+                db.save(receivedComment);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void saveActivityLikeMessage(){
+        if (type == ConstantValue.ACTIVITY_RECEIVED_LIKE) {
+            try {
+                time = jsonObject.getString("time");
+                activityId = jsonObject.getInt("activityId");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            DbReceivedLike receivedLike = new DbReceivedLike();
+            receivedLike.setActivityId(activityId);
+            receivedLike.setTime(time);
+            try {
+                db.save(receivedLike);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+    public void saveProjectComment(){
+        if (type == ConstantValue.PROJECT_RECEIVED_COMMENT) {
+            try {
+                userHeadImagePath = jsonObject.getString("userHeadImagePath");
+                userName = jsonObject.getString("userName");
+                commentContent = jsonObject.getString("content");
+                projectId = jsonObject.getInt("projectId");
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            DbReceivedComment receivedComment = new DbReceivedComment();
+            receivedComment.setContent(commentContent);
+            receivedComment.setUserName(userName);
+            receivedComment.setUserHeadImagePath(userHeadImagePath);
+            receivedComment.setProjectId(projectId);
+
+            try {
+                db.save(receivedComment);
+            } catch (DbException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -130,5 +130,6 @@ public class ConstantValue {
     //获取该项目相关活动
     public static final String GET_RELATED_ACTIVITY = urlRoot + "/getActivityInfoOfProjectForApp";
 
-
-}
+    //获得消息状态
+    public static final String HANDLE_MESSAGE_STATUS = urlRoot + "/handleMessageStatus";
+ }

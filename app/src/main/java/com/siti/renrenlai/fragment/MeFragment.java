@@ -34,6 +34,7 @@ import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
@@ -93,7 +94,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
         view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
-
+        init();
         return view;
     }
 
@@ -101,13 +102,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         initTopBarForOnlyTitle("我的");
-        init();
+
     }
 
     private void init() {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
         userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
-        initMessage2();
         if (userName.equals("0")) {
             tv_userName.setText("请登录");
         } else {
@@ -116,81 +116,28 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-            initMessage();
+
+            initMessage2();
         }
     }
 
     private void initMessage2(){
-        url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
-        JSONObject jsonObject1 = new JSONObject();
         try {
-            jsonObject1.put("userName", userName);
-        } catch (JSONException e) {
+            systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
+            receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
+            receivedLikeList = db.selector(DbReceivedLike.class).where("handleOrNot", "=", "0").findAll();
+        } catch (DbException e) {
             e.printStackTrace();
         }
-        JsonObjectRequest request1 = new JsonObjectRequest(url1, jsonObject1,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        request1.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        CustomApplication.getInstance().addToRequestQueue(request1);      //加入请求队列
+        systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
+        receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
+        receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
 
-
-        url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
-        JSONObject jsonObject2 = new JSONObject();
-        try {
-            jsonObject2.put("userName", userName);
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() >0)
+                || (receivedLikeList != null && receivedLikeList.size() > 0)) {
+            iv_circle.setVisibility(View.VISIBLE);
+            tv_message_nums.setText(String.valueOf(systemMessageSize + receivedReviewSize + receivedLikeSize));
         }
-        JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject2,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        request2.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        CustomApplication.getInstance().addToRequestQueue(request2);      //加入请求队列
-
-
-        url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
-        JSONObject jsonObject3 = new JSONObject();
-        try {
-            jsonObject3.put("userName", userName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject3,
-                new Response.Listener<JSONObject>() {
-                    @Override
-                    public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
-                    }
-                }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-            }
-        });
-        request3.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
     }
 
     private void initMessage() {
@@ -296,11 +243,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 .show();
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
-        if (!userName.equals("0")) {
-            initMessage();
+        if(!"0".equals(userName)){
+            initMessage2();
         }
     }
 }
