@@ -145,7 +145,6 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         }
 
         btnComment.setText("评论(" + (commentsList.size()) + ")");
-        btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         for(int i = 0; i < lovedUsersList.size(); i++){
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");

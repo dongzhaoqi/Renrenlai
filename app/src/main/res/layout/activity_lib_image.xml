@@ -63,6 +63,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:text="相册没有图片"
+        android:visibility="invisible"
         android:textColor="#000"
         />
 

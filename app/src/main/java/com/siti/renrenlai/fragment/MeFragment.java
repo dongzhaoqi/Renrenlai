@@ -42,6 +42,8 @@ import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.x;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 import butterknife.Bind;
@@ -62,10 +64,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     CircleImageView img_photo;
     @Bind(R.id.layout_favorite)
     LinearLayout layout_favorite;
+    @Bind(R.id.tv_favorite) TextView tv_favorite;
     @Bind(R.id.layout_enroll)
     LinearLayout layout_enroll;
+    @Bind(R.id.tv_enroll) TextView tv_enroll;
     @Bind(R.id.layout_launch)
     LinearLayout layout_launch;
+    @Bind(R.id.tv_launch) TextView tv_launch;
     @Bind(R.id.layout_message)
     RelativeLayout layout_message;
     @Bind(R.id.layout_invite)
@@ -82,21 +87,26 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tv_message_nums;
     private View view;
     private User user;
-    String userHeadPicImagePath, userName, url1, url2, url3;
+    String userHeadPicImagePath, userName, url, url1, url2, url3;
     boolean isSignedin = false;
     private DbManager db;
     private List<DbSystemMessage> systemMessageList;
     private List<DbReceivedComment> receivedCommentList;
     private List<DbReceivedLike> receivedLikeList;
-    int count;          //未读消息条数
+    int count;                              //未读消息条数
+    int myLikeActivitySize;                 //我喜欢的活动数量
+    int myParticipateActivitySize;          //我报名的活动的数量
+    int myLaunchActivitySize;               //我发起的活动的数量
     int systemMessageSize, receivedReviewSize, receivedLikeSize;
     private static final String TAG = "MeFragment";
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
         view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
         init();
+
         return view;
     }
 
@@ -118,15 +128,98 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-
+            initMyActivity();
             initMessage2();
         }
     }
 
-    private void initMessage2(){
+    private void initMyActivity() {
+
+        initLikeActivity();
+
+        initParticipateActivity();
+
+        initLaunchActivity();
+
+    }
+
+    private void initLikeActivity(){
+        try {
+            url = ConstantValue.GET_LOVED_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        System.out.println("url:" + url);
+        JsonObjectRequest likeRequest = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        myLikeActivitySize = response.optJSONArray("result").length();
+                        tv_favorite.setText(String.valueOf(myLikeActivitySize));
+                        Log.d(TAG, "onResponse: " + myLikeActivitySize);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        likeRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(likeRequest);
+    }
+
+    private void initParticipateActivity(){
+        try {
+            url = ConstantValue.GET_PARTICIPATE_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest req = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        myParticipateActivitySize = response.optJSONArray("result").length();
+                        tv_enroll.setText(String.valueOf(myParticipateActivitySize));
+                        Log.d(TAG, "onResponse: " + myParticipateActivitySize);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void initLaunchActivity(){
+        try {
+            url = ConstantValue.GET_PUBLISH_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest req = new JsonObjectRequest(url, null,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        myLaunchActivitySize = response.optJSONArray("result").length();
+                        tv_launch.setText(String.valueOf(myLaunchActivitySize));
+                        Log.d(TAG, "onResponse: " + myLaunchActivitySize);
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    private void initMessage2() {
 
         url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -137,16 +230,16 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
-                        if(result != null && result.length() > 0){
+                        if (result != null && result.length() > 0) {
                             systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
                             try {
                                 db.delete(DbSystemMessage.class);
                             } catch (DbException e) {
                                 e.printStackTrace();
                             }
-                            for(DbSystemMessage systemMessage : systemMessageList){
+                            for (DbSystemMessage systemMessage : systemMessageList) {
                                 try {
                                     db.save(systemMessage);
                                 } catch (DbException e) {
@@ -166,22 +259,22 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
 
         url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
 
         JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
-                        if(result != null && result.length() > 0){
+                        if (result != null && result.length() > 0) {
                             receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
                             try {
                                 db.delete(DbReceivedComment.class);
                             } catch (DbException e) {
                                 e.printStackTrace();
                             }
-                            for(DbReceivedComment receivedComment : receivedCommentList){
+                            for (DbReceivedComment receivedComment : receivedCommentList) {
                                 try {
                                     db.save(receivedComment);
                                 } catch (DbException e) {
@@ -201,22 +294,22 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
 
         url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
 
         JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
-                        if(result != null && result.length() > 0){
+                        if (result != null && result.length() > 0) {
                             receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
                             try {
                                 db.delete(DbReceivedLike.class);
                             } catch (DbException e) {
                                 e.printStackTrace();
                             }
-                            for(DbReceivedLike receivedLike : receivedLikeList){
+                            for (DbReceivedLike receivedLike : receivedLikeList) {
                                 try {
                                     db.save(receivedLike);
                                 } catch (DbException e) {
@@ -241,7 +334,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         } catch (DbException e) {
             e.printStackTrace();
         }
-        systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
+        systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
         count = systemMessageSize + receivedReviewSize + receivedLikeSize;
@@ -249,12 +342,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
             tv_message_nums.setText(String.valueOf(count));
-        }else{
+        } else {
             iv_circle.setVisibility(View.INVISIBLE);
             tv_message_nums.setText("");
         }
 
-        ((MainActivity)getActivity()).setIconInvisible(count);
+        ((MainActivity) getActivity()).setIconInvisible(count);
     }
 
     private void initMessage() {
@@ -276,11 +369,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-        systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
+        systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
 
-        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() >0)
+        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() > 0)
                 || (receivedLikeList != null && receivedLikeList.size() > 0)) {
             iv_circle.setVisibility(View.VISIBLE);
             tv_message_nums.setText(String.valueOf(systemMessageSize + receivedReviewSize + receivedLikeSize));
@@ -364,8 +457,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
-        if(!"0".equals(userName)){
+        if (!"0".equals(userName)) {
             initMessage2();
+            initMyActivity();
         }
     }
 }

@@ -266,7 +266,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
 
     private void initData() {
-        showProcessDialog();
+        //showProcessDialog();
         Log.d("FindFragment", "url:" + url);
 
         JsonObjectRequest request = new JsonObjectRequest(url, null,
@@ -274,13 +274,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         getData(response);
-                        dismissProcessDialog();
+                        //dismissProcessDialog();
                         Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                dismissProcessDialog();
+                //dismissProcessDialog();
             }
         });
 
@@ -597,9 +597,14 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             }
 
         });
-
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        cache();
+    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {

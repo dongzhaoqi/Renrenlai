@@ -1,5 +1,7 @@
 package com.siti.renrenlai.bean;
 
+import com.siti.renrenlai.util.ConstantValue;
+
 import java.io.Serializable;
 
 /**
@@ -23,7 +25,10 @@ public class ActivityImagePre implements Serializable{
         this.activityImagePreName = activityImagePreName;
     }
     public String getActivityImagePath() {
-        return activityImagePath;
+        if(activityImagePath.contains("http")){
+            return activityImagePath;
+        }
+        return ConstantValue.urlRoot + activityImagePath;
     }
     public void setActivityImagePath(String activityImagePath) {
         this.activityImagePath = activityImagePath;

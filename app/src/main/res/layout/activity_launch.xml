@@ -342,6 +342,7 @@
                     style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
+                    android:layout_marginBottom="@dimen/margin_8"
                     android:text="@string/txt_cover" />
 
                 <com.siti.renrenlai.view.NoScrollGridView

@@ -2,6 +2,7 @@ package com.siti.renrenlai.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -77,6 +78,10 @@ public class RegisterActivity extends BaseActivity {
         userName = etUsername.getText().toString();
         password = etPassword.getText().toString();
         confirmPassword = etConfirmPassword.getText().toString();
+        if(TextUtils.isEmpty(userName)){
+            Toast.makeText(RegisterActivity.this, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
         if(!password.equals(confirmPassword)){
             Toast.makeText(RegisterActivity.this, "两次输入密码不一致", Toast.LENGTH_SHORT).show();
             return;

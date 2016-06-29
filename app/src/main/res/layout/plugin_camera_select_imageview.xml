@@ -11,7 +11,7 @@
         android:background="@drawable/plugin_camera_no_pictures"
         android:scaleType="centerCrop" 
         android:layout_gravity="center"/>
-    <RelativeLayout 
+    <RelativeLayout
      	android:layout_width="fill_parent"
      	android:layout_height="fill_parent"
      	android:id="@+id/toggle"

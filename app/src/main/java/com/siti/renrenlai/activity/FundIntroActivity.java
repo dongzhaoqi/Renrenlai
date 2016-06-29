@@ -295,7 +295,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     public void getProjectInfo(int projectId) {
         String url = ConstantValue.GET_PROJECT_INFO;
-
+        Log.d(TAG, "getProjectInfo: projectId--->" + projectId + "  userName:" + userName);
         JSONObject json = new JSONObject();
         try {
             json.put("userName", userName);

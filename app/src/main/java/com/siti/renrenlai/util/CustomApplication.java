@@ -80,7 +80,7 @@ public class CustomApplication extends Application {
 				.setDbName("renrenactivity.db")
 				// 不设置dbDir时, 默认存储在app的私有目录.
 				.setDbDir(new File("/RenrenLai")) // "sdcard"的写法并非最佳实践, 这里为了简单, 先这样写了.
-				.setDbVersion(3)
+				.setDbVersion(2)
 				.setDbOpenListener(new DbManager.DbOpenListener() {
 					@Override
 					public void onDbOpened(DbManager db) {
@@ -144,7 +144,7 @@ public class CustomApplication extends Application {
 	private void initImageLoader(Context context){
 
 		//图片的缓存路径
-		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "/aa");
+		File cacheDir = StorageUtils.getOwnCacheDirectory(context, "/RenrenLai");
 		ImageLoaderConfiguration config = new ImageLoaderConfiguration.Builder(context)
 				.memoryCache(new LruMemoryCache(20 * 1024 * 1024))
 				.denyCacheImageMultipleSizesInMemory()

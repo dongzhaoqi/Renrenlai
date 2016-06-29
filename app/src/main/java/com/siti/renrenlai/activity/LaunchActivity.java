@@ -35,6 +35,7 @@ import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
 import com.siti.renrenlai.bean.Activity;
+import com.siti.renrenlai.db.DbTempActivity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
@@ -48,6 +49,9 @@ import com.siti.renrenlai.view.NoScrollGridView;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -122,6 +126,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "LaunchActivity";
     private List<ProjectBaseInfo> projectList;
     private List<ActivityImagePre> imagePreList;
+    private DbManager db;
+    private DbTempActivity dbTempActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -131,11 +137,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         initProjects();
         initViews();
 
+        initData();
     }
 
     private void initViews() {
         initTopBarForLeft("发起活动");
-
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new PictureAdapter(this);
         noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -151,9 +158,42 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             }
         });
         noScrollGridView.setAdapter(picAdapter);
-
     }
 
+    /**
+     * 若数据库中有保存的活动信息, 从数据库中恢复.
+     */
+    private void initData(){
+        try {
+            dbTempActivity = db.selector(DbTempActivity.class).findFirst();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+        if(dbTempActivity != null){
+            activity_type = dbTempActivity.getActivityType();
+            et_subject.setText(dbTempActivity.getActivityName());
+            tv_start_time.setText(dbTempActivity.getActivityStartTime());
+            tv_end_time.setText(dbTempActivity.getActivityEndTime());
+            tv_deadline.setText(dbTempActivity.getActivityDeadLineTime());
+            et_place.setText(dbTempActivity.getActivityAddress());
+            et_people.setText(dbTempActivity.getActivityPeopleNums());
+            tv_project_name.setText(dbTempActivity.getProjectName());
+            et_detail.setText(dbTempActivity.getActivityDetail());
+            if(activity_type == 1){
+                ll_interest.setSelected(true);
+            }else if(activity_type == 2){
+                ll_help.setSelected(true);
+            }else if(activity_type == 3){
+                ll_advice.setSelected(true);
+            }
+        }
+    }
+
+
+    /**
+     * 获得该用户下的所有项目.
+     */
     public void initProjects() {
         String url = ConstantValue.GET_LAUNCHED_PROJECTS;
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
@@ -199,7 +239,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     public void showTimeDialog(View v) {
 
         Calendar calendar = Calendar.getInstance();
-        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         final int id = v.getId();
         DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
         picker.setRange(2000, 2030);
@@ -225,6 +265,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     }
                 } else {
                     tv_deadline.setText(sdf.format(date));
+                    if(CommonUtils.compareDate(tv_end_time.getText().toString(), tv_deadline.getText().toString())){
+                        Toast.makeText(LaunchActivity.this, "报名截止时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
+                        tv_deadline.setText("");
+                        return;
+                    }
                 }
             }
         });
@@ -538,6 +583,13 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "response:" + response.toString());
+                        if(db != null){
+                            try {
+                                db.delete(DbTempActivity.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                        }
                         showToast("发布成功!");
                     }
                 }, new Response.ErrorListener() {
@@ -582,6 +634,31 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
+     * 按后退键时，将信息保存到数据库中.
+     */
+    private void save(){
+
+        Activity activity = getActivityInfo();
+        DbTempActivity dbTempActivity = new DbTempActivity();
+        dbTempActivity.setActivityType(Integer.parseInt(activity.getActivityType()));
+        dbTempActivity.setActivityName(activity.getActivityName());
+        dbTempActivity.setActivityStartTime(activity.getActivityStartTime());
+        dbTempActivity.setActivityEndTime(activity.getActivityEndTime());
+        dbTempActivity.setActivityDeadLineTime(activity.getDeadline());
+        dbTempActivity.setActivityAddress(activity.getActivityAddress());
+        dbTempActivity.setActivityPeopleNums(activity.getParticipateNum());
+        dbTempActivity.setProjectId(projectId);
+        dbTempActivity.setProjectName(tv_project_name.getText().toString());
+        dbTempActivity.setActivityDetail(activity.getActivityDetailDescrip());
+        try {
+            db.delete(DbTempActivity.class);
+            db.save(dbTempActivity);
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * 选择活动活动类型处
      */
     public void unselectedAll() {
@@ -594,5 +671,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     protected void onResume() {
         super.onResume();
         picAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        save();
+        Toast.makeText(LaunchActivity.this, "已保存为草稿", Toast.LENGTH_SHORT).show();
     }
 }
