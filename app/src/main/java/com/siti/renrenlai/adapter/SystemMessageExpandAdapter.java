@@ -58,6 +58,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
     String userName, url;
     private List<LovedUsers> lovedUsersList = new ArrayList<>();
     private List<CommentContents> commentsList = new ArrayList<>();
+    int count;
     private static final String TAG = "SystemMessageAdapter";
 
     public SystemMessageExpandAdapter(Context context) {
@@ -118,7 +119,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         }
 
         if(systemMessageList != null && systemMessageList.size() > 0 ){
-            int count = 0;
+            count = 0;
             for(int i = 0; i < systemMessageList.size(); i++){
                 Log.d(TAG, "getGroupView: systemMessageList.get(i).getHandleOrNot()------>" + systemMessageList.get(i).getHandleOrNot());
                 if(systemMessageList.get(i).getHandleOrNot() == 0){
@@ -129,6 +130,9 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
                 holder.iv_circle.setVisibility(View.VISIBLE);
                 holder.tv_message_nums.setText(String.valueOf(count));
             }
+            holder.title.setText("系统消息" + "(" + systemMessageList.size() +")");
+        }else{
+            holder.title.setText(R.string.str_system_alarm);
         }
         if(!isExpanded){
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_expand_small_holo_light);
@@ -136,7 +140,6 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_collapse_small_holo_light);
         }
 
-        holder.title.setText(R.string.str_system_alarm);
         return convertView;
     }
 
@@ -164,7 +167,9 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         Picasso.with(mContext).load(messageChild.activityImagePath).into(holder.iv_activity_img);
 
         if(messageChild.handleOrNot == 0){
-            holder.ll_system_message.setBackgroundColor(Color.parseColor("#FF646464"));
+            holder.ll_system_message.setBackgroundResource(R.color.background);
+        }else{
+            holder.ll_system_message.setBackgroundResource(R.color.white);
         }
 
         convertView.setOnClickListener(this);
@@ -261,6 +266,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
             e.printStackTrace();
         }
         if(dbActivity != null) {
+            activity.setActivityId(dbActivity.getActivityId());
             activity.setActivityName(dbActivity.getActivityName());
             activity.setActivityStartTime(dbActivity.getActivityStartTime());
             activity.setActivityEndTime(dbActivity.getActivityEndTime());

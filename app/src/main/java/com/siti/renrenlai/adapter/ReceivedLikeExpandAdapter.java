@@ -57,6 +57,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
     private Context mContext;
     private DbManager db;
     String userName, url;
+    int count;
     private List<LovedUsers> lovedUsersList = new ArrayList<>();
     private List<CommentContents> commentsList = new ArrayList<>();
     private static final String TAG = "ReceivedLikeAdapter";
@@ -119,7 +120,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         }
 
         if(receivedLikeList != null && receivedLikeList.size() > 0 ){
-            int count = 0;
+            count = 0;
             for(int i = 0; i < receivedLikeList.size(); i++){
                 Log.d(TAG, "getGroupView: receivedLikeList.get(i).getHandleOrNot()------>" + receivedLikeList.get(i).getHandleOrNot());
                 if(receivedLikeList.get(i).getHandleOrNot() == 0){
@@ -130,6 +131,9 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
                 holder.iv_circle.setVisibility(View.VISIBLE);
                 holder.tv_message_nums.setText(String.valueOf(count));
             }
+            holder.title.setText("收到的喜欢" + "(" + receivedLikeList.size() +")");
+        }else{
+            holder.title.setText(R.string.str_like);
         }
 
 
@@ -139,7 +143,6 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_collapse_small_holo_light);
         }
 
-        holder.title.setText(R.string.str_like);
         return convertView;
     }
 
@@ -166,7 +169,9 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         Picasso.with(mContext).load(receivedLikeChild.activityImagePath).into(holder.iv_activity_img);
 
         if(receivedLikeChild.handleOrNot == 0){
-            holder.ll_received_like.setBackgroundColor(Color.parseColor("#FF646464"));
+            holder.ll_received_like.setBackgroundResource(R.color.background);
+        }else{
+            holder.ll_received_like.setBackgroundResource(R.color.white);
         }
 
         holder.ll_received_like.setOnClickListener(new View.OnClickListener() {
@@ -262,6 +267,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
             e.printStackTrace();
         }
         if(dbActivity != null) {
+            activity.setActivityId(dbActivity.getActivityId());
             activity.setActivityName(dbActivity.getActivityName());
             activity.setActivityStartTime(dbActivity.getActivityStartTime());
             activity.setActivityEndTime(dbActivity.getActivityEndTime());

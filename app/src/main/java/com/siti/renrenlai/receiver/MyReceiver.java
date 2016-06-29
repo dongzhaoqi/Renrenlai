@@ -6,13 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.db.DbReceivedComment;
 import com.siti.renrenlai.db.DbReceivedLike;
 import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
@@ -20,6 +26,7 @@ import org.xutils.ex.DbException;
 import org.xutils.x;
 
 import java.util.Iterator;
+import java.util.List;
 
 import cn.jpush.android.api.JPushInterface;
 
@@ -29,16 +36,25 @@ import cn.jpush.android.api.JPushInterface;
 public class MyReceiver extends BroadcastReceiver {
     private static final String TAG = "MyReceiver";
     private DbManager db;
+    private List<DbSystemMessage> systemMessageList;
+    private List<DbReceivedComment> receivedCommentList;
+    private List<DbReceivedLike> receivedLikeList;
     int type;  //消息类型
-    JSONObject jsonObject;
+    JSONObject extrasJsonObject, jsonObject;
     String userHeadImagePath, userName, commentContent, time, title, content, extras;
+    String url1, url2, url3;
     int projectId, activityId;
+    int handleOrNot;        //消息是否已读
+    int adviceId;           //消息Id
+    int activOrProId;       //活动或项目Id
 
     @Override
     public void onReceive(Context context, Intent intent) {
 
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-
+        userName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        context, "login"), "userName");
         Bundle bundle = intent.getExtras();
         Log.d(TAG, "[MyReceiver] onReceive - " + intent.getAction() + ", extras: " + printBundle(bundle));
 
@@ -59,8 +75,8 @@ public class MyReceiver extends BroadcastReceiver {
             extras = bundle.getString(JPushInterface.EXTRA_EXTRA);
 
             try {
-                jsonObject = new JSONObject(extras);
-                type = jsonObject.getInt("type");
+                extrasJsonObject = new JSONObject(extras);
+                type = extrasJsonObject.getInt("type");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -69,15 +85,21 @@ public class MyReceiver extends BroadcastReceiver {
             Log.d(TAG, "onReceive: 接收到推送下来的通知内容:" + content);
             Log.d(TAG, "onReceive: 接收到推送下来的extras:" + extras);
 
+            jsonObject = new JSONObject();
+            try {
+                jsonObject.put("userName", userName);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
 
             //收到的系统消息---用户报名了活动
-            //saveSystemMessage();
+            saveSystemMessage();
 
-            //收到的活动评论
-            //saveReviewMessage();
+            //收到的评论
+            saveReviewMessage();
 
-            //收到的活动喜欢
-            //saveActivityLikeMessage();
+            //收到的喜欢
+            saveActivityLikeMessage();
 
             //收到的项目评论
             //saveProjectComment();
@@ -104,61 +126,170 @@ public class MyReceiver extends BroadcastReceiver {
         }
     }
 
-    public void saveSystemMessage(){
-        if (type == ConstantValue.Activity_SYSTEM_MESSAGE) {
-            try {
-                userHeadImagePath = jsonObject.optString("userHeadImagePath");
-                activityId = jsonObject.getInt("activityId");
-                time = jsonObject.getString("time");
-            } catch (JSONException e) {
-                e.printStackTrace();
+    public void saveSystemMessage() {
+        url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
+
+        JsonObjectRequest request1 = new JsonObjectRequest(url1, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse   saveSystemMessage: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
+                            try {
+                                db.delete(DbSystemMessage.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbSystemMessage systemMessage : systemMessageList){
+                                try {
+                                    db.save(systemMessage);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
             }
+        });
+        request1.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request1);      //加入请求队列
+
+        /*if (type == ConstantValue.Activity_SYSTEM_MESSAGE) {
+            adviceId = jsonObject.optInt("adviceId");
+            userHeadImagePath = jsonObject.optString("userHeadImagePath");
+            activityId = jsonObject.optInt("activityId");
+            time = jsonObject.optString("time");
+            type = jsonObject.optInt("type");
+            handleOrNot = jsonObject.optInt("handleOrNot");
 
             DbSystemMessage systemMessage = new DbSystemMessage();
+            systemMessage.setAdviceId(adviceId);
             systemMessage.setContent(content);
             systemMessage.setActivityId(activityId);
             systemMessage.setUserHeadImagePath(userHeadImagePath);
+            systemMessage.setType(type);
+            systemMessage.setHandleOrNot(handleOrNot);
             systemMessage.setTime(time);
             try {
                 db.save(systemMessage);
             } catch (DbException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
-    public void saveReviewMessage(){
-        if (type == ConstantValue.ACTIVITY_RECEIVED_COMMENT) {
+    public void saveReviewMessage() {
+        url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
+
+        JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse   saveReviewMessage: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
+                            try {
+                                db.delete(DbReceivedComment.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbReceivedComment receivedComment : receivedCommentList){
+                                try {
+                                    db.save(receivedComment);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request2.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request2);      //加入请求队列
+
+        /*if (type == ConstantValue.ACTIVITY_RECEIVED_COMMENT) {
+            adviceId = jsonObject.optInt("adviceId");
             userHeadImagePath = jsonObject.optString("userHeadImagePath");
             userName = jsonObject.optString("userName");
             commentContent = jsonObject.optString("content");
             activityId = jsonObject.optInt("activityId");
             time = jsonObject.optString("time");
+            type = jsonObject.optInt("type");
+            handleOrNot = jsonObject.optInt("handleOrNot");
 
             DbReceivedComment receivedComment = new DbReceivedComment();
+            receivedComment.setAdviceId(adviceId);
             receivedComment.setContent(commentContent);
             receivedComment.setUserName(userName);
             receivedComment.setUserHeadImagePath(userHeadImagePath);
             receivedComment.setActivityId(activityId);
             receivedComment.setTime(time);
+            receivedComment.setType(type);
+            receivedComment.setActivOrProId(activOrProId);
+            receivedComment.setHandleOrNot(handleOrNot);
 
             try {
                 db.save(receivedComment);
             } catch (DbException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 
-    public void saveActivityLikeMessage(){
-        if (type == ConstantValue.ACTIVITY_RECEIVED_LIKE) {
-            try {
-                time = jsonObject.getString("time");
-                activityId = jsonObject.getInt("activityId");
-            } catch (JSONException e) {
-                e.printStackTrace();
+    public void saveActivityLikeMessage() {
+        url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
+
+        JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse  saveActivityLikeMessage: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
+                            try {
+                                db.delete(DbReceivedLike.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbReceivedLike receivedLike : receivedLikeList){
+                                try {
+                                    db.save(receivedLike);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
             }
+        });
+        request3.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
+        /*if (type == ConstantValue.ACTIVITY_RECEIVED_LIKE) {
+            adviceId = jsonObject.optInt("adviceId");
+            time = jsonObject.optString("time");
+            activityId = jsonObject.optInt("activityId");
+            type = jsonObject.optInt("type");
+            handleOrNot = jsonObject.optInt("handleOrNot");
 
             DbReceivedLike receivedLike = new DbReceivedLike();
             receivedLike.setActivityId(activityId);
@@ -168,17 +299,17 @@ public class MyReceiver extends BroadcastReceiver {
             } catch (DbException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
 
-    public void saveProjectComment(){
+    public void saveProjectComment() {
         if (type == ConstantValue.PROJECT_RECEIVED_COMMENT) {
             try {
-                userHeadImagePath = jsonObject.getString("userHeadImagePath");
-                userName = jsonObject.getString("userName");
-                commentContent = jsonObject.getString("content");
-                projectId = jsonObject.getInt("projectId");
+                userHeadImagePath = extrasJsonObject.getString("userHeadImagePath");
+                userName = extrasJsonObject.getString("userName");
+                commentContent = extrasJsonObject.getString("content");
+                projectId = extrasJsonObject.getInt("projectId");
             } catch (JSONException e) {
                 e.printStackTrace();
             }

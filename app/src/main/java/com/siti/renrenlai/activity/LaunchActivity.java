@@ -36,6 +36,7 @@ import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
@@ -58,6 +59,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -117,8 +119,6 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private File mCurrentPhotoFile;
     /* 拍照的照片存储位置 */
     private File PHOTO_DIR = null;
-    private Calendar calendar = Calendar.getInstance();
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     private static final String TAG = "LaunchActivity";
     private List<ProjectBaseInfo> projectList;
     private List<ActivityImagePre> imagePreList;
@@ -198,6 +198,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      */
     public void showTimeDialog(View v) {
 
+        Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd hh:mm");
         final int id = v.getId();
         DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
         picker.setRange(2000, 2030);
@@ -206,7 +208,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         picker.setOnDateTimePickListener(new DateTimePicker.OnYearMonthDayTimePickListener() {
             @Override
             public void onDateTimePicked(String year, String month, String day, String hour, String minute) {
-                Date date = null;
+                Date date = new Date();
                 try {
                     date = sdf.parse(year + "-" + month + "-" + day + " " + hour + ":" + minute);
                 } catch (ParseException e) {
@@ -216,13 +218,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     tv_start_time.setText(sdf.format(date));
                 } else if (id == R.id.tv_end_time) {
                     tv_end_time.setText(sdf.format(date));
+                    if(CommonUtils.compareDate(tv_end_time.getText().toString(), tv_start_time.getText().toString())){
+                        Toast.makeText(LaunchActivity.this, "结束时间不能早于开始时间", Toast.LENGTH_SHORT).show();
+                        tv_end_time.setText("");
+                        return;
+                    }
                 } else {
                     tv_deadline.setText(sdf.format(date));
                 }
             }
         });
         picker.show();
-
     }
 
     /**
@@ -419,12 +425,31 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
         if(activity_type == 0){
             Toast.makeText(LaunchActivity.this, "请选择活动类型", Toast.LENGTH_SHORT).show();
+            return;
         }
         if("".equals(et_subject.getText().toString().trim())){
             Toast.makeText(LaunchActivity.this, "请填写活动主题", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if("".equals(tv_start_time.getText().toString())){
+            Toast.makeText(LaunchActivity.this, "请选择开始时间", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if("".equals(tv_end_time.getText().toString())){
+            Toast.makeText(LaunchActivity.this, "请选择开始时间", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if("".equals(tv_deadline.getText().toString())){
+            Toast.makeText(LaunchActivity.this, "请选择报名截止时间", Toast.LENGTH_SHORT).show();
+            return;
         }
         if("".equals(et_place.getText().toString().trim())){
             Toast.makeText(LaunchActivity.this, "请填写活动地点", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if("".equals(et_people.getText().toString())){
+            Toast.makeText(LaunchActivity.this, "请填写活动人数", Toast.LENGTH_SHORT).show();
+            return;
         }
 
         showProcessDialog("发布中");
@@ -466,7 +491,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         String path, imageName;
                         for (int i = 0; i < picAdapter.getCount() - 1; i++) {
                             path = Bimp.getTempSelectBitmap().get(i).getPath();
-                            imageName = path.substring(path.lastIndexOf("/") + 1);
+                            //imageName = path.substring(path.lastIndexOf("/") + 1);
+                            imageName = UUID.randomUUID().toString();
                             File imgFile = new File(path);
                             if (imgFile.exists()) {
                                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());

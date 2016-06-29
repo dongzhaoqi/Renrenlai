@@ -97,6 +97,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
         userName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         mActivity, "login"), "userName");
+        Log.d(TAG, "onClick: " + userName);
         if("0".equals(userName)){
             mActivity.startActivity(new Intent(mActivity, LoginActivity.class));
             CommentDialog.this.dismiss();
@@ -125,6 +126,7 @@ public class CommentDialog extends Dialog implements OnClickListener{
      * @param activityId    评论的活动id
      */
     private void comment(String userName, String commentContent, int activityId) {
+        Log.d(TAG, "comment: 执行了--->" + "comment: " + userName + " " + commentContent + " " + activityId);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);

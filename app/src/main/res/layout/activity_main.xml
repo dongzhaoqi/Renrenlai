@@ -3,8 +3,7 @@
     xmlns:fab="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -36,25 +35,40 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
+                android:gravity="bottom"
                 android:text="@string/tab_activity"
                 android:textColor="@drawable/tab_textcolor"
-                android:gravity="bottom"
                 android:textSize="@dimen/text_size_15" />
 
-            <Button
-                android:id="@+id/btn_me"
+            <RelativeLayout
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
                 android:background="@drawable/layout_top_border"
-                android:drawableTop="@drawable/tab_me_btn"
-                android:onClick="onTabSelect"
-                android:paddingTop="12dp"
-                android:scaleType="matrix"
-                android:text="@string/tab_me"
-                android:textColor="@drawable/tab_textcolor"
-                android:textSize="@dimen/text_size_15" />
+                android:layout_height="match_parent">
 
+                <Button
+                    android:id="@+id/btn_me"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:minWidth="0dp"
+                    android:background="@drawable/layout_top_border"
+                    android:drawableTop="@drawable/tab_me_btn"
+                    android:layout_centerInParent="true"
+                    android:onClick="onTabSelect"
+                    android:paddingTop="12dp"
+                    android:text="@string/tab_me"
+                    android:textColor="@drawable/tab_textcolor"
+                    android:textSize="@dimen/text_size_15" />
+
+                <ImageView
+                    android:id="@+id/iv_new_message"
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:layout_toRightOf="@id/btn_me"
+                    android:layout_marginTop="@dimen/padding_10"
+                    android:visibility="invisible"
+                    android:src="@drawable/red"/>
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -65,8 +79,7 @@
 
     </RelativeLayout>
 
-    <com.software.shell.fab.ActionButton
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
+    <com.software.shell.fab.ActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
         android:id="@+id/btn_activity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -78,6 +91,5 @@
         fab:image_size="24dp"
         fab:shadow_radius="1.0dp"
         fab:shadow_xOffset="0.5dp"
-        fab:shadow_yOffset="1.0dp"
-        />
+        fab:shadow_yOffset="1.0dp" />
 </FrameLayout>

@@ -37,6 +37,7 @@ import com.quinny898.library.persistentsearch.SearchResult;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
+import com.siti.renrenlai.activity.MainActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
@@ -89,6 +90,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<DbReceivedComment> receivedCommentList;
     private List<DbReceivedLike> receivedLikeList;
     int systemMessageSize, receivedReviewSize, receivedLikeSize;
+    int count;          //未读消息条数
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -515,8 +517,19 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
 
+        try {
+            systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
+            receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
+            receivedLikeList = db.selector(DbReceivedLike.class).where("handleOrNot", "=", "0").findAll();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
+        receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
+        receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
+        count = systemMessageSize + receivedReviewSize + receivedLikeSize;
 
-
+        ((MainActivity)getActivity()).setIconInvisible(count);
     }
 
     @Override

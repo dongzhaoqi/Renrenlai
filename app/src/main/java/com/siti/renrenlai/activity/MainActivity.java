@@ -8,6 +8,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.siti.renrenlai.R;
@@ -29,6 +30,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private Fragment[] mFragments;
     private FindFragment mFindFragment;
     private MeFragment mMeFragment;
+    private ImageView iv_new_message;
     private int currentTabIndex = 0;
     private int index;
     private long firstTime;     //记录初次按下后退键的时间
@@ -79,6 +81,16 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         btn_activity = (ActionButton) findViewById(R.id.btn_activity);
         btn_activity.setOnClickListener(this);
+
+        iv_new_message = (ImageView) findViewById(R.id.iv_new_message);
+    }
+
+    public void setIconInvisible(int num){
+        if(num == 0){
+            iv_new_message.setVisibility(View.INVISIBLE);
+        }else{
+            iv_new_message.setVisibility(View.VISIBLE);
+        }
     }
 
     public void onTabSelect(View v){

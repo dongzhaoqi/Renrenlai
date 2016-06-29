@@ -97,16 +97,11 @@ public class MessageActivity extends BaseActivity {
         } catch (DbException e) {
             e.printStackTrace();
         }
-        if (systemMessageList != null) {
-            for (DbSystemMessage systemMessage : systemMessageList) {
-                Log.d(TAG, "onCreate: " + systemMessage.getAdviceId() + " " + systemMessage.getMsgTitle() + " " + systemMessage.getContent());
-            }
-        }
 
         List<MessageGroup> systemMessageGroupList = new ArrayList<>();
         MessageGroup systemMessageGroup = new MessageGroup();
         if (systemMessageList != null && systemMessageList.size() > 0) {
-            for (int i = 0; i < systemMessageList.size(); i++) {
+            for (int i = systemMessageList.size()-1; i >= 0 ; i--) {
                 DbActivity dbActivity = new DbActivity();
                 MessageChild child = new MessageChild();
                 child.type = systemMessageList.get(i).getType();
@@ -118,17 +113,18 @@ public class MessageActivity extends BaseActivity {
                 child.handleOrNot = systemMessageList.get(i).getHandleOrNot();
 
                 try {
-                    Log.d(TAG, "initSystemMessage: child.adviceId--->" + child.adviceId);
                     dbActivity = db.selector(DbActivity.class).where("activityId", "=", child.activityId).findFirst();
                 } catch (DbException e) {
                     e.printStackTrace();
                 }
-                child.activity_name = dbActivity.getActivityName();
-                try {
-                    Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                    child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
-                } catch (DbException e) {
-                    e.printStackTrace();
+                if(dbActivity != null) {
+                    child.activity_name = dbActivity.getActivityName();
+                    try {
+                        Log.d(TAG, "initSystem: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                        child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
                 }
                 systemMessageGroup.systemMessageChildList.add(child);
             }
@@ -164,16 +160,10 @@ public class MessageActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if (receivedCommentList != null) {
-            for (DbReceivedComment comment : receivedCommentList) {
-                Log.d(TAG, "评论内容：" + comment.getContent() + " 评论人：" + comment.getUserName());
-            }
-        }
-
         List<ReviewGroup> receivedCommentGroupList = new ArrayList<>();
         ReviewGroup reviewGroup = new ReviewGroup();
         if (receivedCommentList != null && receivedCommentList.size() > 0) {
-            for (int i = 0; i < receivedCommentList.size(); i++) {
+            for (int i = receivedCommentList.size()-1; i >= 0 ; i--) {
                 DbActivity dbActivity = new DbActivity();
                 DbProject dbProject = new DbProject();
                 int type;
@@ -193,15 +183,17 @@ public class MessageActivity extends BaseActivity {
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
-                    child.activity_name = dbActivity.getActivityName();
-                    try {
-                        //Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                        Log.d(TAG, "initReview: child.adviceId--->" + child.adviceId);
-                        if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
-                            child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                    if (dbActivity != null) {
+                        child.activity_name = dbActivity.getActivityName();
+                        try {
+                            //Log.d(TAG, "initReview: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                            Log.d(TAG, "initReview: child.adviceId--->" + child.adviceId);
+                            if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
+                                child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                            }
+                        } catch (DbException e) {
+                            e.printStackTrace();
                         }
-                    } catch (DbException e) {
-                        e.printStackTrace();
                     }
 
                 } else { //项目消息
@@ -213,7 +205,7 @@ public class MessageActivity extends BaseActivity {
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
-                    if(dbProject != null) {
+                    if (dbProject != null) {
                         child.activity_name = dbProject.getProjectName();
                         if (dbProject.getProjectImagePath() != null) {
                             child.activityImagePath = dbProject.getProjectImagePath();
@@ -254,17 +246,11 @@ public class MessageActivity extends BaseActivity {
             e.printStackTrace();
         }
 
-        if (receivedLikeList != null) {
-            for (DbReceivedLike like : receivedLikeList) {
-                Log.d(TAG, "用户头像：" + like.getUserHeadImagePath());
-            }
-        }
-
         List<ReceivedLikeGroup> receivedLikeGroupList = new ArrayList<>();
         ReceivedLikeGroup receivedLikeGroup = new ReceivedLikeGroup();
 
         if (receivedLikeList != null && receivedLikeList.size() > 0) {
-            for (int i = 0; i < receivedLikeList.size(); i++) {
+            for (int i = receivedLikeList.size()-1; i >= 0; i--) {
                 DbActivity dbActivity = new DbActivity();
                 DbProject dbProject = new DbProject();
                 int type;
@@ -281,13 +267,14 @@ public class MessageActivity extends BaseActivity {
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
-                    child.activity_name = dbActivity.getActivityName();
-                    try {
-                        Log.d(TAG, "initReceivedLike: adviceId--->" + child.adviceId);
-                        Log.d(TAG, "initReview: dbActivity " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                        child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
-                    } catch (DbException e) {
-                        e.printStackTrace();
+                    if (dbActivity != null) {
+                        child.activity_name = dbActivity.getActivityName();
+                        try {
+                            Log.d(TAG, "initLike: dbActivity " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                            child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     child.projectId = receivedLikeList.get(i).getActivOrProId();
@@ -296,11 +283,10 @@ public class MessageActivity extends BaseActivity {
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
-                    if(dbProject != null){
+                    if (dbProject != null) {
                         child.activity_name = dbProject.getProjectName();
                         try {
-                            Log.d(TAG, "initReceivedLike: adviceId--->" + child.adviceId);
-                            Log.d(TAG, "initReview: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
+                            Log.d(TAG, "initLike: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
                             child.activityImagePath = dbProject.getProjectImages(db).get(0).getProjectImagePath();
                         } catch (DbException e) {
                             e.printStackTrace();

@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.alibaba.fastjson.JSONArray;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -61,6 +62,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
     String userName, url;
     private List<LovedUsers> lovedUsersList = new ArrayList<>();
     private List<CommentContents> commentsList = new ArrayList<>();
+    int count;
     private static final String TAG = "ReviewExpandAdapter";
 
     public ReviewExpandAdapter(Context context) {
@@ -121,7 +123,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         }
 
         if(receivedCommentList != null && receivedCommentList.size() > 0 ){
-            int count = 0;
+            count = 0;
             for(int i = 0; i < receivedCommentList.size(); i++){
                 Log.d(TAG, "getGroupView: receivedCommentList.get(i).getHandleOrNot()------>" + receivedCommentList.get(i).getHandleOrNot());
                 if(receivedCommentList.get(i).getHandleOrNot() == 0){
@@ -132,6 +134,9 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
                 holder.iv_circle.setVisibility(View.VISIBLE);
                 holder.tv_message_nums.setText(String.valueOf(count));
             }
+            holder.title.setText("评论" + "(" + receivedCommentList.size() +")");
+        }else{
+            holder.title.setText(R.string.str_review);
         }
 
         if(!isExpanded){
@@ -140,7 +145,6 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
             holder.expand_imgView.setBackgroundResource(R.drawable.ic_collapse_small_holo_light);
         }
 
-        holder.title.setText(R.string.str_review);
         return convertView;
     }
 
@@ -172,7 +176,9 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         Picasso.with(mContext).load(reviewChild.activityImagePath).into(holder.iv_activity_img);
 
         if(reviewChild.handleOrNot == 0){
-            holder.ll_review.setBackgroundColor(Color.parseColor("#FF646464"));
+            holder.ll_review.setBackgroundResource(R.color.background);
+        }else{
+            holder.ll_review.setBackgroundResource(R.color.white);
         }
         holder.ll_review.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -256,8 +262,8 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
     public void getActivityNewData(JSONObject response, int activityId) {
         Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
-        commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
-        lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
+        commentsList = JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
+        lovedUsersList = JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
         DbActivity dbActivity = null;
         List<DbActivityImage> dbActivityImage = null;
         List<ActivityImage> activityImages;
@@ -270,6 +276,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
             e.printStackTrace();
         }
         if(dbActivity != null) {
+            activity.setActivityId(dbActivity.getActivityId());
             activity.setActivityName(dbActivity.getActivityName());
             activity.setActivityStartTime(dbActivity.getActivityStartTime());
             activity.setActivityEndTime(dbActivity.getActivityEndTime());

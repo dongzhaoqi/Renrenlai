@@ -22,7 +22,7 @@
         <TextView
             android:id="@+id/str_system_alarm"
             style="@style/me_text_style"
-            android:layout_width="@dimen/height_96"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toRightOf="@id/iv_system_alarm"
             android:text="@string/str_system_alarm" />

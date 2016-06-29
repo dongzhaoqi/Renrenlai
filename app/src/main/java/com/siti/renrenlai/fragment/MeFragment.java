@@ -21,6 +21,7 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.FeedbackActivity;
 import com.siti.renrenlai.activity.LoginActivity;
+import com.siti.renrenlai.activity.MainActivity;
 import com.siti.renrenlai.activity.MessageActivity;
 import com.siti.renrenlai.activity.MyActivity;
 import com.siti.renrenlai.activity.MyProfileActivity;
@@ -87,6 +88,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private List<DbSystemMessage> systemMessageList;
     private List<DbReceivedComment> receivedCommentList;
     private List<DbReceivedLike> receivedLikeList;
+    int count;          //未读消息条数
     int systemMessageSize, receivedReviewSize, receivedLikeSize;
     private static final String TAG = "MeFragment";
     @Override
@@ -122,6 +124,116 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     }
 
     private void initMessage2(){
+
+        url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest request1 = new JsonObjectRequest(url1, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
+                            try {
+                                db.delete(DbSystemMessage.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbSystemMessage systemMessage : systemMessageList){
+                                try {
+                                    db.save(systemMessage);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request1.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request1);      //加入请求队列
+
+
+        url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
+
+        JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
+                            try {
+                                db.delete(DbReceivedComment.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbReceivedComment receivedComment : receivedCommentList){
+                                try {
+                                    db.save(receivedComment);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request2.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request2);      //加入请求队列
+
+
+        url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
+        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
+
+        JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: " + response);
+                        JSONArray result = response.optJSONArray("result");
+                        if(result != null && result.length() > 0){
+                            receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
+                            try {
+                                db.delete(DbReceivedLike.class);
+                            } catch (DbException e) {
+                                e.printStackTrace();
+                            }
+                            for(DbReceivedLike receivedLike : receivedLikeList){
+                                try {
+                                    db.save(receivedLike);
+                                } catch (DbException e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                        }
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        request3.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
+
         try {
             systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
             receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
@@ -132,12 +244,17 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         systemMessageSize = systemMessageList == null ?  0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
+        count = systemMessageSize + receivedReviewSize + receivedLikeSize;
 
-        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() >0)
-                || (receivedLikeList != null && receivedLikeList.size() > 0)) {
+        if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
-            tv_message_nums.setText(String.valueOf(systemMessageSize + receivedReviewSize + receivedLikeSize));
+            tv_message_nums.setText(String.valueOf(count));
+        }else{
+            iv_circle.setVisibility(View.INVISIBLE);
+            tv_message_nums.setText("");
         }
+
+        ((MainActivity)getActivity()).setIconInvisible(count);
     }
 
     private void initMessage() {
