@@ -1,21 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent" >
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:id="@+id/rl_image">
 
     <ImageView
         android:id="@+id/img_view"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:scaleType="fitXY" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:adjustViewBounds="true"
+        android:background="@drawable/plugin_camera_no_pictures"
+        android:scaleType="centerCrop" />
 
-    <ImageView
-        android:id="@+id/select"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-        android:background="@drawable/plugin_camera_choosed"
-        android:visibility="gone" />
+    <RelativeLayout
+        android:id="@+id/toggle"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
+        <ToggleButton
+            android:id="@+id/toggle_button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/plugin_camera_pic_choose_selector"
+            android:textOff="@null"
+            android:textOn="@null" />
+
+        <Button
+            android:id="@+id/choosedbt"
+            android:layout_width="32dp"
+            android:layout_height="32dp"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:background="@drawable/plugin_camera_choosed"
+            android:visibility="gone" />
+    </RelativeLayout>
     <!-- 这里是当该图片被选上的时候打上小勾的,因此起初是隐藏不显示的 -->
 </RelativeLayout>

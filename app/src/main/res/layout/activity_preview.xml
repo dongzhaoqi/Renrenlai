@@ -192,6 +192,31 @@
             </RelativeLayout>
 
             <RelativeLayout
+                android:id="@+id/rl_project"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/item_height"
+                android:background="@drawable/layout_bottom_border"
+                android:padding="@dimen/padding_10">
+
+                <TextView
+                    android:id="@+id/str_project"
+                    style="@style/activity_text_style"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="@string/txt_project" />
+
+                <TextView
+                    android:id="@+id/tv_project"
+                    style="@style/me_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_toRightOf="@id/str_project"
+                    android:background="@null"
+                    android:paddingLeft="@dimen/activity_horizontal_margin"
+                    android:singleLine="true" />
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/layout_cover"
                 android:layout_width="match_parent"
                 android:minHeight="@dimen/height_96"

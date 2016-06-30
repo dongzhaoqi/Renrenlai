@@ -41,7 +41,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
     private List<CommentContents> commentsList;
     private CommentAdapter mAdapter;
     int position = -1;
-    int project_id;
+    long project_id;
     int replyId;
     String url = ConstantValue.COMMENT_THIS_PROJECT;
     String userName, userHeadImagePath, contents, commentTime;
@@ -59,7 +59,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
         this.mAdapter = mAdapter;
     }
 
-    public ProjectCommentDialog(Activity activity, CommentAdapter mAdapter, List<CommentContents> commentsList, int project_id) {
+    public ProjectCommentDialog(Activity activity, CommentAdapter mAdapter, List<CommentContents> commentsList, long project_id) {
         this(activity, R.style.dialog_comment);
         this.mActivity = activity;
         this.mAdapter = mAdapter;
@@ -69,7 +69,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
     }
 
 
-    public void setCommentList(List<CommentContents> commentsList, int pos, int project_id){
+    public void setCommentList(List<CommentContents> commentsList, int pos, long project_id){
         this.commentsList = commentsList;
         this.position = pos;
         this.project_id = project_id;
@@ -124,7 +124,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
      * @param commentContent    评论内容
      * @param projectId    评论的项目id
      */
-    private void comment(String userName, String commentContent, int projectId) {
+    private void comment(String userName, String commentContent, long projectId) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -161,7 +161,7 @@ public class ProjectCommentDialog extends Dialog implements OnClickListener{
      * @param projectId
      * @param replyId
      */
-    private void comment(String userName, String commentContent, int projectId, int replyId ){
+    private void comment(String userName, String commentContent, long projectId, int replyId ){
         Log.d(TAG, "comment: " + userName + " " + commentContent + " " + projectId + " " + replyId);
         JSONObject jsonObject = new JSONObject();
         try {

@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
@@ -15,6 +16,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.ProjectIntention;
+import com.siti.renrenlai.db.DbProjectIntention;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
@@ -23,6 +25,9 @@ import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.DbManager;
+import org.xutils.ex.DbException;
+import org.xutils.x;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -54,23 +59,64 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
     Button btnPreview;
     @Bind(R.id.btn_publish)
     Button btnPublish;
-    private Calendar calendar = Calendar.getInstance();
-    private SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    String url, userName;
+    private DbManager db;
+    private DbProjectIntention dbProjectIntention;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_wish);
         ButterKnife.bind(this);
         initView();
+
+        initData();
     }
 
     private void initView() {
+        db = x.getDb(CustomApplication.getInstance().getDaoConfig());
         initTopBarForBoth("申请意愿", "暂存", new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
-
+                save();
             }
         });
+    }
+
+    /**
+     * 恢复数据库中暂存的项目意愿
+     */
+    private void initData(){
+        try {
+            dbProjectIntention = db.selector(DbProjectIntention.class).findFirst();
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+        if(dbProjectIntention != null){
+            etHow.setText(dbProjectIntention.getProjectIntentionName());
+            etWhich.setText(dbProjectIntention.getProjectIntentionDescrip());
+            etWhat.setText(dbProjectIntention.getProjectIntentionPurpose());
+            etWho.setText(dbProjectIntention.getProjectIntentionBenefitForWho());
+            tvWhen.setText(dbProjectIntention.getProjectIntentionExecuteTime());
+        }
+    }
+
+    private void save(){
+        ProjectIntention projectIntention = getProjectIntention();
+        DbProjectIntention dbProjectIntention = new DbProjectIntention();
+        dbProjectIntention.setProjectIntentionName(projectIntention.getProjectIntentionName());
+        dbProjectIntention.setProjectIntentionDescrip(projectIntention.getProjectIntentionDescrip());
+        dbProjectIntention.setProjectIntentionPurpose(projectIntention.getProjectIntentionPurpose());
+        dbProjectIntention.setProjectIntentionBenefitForWho(projectIntention.getProjectIntentionBenefitForWho());
+        dbProjectIntention.setProjectIntentionExecuteTime(projectIntention.getProjectIntentionExecuteTime());
+        try {
+            db.delete(DbProjectIntention.class);
+            db.save(dbProjectIntention);
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(ApplyWishActivity.this, "已暂存为草稿", Toast.LENGTH_SHORT).show();
     }
 
     @OnClick({R.id.tv_when, R.id.btn_preview, R.id.btn_publish})
@@ -90,7 +136,8 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
 
     public void showTimeDialog(View v) {
         final int id = v.getId();
-
+        Calendar calendar = Calendar.getInstance();
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         DateTimePicker picker = new DateTimePicker(this, DateTimePicker.HOUR_OF_DAY);
         picker.setRange(2000, 2030);
         picker.setSelectedItem(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.DAY_OF_MONTH),
@@ -126,14 +173,13 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
         intention.setProjectIntentionPurpose(etWhat.getText().toString());
         intention.setProjectIntentionBenefitForWho(etWho.getText().toString());
         intention.setProjectIntentionExecuteTime(tvWhen.getText().toString());
-
         return intention;
     }
 
     //发布项目意愿
     public void publish(){
-        String url = ConstantValue.LAUNCH_PROJECT_INTENTION;
-        String userName = SharedPreferencesUtil.readString( SharedPreferencesUtil.getSharedPreference(
+        url = ConstantValue.LAUNCH_PROJECT_INTENTION;
+        userName = SharedPreferencesUtil.readString( SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "userName");
 
         JSONObject jsonObject = new JSONObject();

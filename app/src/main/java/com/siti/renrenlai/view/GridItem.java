@@ -32,7 +32,6 @@ public class GridItem extends RelativeLayout implements Checkable {
         mContext = context;
         LayoutInflater.from(mContext).inflate(R.layout.grid_item, this);
         mImgView = (ImageView) findViewById(R.id.img_view);
-        mSecletView = (ImageView) findViewById(R.id.select);
     }
 
     @Override

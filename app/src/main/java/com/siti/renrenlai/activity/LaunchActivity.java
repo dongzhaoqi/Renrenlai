@@ -12,6 +12,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -30,6 +31,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
 import com.siti.renrenlai.bean.ActivityImagePre;
@@ -37,6 +39,7 @@ import com.siti.renrenlai.bean.ProjectBaseInfo;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.db.DbTempActivity;
 import com.siti.renrenlai.util.Bimp;
+import com.siti.renrenlai.util.BitmapUtils;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -118,6 +121,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     int projectId;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
+    private static final int FROM_IMAGE_LIB = 2;
     private PictureAdapter picAdapter;
     // 照相机拍照得到的图片
     private File mCurrentPhotoFile;
@@ -126,9 +130,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "LaunchActivity";
     private List<ProjectBaseInfo> projectList;
     private List<ActivityImagePre> imagePreList;
+    private ArrayList<String> imagePathList;
     private DbManager db;
     private DbTempActivity dbTempActivity;
+    private ImageAdapter imageAdapter;
+    int flag_gallery ;
+    int flag_image_lib ;
 
+    ArrayList<String> imgs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -224,9 +233,10 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     public void getProjects(JSONObject response) {
         JSONArray result = response.optJSONArray("result");
         Log.d("response", "result:" + result);
-        projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), ProjectBaseInfo.class);
-        if(projectList.size() == 0){
+        if(result == null || result.length() == 0){
             layout_projects.setVisibility(View.GONE);
+        }else{
+            projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), ProjectBaseInfo.class);
         }
     }
 
@@ -265,8 +275,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     }
                 } else {
                     tv_deadline.setText(sdf.format(date));
-                    if(CommonUtils.compareDate(tv_end_time.getText().toString(), tv_deadline.getText().toString())){
-                        Toast.makeText(LaunchActivity.this, "报名截止时间不能晚于结束时间", Toast.LENGTH_SHORT).show();
+                    if(CommonUtils.compareDate(tv_start_time.getText().toString(), tv_deadline.getText().toString())){
+                        Toast.makeText(LaunchActivity.this, "报名截止时间不能晚于开始时间", Toast.LENGTH_SHORT).show();
                         tv_deadline.setText("");
                         return;
                     }
@@ -290,11 +300,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             public boolean onItemSelected(int id) {
                 switch (id) {
                     case R.id.item_pick_photo:
+                        flag_gallery = 3;
                         startAnimActivity(AlbumActivity.class);
+                        flag_image_lib = 0;
                         return true;
                     case R.id.item_take_pic:
                         //goCamera();
+                        flag_image_lib = 4;
                         getImagesFromLib();
+                        flag_gallery = 0;
                         return true;
                     default:
                         return false;
@@ -333,7 +347,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         imagePreList = com.alibaba.fastjson.JSONArray.parseArray(
                                 response.optJSONArray("result").toString(), ActivityImagePre.class);
                         intent.putExtra("libImageList", (Serializable) imagePreList);
-                        startActivity(intent);
+                        startActivityForResult(intent, FROM_IMAGE_LIB);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -380,6 +394,21 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             File img = new File(imgFolder, imgName);
             bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
+        }else if(requestCode == FROM_IMAGE_LIB){
+            imagePathList = data.getStringArrayListExtra("imagePathList");
+            for (String str : imagePathList){
+                Log.d(TAG, "==========> " + str);
+            }
+            imageAdapter = new ImageAdapter(this, imagePathList);
+            noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            /*noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(LaunchActivity.this, GalleryActivity.class);
+                    intent.putExtra("ID", i);
+                    startActivity(intent);
+                }
+            });*/
+            noScrollGridView.setAdapter(imageAdapter);
         }
     }
 
@@ -420,12 +449,19 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.btn_preview:
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
-                int picCount = picAdapter.getCount();
-                System.out.println("count:" + picCount);
-                ArrayList<String> imgs = new ArrayList<>();
-                for (int i = 0; i < picCount - 1; i++) {
-                    System.out.println("path:" + Bimp.getTempSelectBitmap().get(i).getPath());
-                    imgs.add(Bimp.getTempSelectBitmap().get(i).getPath());
+                imgs = new ArrayList<>();
+                if(flag_gallery == 3) {
+                    int picCount = picAdapter.getCount();
+                    System.out.println("count:" + picCount);
+                    for (int i = 0; i < picCount - 1; i++) {
+                        System.out.println("path:" + Bimp.getTempSelectBitmap().get(i).getPath());
+                        imgs.add(Bimp.getTempSelectBitmap().get(i).getPath());
+                    }
+                }else if(flag_image_lib == 4){
+                    int picCount = imageAdapter.getCount();
+                    for(int i = 0; i < picCount; i++){
+                        imgs.add(imagePathList.get(i));
+                    }
                 }
                 Bundle bundle = new Bundle();
                 bundle.putStringArrayList("images", imgs);
@@ -440,11 +476,10 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     public void showProjectsDialog() {
-        Log.d(TAG, "showProjectsDialog: ");
         final PopupWindow popupWindow;
         View view = LayoutInflater.from(this).inflate(R.layout.list_project, null);
         ListView listView = (ListView) view.findViewById(R.id.ll_project);
-        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.WRAP_CONTENT,
+        popupWindow = new PopupWindow(view, LinearLayout.LayoutParams.MATCH_PARENT,
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.base_edit_input));
         popupWindow.setOutsideTouchable(true);
@@ -474,6 +509,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
         if("".equals(et_subject.getText().toString().trim())){
             Toast.makeText(LaunchActivity.this, "请填写活动主题", Toast.LENGTH_SHORT).show();
+            et_subject.requestFocus();
             return;
         }
         if("".equals(tv_start_time.getText().toString())){
@@ -490,10 +526,18 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
         if("".equals(et_place.getText().toString().trim())){
             Toast.makeText(LaunchActivity.this, "请填写活动地点", Toast.LENGTH_SHORT).show();
+            et_place.requestFocus();
             return;
         }
         if("".equals(et_people.getText().toString())){
             Toast.makeText(LaunchActivity.this, "请填写活动人数", Toast.LENGTH_SHORT).show();
+            et_people.requestFocus();
+            return;
+        }
+
+        if("".equals(et_detail.getText().toString())){
+            Toast.makeText(LaunchActivity.this, "请填写活动详情", Toast.LENGTH_SHORT).show();
+            et_people.requestFocus();
             return;
         }
 
@@ -534,13 +578,24 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         }
 
                         String path, imageName;
-                        for (int i = 0; i < picAdapter.getCount() - 1; i++) {
-                            path = Bimp.getTempSelectBitmap().get(i).getPath();
-                            //imageName = path.substring(path.lastIndexOf("/") + 1);
-                            imageName = UUID.randomUUID().toString();
-                            File imgFile = new File(path);
-                            if (imgFile.exists()) {
-                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                        if(flag_gallery == 3) {
+                            Log.d(TAG, "flag_gallery: " + flag_gallery);
+                            for (int i = 0; i < picAdapter.getCount() - 1; i++) {
+                                path = Bimp.getTempSelectBitmap().get(i).getPath();
+                                imageName = path.substring(path.lastIndexOf("/") + 1);
+                                //imageName = UUID.randomUUID().toString().substring(0, 16);
+                                File imgFile = new File(path);
+                                if (imgFile.exists()) {
+                                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                                    upload(activity_id, myBitmap, imageName);
+                                }
+                            }
+                        }else if(flag_image_lib == 4){
+                            Log.d(TAG, "flag_image_lib: " + flag_image_lib);
+                            for(int i = 0; i < imageAdapter.getCount() - 1; i++){
+                                path = imagePathList.get(i);
+                                imageName = path.substring(path.lastIndexOf("/") + 1);
+                                Bitmap myBitmap = BitmapUtils.loadBitmap(path);
                                 upload(activity_id, myBitmap, imageName);
                             }
                         }
@@ -621,13 +676,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     public Activity getActivityInfo() {
         Activity activity = new Activity();
-        activity.setActivityType(activity_type + "");
+        activity.setActivityType(activity_type);
         activity.setActivityName(et_subject.getText().toString());
         activity.setActivityStartTime(tv_start_time.getText().toString());
         activity.setActivityEndTime(tv_end_time.getText().toString());
         activity.setDeadline(tv_deadline.getText().toString());
         activity.setActivityAddress(et_place.getText().toString());
         activity.setParticipateNum(et_people.getText().toString());
+        if(projectList.size() > 0){
+            activity.setProjectName(tv_project_name.getText().toString());
+        }
         activity.setActivityDetailDescrip(et_detail.getText().toString());
 
         return activity;
@@ -640,7 +698,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
         Activity activity = getActivityInfo();
         DbTempActivity dbTempActivity = new DbTempActivity();
-        dbTempActivity.setActivityType(Integer.parseInt(activity.getActivityType()));
+        dbTempActivity.setActivityType(activity.getActivityType());
         dbTempActivity.setActivityName(activity.getActivityName());
         dbTempActivity.setActivityStartTime(activity.getActivityStartTime());
         dbTempActivity.setActivityEndTime(activity.getActivityEndTime());
@@ -659,7 +717,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     /**
-     * 选择活动活动类型处
+     * 选择活动类型
      */
     public void unselectedAll() {
         ll_interest.setSelected(false);

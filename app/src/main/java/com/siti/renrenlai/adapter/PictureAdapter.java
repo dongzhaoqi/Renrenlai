@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.Bimp;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -46,9 +48,16 @@ public class PictureAdapter extends BaseAdapter {
         this.context = context;
         this.list = images;
         inflater = LayoutInflater.from(context);
+
     }
 
     public int getCount() {
+        if(list != null && list.size() > 0){
+            if(list.get(0).contains("http")){
+                return list.size();
+            }
+        }
+
         if (Bimp.tempSelectBitmap.size() == 9) {
             return 9;
         }
@@ -96,10 +105,14 @@ public class PictureAdapter extends BaseAdapter {
                 holder.image.setVisibility(View.GONE);
             }
         } else if (list != null) {
-            File imgFile = new File(list.get(position));
-            if (imgFile.exists()) {
-                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
-                holder.image.setImageBitmap(myBitmap);
+            if(list.get(position).contains("http")){
+                Picasso.with(context).load(list.get(position)).into(holder.image);
+            }else {
+                File imgFile = new File(list.get(position));
+                if (imgFile.exists()) {
+                    Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+                    holder.image.setImageBitmap(myBitmap);
+                }
             }
             if(position == list.size()+1){
                 holder.image.setVisibility(View.GONE);

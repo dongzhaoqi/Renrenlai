@@ -42,6 +42,7 @@
     <style name="me_text_style" parent="@style/more_text_style">
         <item name="android:paddingLeft">8dip</item>
         <item name="android:textColor">@color/me_text_color</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
     </style>
 
     <style name="activity_text_style" parent="@style/more_text_style">

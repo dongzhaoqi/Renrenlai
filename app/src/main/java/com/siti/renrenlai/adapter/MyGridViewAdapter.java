@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 
@@ -17,7 +18,7 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyGridViewAdapter extends BaseAdapter {
+public class MyGridViewAdapter extends BaseAdapter implements View.OnClickListener{
 
     private Context mContext;
     private List<ActivityImagePre> imagePathList;
@@ -51,10 +52,11 @@ public class MyGridViewAdapter extends BaseAdapter {
         if (null == convertView) {
             viewHolder = new ViewHolder();
             LayoutInflater mInflater = LayoutInflater.from(mContext);
-            convertView = mInflater.inflate(R.layout.plugin_camera_select_imageview, parent, false);
+            convertView = mInflater.inflate(R.layout.grid_item, parent, false);
 
             viewHolder.grid_img_item = (ImageView) convertView
-                    .findViewById(R.id.image_view);
+                    .findViewById(R.id.img_view);
+            viewHolder.rl_image = (RelativeLayout) convertView.findViewById(R.id.rl_image);
             viewHolder.toggleButton = (ToggleButton) convertView
                     .findViewById(R.id.toggle_button);
             viewHolder.choosetoggle = (Button) convertView
@@ -63,18 +65,24 @@ public class MyGridViewAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        Picasso.with(mContext).load(image.getActivityImagePath()).into(viewHolder.grid_img_item);
         viewHolder.toggleButton.setTag(position);
         viewHolder.choosetoggle.setTag(position);
         viewHolder.toggleButton.setOnClickListener(new ToggleClickListener(viewHolder.choosetoggle));
-        /*if (selectedDataList.contains(imagePathList.get(position))) {
-            viewHolder.toggleButton.setChecked(true);
-            viewHolder.choosetoggle.setVisibility(View.VISIBLE);
-        } else {
-            viewHolder.toggleButton.setChecked(false);
-            viewHolder.choosetoggle.setVisibility(View.GONE);
-        }*/
+        Picasso.with(mContext).load(image.getActivityImagePath()).into(viewHolder.grid_img_item);
+        viewHolder.rl_image.setOnClickListener(this);
         return convertView;
+    }
+
+    @Override
+    public void onClick(View v) {
+
+    }
+
+    private static class ViewHolder {
+        ImageView grid_img_item;
+        RelativeLayout rl_image;
+        public ToggleButton toggleButton;
+        public Button choosetoggle;
     }
 
     private class ToggleClickListener implements View.OnClickListener {
@@ -96,7 +104,6 @@ public class MyGridViewAdapter extends BaseAdapter {
         }
     }
 
-
     private OnItemClickListener mOnItemClickListener;
 
     public void setOnItemClickListener(OnItemClickListener l) {
@@ -106,12 +113,6 @@ public class MyGridViewAdapter extends BaseAdapter {
     public interface OnItemClickListener {
         public void onItemClick(ToggleButton view, int position,
                                 boolean isChecked, Button chooseBt);
-    }
-
-    private static class ViewHolder {
-        ImageView grid_img_item;
-        public ToggleButton toggleButton;
-        public Button choosetoggle;
     }
 
 }

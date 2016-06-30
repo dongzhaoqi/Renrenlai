@@ -23,7 +23,7 @@ import java.util.Set;
 import cn.jpush.android.api.JPushInterface;
 import cn.jpush.android.api.TagAliasCallback;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener{
+public class MainActivity extends BaseActivity implements View.OnClickListener {
 
     private Button[] mTabs;
     private ActionButton btn_activity;
@@ -35,6 +35,8 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
     private int index;
     private long firstTime;     //记录初次按下后退键的时间
     private static final String TAG = "MainActivity";
+    private String userName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,7 +49,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         JPushInterface.init(MainActivity.this);
 
         String rid = JPushInterface.getRegistrationID(getApplicationContext());
-        setAlias();		//为设备设置别名,以便可以定向推送
+        setAlias();        //为设备设置别名,以便可以定向推送
         Log.e(TAG, "onCreate: " + rid);
     }
 
@@ -68,11 +70,12 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         mMeFragment = new MeFragment();
         mFragments = new Fragment[]{mFindFragment, mMeFragment};
         getSupportFragmentManager().beginTransaction()
-                .add(R.id.fragment_container,mFindFragment)
+                .add(R.id.fragment_container, mFindFragment)
                 .show(mFindFragment).commit();
     }
 
     private void initView() {
+        userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         mTabs = new Button[2];
         mTabs[0] = (Button) findViewById(R.id.btn_find);
         mTabs[1] = (Button) findViewById(R.id.btn_me);
@@ -85,17 +88,17 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
         iv_new_message = (ImageView) findViewById(R.id.iv_new_message);
     }
 
-    public void setIconInvisible(int num){
-        if(num == 0){
+    public void setIconInvisible(int num) {
+        if (num == 0) {
             iv_new_message.setVisibility(View.INVISIBLE);
-        }else{
+        } else {
             iv_new_message.setVisibility(View.VISIBLE);
         }
     }
 
-    public void onTabSelect(View v){
+    public void onTabSelect(View v) {
         int id = v.getId();
-        switch (id){
+        switch (id) {
             case R.id.btn_find:
                 index = 0;
                 break;
@@ -120,9 +123,13 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.btn_activity:
-                startAnimActivity(LaunchActivity.class);
+                if ("0".equals(userName)) {
+                    startAnimActivity(LoginActivity.class);
+                } else {
+                    startAnimActivity(LaunchActivity.class);
+                }
                 break;
         }
     }
@@ -134,15 +141,15 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
     @Override
     public void onBackPressed() {
-        if(System.currentTimeMillis() - firstTime < 2000){
+        if (System.currentTimeMillis() - firstTime < 2000) {
             super.onBackPressed();
-        }else{
+        } else {
             showToast("再按一次退出");
         }
         firstTime = System.currentTimeMillis();
     }
 
-    private void setAlias(){
+    private void setAlias() {
         String alias = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         Log.d(TAG, "setAlias() returned: " + alias);
         // 检查 tag 的有效性
@@ -150,7 +157,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
             return;
         }
         if (!CommonUtils.isValidTagAndAlias(alias)) {
-            Toast.makeText(MainActivity.this,R.string.error_tag_gs_empty, Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity.this, R.string.error_tag_gs_empty, Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -180,7 +187,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener{
 
         @Override
         public void gotResult(int code, String alias, Set<String> tags) {
-            String logs ;
+            String logs;
             switch (code) {
                 case 0:
                     logs = "Set tag and alias success";

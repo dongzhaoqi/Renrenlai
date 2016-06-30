@@ -7,7 +7,7 @@ public class Activity implements Serializable {
 
     private int activityId;
     private String activityName;
-    private String activityType;                    //活动类型
+    private int activityType;                    //活动类型
     private String activityAddress;                 //活动地点
     private String participateNum;                     //活动人数
     private String activityDetailDescrip;                 //活动详情
@@ -16,6 +16,7 @@ public class Activity implements Serializable {
     private String deadline;                        //报名截止时间
     private String activityReleaserTel;
     private String activityReleaseTime;
+    private String projectName;
     private String activityStatus;
     private boolean lovedIs;                        //用户是否已喜欢
     private boolean signUpIs;                       //用户是否已报名
@@ -39,11 +40,11 @@ public class Activity implements Serializable {
         this.activityName = activityName;
     }
 
-    public String getActivityType() {
+    public int getActivityType() {
         return activityType;
     }
 
-    public void setActivityType(String activityType) {
+    public void setActivityType(int activityType) {
         this.activityType = activityType;
     }
 
@@ -109,6 +110,14 @@ public class Activity implements Serializable {
 
     public void setActivityReleaseTime(String activityReleaseTime) {
         this.activityReleaseTime = activityReleaseTime;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
     }
 
     public String getActivityStatus() {

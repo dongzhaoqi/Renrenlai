@@ -33,12 +33,16 @@ public class ImageAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return imageList.size();
+        if(imageList.size() == 9)
+            return 9;
+        if(imageList != null)
+            return imageList.size();
+        return imageList.size()+1;
     }
 
     @Override
     public Object getItem(int position) {
-        return imageList.get(position);
+        return 0;
     }
 
     @Override
@@ -59,7 +63,15 @@ public class ImageAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
 
-        Picasso.with(mContext).load(imageList.get(position)).into(holder.image);
+        if(position == imageList.size()){
+            holder.image.setImageBitmap(BitmapFactory.decodeResource(
+                    convertView.getResources(), R.drawable.icon_add_pic_unfocused));
+            if (position == 9) {
+                holder.image.setVisibility(View.GONE);
+            }
+        }else{
+            Picasso.with(mContext).load(imageList.get(position)).into(holder.image);
+        }
         return convertView;
     }
 

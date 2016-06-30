@@ -4,8 +4,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
@@ -15,6 +17,7 @@ import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.view.NoScrollGridView;
 
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -38,12 +41,16 @@ public class PreviewActivity extends BaseActivity {
     TextView tvPlace;
     @Bind(R.id.tv_people)
     TextView tvPeople;
+    @Bind(R.id.rl_project)
+    RelativeLayout rl_project;
+    @Bind(R.id.tv_project) TextView tvProject;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollGridView;
     @Bind(R.id.tv_detail)
     TextView tvDetail;
+    int activity_type;
     private PictureAdapter picAdapter;
-
+    private static final String TAG = "PreviewActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -59,7 +66,17 @@ public class PreviewActivity extends BaseActivity {
         Activity activity = (Activity) getIntent().getSerializableExtra("activity");
         ArrayList<String> images = getIntent().getStringArrayListExtra("images");
 
-        tvCategory.setText(activity.getActivityType());
+        for(String str: images){
+            Log.d(TAG, "initView: " + str);
+        }
+        activity_type = activity.getActivityType();
+        if(activity_type == 1){
+            tvCategory.setText("兴趣");
+        }else if(activity_type == 2){
+            tvCategory.setText("公益");
+        }else{
+            tvCategory.setText("议事");
+        }
         tvSubject.setText(activity.getActivityName());
         tvStartTime.setText(activity.getActivityStartTime());
         tvEndTime.setText(activity.getActivityEndTime());
@@ -67,7 +84,11 @@ public class PreviewActivity extends BaseActivity {
         tvPlace.setText(activity.getActivityAddress());
         tvPeople.setText(activity.getParticipateNum());
         tvDetail.setText(activity.getActivityDetailDescrip());
-
+        if(activity.getProjectName() != null){
+            tvProject.setText(activity.getProjectName());
+        }else{
+            rl_project.setVisibility(View.INVISIBLE);
+        }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new PictureAdapter(this, images);
         noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
