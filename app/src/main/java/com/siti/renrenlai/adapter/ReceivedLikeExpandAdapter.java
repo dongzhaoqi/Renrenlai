@@ -158,14 +158,15 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
             holder.tv_received_time = (TextView) convertView.findViewById(R.id.tv_received_time);
             holder.iv_activity_img = (ImageView) convertView.findViewById(R.id.iv_activity_img);
             holder.tv_activity_name = (TextView) convertView.findViewById(R.id.tv_activity_name);
+            holder.tv_userName = (TextView) convertView.findViewById(R.id.tv_userName);
             convertView.setTag(holder);
         }else{
             holder = (ChildHolder) convertView.getTag();
         }
         convertView.setOnClickListener(this);
-        holder.iv_user_icon.setImageResource(R.drawable.system_alarm);
         holder.tv_received_time.setText(receivedLikeChild.received_time);
         holder.tv_activity_name.setText(receivedLikeChild.activity_name);
+        holder.tv_userName.setText(receivedLikeChild.userName);
         Picasso.with(mContext).load(receivedLikeChild.activityImagePath).into(holder.iv_activity_img);
 
         if(receivedLikeChild.handleOrNot == 0){
@@ -370,6 +371,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         public String activity_name;
         public int activityId;
         public int projectId;
+        public String userName;
         public String activityImagePath;
         public int handleOrNot;
     }
@@ -387,6 +389,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         ImageView iv_activity_img;
         TextView tv_received_time;
         TextView tv_activity_name;
+        TextView tv_userName;
     }
 
     public static interface OnChildItemClickListener {

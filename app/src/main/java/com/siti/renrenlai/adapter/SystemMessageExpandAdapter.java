@@ -261,7 +261,6 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         try {
             dbActivity = db.selector(DbActivity.class).where("activityId", "=", activityId).findFirst();
             dbActivityImage = db.selector(DbActivityImage.class).where("activityId", "=", activityId).findAll();
-            Log.d(TAG, "getActivityNewData: " + dbActivityImage.size() + dbActivityImage.get(0).getActivityImagePath());
         } catch (DbException e) {
             e.printStackTrace();
         }

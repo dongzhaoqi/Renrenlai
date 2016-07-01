@@ -120,8 +120,10 @@ public class MessageActivity extends BaseActivity {
                 if(dbActivity != null) {
                     child.activity_name = dbActivity.getActivityName();
                     try {
-                        Log.d(TAG, "initSystem: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                        child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                        if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
+                            Log.d(TAG, "initSystem: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                            child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                        }
                     } catch (DbException e) {
                         e.printStackTrace();
                     }
@@ -257,6 +259,7 @@ public class MessageActivity extends BaseActivity {
                 ReceivedLikeChild child = new ReceivedLikeChild();
                 child.adviceId = receivedLikeList.get(i).getAdviceId();
                 child.received_time = receivedLikeList.get(i).getTime();
+                child.userName = receivedLikeList.get(i).getUserName();
                 child.handleOrNot = receivedLikeList.get(i).getHandleOrNot();
 
                 type = receivedLikeList.get(i).getType();
@@ -270,8 +273,10 @@ public class MessageActivity extends BaseActivity {
                     if (dbActivity != null) {
                         child.activity_name = dbActivity.getActivityName();
                         try {
-                            Log.d(TAG, "initLike: dbActivity " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
-                            child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                            if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
+                                Log.d(TAG, "initSystem: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                                child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
+                            }
                         } catch (DbException e) {
                             e.printStackTrace();
                         }
@@ -286,8 +291,10 @@ public class MessageActivity extends BaseActivity {
                     if (dbProject != null) {
                         child.activity_name = dbProject.getProjectName();
                         try {
-                            Log.d(TAG, "initLike: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
-                            child.activityImagePath = dbProject.getProjectImages(db).get(0).getProjectImagePath();
+                            if(dbProject.getProjectImages(db) != null && dbProject.getProjectImages(db).size() > 0) {
+                                Log.d(TAG, "initLike: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
+                                child.activityImagePath = dbProject.getProjectImages(db).get(0).getProjectImagePath();
+                            }
                         } catch (DbException e) {
                             e.printStackTrace();
                         }

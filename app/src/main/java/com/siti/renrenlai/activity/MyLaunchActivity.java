@@ -93,6 +93,7 @@ public class MyLaunchActivity extends BaseActivity {
         str_activity_name = model.getActivityName();
         str_activity_begin_time = model.getActivityStartTime();
         str_activity_end_time = model.getActivityEndTime();
+        str_activity_location = model.getActivityAddress();
         str_activity_loved_number = model.getLovedPersonNum();
         str_activity_enroll_number = model.getSignPersonNum();
         commentContentsList = model.getCommentContents();
@@ -102,6 +103,7 @@ public class MyLaunchActivity extends BaseActivity {
 
         activityName.setText(str_activity_name);
         activityTime.setText(activity_time);
+        activityLocation.setText(str_activity_location);
         if(commentContentsList != null && commentContentsList.size() > 0){
             tvCommentsNumber.setText(String.valueOf(commentContentsList.size()));
         }else{

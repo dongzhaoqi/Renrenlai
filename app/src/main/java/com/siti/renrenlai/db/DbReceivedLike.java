@@ -23,6 +23,9 @@ public class DbReceivedLike {
     @Column(name = "time")
     private String time;
 
+    @Column(name = "userName")
+    private String userName;
+
     @Column(name = "userHeadImagePath")
     private String userHeadImagePath;
 
@@ -65,6 +68,14 @@ public class DbReceivedLike {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getUserHeadImagePath() {

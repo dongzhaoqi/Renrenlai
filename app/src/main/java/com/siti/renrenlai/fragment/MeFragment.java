@@ -156,7 +156,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         myLikeActivitySize = response.optJSONArray("result").length();
                         tv_favorite.setText(String.valueOf(myLikeActivitySize));
-                        Log.d(TAG, "onResponse: " + myLikeActivitySize);
+                        //Log.d(TAG, "onResponse: " + myLikeActivitySize);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -180,7 +180,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         myParticipateActivitySize = response.optJSONArray("result").length();
                         tv_enroll.setText(String.valueOf(myParticipateActivitySize));
-                        Log.d(TAG, "onResponse: " + myParticipateActivitySize);
+                        //Log.d(TAG, "onResponse: " + myParticipateActivitySize);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -204,7 +204,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         myLaunchActivitySize = response.optJSONArray("result").length();
                         tv_launch.setText(String.valueOf(myLaunchActivitySize));
-                        Log.d(TAG, "onResponse: " + myLaunchActivitySize);
+                        //Log.d(TAG, "onResponse: " + myLaunchActivitySize);
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -230,21 +230,34 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "onResponse: " + response);
+                        try {
+                            List<DbSystemMessage> systemList = db.selector(DbSystemMessage.class).findAll();
+                            for (DbSystemMessage systemMessage : systemList) {
+                                Log.d("aaa", "systemList: " + systemMessage.getContent());
+                            }
+                            db.delete(systemList);
+                            for (DbSystemMessage systemMessage : systemList) {
+                                Log.d("bbb", "systemList: " + systemMessage.getContent());
+                            }
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
-                            try {
-                                db.delete(DbSystemMessage.class);
-                            } catch (DbException e) {
-                                e.printStackTrace();
-                            }
+
                             for (DbSystemMessage systemMessage : systemMessageList) {
                                 try {
                                     db.save(systemMessage);
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                            try {
+                                systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
+                            } catch (DbException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -265,21 +278,34 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "onResponse: " + response);
+                        try {
+                            List<DbReceivedComment> commentList = db.selector(DbReceivedComment.class).findAll();
+                            for (DbReceivedComment receivedComment : commentList) {
+                                Log.d("aaa", "commentList: " + receivedComment.getContent());
+                            }
+                            db.delete(commentList);
+                            for (DbReceivedComment receivedComment : commentList) {
+                                Log.d("bbb", "commentList: " + receivedComment.getContent());
+                            }
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
-                            try {
-                                db.delete(DbReceivedComment.class);
-                            } catch (DbException e) {
-                                e.printStackTrace();
-                            }
+
                             for (DbReceivedComment receivedComment : receivedCommentList) {
                                 try {
                                     db.save(receivedComment);
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                            try {
+                                receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
+                            } catch (DbException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -300,21 +326,34 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        //Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "onResponse: " + response);
+                        try {
+                            List<DbReceivedLike> likeList = db.selector(DbReceivedLike.class).findAll();
+                            for (DbReceivedLike receivedLike : likeList) {
+                                Log.d("aaa", "likeList: " + receivedLike.getAdviceId());
+                            }
+                            db.delete(likeList);
+                            for (DbReceivedLike receivedLike : likeList) {
+                                Log.d("bbb", "likeList: " + receivedLike.getAdviceId());
+                            }
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
-                            try {
-                                db.delete(DbReceivedLike.class);
-                            } catch (DbException e) {
-                                e.printStackTrace();
-                            }
+
                             for (DbReceivedLike receivedLike : receivedLikeList) {
                                 try {
                                     db.save(receivedLike);
                                 } catch (DbException e) {
                                     e.printStackTrace();
                                 }
+                            }
+                            try {
+                                receivedLikeList = db.selector(DbReceivedLike.class).where("handleOrNot", "=", "0").findAll();
+                            } catch (DbException e) {
+                                e.printStackTrace();
                             }
                         }
                     }
@@ -327,13 +366,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
 
-        try {
-            systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
-            receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
-            receivedLikeList = db.selector(DbReceivedLike.class).where("handleOrNot", "=", "0").findAll();
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
+
         systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
@@ -342,12 +375,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
             tv_message_nums.setText(String.valueOf(count));
+            ((MainActivity) getActivity()).setIconInvisible(count);
         } else {
             iv_circle.setVisibility(View.INVISIBLE);
             tv_message_nums.setText("");
         }
 
-        ((MainActivity) getActivity()).setIconInvisible(count);
     }
 
     private void initMessage() {

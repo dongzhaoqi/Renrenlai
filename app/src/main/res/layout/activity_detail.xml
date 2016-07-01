@@ -66,8 +66,8 @@
 
                     <ImageView
                         android:id="@+id/img_fund"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="@dimen/padding_24"
+                        android:layout_height="@dimen/padding_24"
                         android:layout_centerVertical="true"
                         android:src="@drawable/tag" />
 
@@ -102,8 +102,8 @@
 
                     <ImageView
                         android:id="@+id/img_time"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="@dimen/padding_24"
+                        android:layout_height="@dimen/padding_24"
                         android:layout_centerVertical="true"
                         android:src="@drawable/time" />
 
@@ -133,8 +133,8 @@
 
                     <ImageView
                         android:id="@+id/img_location"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="@dimen/padding_24"
+                        android:layout_height="@dimen/padding_24"
                         android:layout_centerVertical="true"
                         android:src="@drawable/location" />
 
@@ -164,8 +164,8 @@
 
                     <ImageView
                         android:id="@+id/img_community"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="@dimen/padding_24"
+                        android:layout_height="@dimen/padding_24"
                         android:layout_centerVertical="true"
                         android:src="@drawable/tel" />
 
@@ -200,8 +200,8 @@
 
                     <ImageView
                         android:id="@+id/img_intro"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
+                        android:layout_width="@dimen/padding_24"
+                        android:layout_height="@dimen/padding_24"
                         android:layout_centerVertical="true"
                         android:src="@drawable/intro" />
 

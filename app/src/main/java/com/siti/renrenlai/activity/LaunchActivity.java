@@ -9,15 +9,16 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,9 +35,9 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImagePre;
 import com.siti.renrenlai.bean.ProjectBaseInfo;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.db.DbTempActivity;
 import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.util.BitmapUtils;
@@ -66,7 +67,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -89,6 +89,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     LinearLayout ll_help;
     @Bind(R.id.ll_advice)
     LinearLayout ll_advice;
+
     @Bind(R.id.et_subject)
     EditText et_subject;
     @Bind(R.id.tv_start_time)
@@ -101,7 +102,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     EditText et_place;
     @Bind(R.id.et_epople)
     EditText et_people;
-    @Bind(R.id.layout_projects) RelativeLayout layout_projects;
+    @Bind(R.id.layout_projects)
+    RelativeLayout layout_projects;
     @Bind(R.id.tv_project_name)
     TextView tv_project_name;
     @Bind(R.id.layout_cover)
@@ -116,6 +118,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     Button btn_publish;
 
     public static Bitmap bitmap;
+    @Bind(R.id.iv_activity)
+    ImageView ivActivity;
+    @Bind(R.id.iv_charity)
+    ImageView ivCharity;
+    @Bind(R.id.iv_discuss)
+    ImageView ivDiscuss;
     private String imgName;
     private int activity_type = 0;
     int projectId;
@@ -134,15 +142,18 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private DbManager db;
     private DbTempActivity dbTempActivity;
     private ImageAdapter imageAdapter;
-    int flag_gallery ;
-    int flag_image_lib ;
+    int flag_gallery;
+    int flag_image_lib;
 
     ArrayList<String> imgs;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_launch);
         ButterKnife.bind(this);
+        StrictMode.ThreadPolicy policy=new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
         initProjects();
         initViews();
 
@@ -172,14 +183,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     /**
      * 若数据库中有保存的活动信息, 从数据库中恢复.
      */
-    private void initData(){
+    private void initData() {
         try {
             dbTempActivity = db.selector(DbTempActivity.class).findFirst();
         } catch (DbException e) {
             e.printStackTrace();
         }
 
-        if(dbTempActivity != null){
+        if (dbTempActivity != null) {
             activity_type = dbTempActivity.getActivityType();
             et_subject.setText(dbTempActivity.getActivityName());
             tv_start_time.setText(dbTempActivity.getActivityStartTime());
@@ -189,11 +200,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             et_people.setText(dbTempActivity.getActivityPeopleNums());
             tv_project_name.setText(dbTempActivity.getProjectName());
             et_detail.setText(dbTempActivity.getActivityDetail());
-            if(activity_type == 1){
+            if (activity_type == 1) {
                 ll_interest.setSelected(true);
-            }else if(activity_type == 2){
+            } else if (activity_type == 2) {
                 ll_help.setSelected(true);
-            }else if(activity_type == 3){
+            } else if (activity_type == 3) {
                 ll_advice.setSelected(true);
             }
         }
@@ -233,9 +244,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     public void getProjects(JSONObject response) {
         JSONArray result = response.optJSONArray("result");
         Log.d("response", "result:" + result);
-        if(result == null || result.length() == 0){
+        if (result == null || result.length() == 0) {
             layout_projects.setVisibility(View.GONE);
-        }else{
+        } else {
             projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), ProjectBaseInfo.class);
         }
     }
@@ -268,14 +279,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     tv_start_time.setText(sdf.format(date));
                 } else if (id == R.id.tv_end_time) {
                     tv_end_time.setText(sdf.format(date));
-                    if(CommonUtils.compareDate(tv_end_time.getText().toString(), tv_start_time.getText().toString())){
+                    if (CommonUtils.compareDate(tv_end_time.getText().toString(), tv_start_time.getText().toString())) {
                         Toast.makeText(LaunchActivity.this, "结束时间不能早于开始时间", Toast.LENGTH_SHORT).show();
                         tv_end_time.setText("");
                         return;
                     }
                 } else {
                     tv_deadline.setText(sdf.format(date));
-                    if(CommonUtils.compareDate(tv_start_time.getText().toString(), tv_deadline.getText().toString())){
+                    if (CommonUtils.compareDate(tv_start_time.getText().toString(), tv_deadline.getText().toString())) {
                         Toast.makeText(LaunchActivity.this, "报名截止时间不能晚于开始时间", Toast.LENGTH_SHORT).show();
                         tv_deadline.setText("");
                         return;
@@ -336,7 +347,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     /**
      * 从库图片中选择
      */
-    private void getImagesFromLib(){
+    private void getImagesFromLib() {
         String url = ConstantValue.GET_IMAGES_FROM_LIB;
         final Intent intent = new Intent(LaunchActivity.this, LibImageActivity.class);
         JsonObjectRequest req = new JsonObjectRequest(url, null,
@@ -394,9 +405,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             File img = new File(imgFolder, imgName);
             bitmap = PhotoUtil.getImageThumbnail(img.getAbsolutePath(), 180, 180);
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
-        }else if(requestCode == FROM_IMAGE_LIB){
+        } else if (requestCode == FROM_IMAGE_LIB) {
             imagePathList = data.getStringArrayListExtra("imagePathList");
-            for (String str : imagePathList){
+            for (String str : imagePathList) {
                 Log.d(TAG, "==========> " + str);
             }
             imageAdapter = new ImageAdapter(this, imagePathList);
@@ -420,16 +431,19 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.ll_interest:
                 unselectedAll();
                 ll_interest.setSelected(true);
+                ivActivity.setSelected(true);
                 activity_type = 1;
                 break;
             case R.id.ll_help:
                 unselectedAll();
                 ll_help.setSelected(true);
+                ivCharity.setSelected(true);
                 activity_type = 2;
                 break;
             case R.id.ll_advice:
                 unselectedAll();
                 ll_advice.setSelected(true);
+                ivDiscuss.setSelected(true);
                 activity_type = 3;
                 break;
             case R.id.tv_start_time:
@@ -450,16 +464,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.btn_preview:
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
                 imgs = new ArrayList<>();
-                if(flag_gallery == 3) {
+                if (flag_gallery == 3) {
                     int picCount = picAdapter.getCount();
                     System.out.println("count:" + picCount);
                     for (int i = 0; i < picCount - 1; i++) {
                         System.out.println("path:" + Bimp.getTempSelectBitmap().get(i).getPath());
                         imgs.add(Bimp.getTempSelectBitmap().get(i).getPath());
                     }
-                }else if(flag_image_lib == 4){
+                } else if (flag_image_lib == 4) {
                     int picCount = imageAdapter.getCount();
-                    for(int i = 0; i < picCount; i++){
+                    for (int i = 0; i < picCount; i++) {
                         imgs.add(imagePathList.get(i));
                     }
                 }
@@ -503,39 +517,39 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      */
     public void publishActivity() {
 
-        if(activity_type == 0){
+        if (activity_type == 0) {
             Toast.makeText(LaunchActivity.this, "请选择活动类型", Toast.LENGTH_SHORT).show();
             return;
         }
-        if("".equals(et_subject.getText().toString().trim())){
+        if ("".equals(et_subject.getText().toString().trim())) {
             Toast.makeText(LaunchActivity.this, "请填写活动主题", Toast.LENGTH_SHORT).show();
             et_subject.requestFocus();
             return;
         }
-        if("".equals(tv_start_time.getText().toString())){
+        if ("".equals(tv_start_time.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请选择开始时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        if("".equals(tv_end_time.getText().toString())){
+        if ("".equals(tv_end_time.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请选择开始时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        if("".equals(tv_deadline.getText().toString())){
+        if ("".equals(tv_deadline.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请选择报名截止时间", Toast.LENGTH_SHORT).show();
             return;
         }
-        if("".equals(et_place.getText().toString().trim())){
+        if ("".equals(et_place.getText().toString().trim())) {
             Toast.makeText(LaunchActivity.this, "请填写活动地点", Toast.LENGTH_SHORT).show();
             et_place.requestFocus();
             return;
         }
-        if("".equals(et_people.getText().toString())){
+        if ("".equals(et_people.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请填写活动人数", Toast.LENGTH_SHORT).show();
             et_people.requestFocus();
             return;
         }
 
-        if("".equals(et_detail.getText().toString())){
+        if ("".equals(et_detail.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请填写活动详情", Toast.LENGTH_SHORT).show();
             et_people.requestFocus();
             return;
@@ -578,7 +592,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         }
 
                         String path, imageName;
-                        if(flag_gallery == 3) {
+                        if (flag_gallery == 3) {
                             Log.d(TAG, "flag_gallery: " + flag_gallery);
                             for (int i = 0; i < picAdapter.getCount() - 1; i++) {
                                 path = Bimp.getTempSelectBitmap().get(i).getPath();
@@ -590,9 +604,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                                     upload(activity_id, myBitmap, imageName);
                                 }
                             }
-                        }else if(flag_image_lib == 4){
+                        } else if (flag_image_lib == 4) {
                             Log.d(TAG, "flag_image_lib: " + flag_image_lib);
-                            for(int i = 0; i < imageAdapter.getCount() - 1; i++){
+                            for (int i = 0; i < imageAdapter.getCount() - 1; i++) {
                                 path = imagePathList.get(i);
                                 imageName = path.substring(path.lastIndexOf("/") + 1);
                                 Bitmap myBitmap = BitmapUtils.loadBitmap(path);
@@ -638,7 +652,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d("response", "response:" + response.toString());
-                        if(db != null){
+                        if (db != null) {
                             try {
                                 db.delete(DbTempActivity.class);
                             } catch (DbException e) {
@@ -683,7 +697,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         activity.setDeadline(tv_deadline.getText().toString());
         activity.setActivityAddress(et_place.getText().toString());
         activity.setParticipateNum(et_people.getText().toString());
-        if(projectList.size() > 0){
+        if (projectList.size() > 0) {
             activity.setProjectName(tv_project_name.getText().toString());
         }
         activity.setActivityDetailDescrip(et_detail.getText().toString());
@@ -694,7 +708,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     /**
      * 按后退键时，将信息保存到数据库中.
      */
-    private void save(){
+    private void save() {
 
         Activity activity = getActivityInfo();
         DbTempActivity dbTempActivity = new DbTempActivity();

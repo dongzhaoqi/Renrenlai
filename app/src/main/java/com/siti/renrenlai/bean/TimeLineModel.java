@@ -13,6 +13,7 @@ public class TimeLineModel implements Serializable{
     private String dateTimeForActiv;
     private String activityStartTime;
     private String activityEndTime;
+    private String activityAddress;
     private String signPersonNum;
     private String lovedPersonNum;
     private List<ActivityImage>activityImageList;
@@ -64,6 +65,14 @@ public class TimeLineModel implements Serializable{
 
     public void setActivityEndTime(String activityEndTime) {
         this.activityEndTime = activityEndTime;
+    }
+
+    public String getActivityAddress() {
+        return activityAddress;
+    }
+
+    public void setActivityAddress(String activityAddress) {
+        this.activityAddress = activityAddress;
     }
 
     public String getLovedPersonNum() {
