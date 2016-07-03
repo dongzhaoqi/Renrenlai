@@ -88,7 +88,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         iv_new_message = (ImageView) findViewById(R.id.iv_new_message);
     }
 
-    public void setIconInvisible(int num) {
+    public void setIconVisibleOrInvisible(int num) {
         if (num == 0) {
             iv_new_message.setVisibility(View.INVISIBLE);
         } else {

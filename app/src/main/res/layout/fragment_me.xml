@@ -65,7 +65,7 @@
                 android:id="@+id/tv_favorite"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6" />
+                android:text="0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -86,7 +86,7 @@
                 android:id="@+id/tv_enroll"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6" />
+                android:text="0" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -107,7 +107,7 @@
                 android:id="@+id/tv_launch"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="6" />
+                android:text="0" />
 
             <TextView
                 android:layout_width="wrap_content"

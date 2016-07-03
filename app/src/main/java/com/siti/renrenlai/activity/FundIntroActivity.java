@@ -21,10 +21,7 @@ import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.FundIntroAdapter;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.Project;
-import com.siti.renrenlai.db.DbActivity;
-import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.db.DbProject;
 import com.siti.renrenlai.db.DbProjectImage;
 import com.siti.renrenlai.util.CommonUtils;
@@ -61,7 +58,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
-    String api, url, userName;
+    String userName;
+    String url = ConstantValue.GET_PROJECT_LIST;
     private DbManager db;
 
     @Override
@@ -81,7 +79,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
      * 判断缓存中是否已经有请求的数据，若已有直接从缓存中取，若没有，发起网络请求
      */
     private void cache() {
-        url = ConstantValue.GET_PROJECT_LIST;
+
         Cache cache = CustomApplication.getInstance().getRequestQueue().getCache();
         Cache.Entry entry = cache.get(url);
         if (entry != null) {              // Cache is available
@@ -89,8 +87,13 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                System.out.println("data:" + jsonObject);
-                getData(jsonObject);
+                Log.d(TAG, "cache: "+jsonObject);
+                if(jsonObject.optJSONArray("result") != null){
+                    getData(jsonObject);
+                }else{
+                    initData();
+                }
+
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
@@ -144,7 +147,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     private void initData() {
         showProcessDialog();
-        Log.d("FindFragment", "url:" + url);
+        Log.d(TAG, "url:" + url);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -156,7 +159,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d("response", response.toString());
+                        Log.d(TAG, response.toString());
                         getData(response);
                         dismissProcessDialog();
                     }

@@ -13,8 +13,10 @@ import android.os.StrictMode;
 import android.provider.MediaStore;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
@@ -144,6 +146,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private ImageAdapter imageAdapter;
     int flag_gallery;
     int flag_image_lib;
+    int width, height;
 
     ArrayList<String> imgs;
 
@@ -497,6 +500,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 LinearLayout.LayoutParams.WRAP_CONTENT);
         popupWindow.setBackgroundDrawable(getResources().getDrawable(R.drawable.base_edit_input));
         popupWindow.setOutsideTouchable(true);
+        /**
+         * 设置弹出框的宽、高
+         */
+        WindowManager windowManager = getWindowManager();
+        Display display = windowManager.getDefaultDisplay();
+        width = (int) (display.getWidth() * 0.675); // 设置宽度
+        height = LinearLayout.LayoutParams.WRAP_CONTENT;// 设置高度
+
+        popupWindow.setWidth(width);
+        popupWindow.setHeight(height);
         listView.setAdapter(new SpinnerProjectAdapter(this, projectList));
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

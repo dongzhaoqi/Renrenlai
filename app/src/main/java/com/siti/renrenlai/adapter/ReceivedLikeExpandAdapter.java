@@ -2,7 +2,6 @@ package com.siti.renrenlai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,14 +18,13 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.ProjectInfo;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.db.DbActivity;
 import com.siti.renrenlai.db.DbActivityImage;
-import com.siti.renrenlai.db.DbReceivedComment;
 import com.siti.renrenlai.db.DbReceivedLike;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -122,7 +120,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
         if(receivedLikeList != null && receivedLikeList.size() > 0 ){
             count = 0;
             for(int i = 0; i < receivedLikeList.size(); i++){
-                Log.d(TAG, "getGroupView: receivedLikeList.get(i).getHandleOrNot()------>" + receivedLikeList.get(i).getHandleOrNot());
+                //Log.d(TAG, "getGroupView: receivedLikeList.get(i).getHandleOrNot()------>" + receivedLikeList.get(i).getHandleOrNot());
                 if(receivedLikeList.get(i).getHandleOrNot() == 0){
                     count ++ ;
                 }
@@ -187,7 +185,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
                 }else{
                     getProjectInfo(receivedLikeChild.projectId);
                 }
-                Log.d(TAG, "onClick: " + receivedLikeChild.activityId);
+                //Log.d(TAG, "onClick: " + receivedLikeChild.activityId);
             }
         });
         return convertView;
@@ -207,7 +205,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         try {
                             db.update(DbReceivedLike.class, WhereBuilder.b("adviceId", "=", adviceId),new KeyValue("handleOrNot",1));
                         } catch (DbException e) {
@@ -253,7 +251,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
     }
 
     public void getActivityNewData(JSONObject response, int activityId) {
-        Log.d(TAG, "getActivityNewData: " + response);
+        //Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
@@ -282,7 +280,7 @@ public class ReceivedLikeExpandAdapter extends AnimatedExpandableListAdapter imp
             for(int i = 0; i < dbActivityImageSize; i++){
                 ActivityImage activityImage = new ActivityImage();
                 activityImage.setActivityImagePath(dbActivityImage.get(i).getActivityImagePath());
-                Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
+                //Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
                 activityImages.add(activityImage);
             }
             activity.setActivityImages(activityImages);

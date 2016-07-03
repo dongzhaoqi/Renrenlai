@@ -105,7 +105,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
         view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
-        init();
+
 
         return view;
     }
@@ -113,11 +113,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initTopBarForOnlyTitle("我的");
 
+        init();
     }
 
     private void init() {
+        initTopBarForOnlyTitle("我的");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
         userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
         if (userName.equals("0")) {
@@ -218,6 +219,18 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initMessage2() {
 
+        try {
+            List<DbSystemMessage> systemList = db.selector(DbSystemMessage.class).findAll();
+            List<DbReceivedComment> commentList = db.selector(DbReceivedComment.class).findAll();
+            List<DbReceivedLike> likeList = db.selector(DbReceivedLike.class).findAll();
+            db.delete(systemList);
+            db.delete(commentList);
+            db.delete(likeList);
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+
         url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
         //Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
         JSONObject jsonObject = new JSONObject();
@@ -231,18 +244,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: " + response);
-                        try {
-                            List<DbSystemMessage> systemList = db.selector(DbSystemMessage.class).findAll();
-                            for (DbSystemMessage systemMessage : systemList) {
-                                Log.d("aaa", "systemList: " + systemMessage.getContent());
-                            }
-                            db.delete(systemList);
-                            for (DbSystemMessage systemMessage : systemList) {
-                                Log.d("bbb", "systemList: " + systemMessage.getContent());
-                            }
-                        } catch (DbException e) {
-                            e.printStackTrace();
-                        }
+
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
@@ -279,18 +281,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: " + response);
-                        try {
-                            List<DbReceivedComment> commentList = db.selector(DbReceivedComment.class).findAll();
-                            for (DbReceivedComment receivedComment : commentList) {
-                                Log.d("aaa", "commentList: " + receivedComment.getContent());
-                            }
-                            db.delete(commentList);
-                            for (DbReceivedComment receivedComment : commentList) {
-                                Log.d("bbb", "commentList: " + receivedComment.getContent());
-                            }
-                        } catch (DbException e) {
-                            e.printStackTrace();
-                        }
+
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
@@ -327,18 +318,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.d(TAG, "onResponse: " + response);
-                        try {
-                            List<DbReceivedLike> likeList = db.selector(DbReceivedLike.class).findAll();
-                            for (DbReceivedLike receivedLike : likeList) {
-                                Log.d("aaa", "likeList: " + receivedLike.getAdviceId());
-                            }
-                            db.delete(likeList);
-                            for (DbReceivedLike receivedLike : likeList) {
-                                Log.d("bbb", "likeList: " + receivedLike.getAdviceId());
-                            }
-                        } catch (DbException e) {
-                            e.printStackTrace();
-                        }
+
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
                             receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
@@ -366,7 +346,10 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(request3);      //加入请求队列
 
+        setIcon();
+    }
 
+    private void setIcon(){
         systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
@@ -375,12 +358,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
             tv_message_nums.setText(String.valueOf(count));
-            ((MainActivity) getActivity()).setIconInvisible(count);
+
         } else {
             iv_circle.setVisibility(View.INVISIBLE);
             tv_message_nums.setText("");
         }
-
+        ((MainActivity) getActivity()).setIconVisibleOrInvisible(count);
     }
 
     private void initMessage() {
@@ -492,6 +475,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         super.onResume();
         if (!"0".equals(userName)) {
             initMessage2();
+            setIcon();
             initMyActivity();
         }
     }

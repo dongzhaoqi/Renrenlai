@@ -2,7 +2,6 @@ package com.siti.renrenlai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
@@ -32,7 +30,6 @@ import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.AnimatedExpandableListView.AnimatedExpandableListAdapter;
 import com.squareup.picasso.Picasso;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.xutils.DbManager;
@@ -121,7 +118,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
         if(systemMessageList != null && systemMessageList.size() > 0 ){
             count = 0;
             for(int i = 0; i < systemMessageList.size(); i++){
-                Log.d(TAG, "getGroupView: systemMessageList.get(i).getHandleOrNot()------>" + systemMessageList.get(i).getHandleOrNot());
+                //Log.d(TAG, "getGroupView: systemMessageList.get(i).getHandleOrNot()------>" + systemMessageList.get(i).getHandleOrNot());
                 if(systemMessageList.get(i).getHandleOrNot() == 0){
                     count ++ ;
                 }
@@ -204,7 +201,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         try {
                             db.update(DbSystemMessage.class, WhereBuilder.b("adviceId", "=", adviceId),new KeyValue("handleOrNot",1));
                         } catch (DbException e) {
@@ -250,7 +247,7 @@ public class SystemMessageExpandAdapter extends AnimatedExpandableListAdapter im
     }
 
     public void getActivityNewData(JSONObject response, int activityId) {
-        Log.d(TAG, "getActivityNewData: " + response);
+        //Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);

@@ -11,7 +11,10 @@ import org.xutils.db.annotation.Table;
 @Table(name = "received_like")
 public class DbReceivedLike {
 
-    @Column(name = "adviceId", isId = true, autoGen = false)
+    @Column(name = "msgId", isId = true, autoGen = true)
+    private int msgId;
+
+    @Column(name = "adviceId")
     private int adviceId;
 
     @Column(name = "activityId")
@@ -37,6 +40,14 @@ public class DbReceivedLike {
 
     @Column(name = "activOrProId")
     private int activOrProId;
+
+    public int getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(int msgId) {
+        this.msgId = msgId;
+    }
 
     public int getAdviceId() {
         return adviceId;

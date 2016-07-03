@@ -1,8 +1,5 @@
 package com.siti.renrenlai.db;
 
-import com.siti.renrenlai.bean.CommentContents;
-import com.siti.renrenlai.bean.LovedUsers;
-
 import org.xutils.DbManager;
 import org.xutils.db.annotation.Column;
 import org.xutils.db.annotation.Table;
@@ -17,7 +14,11 @@ import java.util.List;
 
 @Table(name = "activity")
 public class DbActivity implements Serializable{
-    @Column(name = "activityId", isId = true, autoGen = false)
+
+    @Column(name = "autoActivityId", isId = true, autoGen = true)
+    private int autoActivityId;
+
+    @Column(name = "activityId")
     private int activityId;
 
     @Column(name = "activityName")
@@ -64,6 +65,14 @@ public class DbActivity implements Serializable{
         return db.selector(DbActivityImage.class).where("activityId", "=", this.activityId).findAll();
     }
 
+
+    public int getAutoActivityId() {
+        return autoActivityId;
+    }
+
+    public void setAutoActivityId(int autoActivityId) {
+        this.autoActivityId = autoActivityId;
+    }
 
     public int getActivityId() {
         return activityId;

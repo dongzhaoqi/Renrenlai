@@ -123,7 +123,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                Log.d(TAG, jsonObject.toString());
+                //Log.d(TAG, jsonObject.toString());
                 getData(jsonObject);
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
@@ -132,7 +132,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             }
         } else {
             // Cache
-            System.out.println("initData");
+            //System.out.println("initData");
             initData();
         }
     }
@@ -267,7 +267,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     private void initData() {
         //showProcessDialog();
-        Log.d("FindFragment", "url:" + url);
+        //Log.d("FindFragment", "url:" + url);
 
         JsonObjectRequest request = new JsonObjectRequest(url, null,
                 new Response.Listener<JSONObject>() {
@@ -275,7 +275,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         getData(response);
                         //dismissProcessDialog();
-                        Log.d(TAG, response.toString());
+                        //Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -373,7 +373,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, response.toString());
+                        //Log.d(TAG, response.toString());
                         getActivityNewData(pos, response);
                     }
                 }, new Response.ErrorListener() {
@@ -391,7 +391,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
 
     public void getActivityNewData(int pos, JSONObject response) {
-        Log.d(TAG, "getActivityNewData: " + response);
+        //Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
         commentsList = com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList =  com.alibaba.fastjson.JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
@@ -409,7 +409,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
     private void initMessage(){
         url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -420,7 +420,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
                         if(result != null && result.length() > 0){
                             systemMessageList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbSystemMessage.class);
@@ -449,13 +449,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
 
         url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
 
         JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
                         if(result != null && result.length() > 0){
                             receivedCommentList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedComment.class);
@@ -484,13 +484,13 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
 
         url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
-        Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
+        //Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
 
         JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         JSONArray result = response.optJSONArray("result");
                         if(result != null && result.length() > 0){
                             receivedLikeList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), DbReceivedLike.class);
@@ -529,7 +529,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
         count = systemMessageSize + receivedReviewSize + receivedLikeSize;
 
-        ((MainActivity)getActivity()).setIconInvisible(count);
+        ((MainActivity)getActivity()).setIconVisibleOrInvisible(count);
     }
 
     @Override

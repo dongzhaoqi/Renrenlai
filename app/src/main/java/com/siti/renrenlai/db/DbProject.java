@@ -20,7 +20,10 @@ import java.util.List;
 @Table(name = "project")
 public class DbProject implements Serializable{
 
-    @Column(name = "projectId", isId = true, autoGen = false)
+    @Column(name = "autoProjectId", isId = true, autoGen = true)
+    private int autoProjectId;
+
+    @Column(name = "projectId")
     private int projectId;
 
     @Column(name = "projectName")
@@ -61,6 +64,14 @@ public class DbProject implements Serializable{
 
     public List<DbProjectImage> getProjectImages(DbManager db) throws DbException {
         return db.selector(DbProjectImage.class).where("projectId", "=", this.projectId).findAll();
+    }
+
+    public int getAutoProjectId() {
+        return autoProjectId;
+    }
+
+    public void setAutoProjectId(int autoProjectId) {
+        this.autoProjectId = autoProjectId;
     }
 
     public int getProjectId() {

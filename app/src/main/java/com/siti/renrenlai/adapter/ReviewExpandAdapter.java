@@ -2,7 +2,6 @@ package com.siti.renrenlai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,15 +19,14 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.ProjectInfo;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.Project;
 import com.siti.renrenlai.db.DbActivity;
 import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.db.DbReceivedComment;
-import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
@@ -125,7 +123,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         if(receivedCommentList != null && receivedCommentList.size() > 0 ){
             count = 0;
             for(int i = 0; i < receivedCommentList.size(); i++){
-                Log.d(TAG, "getGroupView: receivedCommentList.get(i).getHandleOrNot()------>" + receivedCommentList.get(i).getHandleOrNot());
+                //Log.d(TAG, "getGroupView: receivedCommentList.get(i).getHandleOrNot()------>" + receivedCommentList.get(i).getHandleOrNot());
                 if(receivedCommentList.get(i).getHandleOrNot() == 0){
                     count ++ ;
                 }
@@ -166,7 +164,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
         }else{
             holder = (ChildHolder) convertView.getTag();
         }
-        Log.d(TAG, "getRealChildView: " + reviewChild.userHeadImagePath);
+        //Log.d(TAG, "getRealChildView: " + reviewChild.userHeadImagePath);
         Log.d(TAG, "getRealChildImageView: " + reviewChild.activityImagePath);
         Picasso.with(mContext).load(reviewChild.userHeadImagePath).placeholder(R.drawable.no_img).into(holder.iv_review_icon);
         holder.tv_username.setText(reviewChild.username);
@@ -192,7 +190,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
                 }else{
                     getProjectInfo(reviewChild.projectId);
                 }
-                Log.d(TAG, "onClick: " + reviewChild.activityId);
+                //Log.d(TAG, "onClick: " + reviewChild.activityId);
                 //Toast.makeText(mContext, "position:" + reviewChild.activityId, Toast.LENGTH_LONG).show();
             }
         });
@@ -214,7 +212,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        //Log.d(TAG, "onResponse: " + response);
                         try {
                             db.update(DbReceivedComment.class, WhereBuilder.b("adviceId", "=", adviceId),new KeyValue("handleOrNot",1));
                         } catch (DbException e) {
@@ -260,7 +258,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
     }
 
     public void getActivityNewData(JSONObject response, int activityId) {
-        Log.d(TAG, "getActivityNewData: " + response);
+        //Log.d(TAG, "getActivityNewData: " + response);
         JSONObject result = response.optJSONObject("result");
         commentsList = JSONArray.parseArray(result.optJSONArray("commentUserInfoList").toString(), CommentContents.class);
         lovedUsersList = JSONArray.parseArray(result.optJSONArray("lovedUserList").toString(), LovedUsers.class);
@@ -289,7 +287,7 @@ public class ReviewExpandAdapter extends AnimatedExpandableListAdapter implement
             for(int i = 0; i < dbActivityImageSize; i++){
                 ActivityImage activityImage = new ActivityImage();
                 activityImage.setActivityImagePath(dbActivityImage.get(i).getActivityImagePath());
-                Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
+                //Log.d(TAG, "getActivityNewData: " + dbActivityImage.get(i).getActivityImagePath());
                 activityImages.add(activityImage);
             }
             activity.setActivityImages(activityImages);

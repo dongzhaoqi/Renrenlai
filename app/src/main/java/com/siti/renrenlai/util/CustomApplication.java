@@ -80,7 +80,7 @@ public class CustomApplication extends Application {
 				.setDbName("renrenactivity.db")
 				// 不设置dbDir时, 默认存储在app的私有目录.
 				.setDbDir(new File("/RenrenLai")) // "sdcard"的写法并非最佳实践, 这里为了简单, 先这样写了.
-				.setDbVersion(1)
+				.setDbVersion(2)
 				.setDbOpenListener(new DbManager.DbOpenListener() {
 					@Override
 					public void onDbOpened(DbManager db) {

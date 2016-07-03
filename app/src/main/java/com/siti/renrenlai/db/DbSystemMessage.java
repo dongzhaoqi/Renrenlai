@@ -11,7 +11,10 @@ import org.xutils.db.annotation.Table;
 @Table(name = "system_message")
 public class DbSystemMessage {
 
-    @Column(name = "adviceId", isId = true, autoGen = false)
+    @Column(name = "msgId", isId = true, autoGen = true)
+    private int msgId;
+
+    @Column(name = "adviceId")
     private int adviceId;
 
     @Column(name = "msgTitle")
@@ -40,6 +43,14 @@ public class DbSystemMessage {
 
     @Column(name = "activOrProId")
     private int activOrProId;
+
+    public int getMsgId() {
+        return msgId;
+    }
+
+    public void setMsgId(int msgId) {
+        this.msgId = msgId;
+    }
 
     public int getAdviceId() {
         return adviceId;
