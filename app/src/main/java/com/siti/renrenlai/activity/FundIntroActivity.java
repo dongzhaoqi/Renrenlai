@@ -69,7 +69,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         ButterKnife.bind(this);
         ShareSDK.initSDK(this);
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
-        Log.d(TAG, "onCreate() called with: " + userName);
         initView();
 
         cache();
@@ -147,7 +146,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     private void initData() {
         showProcessDialog();
-        Log.d(TAG, "url:" + url);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -175,7 +173,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void getData(JSONObject response) {
-        int projectImageSize ;
         try {
             db.delete(DbProject.class);
             db.delete(DbProjectImage.class);
@@ -185,7 +182,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         JSONArray result = response.optJSONArray("result");
         if (result != null) {
             projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Project.class);
-            Log.d(TAG, "getData() returned: " + projectList.size());
 
             for(Project project : projectList){
                 DbProject dbProject = new DbProject();
@@ -298,7 +294,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     public void getProjectInfo(int projectId) {
         String url = ConstantValue.GET_PROJECT_INFO;
-        Log.d(TAG, "getProjectInfo: projectId--->" + projectId + "  userName:" + userName);
         JSONObject json = new JSONObject();
         try {
             json.put("userName", userName);

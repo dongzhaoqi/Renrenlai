@@ -222,8 +222,7 @@
                         android:id="@+id/img_relative_activity"
                         android:layout_width="@dimen/height_56"
                         android:layout_height="@dimen/height_56"
-                        android:layout_centerVertical="true"
-                        android:src="@drawable/location" />
+                        android:layout_centerVertical="true"/>
 
                     <TextView
                         style="@style/me_text_style"

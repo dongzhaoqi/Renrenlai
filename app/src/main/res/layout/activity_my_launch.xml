@@ -93,8 +93,8 @@
 
                 <ImageView
                     android:id="@+id/img_time"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/padding_24"
+                    android:layout_height="@dimen/padding_24"
                     android:layout_centerVertical="true"
                     android:src="@drawable/time" />
 
@@ -124,8 +124,8 @@
 
                 <ImageView
                     android:id="@+id/img_locate"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/padding_24"
+                    android:layout_height="@dimen/padding_24"
                     android:layout_centerVertical="true"
                     android:src="@drawable/location" />
 
@@ -154,8 +154,8 @@
 
                 <ImageView
                     android:id="@+id/img_enroll_number"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/padding_24"
+                    android:layout_height="@dimen/padding_24"
                     android:layout_centerVertical="true"
                     android:src="@drawable/me" />
 
@@ -199,8 +199,8 @@
 
                 <ImageView
                     android:id="@+id/img_favor_number"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
+                    android:layout_width="@dimen/padding_24"
+                    android:layout_height="@dimen/padding_24"
                     android:layout_centerVertical="true"
                     android:src="@drawable/like" />
 
@@ -238,25 +238,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/layout_bottom_border"
-                android:minHeight="@dimen/height_96"
-                android:padding="@dimen/padding_10">
+                android:minHeight="@dimen/height_96">
 
                 <TextView
                     android:id="@+id/str_cover"
                     style="@style/me_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/margin_8"
+                    android:layout_margin="@dimen/margin_8"
                     android:text="@string/txt_activity_cover" />
 
                 <com.siti.renrenlai.view.NoScrollGridView
                     android:id="@+id/detail_scrollgridview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="5dp"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_below="@id/str_cover"
                     android:horizontalSpacing="3dp"
                     android:listSelector="#00000000"
                     android:numColumns="3"

@@ -29,6 +29,7 @@ import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
+import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
 import com.siti.renrenlai.bean.Project;
@@ -232,7 +233,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                             layout_relative_activity.setVisibility(View.GONE);
                         }else{
                             tv_relative_activity_name.setText(relatedActivityList.get(0).getActivityName());
-                            Picasso.with(ProjectInfo.this).load(relatedActivityList.get(0).getActivityImages().get(0).getActivityImagePath()).into(img_relative_activity);
+                            List<ActivityImage> images = relatedActivityList.get(0).getActivityImages();
+                            if(images != null && images.size() > 0){
+                                Picasso.with(ProjectInfo.this).load(images.get(0).getActivityImagePath()).placeholder(R.drawable.no_img).into(img_relative_activity);
+                            }
                         }
                     }
                 }, new Response.ErrorListener() {

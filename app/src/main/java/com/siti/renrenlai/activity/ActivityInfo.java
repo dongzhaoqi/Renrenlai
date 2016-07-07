@@ -82,6 +82,10 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     LinearLayout ll_image;
     @Bind(R.id.list_comment)
     RecyclerView list_comment;
+    @Bind(R.id.empty_view)
+    TextView empty_view;
+    @Bind(R.id.empty_view_like)
+    TextView empty_view_like;
     @Bind(R.id.detail_scrollgridview)
     NoScrollGridView noScrollGridView;
     @Bind(R.id.btn_comment)
@@ -144,13 +148,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             }
         });
 
-        if(lovedIs){
+        if (lovedIs) {
             btnFavor.setText("已喜欢(" + (lovedUsersList.size()) + ")");
             btnFavor.setSelected(true);
-        }else{
+        } else {
             btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         }
-        if(signUpIs){
+        if (signUpIs) {
             btnParticipate.setText("已报名");
             btnParticipate.setBackgroundColor(Color.parseColor("#E5E5E5"));
             btnParticipate.setClickable(false);
@@ -168,17 +172,21 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             Picasso.with(this).load(R.drawable.no_img).into(activity_img);
         }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        picAdapter = new ImageAdapter(this, imagePath);
-        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ActivityInfo.this, GalleryImageActivity.class);
-                intent.putStringArrayListExtra("imagePath", imagePath);
-                intent.putExtra("ID", i);
-                startActivity(intent);
-            }
-        });
-        noScrollGridView.setAdapter(picAdapter);
-
+        if (imagePath.size() == 0) {
+            empty_view_like.setVisibility(View.VISIBLE);
+            ll_image.setVisibility(View.GONE);
+        } else {
+            picAdapter = new ImageAdapter(this, imagePath);
+            noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(ActivityInfo.this, GalleryImageActivity.class);
+                    intent.putStringArrayListExtra("imagePath", imagePath);
+                    intent.putExtra("ID", i);
+                    startActivity(intent);
+                }
+            });
+            noScrollGridView.setAdapter(picAdapter);
+        }
         btnComment.setText("评论(" + (commentsList.size()) + ")");
 
         for (int i = 0; i < lovedUsersList.size(); i++) {
@@ -209,6 +217,12 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         tv_activity_time.setText(activity_time);
         //Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
 
+        if (commentsList.size() == 0) {
+            empty_view.setVisibility(View.VISIBLE);
+            list_comment.setVisibility(View.GONE);
+            return;
+        }
+
         mAdapter = new CommentAdapter(this, commentsList);
         mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {
             @Override
@@ -236,9 +250,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 showCommentDialog(mAdapter);
                 break;
             case R.id.btn_favor:
-                if(userName.equals("0")){
+                if (userName.equals("0")) {
                     startActivity(new Intent(this, LoginActivity.class));
-                }else {
+                } else {
                     if (!lovedIs) {
                         like();
                         lovedIs = true;
@@ -253,9 +267,9 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 }
                 break;
             case R.id.btn_participate:
-                if(userName.equals("0")){
+                if (userName.equals("0")) {
                     startActivity(new Intent(this, LoginActivity.class));
-                }else{
+                } else {
                     participate(activity_id);
                 }
                 break;
@@ -264,7 +278,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
 
     /**
      * 报名活动
-     * @param activity_id   活动的id
+     *
+     * @param activity_id 活动的id
      */
     private void participate(int activity_id) {
         JSONObject jsonObject = new JSONObject();
@@ -288,7 +303,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("活动报名Error: ","error:" + error.getMessage());
+                Log.e("活动报名Error: ", "error:" + error.getMessage());
                 showToast("出错了!");
             }
         });

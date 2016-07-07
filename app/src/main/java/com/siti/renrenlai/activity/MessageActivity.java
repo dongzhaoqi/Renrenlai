@@ -48,10 +48,6 @@ public class MessageActivity extends BaseActivity {
     private SystemMessageExpandAdapter systemAdapter;
     private ReviewExpandAdapter reviewAdapter;
     private ReceivedLikeExpandAdapter receivedLikeAdapter;
-    private String[] str_message = {"本活动将于两天后举行aaaaa啊啊啊啊啊!", "本活动取消了!"};
-    private String[] str_name = {"环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑", "环小区挑战赛!", "越野跑", "夜跑"};
-    private String[] users = {"张三", "李四", "小王", "张三", "李四", "小王", "张三", "李四", "小王"};
-    private String[] contents = {"哈哈", "不错", "好玩", "哈哈", "不错", "好玩", "哈哈", "不错", "好玩"};
     private DbManager db;
     private List<DbSystemMessage> systemMessageList;
     private List<DbReceivedComment> receivedCommentList;
@@ -101,7 +97,7 @@ public class MessageActivity extends BaseActivity {
         List<MessageGroup> systemMessageGroupList = new ArrayList<>();
         MessageGroup systemMessageGroup = new MessageGroup();
         if (systemMessageList != null && systemMessageList.size() > 0) {
-            for (int i = systemMessageList.size()-1; i >= 0 ; i--) {
+            for (int i = 0; i <= systemMessageList.size()-1 ; i++) {
                 DbActivity dbActivity = new DbActivity();
                 MessageChild child = new MessageChild();
                 child.type = systemMessageList.get(i).getType();
@@ -165,7 +161,7 @@ public class MessageActivity extends BaseActivity {
         List<ReviewGroup> receivedCommentGroupList = new ArrayList<>();
         ReviewGroup reviewGroup = new ReviewGroup();
         if (receivedCommentList != null && receivedCommentList.size() > 0) {
-            for (int i = receivedCommentList.size()-1; i >= 0 ; i--) {
+            for (int i = 0; i <= receivedCommentList.size()-1 ; i++) {
                 DbActivity dbActivity = new DbActivity();
                 DbProject dbProject = new DbProject();
                 int type;
@@ -252,7 +248,7 @@ public class MessageActivity extends BaseActivity {
         ReceivedLikeGroup receivedLikeGroup = new ReceivedLikeGroup();
 
         if (receivedLikeList != null && receivedLikeList.size() > 0) {
-            for (int i = receivedLikeList.size()-1; i >= 0; i--) {
+            for (int i = 0; i <= receivedLikeList.size()-1; i++) {
                 DbActivity dbActivity = new DbActivity();
                 DbProject dbProject = new DbProject();
                 int type;
@@ -274,7 +270,7 @@ public class MessageActivity extends BaseActivity {
                         child.activity_name = dbActivity.getActivityName();
                         try {
                             if (dbActivity.getActivityImages(db) != null && dbActivity.getActivityImages(db).size() > 0) {
-                                Log.d(TAG, "initSystem: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
+                                Log.d(TAG, "initReceivedLike: " + dbActivity.getActivityImages(db).get(0).getActivityImagePath());
                                 child.activityImagePath = dbActivity.getActivityImages(db).get(0).getActivityImagePath();
                             }
                         } catch (DbException e) {
@@ -292,7 +288,7 @@ public class MessageActivity extends BaseActivity {
                         child.activity_name = dbProject.getProjectName();
                         try {
                             if(dbProject.getProjectImages(db) != null && dbProject.getProjectImages(db).size() > 0) {
-                                Log.d(TAG, "initLike: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
+                                Log.d(TAG, "initReceivedLike: dbProject " + dbProject.getProjectImages(db).get(0).getProjectImagePath());
                                 child.activityImagePath = dbProject.getProjectImages(db).get(0).getProjectImagePath();
                             }
                         } catch (DbException e) {

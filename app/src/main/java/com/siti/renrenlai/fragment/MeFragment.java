@@ -64,13 +64,16 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     CircleImageView img_photo;
     @Bind(R.id.layout_favorite)
     LinearLayout layout_favorite;
-    @Bind(R.id.tv_favorite) TextView tv_favorite;
+    @Bind(R.id.tv_favorite)
+    TextView tv_favorite;
     @Bind(R.id.layout_enroll)
     LinearLayout layout_enroll;
-    @Bind(R.id.tv_enroll) TextView tv_enroll;
+    @Bind(R.id.tv_enroll)
+    TextView tv_enroll;
     @Bind(R.id.layout_launch)
     LinearLayout layout_launch;
-    @Bind(R.id.tv_launch) TextView tv_launch;
+    @Bind(R.id.tv_launch)
+    TextView tv_launch;
     @Bind(R.id.layout_message)
     RelativeLayout layout_message;
     @Bind(R.id.layout_invite)
@@ -106,7 +109,6 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.fragment_me, container, false);
         ButterKnife.bind(this, view);
 
-
         return view;
     }
 
@@ -130,7 +132,9 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
             initMyActivity();
-            initMessage2();
+
+            //刚进到 我的 页面时,从消息数据库中取数据
+            initMessage();
         }
     }
 
@@ -144,9 +148,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    private void initLikeActivity(){
+    /**
+     * 初始化 我喜欢的活动 的数量
+     */
+    private void initLikeActivity() {
         try {
-            url = ConstantValue.GET_LOVED_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+            url = ConstantValue.GET_LOVED_ACTIVITY_LIST + "?userName=" + URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -169,9 +176,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         CustomApplication.getInstance().addToRequestQueue(likeRequest);
     }
 
-    private void initParticipateActivity(){
+    /**
+     * 初始化 我报名的活动 的数量
+     */
+    private void initParticipateActivity() {
         try {
-            url = ConstantValue.GET_PARTICIPATE_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+            url = ConstantValue.GET_PARTICIPATE_ACTIVITY_LIST + "?userName=" + URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -193,9 +203,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         CustomApplication.getInstance().addToRequestQueue(req);
     }
 
-    private void initLaunchActivity(){
+    /**
+     * 初始化 我发起的活动 的数量
+     */
+    private void initLaunchActivity() {
         try {
-            url = ConstantValue.GET_PUBLISH_ACTIVITY_LIST + "?userName="+ URLEncoder.encode(userName, "utf-8");
+            url = ConstantValue.GET_PUBLISH_ACTIVITY_LIST + "?userName=" + URLEncoder.encode(userName, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -230,9 +243,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
             e.printStackTrace();
         }
 
-
         url1 = ConstantValue.urlRoot + ConstantValue.GET_SYSTEM_MESSAGE;
-        //Log.d(TAG, "initMessage2: " + url1 + " userName " + userName);
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject.put("userName", userName);
@@ -243,7 +254,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "GET_SYSTEM_MESSAGE onResponse: " + response);
 
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
@@ -274,13 +285,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
 
         url2 = ConstantValue.urlRoot + ConstantValue.GET_COMMENT_MESSAGE;
-        //Log.d(TAG, "initMessage2: " + url2 + " userName " + userName);
-
         JsonObjectRequest request2 = new JsonObjectRequest(url2, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "GET_COMMENT_MESSAGE onResponse: " + response);
 
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
@@ -311,13 +320,11 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
 
         url3 = ConstantValue.urlRoot + ConstantValue.GET_LIKE_MESSAGE;
-        //Log.d(TAG, "initMessage2: " + url3 + " userName " + userName);
-
         JsonObjectRequest request3 = new JsonObjectRequest(url3, jsonObject,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.d(TAG, "onResponse: " + response);
+                        Log.d(TAG, "GET_LIKE_MESSAGE onResponse: " + response);
 
                         JSONArray result = response.optJSONArray("result");
                         if (result != null && result.length() > 0) {
@@ -349,11 +356,16 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         setIcon();
     }
 
-    private void setIcon(){
+    /**
+     * 设置 未读消息 的数量
+     */
+    private void setIcon() {
         systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
         receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
         count = systemMessageSize + receivedReviewSize + receivedLikeSize;
+
+        Log.e(TAG, "systemMessageSize:" + systemMessageSize + " receivedReviewSize:" + receivedReviewSize + " receivedLikeSize:" + receivedLikeSize );
 
         if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
@@ -368,33 +380,13 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
 
     private void initMessage() {
         try {
-            systemMessageList = db.selector(DbSystemMessage.class).findAll();
+            systemMessageList = db.selector(DbSystemMessage.class).where("handleOrNot", "=", "0").findAll();
+            receivedCommentList = db.selector(DbReceivedComment.class).where("handleOrNot", "=", "0").findAll();
+            receivedLikeList = db.selector(DbReceivedLike.class).where("handleOrNot", "=", "0").findAll();
         } catch (DbException e) {
             e.printStackTrace();
         }
-
-        try {
-            receivedCommentList = db.selector(DbReceivedComment.class).findAll();
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            receivedLikeList = db.selector(DbReceivedLike.class).findAll();
-        } catch (DbException e) {
-            e.printStackTrace();
-        }
-
-        systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();
-        receivedReviewSize = receivedCommentList == null ? 0 : receivedCommentList.size();
-        receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
-
-        if ((systemMessageList != null && systemMessageList.size() > 0) || (receivedCommentList != null && receivedCommentList.size() > 0)
-                || (receivedLikeList != null && receivedLikeList.size() > 0)) {
-            iv_circle.setVisibility(View.VISIBLE);
-            tv_message_nums.setText(String.valueOf(systemMessageSize + receivedReviewSize + receivedLikeSize));
-        }
-
+        setIcon();
     }
 
     @Override
@@ -474,9 +466,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (!"0".equals(userName)) {
-            initMessage2();
-            setIcon();
-            initMyActivity();
+            initMessage();
         }
     }
 }

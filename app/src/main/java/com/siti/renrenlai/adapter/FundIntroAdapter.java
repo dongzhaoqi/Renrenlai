@@ -3,6 +3,7 @@ package com.siti.renrenlai.adapter;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,6 +73,7 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
+        Log.d("TAG", "onBindViewHolder: " + holder);
         Project project = projectList.get(position);
         commentList = project.getCommentList();
         loader.displayImage(ConstantValue.urlRoot + project.getProjectImagePath(), holder.ivProject, options,
@@ -80,11 +82,18 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
         holder.tvProjectName.setText(project.getProjectName());
         holder.tvCommentsNumber.setText(project.getCommentCount());
         holder.tvLikeNumber.setText(project.getLovedCount());
-        if(commentList != null && commentList.size() >= 2) {
-            holder.tvUsername1.setText(commentList.get(0).getUserName() + ": ");
-            holder.tvUsername2.setText(commentList.get(1).getUserName() + ": ");
-            holder.tvComment1.setText(commentList.get(0).getCommentContent());
-            holder.tvComment2.setText(commentList.get(1).getCommentContent());
+        if(commentList != null) {
+            if(commentList.size() >= 2) {
+                holder.tvUsername1.setText(commentList.get(0).getUserName() + ": ");
+                holder.tvUsername2.setText(commentList.get(1).getUserName() + ": ");
+                holder.tvComment1.setText(commentList.get(0).getCommentContent());
+                holder.tvComment2.setText(commentList.get(1).getCommentContent());
+            }else if(commentList.size() >= 1){
+                holder.tvUsername1.setText(commentList.get(0).getUserName() + ": ");
+                holder.tvUsername2.setText("");
+                holder.tvComment1.setText(commentList.get(0).getCommentContent());
+                holder.tvComment2.setText("");
+            }
         }
         //将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(project.getProjectId());

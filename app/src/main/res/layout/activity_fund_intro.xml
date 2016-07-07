@@ -17,8 +17,7 @@
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/fund_list"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/item_height"/>
+            android:layout_height="wrap_content"/>
 
         <RelativeLayout
             android:id="@+id/layout_dream_go"
