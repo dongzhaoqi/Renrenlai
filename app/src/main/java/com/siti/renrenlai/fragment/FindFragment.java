@@ -421,9 +421,11 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             List<DbSystemMessage> systemList = db.selector(DbSystemMessage.class).findAll();
             List<DbReceivedComment> commentList = db.selector(DbReceivedComment.class).findAll();
             List<DbReceivedLike> likeList = db.selector(DbReceivedLike.class).findAll();
-            db.delete(systemList);
-            db.delete(commentList);
-            db.delete(likeList);
+            if(systemList != null && commentList != null && likeList != null) {
+                db.delete(systemList);
+                db.delete(commentList);
+                db.delete(likeList);
+            }
         } catch (DbException e) {
             e.printStackTrace();
         }
