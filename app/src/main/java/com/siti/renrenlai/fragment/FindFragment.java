@@ -39,10 +39,10 @@ import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.activity.MainActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
+import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
 import com.siti.renrenlai.bean.LovedUsers;
-import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.db.DbActivity;
 import com.siti.renrenlai.db.DbActivityImage;
 import com.siti.renrenlai.db.DbReceivedComment;
@@ -91,6 +91,8 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<DbReceivedLike> receivedLikeList;
     int systemMessageSize, receivedReviewSize, receivedLikeSize;
     int count;          //未读消息条数
+    private static final String LIST_STATE = "listState";
+    private int lastFirstVisiblePosition;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -605,12 +607,21 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         });
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        lastFirstVisiblePosition = ((LinearLayoutManager)mXRecyclerView.getLayoutManager()).
+                findFirstCompletelyVisibleItemPosition();
+    }
 
     @Override
     public void onResume() {
         super.onResume();
         cache();
+        //回到之前浏览到的位置
+        mXRecyclerView.getLayoutManager().scrollToPosition(lastFirstVisiblePosition);
     }
+
 
     private void setIcon() {
         systemMessageSize = systemMessageList == null ? 0 : systemMessageList.size();

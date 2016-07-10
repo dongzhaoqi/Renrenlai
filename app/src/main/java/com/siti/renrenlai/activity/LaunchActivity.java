@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
@@ -29,6 +30,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -52,6 +55,7 @@ import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.NoScrollGridView;
+import com.siti.renrenlai.view.PictureAndTextEditorView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -74,7 +78,6 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import jp.wasabeef.richeditor.RichEditor;
 import rebus.bottomdialog.BottomDialog;
 
 /**
@@ -114,8 +117,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     RelativeLayout layout_cover;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollGridView;
-    @Bind(R.id.et_detail)
-    RichEditor mEditor;
+    /*@Bind(R.id.et_detail)
+    RichEditor mEditor;*/
     @Bind(R.id.btn_preview)
     Button btn_preview;
     @Bind(R.id.btn_publish)
@@ -128,12 +131,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     ImageView ivCharity;
     @Bind(R.id.iv_discuss)
     ImageView ivDiscuss;
-    @Bind(R.id.action_bold)
+    @Bind(R.id.edit_text)
+    PictureAndTextEditorView etDetail;
+    /*@Bind(R.id.action_bold)
     ImageButton actionBold;
     @Bind(R.id.action_italic)
     ImageButton actionItalic;
     @Bind(R.id.action_underline)
-    ImageButton actionUnderline;
+    ImageButton actionUnderline;*/
     @Bind(R.id.action_insert_image)
     ImageButton actionInsertImage;
     private String imgName;
@@ -175,12 +180,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     private void initViews() {
         initTopBarForLeft("发起活动");
-        mEditor.setEditorHeight(200);
+        /*mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(18);
         mEditor.setEditorFontColor(Color.BLACK);
         mEditor.setPadding(10, 10, 10, 10);
         //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("Insert text here...");
+        mEditor.setPlaceholder("Insert text here...");*/
 
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -219,6 +224,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             et_place.setText(dbTempActivity.getActivityAddress());
             et_people.setText(dbTempActivity.getActivityPeopleNums());
             tv_project_name.setText(dbTempActivity.getProjectName());
+            List<String> detail = new ArrayList<>();
+            String[] descrip = dbTempActivity.getActivityDetail().split(" ");
+            for (String str : descrip) {
+                if (str.contains("/") && str.contains(".")) {
+                    str += "&";
+                }
+                detail.add(str);
+            }
+            etDetail.setmContentList(detail);
             //et_detail.setText(dbTempActivity.getActivityDetail());
             if (activity_type == 1) {
                 ll_interest.setSelected(true);
@@ -298,6 +312,10 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 if (id == R.id.tv_start_time) {
                     tv_start_time.setText(sdf.format(date));
                 } else if (id == R.id.tv_end_time) {
+                    if (tv_start_time.getText().toString() == null || "".equals(tv_start_time.getText().toString())) {
+                        Toast.makeText(LaunchActivity.this, "请选择开始时间", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     tv_end_time.setText(sdf.format(date));
                     if (CommonUtils.compareDate(tv_end_time.getText().toString(), tv_start_time.getText().toString())) {
                         Toast.makeText(LaunchActivity.this, "结束时间不能早于开始时间", Toast.LENGTH_SHORT).show();
@@ -305,6 +323,10 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         return;
                     }
                 } else {
+                    if (tv_end_time.getText().toString() == null || "".equals(tv_end_time.getText().toString())) {
+                        Toast.makeText(LaunchActivity.this, "请选择结束时间", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
                     tv_deadline.setText(sdf.format(date));
                     if (CommonUtils.compareDate(tv_start_time.getText().toString(), tv_deadline.getText().toString())) {
                         Toast.makeText(LaunchActivity.this, "报名截止时间不能晚于开始时间", Toast.LENGTH_SHORT).show();
@@ -440,13 +462,35 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 }
             });*/
             noScrollGridView.setAdapter(imageAdapter);
+        } else if (requestCode == 12) {
+            ContentResolver resolver = getContentResolver();
+            // 获得图片的uri
+            Uri originalUri = data.getData();
+            String url = ImageHelper.getRealPathFromURI(this, originalUri);
+            bitmap = null;
+            try {
+                Bitmap originalBitmap = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
+                bitmap = ImageHelper.resizeImage(originalBitmap, 400, 400);
+                // 将原始图片的bitmap转换为文件
+                // 上传该文件并获取url
+                Log.e(TAG, "onActivityResult: " + url);
+                etDetail.insertBitmap(url);
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //insertPic(bitmap, 0);
+                    }
+                }).start();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
     }
 
 
     @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.tv_start_time, R.id.tv_end_time,
-            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline, R.id.action_bold, R.id.action_italic, R.id.action_underline,
-            R.id.action_insert_image,R.id.btn_preview, R.id.btn_publish})
+            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline,
+            R.id.action_insert_image, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_interest:
@@ -482,7 +526,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.layout_cover:
                 showPicDialog();
                 break;
-            case R.id.action_bold:
+            /*case R.id.action_bold:
                 mEditor.setBold();
                 break;
             case R.id.action_italic:
@@ -490,15 +534,19 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 break;
             case R.id.action_underline:
                 mEditor.setUnderline();
-                break;
+                break;*/
             case R.id.action_insert_image:
-                flag_gallery = 3;
+                /*flag_gallery = 3;
                 startAnimActivity(AlbumActivity.class);
                 flag_image_lib = 0;
                 mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                        "dachshund");
+                        "dachshund");*/
+                getImage();
                 break;
             case R.id.btn_preview:
+
+                Log.e(TAG, "onClick: " + etDetail.getmContentList().size() + etDetail.getmContentList());
+
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
                 imgs = new ArrayList<>();
                 if (flag_gallery == 3) {
@@ -524,6 +572,17 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 publishActivity();
                 break;
         }
+    }
+
+
+    /**
+     * 图文详情页面选择图片
+     */
+    public void getImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("image/*");
+        startActivityForResult(intent, 12);
     }
 
     public void showProjectsDialog() {
@@ -596,11 +655,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             return;
         }
 
-        /*if ("".equals(et_detail.getText().toString())) {
+        if ("".equals(etDetail.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请填写活动详情", Toast.LENGTH_SHORT).show();
             et_people.requestFocus();
             return;
-        }*/
+        }
 
         showProcessDialog("发布中");
         Log.d(TAG, "publishActivity() returned: ");
@@ -615,7 +674,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             activityContent.put("endTimeOfActivity", tv_end_time.getText().toString());
             activityContent.put("signUpDeadLine", tv_deadline.getText().toString());
             activityContent.put("activityAddress", et_place.getText().toString());
-            //activityContent.put("activityDescrip", et_detail.getText().toString());
+            activityContent.put("activityDescrip", etDetail.getmContentList());
             activityContent.put("activityTypeId", activity_type);
             activityContent.put("groupId", 2);
             activityContent.put("projectId", projectId);
@@ -747,7 +806,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         if (projectList.size() > 0) {
             activity.setProjectName(tv_project_name.getText().toString());
         }
-        //activity.setActivityDetailDescrip(et_detail.getText().toString());
+        List<String> detailList = etDetail.getmContentList();
+        StringBuffer buffer = new StringBuffer();
+        for (String str : detailList) {
+            buffer.append(str).append(" ");
+        }
+        activity.setActivityDetailDescrip(buffer.toString());
 
         return activity;
     }
@@ -756,7 +820,6 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
      * 按后退键时，将信息保存到数据库中.
      */
     private void save() {
-
         Activity activity = getActivityInfo();
         DbTempActivity dbTempActivity = new DbTempActivity();
         dbTempActivity.setActivityType(activity.getActivityType());
@@ -777,6 +840,18 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         }
     }
 
+    private void disSave() {
+        try {
+            DbTempActivity dbTempActivity = db.selector(DbTempActivity.class).findFirst();
+            if (db != null) {
+                db.delete(dbTempActivity);
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
+    }
+
     /**
      * 选择活动类型
      */
@@ -794,9 +869,28 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        save();
-        Toast.makeText(LaunchActivity.this, "已保存为草稿", Toast.LENGTH_SHORT).show();
+        new MaterialDialog.Builder(this)
+                .content(R.string.str_save)
+                .positiveText(R.string.agree)
+                .negativeText(R.string.disagree)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        save();
+                        Toast.makeText(LaunchActivity.this, "已保存为草稿", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        disSave();
+                        finish();
+                    }
+                })
+                .show();
+        //super.onBackPressed();
+
     }
 
 }

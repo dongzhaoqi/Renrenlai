@@ -259,7 +259,20 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_detail" />
 
-                <TextView
+                <com.siti.renrenlai.view.PictureAndTextEditorView
+                    android:id="@+id/et_detail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="vertical"
+                    android:scrollbarStyle="outsideOverlay"
+                    android:layout_below="@id/str_detail"
+                    android:background="@null"
+                    android:minLines="3"
+                    android:gravity="start"
+                    android:textColorHint="@color/hint_color"
+                    android:hint="Insert text here..."/>
+
+                <!--<TextView
                     android:id="@+id/tv_detail"
                     style="@style/me_text_style"
                     android:layout_width="match_parent"
@@ -268,7 +281,7 @@
                     android:background="@null"
                     android:gravity="top"
                     android:minLines="3"
-                    android:padding="@dimen/padding_10" />
+                    android:padding="@dimen/padding_10" />-->
             </RelativeLayout>
 
         </LinearLayout>

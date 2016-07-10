@@ -58,6 +58,9 @@
     <string name="str_tips">消息</string>
     <string name="str_invite">邀请好友加入</string>
     <string name="str_feedback">我要反馈</string>
+    <string name="str_save">是否保存草稿</string>
+    <string name="agree">是</string>
+    <string name="disagree">否</string>
 
     <string name="str_system_alarm">系统消息</string>
     <string name="str_review">评论</string>

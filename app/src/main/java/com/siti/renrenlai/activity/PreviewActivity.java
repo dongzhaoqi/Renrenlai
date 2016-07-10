@@ -13,11 +13,11 @@ import android.widget.TextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.bean.Activity;
-import com.siti.renrenlai.util.Bimp;
 import com.siti.renrenlai.view.NoScrollGridView;
+import com.siti.renrenlai.view.PictureAndTextEditorView;
 
 import java.util.ArrayList;
-import java.util.StringTokenizer;
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -46,8 +46,8 @@ public class PreviewActivity extends BaseActivity {
     @Bind(R.id.tv_project) TextView tvProject;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollGridView;
-    @Bind(R.id.tv_detail)
-    TextView tvDetail;
+    @Bind(R.id.et_detail)
+    PictureAndTextEditorView etDetail;
     int activity_type;
     private PictureAdapter picAdapter;
     private static final String TAG = "PreviewActivity";
@@ -83,7 +83,18 @@ public class PreviewActivity extends BaseActivity {
         tvDeadline.setText(activity.getDeadline());
         tvPlace.setText(activity.getActivityAddress());
         tvPeople.setText(activity.getParticipateNum());
-        tvDetail.setText(activity.getActivityDetailDescrip());
+        //tvDetail.setText(activity.getActivityDetailDescrip());
+        List<String> detail = new ArrayList<>();
+        String[] descrip = activity.getActivityDetailDescrip().split(" ");
+        for(String str : descrip){
+            if(str.contains("/") && str.contains(".")){
+                str += "&";
+            }
+            detail.add(str);
+            Log.e(TAG, "detail: "+ str);
+        }
+        etDetail.setmContentList(detail);
+        etDetail.setFocusable(false);
         if(activity.getProjectName() != null){
             tvProject.setText(activity.getProjectName());
         }else{
@@ -100,4 +111,5 @@ public class PreviewActivity extends BaseActivity {
         });
         noScrollGridView.setAdapter(picAdapter);
     }
+
 }

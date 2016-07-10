@@ -42,7 +42,7 @@
 
                 <TextView
                     android:id="@+id/str_how"
-                    style="@style/me_text_style"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/str_how" />
@@ -71,7 +71,7 @@
 
                 <TextView
                     android:id="@+id/str_which"
-                    style="@style/me_text_style"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_which" />
@@ -101,7 +101,7 @@
 
                 <TextView
                     android:id="@+id/str_what"
-                    style="@style/me_text_style"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_what" />
@@ -132,7 +132,7 @@
 
                 <TextView
                     android:id="@+id/str_who"
-                    style="@style/me_text_style"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/str_who" />
@@ -156,12 +156,12 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/item_height"
-                android:background="@drawable/layout_bottom_border"
+                android:background="@color/white"
                 android:padding="@dimen/padding_10">
 
                 <TextView
                     android:id="@+id/str_when"
-                    style="@style/me_text_style"
+                    style="@style/activity_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:text="@string/str_when" />
