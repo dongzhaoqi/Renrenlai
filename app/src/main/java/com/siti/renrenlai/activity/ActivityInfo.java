@@ -47,7 +47,6 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -200,7 +199,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             params.setMargins(15, 0, 0, 0);
             ll_image.addView(image, params);
 
-            image.setOnClickListener(new OnClickListener() {
+            /*image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(ActivityInfo.this, FavoriteActivity.class);
@@ -208,7 +207,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                     startActivity(intent);
 
                 }
-            });
+            });*/
         }
 
         expTv1.setText(activity_describ);
@@ -330,6 +329,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.setCommentList(commentsList, position, activity_id);
         dialog.show();
         dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
@@ -346,6 +346,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         lp.dimAmount = 0.5f;
         dialog.show();
         dialog.getWindow().setAttributes(lp);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 

@@ -7,11 +7,9 @@ import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -27,11 +25,6 @@ import com.arlib.floatingsearchview.util.view.BodyTextView;
 import com.arlib.floatingsearchview.util.view.IconImageView;
 import com.jcodecraeer.xrecyclerview.ProgressStyle;
 import com.jcodecraeer.xrecyclerview.XRecyclerView;
-import com.orhanobut.dialogplus.DialogPlus;
-import com.orhanobut.dialogplus.OnBackPressListener;
-import com.orhanobut.dialogplus.OnCancelListener;
-import com.orhanobut.dialogplus.OnDismissListener;
-import com.orhanobut.dialogplus.OnItemClickListener;
 import com.quinny898.library.persistentsearch.SearchBox;
 import com.quinny898.library.persistentsearch.SearchResult;
 import com.siti.renrenlai.R;
@@ -51,7 +44,6 @@ import com.siti.renrenlai.db.DbSystemMessage;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
-import com.siti.renrenlai.view.HeaderLayout.onLeftTextClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
 import org.json.JSONArray;
@@ -144,7 +136,61 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
 
-        initTopBarForLeftTextBoth("发现", "阳光小区", new onLeftTextClickListener() {
+        initTopBarForRight("发现",R.drawable.ic_action_search, new onRightImageButtonClickListener() {
+
+            @Override
+            public void onClick() {
+                //startAnimActivity(SearchActivity.class);
+                //openSearch();
+                mSearchView.setVisibility(View.VISIBLE);
+                mSearchView.setOnQueryChangeListener(new FloatingSearchView.OnQueryChangeListener() {
+                    @Override
+                    public void onSearchTextChanged(String oldQuery, final String newQuery) {
+
+                        Log.d("search", "onSearchTextChanged()");
+                    }
+                });
+
+                mSearchView.setOnSearchListener(new FloatingSearchView.OnSearchListener() {
+                    @Override
+                    public void onSuggestionClicked(SearchSuggestion searchSuggestion) {
+                        Log.d("TAG", "onSuggestionClicked()");
+                    }
+
+                    @Override
+                    public void onSearchAction() {
+                        Log.d("TAG", "onSearchAction()");
+                    }
+                });
+
+                mSearchView.setOnFocusChangeListener(new FloatingSearchView.OnFocusChangeListener() {
+                    @Override
+                    public void onFocus() {
+                        Log.d("TAG", "onFocus()");
+                    }
+
+                    @Override
+                    public void onFocusCleared() {
+                        Log.d("TAG", "onFocusCleared()");
+                    }
+                });
+
+                mSearchView.setOnHomeActionClickListener(new FloatingSearchView.OnHomeActionClickListener() {
+                    @Override
+                    public void onHomeClicked() {
+                        mSearchView.setVisibility(View.GONE);
+                    }
+                });
+
+                mSearchView.setOnBindSuggestionCallback(new SearchSuggestionsAdapter.OnBindSuggestionCallback() {
+                    @Override
+                    public void onBindSuggestion(IconImageView leftIcon, BodyTextView bodyText, SearchSuggestion item, int itemPosition) {
+                    }
+                });
+            }
+        });
+
+        /*initTopBarForLeftTextBoth("发现", "阳光小区", new onLeftTextClickListener() {
             @Override
             public void onClick() {
                 DialogPlus dialogPlus = DialogPlus.newDialog(getActivity())
@@ -232,7 +278,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     }
                 });
             }
-        });
+        });*/
 
         search = (SearchBox) findViewById(R.id.searchbox);
         mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
@@ -278,7 +324,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                     public void onResponse(JSONObject response) {
                         getData(response);
                         //dismissProcessDialog();
-                        //Log.d(TAG, response.toString());
+                        Log.d(TAG, response.toString());
                     }
                 }, new Response.ErrorListener() {
             @Override
@@ -621,6 +667,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         //回到之前浏览到的位置
         mXRecyclerView.getLayoutManager().scrollToPosition(lastFirstVisiblePosition);
     }
+
 
 
     private void setIcon() {

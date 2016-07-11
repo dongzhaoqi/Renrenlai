@@ -63,7 +63,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         //if(pos % 2 == 0) {
          //   v = inflater.inflate(R.layout.item_card_layout, viewGroup, false);
         //} else {
-            v = inflater.inflate(R.layout.item_card_layout2, viewGroup, false);
+            v = inflater.inflate(R.layout.item_card_layout, viewGroup, false);
         //}
         pos++;
         ViewHolder vh = new ViewHolder(v);
@@ -76,21 +76,24 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
         // 给ViewHolder设置元素
         Activity p = activities.get(i);
-        viewHolder.mTextView.setText(p.getActivityName());
-        viewHolder.mImageView.setTag(activities.get(i));
-        List<ActivityImage>images = p.getActivityImages();
-        if(images != null && images.size() > 0){
-            System.out.println("images size:" + images.size());
-
-            imagePath = p.getActivityImages().get(0).getActivityImagePath();
-            System.out.println("getActivityImages:" + imagePath);
-        }else{
-            System.out.println("getActivityImages: null");
+        if(p != null) {
+            viewHolder.tv_title.setText(p.getActivityName());
+            viewHolder.tv_time.setText(p.getActivityStartTime() + "开始");
+            viewHolder.tv_address.setText(p.getActivityAddress());
+            viewHolder.iv_cover.setTag(activities.get(i));
+            List<ActivityImage> images = p.getActivityImages();
+            if (images != null && images.size() > 0) {
+                //System.out.println("images size:" + images.size());
+                imagePath = p.getActivityImages().get(0).getActivityImagePath();
+                //System.out.println("getActivityImages:" + imagePath);
+            } else {
+                //System.out.println("getActivityImages: null");
+            }
         }
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
         if (imagePath != null){
-            Picasso.with(mContext).load(imagePath).into(viewHolder.mImageView);
+            Picasso.with(mContext).load(imagePath).into(viewHolder.iv_cover);
             //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
         }
 
@@ -118,13 +121,17 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
     // 重写的自定义ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public TextView mTextView;
-        public ImageView mImageView;
+        public ImageView iv_cover;
+        public TextView tv_title;
+        public TextView tv_time;
+        public TextView tv_address;
 
         public ViewHolder(View v) {
             super(v);
-            mTextView = (TextView) v.findViewById(R.id.tv_title);
-            mImageView = (ImageView) v.findViewById(R.id.iv_cover);
+            iv_cover = (ImageView) v.findViewById(R.id.iv_cover);
+            tv_title = (TextView) v.findViewById(R.id.tv_title);
+            tv_time = (TextView) v.findViewById(R.id.tv_time);
+            tv_address = (TextView) v.findViewById(R.id.tv_address);
         }
     }
 

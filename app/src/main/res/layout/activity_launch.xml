@@ -68,10 +68,12 @@
                         android:textSize="@dimen/text_size_14" />
 
                     <TextView
+                        android:id="@+id/tv_interest"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="@string/txt_interest_hint"
+                        android:visibility="invisible"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
 
@@ -101,10 +103,12 @@
                         android:textSize="@dimen/text_size_14" />
 
                     <TextView
+                        android:id="@+id/tv_charity"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="@string/txt_help_hint"
+                        android:visibility="invisible"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
 
@@ -134,10 +138,12 @@
                         android:textSize="@dimen/text_size_14" />
 
                     <TextView
+                        android:id="@+id/tv_advice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:gravity="center_horizontal"
                         android:text="@string/txt_advice_hint"
+                        android:visibility="invisible"
                         android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
 

@@ -111,6 +111,7 @@
     <string name="txt_activity_cover">活动封面:</string>
     <string name="txt_preview">预览</string>
     <string name="txt_publish">立即发布</string>
+    <string name="txt_apply">提交申请</string>
 
     <string name="txt_enroll_number">报名人数</string>
     <string name="txt_favor_number">喜欢人数</string>

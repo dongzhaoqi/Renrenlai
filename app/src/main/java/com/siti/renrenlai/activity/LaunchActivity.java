@@ -96,7 +96,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     LinearLayout ll_help;
     @Bind(R.id.ll_advice)
     LinearLayout ll_advice;
-
+    @Bind(R.id.tv_interest)
+    TextView tvInterest;
+    @Bind(R.id.tv_charity)
+    TextView tvCharity;
+    @Bind(R.id.tv_advice)
+    TextView tvAdvice;
     @Bind(R.id.et_subject)
     EditText et_subject;
     @Bind(R.id.tv_start_time)
@@ -236,10 +241,13 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             //et_detail.setText(dbTempActivity.getActivityDetail());
             if (activity_type == 1) {
                 ll_interest.setSelected(true);
+                tvInterest.setVisibility(View.VISIBLE);
             } else if (activity_type == 2) {
                 ll_help.setSelected(true);
+                tvCharity.setVisibility(View.VISIBLE);
             } else if (activity_type == 3) {
                 ll_advice.setSelected(true);
+                tvAdvice.setVisibility(View.VISIBLE);
             }
         }
     }
@@ -497,18 +505,21 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 unselectedAll();
                 ll_interest.setSelected(true);
                 ivActivity.setSelected(true);
+                tvInterest.setVisibility(View.VISIBLE);
                 activity_type = 1;
                 break;
             case R.id.ll_help:
                 unselectedAll();
                 ll_help.setSelected(true);
                 ivCharity.setSelected(true);
+                tvCharity.setVisibility(View.VISIBLE);
                 activity_type = 2;
                 break;
             case R.id.ll_advice:
                 unselectedAll();
                 ll_advice.setSelected(true);
                 ivDiscuss.setSelected(true);
+                tvAdvice.setVisibility(View.VISIBLE);
                 activity_type = 3;
                 break;
             case R.id.tv_start_time:
@@ -843,7 +854,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private void disSave() {
         try {
             DbTempActivity dbTempActivity = db.selector(DbTempActivity.class).findFirst();
-            if (db != null) {
+            if (dbTempActivity != null) {
                 db.delete(dbTempActivity);
             }
         } catch (DbException e) {
@@ -859,6 +870,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         ll_interest.setSelected(false);
         ll_help.setSelected(false);
         ll_advice.setSelected(false);
+        tvInterest.setVisibility(View.INVISIBLE);
+        tvCharity.setVisibility(View.INVISIBLE);
+        tvAdvice.setVisibility(View.INVISIBLE);
     }
 
     @Override

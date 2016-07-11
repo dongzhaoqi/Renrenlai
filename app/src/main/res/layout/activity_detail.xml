@@ -31,22 +31,27 @@
                     android:id="@+id/layout_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/row_selector"
-                    android:padding="@dimen/activity_horizontal_margin">
+                    android:background="@drawable/row_selector">
 
                     <ImageView
                         android:id="@+id/activity_img"
-                        android:layout_width="@dimen/height_150"
-                        android:layout_height="@dimen/height_110"
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_centerVertical="true"
+                        android:scaleType="fitXY"
                         android:src="@drawable/launch" />
 
                     <TextView
                         android:id="@+id/activity_name"
                         style="@style/me_text_style"
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_centerInParent="true"
-                        android:layout_toRightOf="@id/activity_img"
+                        android:layout_alignParentBottom="true"
+                        android:background="#55000000"
+                        android:gravity="left"
+                        android:padding="@dimen/drawable_padding_5"
+                        android:textColor="@android:color/white"
+                        android:textSize="@dimen/text_size_18"
                         android:text="仁人来" />
 
                 </RelativeLayout>
