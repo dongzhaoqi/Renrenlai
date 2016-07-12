@@ -16,6 +16,7 @@ public class TimeLineModel implements Serializable{
     private String activityAddress;
     private String signPersonNum;
     private String lovedPersonNum;
+    private List<ParticipateUser>participateUserList;
     private List<ActivityImage>activityImageList;
     private List<CommentContents>commentContents;
 
@@ -81,6 +82,14 @@ public class TimeLineModel implements Serializable{
 
     public void setLovedPersonNum(String lovedPersonNum) {
         this.lovedPersonNum = lovedPersonNum;
+    }
+
+    public List<ParticipateUser> getParticipateUserList() {
+        return participateUserList;
+    }
+
+    public void setParticipateUserList(List<ParticipateUser> participateUserList) {
+        this.participateUserList = participateUserList;
     }
 
     public List<ActivityImage> getActivityImageList() {

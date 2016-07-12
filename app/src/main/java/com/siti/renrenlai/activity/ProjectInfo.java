@@ -160,7 +160,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             image.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ProjectInfo.this, FavoriteActivity.class);
+                    Intent intent = new Intent(ProjectInfo.this, ParticipateActivity.class);
                     intent.putExtra("likeList", (Serializable) lovedUsersList);
                     startActivity(intent);
                 }

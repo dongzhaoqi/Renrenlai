@@ -88,6 +88,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
                 //System.out.println("getActivityImages:" + imagePath);
             } else {
                 //System.out.println("getActivityImages: null");
+                imagePath = null;
             }
         }
         //将数据保存在itemView的Tag中，以便点击时进行获取
@@ -95,6 +96,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         if (imagePath != null){
             Picasso.with(mContext).load(imagePath).into(viewHolder.iv_cover);
             //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
+        }else{
+            Picasso.with(mContext).load(R.drawable.no_img).into(viewHolder.iv_cover);
         }
 
         //viewHolder.itemView.setTag(p.getActivityId());

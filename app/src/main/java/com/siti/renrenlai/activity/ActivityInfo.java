@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ActivityInfo extends BaseActivity implements OnClickListener {
 
+    @Bind(R.id.scroll)
+    ScrollView scrollView;
     @Bind(R.id.activity_img)
     ImageView activity_img;
     @Bind(R.id.activity_name)
@@ -79,6 +83,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     ExpandableTextView expTv1;
     @Bind(R.id.ll_image)
     LinearLayout ll_image;
+    @Bind(R.id.rl_comment)
+    RelativeLayout rl_comment;
     @Bind(R.id.list_comment)
     RecyclerView list_comment;
     @Bind(R.id.empty_view)
@@ -202,7 +208,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             /*image.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(ActivityInfo.this, FavoriteActivity.class);
+                    Intent intent = new Intent(ActivityInfo.this, ParticipateActivity.class);
                     intent.putExtra("likeList", (Serializable) lovedUsersList);
                     startActivity(intent);
 
@@ -227,8 +233,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
             @Override
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
-                showCommentDialog(mAdapter, commentsList, pos);
-
+                showCommentDialog(view, mAdapter, commentsList, pos);
             }
         });
         layoutManager = new LinearLayoutManager(this);
@@ -318,7 +323,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
+    public void showCommentDialog(View view, CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
+        scrollToSpecifiedComment(view);
         CommentDialog dialog = new CommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -330,13 +336,14 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     /**
      * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(CommentAdapter mAdapter) {
+        scrollToComment();
         CommentDialog dialog = new CommentDialog(this, mAdapter, commentsList, activity_id);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -347,7 +354,33 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
         dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    /**
+     * 点击评论按钮，屏幕滚动到评论处
+     */
+    public void scrollToComment(){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.scrollTo(0, rl_comment.getBottom());
+            }
+        });
+    }
+
+    /**
+     * 点击某个人的评论，将屏幕滚动到该评论下方
+     * @param view 要评论的item
+     */
+    public void scrollToSpecifiedComment(final View view){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.scrollTo(0, rl_comment.getBottom() + view.getTop());
+                //((LinearLayoutManager) list_comment.getLayoutManager()).scrollToPositionWithOffset(view.getBottom(), 0);
+            }
+        });
     }
 
     /**
@@ -361,7 +394,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println("url:" + url);
+        //System.out.println("url:" + url);
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override

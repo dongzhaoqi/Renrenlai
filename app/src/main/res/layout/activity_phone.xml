@@ -62,12 +62,12 @@
 
             <Button
                 android:id="@+id/btn_sign_up"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/login_button_selector"
                 android:layout_marginTop="16dp"
-                android:text="@string/verify"
-                android:textStyle="bold" />
+                android:textColor="@color/white"
+                android:text="@string/verify"/>
 
         </LinearLayout>
     </ScrollView>

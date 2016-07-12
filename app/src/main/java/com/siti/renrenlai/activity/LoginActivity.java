@@ -1,5 +1,6 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -7,6 +8,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -24,15 +26,24 @@ import org.json.JSONObject;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 /**
  * Created by Dong on 2016/3/22.
  */
-public class LoginActivity extends BaseActivity implements OnClickListener{
+public class LoginActivity extends BaseActivity implements OnClickListener {
 
-    private Button btn_sign_in;
-    private EditText et_email;
-    private EditText et_password;
-    private String str_email,str_password;
+    @Bind(R.id.et_email)
+    EditText et_email;
+    @Bind(R.id.et_password)
+    EditText et_password;
+    @Bind(R.id.tv_password)
+    TextView tvPassword;
+    @Bind(R.id.btn_sign_in)
+    Button btn_sign_in;
+    private String str_email, str_password;
     private User user;
     private static final String TAG = "LoginActivity";
 
@@ -40,32 +51,14 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        initTopBarForTitleAndRight("登录","注册",new OnRightButtonClickListener(){
+        ButterKnife.bind(this);
+        initTopBarForTitleAndRight("登录", "注册", new OnRightButtonClickListener() {
             @Override
             public void onClick() {
                 super.onClick();
                 startAnimActivity(VerifyPhoneActivity.class);
             }
         });
-        initViews();
-    }
-
-    private void initViews() {
-
-        et_email = (EditText) findViewById(R.id.et_email);
-        et_password = (EditText) findViewById(R.id.et_password);
-        btn_sign_in = (Button) findViewById(R.id.btn_sign_in);
-        btn_sign_in.setOnClickListener(this);
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
-        if(id == R.id.btn_sign_in){
-            attemptLogin();
-        }
     }
 
     private void attemptLogin() {
@@ -73,11 +66,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         str_email = et_email.getText().toString();
         str_password = et_password.getText().toString();
 
-        if(TextUtils.isEmpty(str_email)) {
+        if (TextUtils.isEmpty(str_email)) {
             showToast("用户名不能为空");
-        }else if(TextUtils.isEmpty(str_password)){
+        } else if (TextUtils.isEmpty(str_password)) {
             showToast("密码不能为空");
-        }else{
+        } else {
             doLogin();
         }
     }
@@ -86,7 +79,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
         showProcessDialog("登录中");
         String url = null;
         try {
-            url = ConstantValue.USER_LOGIN + "?userName="+ URLEncoder.encode(str_email, "utf-8")+"&password="+str_password;
+            url = ConstantValue.USER_LOGIN + "?userName=" + URLEncoder.encode(str_email, "utf-8") + "&password=" + str_password;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -100,11 +93,11 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                         dismissProcessDialog();
                     }
                 }, new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
-                        dismissProcessDialog();
-                }
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(LoginActivity.this, "登录失败", Toast.LENGTH_SHORT).show();
+                dismissProcessDialog();
+            }
         });
 
         req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
@@ -124,7 +117,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
             saveUser();
 
             showToast("登录成功");
-        }else{
+        } else {
             showToast("登录失败,请检查用户名或密码");
         }
 
@@ -145,5 +138,17 @@ public class LoginActivity extends BaseActivity implements OnClickListener{
                 "intro", user.getIntroduction());
         SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userId", user.getUserId());
+    }
+
+    @OnClick({R.id.tv_password, R.id.btn_sign_in})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_password:
+                startActivity(new Intent(this, ForgetPasswordActivity.class));
+                break;
+            case R.id.btn_sign_in:
+                attemptLogin();
+                break;
+        }
     }
 }

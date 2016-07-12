@@ -16,6 +16,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/bottom_height"
@@ -66,6 +67,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_action_bar_height"
                     android:background="@drawable/row_selector"
+                    android:visibility="gone"
                     android:paddingLeft="@dimen/padding_10"
                     android:paddingRight="@dimen/padding_10">
 
@@ -190,9 +192,90 @@
 
                 </RelativeLayout>
 
-                <View
+                <!--<View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/view_height"
+                    android:background="@color/background" />-->
+
+
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_vertical_margin"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F5F5F5">
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:text="@string/str_favorite" />
+                </RelativeLayout>
+
+                <TextView
+                    android:id="@+id/empty_view_like"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_8"
+                    android:text="暂无喜欢"
+                    android:visibility="gone" />
+
+                <HorizontalScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none">
+
+                    <LinearLayout
+                        android:id="@+id/ll_image"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/padding_10"
+                        android:orientation="horizontal" />
+                </HorizontalScrollView>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_vertical_margin"
+                    android:background="@color/background" />
+
+                <RelativeLayout
+                    android:id="@+id/rl_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#F5F5F5">
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/margin_8"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:text="@string/str_comment" />
+                </RelativeLayout>
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/list_comment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/padding_10" />
+
+                <TextView
+                    android:id="@+id/empty_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin_8"
+                    android:text="暂无评论"
+                    android:visibility="gone" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/activity_vertical_margin"
                     android:background="@color/background" />
 
                 <RelativeLayout
@@ -248,84 +331,6 @@
                         android:paddingBottom="@dimen/activity_vertical_margin"
                         android:paddingRight="@dimen/activity_vertical_margin" />
                 </com.ms.square.android.expandabletextview.ExpandableTextView>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_vertical_margin"
-                    android:background="@color/background" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#F5F5F5">
-
-                    <TextView
-                        style="@style/me_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_8"
-                        android:layout_marginTop="@dimen/margin_8"
-                        android:text="@string/str_favorite" />
-                </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/empty_view_like"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_8"
-                    android:text="暂无喜欢"
-                    android:visibility="gone" />
-
-                <HorizontalScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:scrollbars="none">
-
-                    <LinearLayout
-                        android:id="@+id/ll_image"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/padding_10"
-                        android:orientation="horizontal" />
-                </HorizontalScrollView>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_vertical_margin"
-                    android:background="@color/background" />
-
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="#F5F5F5">
-
-                    <TextView
-                        style="@style/me_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/margin_8"
-                        android:layout_marginTop="@dimen/margin_8"
-                        android:text="@string/str_comment" />
-                </RelativeLayout>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/list_comment"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/padding_10" />
-
-                <TextView
-                    android:id="@+id/empty_view"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/margin_8"
-                    android:text="暂无评论"
-                    android:visibility="gone" />
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/activity_vertical_margin"
-                    android:background="@color/background" />
 
                 <RelativeLayout
                     android:id="@+id/layout_cover"

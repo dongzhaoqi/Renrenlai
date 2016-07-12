@@ -51,6 +51,7 @@
 
         <activity android:name=".activity.SplashActivity"  android:screenOrientation="portrait"/>
         <activity android:name=".activity.MainActivity"  android:screenOrientation="portrait" />
+        <activity android:name=".activity.ForgetPasswordActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.LoginActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.VerifyPhoneActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.RegisterActivity"  android:screenOrientation="portrait" />
@@ -76,7 +77,7 @@
         <activity android:name=".activity.GalleryActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.GalleryImageActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.AlbumActivity"  android:screenOrientation="portrait" />
-        <activity android:name=".activity.FavoriteActivity"  android:screenOrientation="portrait" />
+        <activity android:name=".activity.ParticipateActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.PreviewActivity"  android:screenOrientation="portrait" />
         <activity android:name=".activity.PreviewWish"  android:screenOrientation="portrait" />
         <activity android:name=".activity.LibImageActivity"  android:screenOrientation="portrait" />

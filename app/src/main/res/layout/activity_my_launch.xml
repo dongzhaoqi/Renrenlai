@@ -149,6 +149,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/base_action_bar_height"
                 android:background="@drawable/row_selector"
+                android:clickable="false"
                 android:paddingLeft="@dimen/padding_10"
                 android:paddingRight="@dimen/padding_10">
 
@@ -176,10 +177,12 @@
                     android:layout_marginRight="@dimen/height_36" />
 
                 <ImageView
+                    android:id="@+id/iv_expand_user"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:duplicateParentState="true"
+                    android:visibility="gone"
                     android:src="@drawable/go" />
 
             </RelativeLayout>
@@ -221,10 +224,12 @@
                     android:layout_marginRight="@dimen/height_36" />
 
                 <ImageView
+                    android:id="@+id/iv_expand_like"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:layout_alignParentRight="true"
                     android:duplicateParentState="true"
+                    android:visibility="gone"
                     android:src="@drawable/go" />
             </RelativeLayout>
 

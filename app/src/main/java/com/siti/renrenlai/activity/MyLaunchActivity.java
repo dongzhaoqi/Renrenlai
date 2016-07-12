@@ -7,18 +7,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.bean.ActivityImage;
 import com.siti.renrenlai.bean.CommentContents;
+import com.siti.renrenlai.bean.ParticipateUser;
 import com.siti.renrenlai.bean.TimeLineModel;
 import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,6 +43,10 @@ public class MyLaunchActivity extends BaseActivity {
     TextView activityTime;
     @Bind(R.id.activity_location)
     TextView activityLocation;
+    @Bind(R.id.layout_enroll_number)
+    RelativeLayout layout_enroll_number;
+    @Bind(R.id.iv_expand_user)
+    ImageView iv_expand_user;
     @Bind(R.id.activity_enroll_number)
     TextView activityEnrollNumber;
     @Bind(R.id.activity_loved_number)
@@ -54,6 +61,7 @@ public class MyLaunchActivity extends BaseActivity {
     private StringBuffer activity_time;
     private String str_activity_name, str_activity_begin_time, str_activity_end_time, str_activity_location,
             str_activity_enroll_number, str_activity_loved_number;
+    private List<ParticipateUser> participateUserList;
     private List<ActivityImage> imageList;              //活动封面
     private List<CommentContents> commentContentsList;
     private ArrayList<String> imagePath;
@@ -74,6 +82,8 @@ public class MyLaunchActivity extends BaseActivity {
             title = "我报名的活动";
         }else if(position == 2){
             title = "我发起的活动";
+            iv_expand_user.setVisibility(View.VISIBLE);
+            layout_enroll_number.setClickable(true);
         }
 
         model = (TimeLineModel) getIntent().getExtras().getSerializable("model");
@@ -96,6 +106,7 @@ public class MyLaunchActivity extends BaseActivity {
         str_activity_location = model.getActivityAddress();
         str_activity_loved_number = model.getLovedPersonNum();
         str_activity_enroll_number = model.getSignPersonNum();
+        participateUserList = model.getParticipateUserList();
         commentContentsList = model.getCommentContents();
         imageList = model.getActivityImageList();
         activity_time.append(str_activity_begin_time.substring(0, 10)).append("  ").append(str_activity_begin_time.substring(11, 16))
@@ -146,6 +157,11 @@ public class MyLaunchActivity extends BaseActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.layout_enroll_number:
+                if(layout_enroll_number.isClickable()) {
+                    Intent intent = new Intent(this, ParticipateActivity.class);
+                    intent.putExtra("participateUserList", (Serializable) participateUserList);
+                    startActivity(intent);
+                }
                 break;
             case R.id.layout_favor_number:
                 break;

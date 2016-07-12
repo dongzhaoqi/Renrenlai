@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.Cache;
@@ -73,6 +74,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private List<ActivityImage> imageList;
     private SearchBox search;
     private FloatingSearchView mSearchView;
+    private TextView tvNoData;
     private static final String TAG = "FindFragment";
     String url = ConstantValue.GET_ACTIVITY_LIST;
     String userName, url1, url2, url3;
@@ -282,6 +284,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
         search = (SearchBox) findViewById(R.id.searchbox);
         mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
+        tvNoData = (TextView) findViewById(R.id.tv_nodata);
         mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -349,35 +352,41 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         JSONArray result = response.optJSONArray("result");
         activityList = new ArrayList<>();
         activityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
-        for(Activity activity : activityList){
-            DbActivity dbActivity = new DbActivity();
-            DbActivityImage dbActivityImage = new DbActivityImage();
-            dbActivity.setActivityId(activity.getActivityId());
-            dbActivity.setActivityAddress(activity.getActivityAddress());
-            dbActivity.setActivityDetailDescrip(activity.getActivityDetailDescrip());
-            dbActivity.setActivityName(activity.getActivityName());
-            dbActivity.setActivityEndTime(activity.getActivityEndTime());
-            dbActivity.setActivityStartTime(activity.getActivityStartTime());
-            dbActivity.setActivityReleaserTel(activity.getActivityReleaserTel());
-            dbActivity.setActivityStatus(activity.getActivityStatus());
+        if(activityList != null) {
+            for (Activity activity : activityList) {
+                DbActivity dbActivity = new DbActivity();
+                DbActivityImage dbActivityImage = new DbActivityImage();
+                dbActivity.setActivityId(activity.getActivityId());
+                dbActivity.setActivityAddress(activity.getActivityAddress());
+                dbActivity.setActivityDetailDescrip(activity.getActivityDetailDescrip());
+                dbActivity.setActivityName(activity.getActivityName());
+                dbActivity.setActivityEndTime(activity.getActivityEndTime());
+                dbActivity.setActivityStartTime(activity.getActivityStartTime());
+                dbActivity.setActivityReleaserTel(activity.getActivityReleaserTel());
+                dbActivity.setActivityStatus(activity.getActivityStatus());
 
-            dbActivityImage.setActivityId(activity.getActivityId());
-            if(activity.getActivityImages() != null) {
-                activityImageSize = activity.getActivityImages().size();
-                for (int i = 0; i < activityImageSize; i++) {
-                    dbActivityImage.setActivityImagePath(activity.getActivityImages().get(i).getActivityImagePath());
-                    try {
-                        db.save(dbActivityImage);
-                    } catch (DbException e) {
-                        e.printStackTrace();
+                dbActivityImage.setActivityId(activity.getActivityId());
+                if (activity.getActivityImages() != null) {
+                    activityImageSize = activity.getActivityImages().size();
+                    for (int i = 0; i < activityImageSize; i++) {
+                        dbActivityImage.setActivityImagePath(activity.getActivityImages().get(i).getActivityImagePath());
+                        try {
+                            db.save(dbActivityImage);
+                        } catch (DbException e) {
+                            e.printStackTrace();
+                        }
                     }
                 }
+                try {
+                    db.save(dbActivity);
+                } catch (DbException e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                db.save(dbActivity);
-            } catch (DbException e) {
-                e.printStackTrace();
-            }
+        }
+        if(activityList == null || activityList.size() == 0){
+            tvNoData.setVisibility(View.VISIBLE);
+            return;
         }
         adapter = new ActivityAdapter(getActivity(), activityList);
         adapter.setOnItemClickListener(new ActivityAdapter.OnRecyclerViewItemClickListener() {

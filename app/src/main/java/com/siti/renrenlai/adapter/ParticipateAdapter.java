@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.bean.LovedUsers;
+import com.siti.renrenlai.bean.ParticipateUser;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -20,39 +20,43 @@ import de.hdodenhof.circleimageview.CircleImageView;
 /**
  * Created by Dong on 2016/5/19.
  */
-public class LikeAdapter extends RecyclerView.Adapter<LikeAdapter.ViewHolder> {
+public class ParticipateAdapter extends RecyclerView.Adapter<ParticipateAdapter.ViewHolder> {
 
     private Context mContext;
-    private List<LovedUsers> likeList;
+    private List<ParticipateUser> participateUserList;
 
-    public LikeAdapter(Context context, List<LovedUsers> list) {
+    public ParticipateAdapter(Context context, List<ParticipateUser> list) {
         this.mContext = context;
-        this.likeList = list;
+        this.participateUserList = list;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.item_like, parent, false);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.item_participate, parent, false);
         return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        LovedUsers like = likeList.get(position);
-        Picasso.with(mContext).load(like.getUserHeadPicImagePath()).into(holder.ivLike);
-        holder.tvLike.setText(like.getUserId());
+        ParticipateUser participateUser = participateUserList.get(position);
+        Picasso.with(mContext).load(participateUser.getUserHeadPicImagePath()).into(holder.iv_user_head);
+        holder.tv_username.setText(participateUser.getRealName());
+        holder.tv_tel.setText(participateUser.getTelephone());
     }
 
     @Override
     public int getItemCount() {
-        return likeList.size();
+        return participateUserList.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        @Bind(R.id.iv_like)
-        CircleImageView ivLike;
-        @Bind(R.id.tv_like)
-        TextView tvLike;
+        @Bind(R.id.iv_user_head)
+        CircleImageView iv_user_head;
+        @Bind(R.id.tv_username)
+        TextView tv_username;
+        @Bind(R.id.tv_tel)
+        TextView tv_tel;
+
         public ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this,itemView);

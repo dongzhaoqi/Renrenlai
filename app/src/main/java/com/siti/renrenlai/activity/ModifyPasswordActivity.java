@@ -10,9 +10,8 @@ import com.siti.renrenlai.R;
 /**
  * Created by Dong on 2016/3/31.
  */
-public class ModifyPasswordActivity extends BaseActivity implements OnClickListener{
+public class ModifyPasswordActivity extends BaseActivity{
 
-    private EditText et_old_password, et_confirm_password, et_new_password;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -22,23 +21,7 @@ public class ModifyPasswordActivity extends BaseActivity implements OnClickListe
     }
 
     private void initViews() {
-        initTopBarForBoth("修改密码","提交",new OnRightButtonClickListener(){
-            @Override
-            public void onClick() {
-                showToast("提交");
-            }
-        });
-
-        et_old_password = (EditText) findViewById(R.id.et_old_password);
-        et_confirm_password = (EditText) findViewById(R.id.et_confirm_password);
-        et_new_password = (EditText) findViewById(R.id.et_new_password);
-
-    }
-
-
-    @Override
-    public void onClick(View v) {
-        int id = v.getId();
+        initTopBarForLeft("修改密码");
 
     }
 
