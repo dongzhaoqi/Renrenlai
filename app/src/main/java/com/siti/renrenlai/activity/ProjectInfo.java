@@ -67,24 +67,36 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     ImageView activity_img;
     @Bind(R.id.activity_name)
     TextView tv_avtivity_name;
-    @Bind(R.id.img_relative_activity) ImageView img_relative_activity;
-    @Bind(R.id.tv_relative_activity_name) TextView tv_relative_activity_name;
-    @Bind(R.id.layout_contact) RelativeLayout layout_contact;
-    @Bind(R.id.layout_relative_activity) RelativeLayout layout_relative_activity;
-    @Bind(R.id.tv_activity_address) TextView tv_activity_address;
-    @Bind(R.id.tv_activity_time) TextView tv_activity_time;
+    @Bind(R.id.img_relative_activity)
+    ImageView img_relative_activity;
+    @Bind(R.id.tv_relative_activity_name)
+    TextView tv_relative_activity_name;
+    @Bind(R.id.layout_contact)
+    RelativeLayout layout_contact;
+    @Bind(R.id.layout_relative_activity)
+    RelativeLayout layout_relative_activity;
+    @Bind(R.id.tv_activity_address)
+    TextView tv_activity_address;
+    @Bind(R.id.tv_activity_time)
+    TextView tv_activity_time;
     @Bind(R.id.expand_text_view)
     ExpandableTextView expTv1;
     @Bind(R.id.ll_image)
     LinearLayout ll_image;
     @Bind(R.id.list_comment)
     RecyclerView list_comment;
+    @Bind(R.id.empty_view)
+    TextView empty_view;
+    @Bind(R.id.empty_view_like)
+    TextView empty_view_like;
     @Bind(R.id.detail_scrollgridview)
     NoScrollGridView noScrollGridView;
     @Bind(R.id.btn_comment)
     Button btnComment;
-    @Bind(R.id.btn_favor) Button btnFavor;
-    @Bind(R.id.btn_publish) Button btnPublish;
+    @Bind(R.id.btn_favor)
+    Button btnFavor;
+    @Bind(R.id.btn_publish)
+    Button btnPublish;
 
     String projectName, projectImagePath, telephone, projectAddress, projectDescrip, projectTime;
     int projectId;
@@ -117,7 +129,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
         userHeadImgePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
         project = (Project) getIntent().getExtras().getSerializable("project");
-        if(project != null){
+        if (project != null) {
             projectId = project.getProjectId();
             lovedOrNot = project.isLovedOrNot();
             projectName = project.getProjectName();
@@ -138,15 +150,15 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             }
         });
 
-        if(lovedOrNot){
+        if (lovedOrNot) {
             btnFavor.setText("已喜欢(" + (lovedUsersList.size()) + ")");
             btnFavor.setSelected(true);
-        }else{
+        } else {
             btnFavor.setText("喜欢(" + (lovedUsersList.size()) + ")");
         }
 
         btnComment.setText("评论(" + (commentsList.size()) + ")");
-        for(int i = 0; i < lovedUsersList.size(); i++){
+        for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
@@ -186,16 +198,26 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         }
 
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        picAdapter = new ImageAdapter(this, imagePath);
-        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Intent intent = new Intent(ProjectInfo.this, GalleryImageActivity.class);
-                intent.putStringArrayListExtra("imagePath", imagePath);
-                intent.putExtra("ID", i);
-                startActivity(intent);
-            }
-        });
-        noScrollGridView.setAdapter(picAdapter);
+        if (imagePath.size() == 0) {
+            empty_view_like.setVisibility(View.VISIBLE);
+            ll_image.setVisibility(View.GONE);
+        } else {
+            picAdapter = new ImageAdapter(this, imagePath);
+            noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Intent intent = new Intent(ProjectInfo.this, GalleryImageActivity.class);
+                    intent.putStringArrayListExtra("imagePath", imagePath);
+                    intent.putExtra("ID", i);
+                    startActivity(intent);
+                }
+            });
+            noScrollGridView.setAdapter(picAdapter);
+        }
+        if (commentsList.size() == 0) {
+            empty_view.setVisibility(View.VISIBLE);
+            list_comment.setVisibility(View.GONE);
+            return;
+        }
 
         mAdapter = new CommentAdapter(this, commentsList);
         mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {
@@ -211,7 +233,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         list_comment.setAdapter(mAdapter);
     }
 
-    public void getRelatedActivity(){
+    public void getRelatedActivity() {
         String url = ConstantValue.GET_RELATED_ACTIVITY;
         JSONObject jsonObject = new JSONObject();
         System.out.println("userName:" + userName + " projectId:" + projectId);
@@ -229,12 +251,12 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                         Log.d("获取相关活动response: ", response.toString());
                         JSONArray result = response.optJSONArray("result");
                         relatedActivityList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Activity.class);
-                        if(relatedActivityList == null || relatedActivityList.size() == 0){
+                        if (relatedActivityList == null || relatedActivityList.size() == 0) {
                             layout_relative_activity.setVisibility(View.GONE);
-                        }else{
+                        } else {
                             tv_relative_activity_name.setText(relatedActivityList.get(0).getActivityName());
                             List<ActivityImage> images = relatedActivityList.get(0).getActivityImages();
-                            if(images != null && images.size() > 0){
+                            if (images != null && images.size() > 0) {
                                 Picasso.with(ProjectInfo.this).load(images.get(0).getActivityImagePath()).placeholder(R.drawable.no_img).into(img_relative_activity);
                             }
                         }
@@ -278,16 +300,16 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                 //isFavorPressed = !isFavorPressed;
                 break;
             case R.id.btn_publish:
-                if(userName.equals("0")){
+                if (userName.equals("0")) {
                     startActivity(new Intent(this, LoginActivity.class));
-                }else{
+                } else {
                     participate(projectId);
                 }
                 break;
         }
     }
 
-    public void participate(int projectId){
+    public void participate(int projectId) {
         JSONObject jsonObject = new JSONObject();
         System.out.println("userName:" + userName + " projectId:" + projectId);
         try {
@@ -309,7 +331,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
                 }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Log.e("活动报名Error: ","error:" + error.getMessage());
+                Log.e("活动报名Error: ", "error:" + error.getMessage());
                 showToast("出错了!");
             }
         });
@@ -320,10 +342,11 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     /**
      * 点击某个人的评论，弹出评论框，进行回复
+     *
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position){
+    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
         ProjectCommentDialog dialog = new ProjectCommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -400,7 +423,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     /**
      * 取消点赞,去除头像
      */
-    public void removeImage(){
+    public void removeImage() {
         CircleImageView image = new CircleImageView(this);
         Picasso.with(this).load(R.drawable.arduino).resize(48, 48).into(image);
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);

@@ -2,6 +2,7 @@ package com.siti.renrenlai.activity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -9,6 +10,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.afollestad.materialdialogs.DialogAction;
+import com.afollestad.materialdialogs.MaterialDialog;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -102,6 +105,9 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    /**
+     * 返回时，保存为草稿
+     */
     private void save(){
         ProjectIntention projectIntention = getProjectIntention();
         DbProjectIntention dbProjectIntention = new DbProjectIntention();
@@ -117,6 +123,18 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
             e.printStackTrace();
         }
         Toast.makeText(ApplyWishActivity.this, "已暂存为草稿", Toast.LENGTH_SHORT).show();
+    }
+
+    private void disSave(){
+        try {
+            DbProjectIntention dbProjectIntention = db.selector(DbProjectIntention.class).findFirst();
+            if(dbProjectIntention != null){
+                db.delete(dbProjectIntention);
+            }
+        } catch (DbException e) {
+            e.printStackTrace();
+        }
+
     }
 
     @OnClick({R.id.tv_when, R.id.btn_preview, R.id.btn_publish})
@@ -211,5 +229,29 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
         req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
                 DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
         CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    @Override
+    public void onBackPressed() {
+        new MaterialDialog.Builder(this)
+                .content(R.string.str_save)
+                .positiveText(R.string.agree)
+                .negativeText(R.string.disagree)
+                .onPositive(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        save();
+                        Toast.makeText(ApplyWishActivity.this, "已保存为草稿", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                })
+                .onNegative(new MaterialDialog.SingleButtonCallback() {
+                    @Override
+                    public void onClick(@NonNull MaterialDialog dialog, @NonNull DialogAction which) {
+                        disSave();
+                        finish();
+                    }
+                })
+                .show();
     }
 }
