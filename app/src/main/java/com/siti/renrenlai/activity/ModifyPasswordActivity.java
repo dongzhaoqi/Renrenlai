@@ -7,19 +7,15 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
-import com.siti.renrenlai.util.SharedPreferencesUtil;
 
-import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -49,23 +45,19 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     private void initViews() {
         initTopBarForLeft("修改密码");
-        telephone = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "telephone");
-        password = etNewPassword.getText().toString();
+
     }
 
     @OnClick(R.id.btn_reset_password)
     public void onClick() {
         showProcessDialog();
-        String url = ConstantValue.UPDATE_USER_PASSWORD;
-        JSONObject json = new JSONObject();
-        try {
-            json.put("telephone", telephone);
-            json.put("password", password);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
+        telephone = getIntent().getStringExtra("tel");
+        password = etNewPassword.getText().toString();
+        Log.d(TAG, "initViews: " + telephone + " " + "password:" + password);
+        String url = ConstantValue.UPDATE_USER_PASSWORD + "?telephone=" +
+                telephone + "&password=" + password;
 
-        JsonObjectRequest req = new JsonObjectRequest(url, json,
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
