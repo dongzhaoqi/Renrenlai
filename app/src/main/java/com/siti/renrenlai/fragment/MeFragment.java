@@ -90,7 +90,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     TextView tv_message_nums;
     private View view;
     private User user;
-    String userHeadPicImagePath, userName, url, url1, url2, url3;
+    String userHeadPicImagePath, userName, realName, url, url1, url2, url3;
     boolean isSignedin = false;
     private DbManager db;
     private List<DbSystemMessage> systemMessageList;
@@ -122,11 +122,12 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     private void init() {
         initTopBarForOnlyTitle("我的");
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userName");
+        realName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "realName");
         userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
         if (userName.equals("0")) {
             tv_userName.setText("请登录");
         } else {
-            tv_userName.setText(userName);
+            tv_userName.setText(realName);
             isSignedin = true;
             Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 

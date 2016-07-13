@@ -74,36 +74,49 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <!--<LinearLayout
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center_vertical"
+                android:layout_margin="@dimen/padding_10"
+                android:text="选择小区"
+                android:textSize="@dimen/text_size_16" />
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="55dp"
+                android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/padding_10"
-                    android:text="选择城市"
-                    android:textSize="@dimen/text_size_16" />
+                <Spinner
+                    android:id="@+id/spinner_province"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:id="@+id/tv_city"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="center"
-                    android:textSize="@dimen/text_size_16" />
+                <Spinner
+                    android:id="@+id/spinner_city"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"/>
 
-            </LinearLayout>-->
+            </LinearLayout>
+
+            <AutoCompleteTextView
+                android:id="@+id/tv_community"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="输入小区名字"
+                android:textColorHint="@color/hint_color"/>
 
             <Button
                 android:id="@+id/btn_sign_up"
-                style="?android:textAppearanceSmall"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="@string/register"
-                android:textStyle="bold" />
+                android:background="@drawable/login_button_selector"
+                android:textColor="@color/white"
+                android:text="@string/register"/>
 
         </LinearLayout>
     </ScrollView>

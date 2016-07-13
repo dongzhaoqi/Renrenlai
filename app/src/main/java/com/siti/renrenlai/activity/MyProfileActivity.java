@@ -97,7 +97,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
-                        getApplicationContext(), "login"), "userName");
+                        getApplicationContext(), "login"), "realName");
         tv_nickName.setText(nickName);
 
         gender = SharedPreferencesUtil.readString(
@@ -229,7 +229,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-        System.out.println("url:" + url);
+
+
+
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
                 new Response.Listener<JSONObject>() {
                     @Override

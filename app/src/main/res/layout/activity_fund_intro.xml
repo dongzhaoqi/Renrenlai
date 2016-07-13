@@ -19,6 +19,17 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/login_button_selector"
+            android:minHeight="0dp"
+            android:minWidth="0dp"
+            android:textColor="@color/white"
+            android:text="请登录"/>
+
         <RelativeLayout
             android:id="@+id/layout_dream_go"
             android:layout_width="match_parent"
@@ -34,6 +45,6 @@
                 android:text="家园梦想，我有"
                 android:textSize="@dimen/text_size_16" />
         </RelativeLayout>
-
     </FrameLayout>
+
 </LinearLayout>

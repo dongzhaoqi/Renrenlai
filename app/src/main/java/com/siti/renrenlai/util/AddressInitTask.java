@@ -31,8 +31,9 @@ public class AddressInitTask extends AsyncTask<String, Void, ArrayList<AddressPi
 
     public AsyncResponse delegate = null;
 
-    public AddressInitTask(Activity activity, AsyncResponse delegate){
+    public AddressInitTask(Activity activity, boolean hideCounty, AsyncResponse delegate){
         this.activity = activity;
+        this.hideCounty=hideCounty;
         this.delegate = delegate;
         dialog = ProgressDialog.show(activity, null, "正在初始化数据...", true, true);
     }
@@ -50,6 +51,7 @@ public class AddressInitTask extends AsyncTask<String, Void, ArrayList<AddressPi
 
     public AddressInitTask(Activity activity) {
         this.activity = activity;
+
         dialog = ProgressDialog.show(activity, null, "正在初始化数据...", true, true);
     }
     @Override

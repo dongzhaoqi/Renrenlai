@@ -48,7 +48,7 @@ public class ForgetPasswordActivity extends BaseActivity {
 
     private void initSMSSDK(){
         // 初始化短信SDK
-        SMSSDK.initSDK(this, ConstantValue.SMS_APPKEY, ConstantValue.SMS_APPSECRET, true);
+        SMSSDK.initSDK(this, ConstantValue.SMS_APPKEY, ConstantValue.SMS_APPSECRET, false);
         EventHandler eventHandler = new EventHandler(){
 
             @Override

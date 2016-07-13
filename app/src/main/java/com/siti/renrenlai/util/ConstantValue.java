@@ -7,11 +7,11 @@ public class ConstantValue {
 
     /*本机测试*/
 //   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
-    //       public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
+    //   public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
  //   public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/
- public static final String urlRoot = "http://116.228.3.125/RenrenLai";
+    public static final String urlRoot = "http://116.228.3.125/RenrenLai";
 
     /*缓存目录*/
     public static final String ENVIRONMENT_DIR_CACHE = "/activityCache";
@@ -62,6 +62,18 @@ public class ConstantValue {
 
     //用户注册
     public static final String USER_REGISTER = urlRoot + "/registerForApp";
+
+    //初始化省份
+    public static final String GET_PROVINCE_LIST = urlRoot + "/getProvinceListForApp";
+
+    //初始化城市
+    public static final String GET_CITY_LIST = urlRoot + "/getCityListForApp";
+
+    //初始化该城市下的小区
+    public static final String GET_GROUP_LIST = urlRoot + "/getGroupListByCityId";
+
+    //更改用户昵称
+    public static final String UPDATE_USER_PASSWORD = urlRoot + "/forgetPassword";
 
     //更改用户昵称
     public static final String UPDATE_USER_NAME = urlRoot + "/updateUserName";

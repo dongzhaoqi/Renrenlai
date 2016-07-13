@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
@@ -54,6 +55,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     XRecyclerView fundList;
     @Bind(R.id.layout_dream_go)
     RelativeLayout layoutDreamGo;
+    @Bind(R.id.btnLogin)
+    Button btnLogin;
     private ImageView iv_project;
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
@@ -86,10 +89,10 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                Log.d(TAG, "cache: "+jsonObject);
-                if(jsonObject.optJSONArray("result") != null){
+                Log.d(TAG, "cache: " + jsonObject);
+                if (jsonObject.optJSONArray("result") != null) {
                     getData(jsonObject);
-                }else{
+                } else {
                     initData();
                 }
 
@@ -183,7 +186,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         if (result != null) {
             projectList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Project.class);
 
-            for(Project project : projectList){
+            for (Project project : projectList) {
                 DbProject dbProject = new DbProject();
                 DbProjectImage dbProjectImage = new DbProjectImage();
                 dbProject.setProjectId(project.getProjectId());
@@ -194,15 +197,15 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
                 dbProjectImage.setProjectId(project.getProjectId());
 
-                if(project.getProjectImagePath() != null) {
+                if (project.getProjectImagePath() != null) {
                     //projectImageSize = project.getProjectImageList().size();
                     //for (int i = 0; i < projectImageSize; i++) {
-                        dbProjectImage.setProjectImagePath(project.getProjectImagePath());
-                        try {
-                            db.save(dbProjectImage);
-                        } catch (DbException e) {
-                            e.printStackTrace();
-                        }
+                    dbProjectImage.setProjectImagePath(project.getProjectImagePath());
+                    try {
+                        db.save(dbProjectImage);
+                    } catch (DbException e) {
+                        e.printStackTrace();
+                    }
                     //}
                 }
                 try {
@@ -291,7 +294,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             getProjectInfo(projectId);
         }
     }*/
-
     public void getProjectInfo(int projectId) {
         String url = ConstantValue.GET_PROJECT_INFO;
         JSONObject json = new JSONObject();
@@ -336,4 +338,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
+    @OnClick(R.id.btnLogin)
+    public void onClick() {
+        startActivity(new Intent(this, LoginActivity.class));
+    }
 }

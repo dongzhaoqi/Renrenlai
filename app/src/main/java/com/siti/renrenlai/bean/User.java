@@ -10,8 +10,10 @@ public class User implements Serializable{
 	private String userName;
 	private String userHeadPicImagePath;
 	private String sex;
+	private String realName;
 	private String interetsAndHobbies;
 	private String introduction;
+	private String telephone;
 
 	public int getUserId() {
 		return userId;
@@ -45,6 +47,14 @@ public class User implements Serializable{
 		this.sex = sex;
 	}
 
+	public String getRealName() {
+		return realName;
+	}
+
+	public void setRealName(String realName) {
+		this.realName = realName;
+	}
+
 	public String getInteretsAndHobbies() {
 		return interetsAndHobbies;
 	}
@@ -59,5 +69,13 @@ public class User implements Serializable{
 
 	public void setIntroduction(String introduction) {
 		this.introduction = introduction;
+	}
+
+	public String getTelephone() {
+		return telephone;
+	}
+
+	public void setTelephone(String telephone) {
+		this.telephone = telephone;
 	}
 }

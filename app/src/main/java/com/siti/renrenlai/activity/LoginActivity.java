@@ -79,7 +79,7 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         showProcessDialog("登录中");
         String url = null;
         try {
-            url = ConstantValue.USER_LOGIN + "?userName=" + URLEncoder.encode(str_email, "utf-8") + "&password=" + str_password;
+            url = ConstantValue.USER_LOGIN + "?telephone=" + URLEncoder.encode(str_email, "utf-8") + "&password=" + str_password;
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
@@ -129,6 +129,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userName", user.getUserName());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "realName", user.getRealName());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userHeadPicImagePath", user.getUserHeadPicImagePath());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "gender", user.getSex());
@@ -136,6 +138,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
                 "interetsAndHobbies", user.getInteretsAndHobbies());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "intro", user.getIntroduction());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "telephone", user.getTelephone());
         SharedPreferencesUtil.writeInt(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userId", user.getUserId());
     }
