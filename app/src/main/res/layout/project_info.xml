@@ -16,6 +16,7 @@
         android:layout_height="match_parent">
 
         <ScrollView
+            android:id="@+id/scroll"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/bottom_height"
@@ -48,9 +49,9 @@
                         android:background="#55000000"
                         android:gravity="left"
                         android:padding="@dimen/drawable_padding_5"
+                        android:text="仁人来"
                         android:textColor="@android:color/white"
-                        android:textSize="@dimen/text_size_18"
-                        android:text="仁人来" />
+                        android:textSize="@dimen/text_size_18" />
 
                 </RelativeLayout>
 
@@ -248,13 +249,21 @@
                     android:layout_height="@dimen/activity_vertical_margin"
                     android:background="@color/background" />
 
-                <TextView
-                    style="@style/me_text_style"
-                    android:layout_width="wrap_content"
+                <RelativeLayout
+                    android:id="@+id/rl_comment"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/padding_10"
-                    android:layout_marginTop="@dimen/margin_8"
-                    android:text="@string/str_comment" />
+                    android:background="#F5F5F5">
+
+                    <TextView
+                        style="@style/me_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/padding_10"
+                        android:layout_marginTop="@dimen/margin_8"
+                        android:text="@string/str_comment" />
+
+                </RelativeLayout>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/list_comment"

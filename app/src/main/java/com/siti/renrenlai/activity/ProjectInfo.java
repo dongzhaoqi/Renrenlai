@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +65,8 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
+    @Bind(R.id.scroll)
+    ScrollView scrollView;
     @Bind(R.id.activity_img)
     ImageView activity_img;
     @Bind(R.id.activity_name)
@@ -85,6 +89,8 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     LinearLayout ll_image;
     @Bind(R.id.list_comment)
     RecyclerView list_comment;
+    @Bind(R.id.rl_comment)
+    RelativeLayout rl_comment;
     @Bind(R.id.empty_view)
     TextView empty_view;
     @Bind(R.id.empty_view_like)
@@ -224,7 +230,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             @Override
             public void onItemClick(View view, Object data) {
                 int pos = Integer.parseInt(data.toString());
-                showCommentDialog(mAdapter, commentsList, pos);
+                showCommentDialog(view, mAdapter, commentsList, pos);
 
             }
         });
@@ -346,7 +352,8 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
      * @param commentsList
      * @param position
      */
-    public void showCommentDialog(CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
+    public void showCommentDialog(View view, CommentAdapter mAdapter, List<CommentContents> commentsList, int position) {
+        scrollToSpecifiedComment(view);
         ProjectCommentDialog dialog = new ProjectCommentDialog(this, mAdapter);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -357,13 +364,15 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         dialog.setCommentList(commentsList, position, projectId);
         dialog.show();
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
     /**
      * 点击评论按钮，弹出评论框
      */
     public void showCommentDialog(CommentAdapter mAdapter) {
+        scrollToComment();
         ProjectCommentDialog dialog = new ProjectCommentDialog(this, mAdapter, commentsList, projectId);
         dialog.setCanceledOnTouchOutside(true);
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -373,7 +382,34 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         lp.dimAmount = 0.5f;
         dialog.show();
         dialog.getWindow().setAttributes(lp);
-        dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+        dialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        //dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
+    }
+
+    /**
+     * 点击评论按钮，屏幕滚动到评论处
+     */
+    public void scrollToComment(){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.scrollTo(0, rl_comment.getBottom());
+            }
+        });
+    }
+
+    /**
+     * 点击某个人的评论，将屏幕滚动到该评论下方
+     * @param view 要评论的item
+     */
+    public void scrollToSpecifiedComment(final View view){
+        new Handler().post(new Runnable() {
+            @Override
+            public void run() {
+                scrollView.scrollTo(0, rl_comment.getBottom() + view.getTop());
+                //((LinearLayoutManager) list_comment.getLayoutManager()).scrollToPositionWithOffset(view.getBottom(), 0);
+            }
+        });
     }
 
     public void like() {
