@@ -109,6 +109,7 @@
 
         <TextView
             style="@style/more_text_style"
+            android:id="@+id/tv_community"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"

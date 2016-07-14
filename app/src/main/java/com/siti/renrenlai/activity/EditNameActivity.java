@@ -63,7 +63,7 @@ public class EditNameActivity extends BaseActivity {
                         VolleyLog.d("response", response.toString());
                         showToast("修改成功!");
                         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"),
-                                "userName", newName);
+                                "realName", newName);
                         Intent intent = new Intent();
                         intent.putExtra("nickName", newName);
                         setResult(RESULT_OK, intent);

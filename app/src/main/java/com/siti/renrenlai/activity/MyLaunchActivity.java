@@ -78,8 +78,10 @@ public class MyLaunchActivity extends BaseActivity {
         position = getIntent().getExtras().getInt("position");
         if(position == 0){
             title = "我喜欢的活动";
+            layout_enroll_number.setEnabled(false);
         }else if(position == 1){
             title = "我报名的活动";
+            layout_enroll_number.setEnabled(false);
         }else if(position == 2){
             title = "我发起的活动";
             iv_expand_user.setVisibility(View.VISIBLE);

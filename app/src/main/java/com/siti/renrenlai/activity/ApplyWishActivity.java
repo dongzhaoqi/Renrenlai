@@ -24,6 +24,7 @@ import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
+import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 
 import org.json.JSONException;
@@ -78,12 +79,18 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
-        initTopBarForBoth("申请意愿", "暂存", new onRightImageButtonClickListener() {
+        initTopBarForBothLeftCustom("申请意愿", "暂存", new onLeftBtnClickListener() {
+            @Override
+            public void onClick() {
+                showExitDialog();
+            }
+        },new onRightImageButtonClickListener() {
             @Override
             public void onClick() {
                 save();
             }
         });
+
     }
 
     /**
@@ -233,6 +240,10 @@ public class ApplyWishActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
+        showExitDialog();
+    }
+
+    private void showExitDialog() {
         new MaterialDialog.Builder(this)
                 .content(R.string.str_save)
                 .positiveText(R.string.agree)

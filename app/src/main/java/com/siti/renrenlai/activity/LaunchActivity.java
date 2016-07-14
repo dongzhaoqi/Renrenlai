@@ -54,9 +54,11 @@ import com.siti.renrenlai.util.DateTimePicker;
 import com.siti.renrenlai.util.ImageHelper;
 import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
+import com.siti.renrenlai.view.HeaderLayout;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.siti.renrenlai.view.PictureAndTextEditorView;
 
+import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,6 +126,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     NoScrollGridView noScrollGridView;
     /*@Bind(R.id.et_detail)
     RichEditor mEditor;*/
+    @Bind(R.id.et_detail)
+    EditText et_detail;
     @Bind(R.id.btn_preview)
     Button btn_preview;
     @Bind(R.id.btn_publish)
@@ -136,16 +140,16 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     ImageView ivCharity;
     @Bind(R.id.iv_discuss)
     ImageView ivDiscuss;
-    @Bind(R.id.edit_text)
+    /*@Bind(R.id.edit_text)
     PictureAndTextEditorView etDetail;
-    /*@Bind(R.id.action_bold)
+    @Bind(R.id.action_bold)
     ImageButton actionBold;
     @Bind(R.id.action_italic)
     ImageButton actionItalic;
     @Bind(R.id.action_underline)
-    ImageButton actionUnderline;*/
+    ImageButton actionUnderline;
     @Bind(R.id.action_insert_image)
-    ImageButton actionInsertImage;
+    ImageButton actionInsertImage;*/
     private String imgName;
     private int activity_type = 0;
     int projectId;
@@ -184,7 +188,13 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void initViews() {
-        initTopBarForLeft("发起活动");
+        initTopBarForLeftClick("发起活动", new onLeftBtnClickListener() {
+            @Override
+            public void onClick() {
+               showExitDialog();
+            }
+        });
+
         /*mEditor.setEditorHeight(200);
         mEditor.setEditorFontSize(18);
         mEditor.setEditorFontColor(Color.BLACK);
@@ -237,8 +247,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 }
                 detail.add(str);
             }
-            etDetail.setmContentList(detail);
-            //et_detail.setText(dbTempActivity.getActivityDetail());
+            //etDetail.setmContentList(detail);
+            et_detail.setText(dbTempActivity.getActivityDetail());
             if (activity_type == 1) {
                 ll_interest.setSelected(true);
                 tvInterest.setVisibility(View.VISIBLE);
@@ -482,7 +492,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 // 将原始图片的bitmap转换为文件
                 // 上传该文件并获取url
                 Log.e(TAG, "onActivityResult: " + url);
-                etDetail.insertBitmap(url);
+                //etDetail.insertBitmap(url);
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
@@ -497,8 +507,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
 
     @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.tv_start_time, R.id.tv_end_time,
-            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline,
-            R.id.action_insert_image, R.id.btn_preview, R.id.btn_publish})
+            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_interest:
@@ -546,17 +555,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.action_underline:
                 mEditor.setUnderline();
                 break;*/
-            case R.id.action_insert_image:
-                /*flag_gallery = 3;
+            /*case R.id.action_insert_image:
+                flag_gallery = 3;
                 startAnimActivity(AlbumActivity.class);
                 flag_image_lib = 0;
                 mEditor.insertImage("http://www.1honeywan.com/dachshund/image/7.21/7.21_3_thumb.JPG",
-                        "dachshund");*/
+                        "dachshund");
                 getImage();
-                break;
+                break;*/
             case R.id.btn_preview:
-
-                Log.e(TAG, "onClick: " + etDetail.getmContentList().size() + etDetail.getmContentList());
 
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
                 imgs = new ArrayList<>();
@@ -666,7 +673,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             return;
         }
 
-        if ("".equals(etDetail.getText().toString())) {
+        if ("".equals(et_detail.getText().toString())) {
             Toast.makeText(LaunchActivity.this, "请填写活动详情", Toast.LENGTH_SHORT).show();
             et_people.requestFocus();
             return;
@@ -685,7 +692,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             activityContent.put("endTimeOfActivity", tv_end_time.getText().toString());
             activityContent.put("signUpDeadLine", tv_deadline.getText().toString());
             activityContent.put("activityAddress", et_place.getText().toString());
-            activityContent.put("activityDescrip", etDetail.getmContentList());
+            activityContent.put("activityDescrip", et_detail.getText().toString());
             activityContent.put("activityTypeId", activity_type);
             activityContent.put("groupId", 2);
             activityContent.put("projectId", projectId);
@@ -814,15 +821,15 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         activity.setDeadline(tv_deadline.getText().toString());
         activity.setActivityAddress(et_place.getText().toString());
         activity.setParticipateNum(et_people.getText().toString());
-        if (projectList.size() > 0) {
+        if (projectList != null && projectList.size() > 0) {
             activity.setProjectName(tv_project_name.getText().toString());
         }
-        List<String> detailList = etDetail.getmContentList();
+        /*List<String> detailList = etDetail.getmContentList();
         StringBuffer buffer = new StringBuffer();
         for (String str : detailList) {
             buffer.append(str).append(" ");
-        }
-        activity.setActivityDetailDescrip(buffer.toString());
+        }*/
+        activity.setActivityDetailDescrip(et_detail.getText().toString());
 
         return activity;
     }
@@ -883,6 +890,11 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
     @Override
     public void onBackPressed() {
+        showExitDialog();
+        //super.onBackPressed();
+    }
+
+    private void showExitDialog(){
         new MaterialDialog.Builder(this)
                 .content(R.string.str_save)
                 .positiveText(R.string.agree)
@@ -903,8 +915,6 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                     }
                 })
                 .show();
-        //super.onBackPressed();
-
     }
 
 }

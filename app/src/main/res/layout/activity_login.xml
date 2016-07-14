@@ -32,9 +32,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/prompt_username_tel"
-                    android:inputType="textEmailAddress"
+                    android:inputType="phone"
                     android:paddingTop="10dp"
-                    android:paddingLeft="15dp"
                     android:maxLines="1"
                     android:singleLine="true" />
 
@@ -53,7 +52,7 @@
                     android:imeActionId="@+id/login"
                     android:imeActionLabel="@string/action_sign_in"
                     android:imeOptions="actionUnspecified"
-                    android:inputType="textPassword"
+                    android:inputType="numberPassword"
                     android:maxLines="1"
                     android:singleLine="true" />
 

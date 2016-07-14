@@ -9,11 +9,14 @@ import android.os.Handler;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -29,7 +32,6 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.ms.square.android.expandabletextview.ExpandableTextView;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.adapter.CommentAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
@@ -42,6 +44,7 @@ import com.siti.renrenlai.util.CommonUtils;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
+import com.siti.renrenlai.view.ExpandableTextView;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
 import com.siti.renrenlai.view.NoScrollGridView;
 import com.squareup.picasso.Picasso;
@@ -59,6 +62,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import cn.sharesdk.framework.ShareSDK;
 import de.hdodenhof.circleimageview.CircleImageView;
+import jp.wasabeef.richeditor.RichEditor;
 
 /**
  * Created by Dong on 2016/3/22.
@@ -79,8 +83,12 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     TextView tv_activity_address;
     @Bind(R.id.tv_activity_time)
     TextView tv_activity_time;
-    @Bind(R.id.expand_text_view)
-    ExpandableTextView expTv1;
+    /*@Bind(R.id.expandable_text)
+    RichEditor expandable_text;*/
+    @Bind(R.id.webview)
+    WebView webview;
+    /*@Bind(R.id.expand_text_view)
+    ExpandableTextView expTv1;*/
     @Bind(R.id.ll_image)
     LinearLayout ll_image;
     @Bind(R.id.rl_comment)
@@ -215,8 +223,20 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 }
             });*/
         }
-
-        expTv1.setText(activity_describ);
+        Display display = getWindowManager().getDefaultDisplay();
+        double width=display.getWidth() * 0.3;
+        activity_describ += "<head><style type='text/css'>"
+                +"img{margin:auto auto;display:block;} </style></head>"
+                +"<body>";
+        for(int i = 1; i < imagePath.size(); i++){
+            activity_describ += "<br><img src='" + imagePath.get(i) + "' width='" + width + "'/>" +
+                    "";
+        }
+        activity_describ += "</body>";
+        webview.loadData(activity_describ,"text/html; charset=UTF-8", null);
+        webview.getSettings().setDefaultZoom(WebSettings.ZoomDensity.FAR);
+        //expandable_text.setHtml(activity_describ);
+        //expTv1.setText(activity_describ);
         tv_avtivity_name.setText(activity_title);
         tv_activity_address.setText(activity_address);
         tv_activity_time.setText(activity_time);

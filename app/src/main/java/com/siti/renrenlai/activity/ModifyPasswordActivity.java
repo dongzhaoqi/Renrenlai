@@ -1,5 +1,6 @@
 package com.siti.renrenlai.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -33,7 +34,7 @@ public class ModifyPasswordActivity extends BaseActivity {
     EditText etNewPassword;
     @Bind(R.id.btn_reset_password)
     Button btnResetPassword;
-    String telephone, password;
+    String telephone, password, confirmPassword;
     private static final String TAG = "ModifyPasswordActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +51,18 @@ public class ModifyPasswordActivity extends BaseActivity {
 
     @OnClick(R.id.btn_reset_password)
     public void onClick() {
-        showProcessDialog();
         telephone = getIntent().getStringExtra("tel");
         password = etNewPassword.getText().toString();
+        confirmPassword = etConfirmPassword.getText().toString();
+        if("".equals(password)){
+            Toast.makeText(ModifyPasswordActivity.this, "新密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }else if("".equals(confirmPassword)){
+            Toast.makeText(ModifyPasswordActivity.this, "确认密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        showProcessDialog();
         Log.d(TAG, "initViews: " + telephone + " " + "password:" + password);
         String url = ConstantValue.UPDATE_USER_PASSWORD + "?telephone=" +
                 telephone + "&password=" + password;
@@ -65,6 +75,8 @@ public class ModifyPasswordActivity extends BaseActivity {
                         int errorCode = response.optInt("errorCode");
                         if(errorCode == 0){
                             Toast.makeText(ModifyPasswordActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
+                            startActivity(new Intent(ModifyPasswordActivity.this, LoginActivity.class));
+                            finish();
                         }else if(errorCode == 1){
                             Toast.makeText(ModifyPasswordActivity.this, "手机号未注册", Toast.LENGTH_SHORT).show();
                         }

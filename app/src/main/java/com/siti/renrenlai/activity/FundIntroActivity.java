@@ -110,6 +110,9 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     private void initView() {
 
+        if("0".equals(userName)){
+            btnLogin.setVisibility(View.VISIBLE);
+        }
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
 
         initTopBarForBoth("家园创变大赛", R.drawable.share, new HeaderLayout.onRightImageButtonClickListener() {

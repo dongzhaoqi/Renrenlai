@@ -58,7 +58,8 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     RelativeLayout layout_name;
     @Bind(R.id.layout_nickname)
     RelativeLayout layout_nickname;
-    @Bind(R.id.tv_nickName) TextView tv_nickName;
+    @Bind(R.id.tv_nickName)
+    TextView tv_nickName;
     @Bind(R.id.layout_community)
     RelativeLayout layout_community;
     @Bind(R.id.layout_gender)
@@ -71,13 +72,17 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     TextView tv_gender;
 
     static TextView tv_hobby;
-    @Bind(R.id.tv_introduction) TextView tv_introduction;
+    @Bind(R.id.tv_introduction)
+    TextView tv_introduction;
+    @Bind(R.id.tv_community)
+    TextView tvCommunity;
     private Bitmap bitmap;
-    private String imgName, nickName, gender, hobby, intro;
+    private String imgName, nickName, groupName, gender, hobby, intro;
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private static int MODIFY_NAME = 2;         //修改昵称
     private static int MODIFY_INTRO = 3;        //修改个人简介
+    private static int CHOOSE_COMMUNITY = 4;        //选择我的小区
     private String userHeadImagePath;
     private User user = CustomApplication.getInstance().getUser();
 
@@ -104,9 +109,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "gender");
 
-        if("0".equals(gender)){
+        if ("0".equals(gender)) {
             tv_gender.setText("请选择");
-        }else{
+        } else {
             tv_gender.setText(gender);
         }
 
@@ -114,18 +119,18 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "interetsAndHobbies");
 
-        if("0".equals(hobby)){
+        if ("0".equals(hobby)) {
             tv_hobby.setText("请选择");
-        }else{
+        } else {
             tv_hobby.setText(hobby);
         }
 
         intro = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "intro");
-        if("0".equals(intro)){
+        if ("0".equals(intro)) {
             tv_introduction.setText("请填写");
-        }else{
+        } else {
             tv_introduction.setText(intro);
         }
     }
@@ -143,6 +148,8 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 startActivityForResult(intent, MODIFY_NAME);
                 break;
             case R.id.layout_community:
+                intent.setClass(MyProfileActivity.this, ChooseCommunity.class);
+                startActivityForResult(intent, CHOOSE_COMMUNITY);
                 break;
             case R.id.layout_gender:
                 showGenderDialog();
@@ -152,9 +159,9 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.layout_introduction:
                 intent.setClass(MyProfileActivity.this, IntroductionActivity.class);
-                if("0".equals(intro)){
+                if ("0".equals(intro)) {
                     intent.putExtra("intro", "");
-                }else{
+                } else {
                     intent.putExtra("intro", intro);
                 }
                 startActivityForResult(intent, MODIFY_INTRO);
@@ -204,7 +211,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     /**
      * "选择性别"弹出框
      */
-    public void showGenderDialog(){
+    public void showGenderDialog() {
         new MaterialDialog.Builder(this)
                 .title(R.string.str_select)
                 .items(R.array.gender)
@@ -221,15 +228,14 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     }
 
 
-    public void updateGender(final String gender){
+    public void updateGender(final String gender) {
         String userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userName");
         String url = null;
         try {
-            url = ConstantValue.UPDATE_USER_GENDER + "?userName="+URLEncoder.encode(userName, "utf-8")+"&userGender="+ URLEncoder.encode(gender, "utf-8");
+            url = ConstantValue.UPDATE_USER_GENDER + "?userName=" + URLEncoder.encode(userName, "utf-8") + "&userGender=" + URLEncoder.encode(gender, "utf-8");
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         }
-
 
 
         JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, null,
@@ -256,7 +262,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     /**
      * "选择兴趣"弹出框
      */
-    public void showHobbyDialog(){
+    public void showHobbyDialog() {
 
         HobbyDialog dialog = new HobbyDialog(this);
         dialog.setCanceledOnTouchOutside(true);
@@ -272,7 +278,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         dialog.getWindow().addFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
-    public static void setHobby(String hobby){
+    public static void setHobby(String hobby) {
         tv_hobby.setText(hobby);
     }
 
@@ -311,20 +317,26 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
             //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
             img_photo.setImageBitmap(bitmap);
-        }else if(requestCode == MODIFY_NAME){
+        } else if (requestCode == MODIFY_NAME) {
             nickName = data.getStringExtra("nickName");
             tv_nickName.setText(nickName);
-        }else if(requestCode == MODIFY_INTRO){
+        } else if (requestCode == MODIFY_INTRO) {
             System.out.println("modify intro");
             intro = SharedPreferencesUtil.readString(
                     SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"), "intro");
-            modifyIntro(intro);
-
+            modifyInfo(tv_introduction, intro);
+        } else if (requestCode == CHOOSE_COMMUNITY) {
+            groupName = data.getStringExtra("groupName");
+            modifyInfo(tvCommunity, groupName);
         }
     }
 
-    public void modifyIntro(String intro) {
-        tv_introduction.setText(intro);
+    public void modifyInfo(View view, String intro) {
+        if(view == tv_introduction){
+            tv_introduction.setText(intro);
+        }else if(view == tvCommunity){
+            tvCommunity.setText(intro);
+        }
     }
 
 }

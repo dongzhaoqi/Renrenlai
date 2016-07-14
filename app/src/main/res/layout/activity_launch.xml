@@ -387,7 +387,7 @@
                     android:layout_height="match_parent"
                     android:text="@string/txt_detail" />
 
-                <!--<EditText
+                <EditText
                     android:id="@+id/et_detail"
                     style="@style/me_text_style"
                     android:layout_width="match_parent"
@@ -396,9 +396,9 @@
                     android:background="@null"
                     android:gravity="top"
                     android:minLines="3"
-                    android:padding="@dimen/padding_10" />-->
+                    android:padding="@dimen/padding_10" />
                 
-                <com.siti.renrenlai.view.PictureAndTextEditorView
+                <!--<com.siti.renrenlai.view.PictureAndTextEditorView
                     android:id="@+id/edit_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -409,7 +409,7 @@
                     android:minLines="3"
                     android:gravity="start"
                     android:textColorHint="@color/hint_color"
-                    android:hint="Insert text here..."/>
+                    android:hint="Insert text here..."/>-->
             </RelativeLayout>
 
             <!--<jp.wasabeef.richeditor.RichEditor
@@ -417,7 +417,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />-->
 
-            <LinearLayout
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/layout_top_border"
@@ -425,7 +425,7 @@
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
-                <!--<ImageButton
+                <ImageButton
                     android:id="@+id/action_bold"
                     android:layout_width="40dp"
                     android:layout_height="40dp"
@@ -447,7 +447,7 @@
                     android:layout_height="40dp"
                     android:background="@null"
                     android:contentDescription="@null"
-                    android:src="@drawable/underline" />-->
+                    android:src="@drawable/underline" />
 
                 <ImageButton
                     android:id="@+id/action_insert_image"
@@ -457,7 +457,7 @@
                     android:contentDescription="@null"
                     android:src="@drawable/insert_image" />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
             <LinearLayout
                 android:layout_width="match_parent"

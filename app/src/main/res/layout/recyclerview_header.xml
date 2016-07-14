@@ -9,4 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_180"
         android:background="@drawable/fund"/>
+
+    <ImageView
+        android:id="@+id/iv_next"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_180"
+        android:layout_marginTop="@dimen/margin_8"
+        android:background="@drawable/desert"/>
+
 </LinearLayout>

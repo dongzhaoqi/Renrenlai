@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.view.HeaderLayout;
+import com.siti.renrenlai.view.HeaderLayout.onLeftBtnClickListener;
 import com.siti.renrenlai.view.HeaderLayout.HeaderStyle;
 import com.siti.renrenlai.view.HeaderLayout.onLeftImageButtonClickListener;
 import com.siti.renrenlai.view.HeaderLayout.onRightImageButtonClickListener;
@@ -131,6 +132,19 @@ public class BaseActivity extends FragmentActivity {
 				listener);
 	}
 
+    public void initTopBarForBothLeftCustom(String titleName, String text, onLeftBtnClickListener leftBtnClickListener,
+                                  onRightImageButtonClickListener listener) {
+        mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
+        mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_BUTTON);
+        mHeaderLayout.setTitleAndLeftButton(titleName,
+                R.drawable.base_action_bar_back_bg_selector,
+                leftBtnClickListener);
+        mHeaderLayout.setTitleAndRightText(titleName,text,
+                listener);
+    }
+
+
+
 	public void initTopBarForLeft(String titleName) {
 		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
 		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_IMAGEBUTTON);
@@ -138,16 +152,27 @@ public class BaseActivity extends FragmentActivity {
 				R.drawable.base_action_bar_back_bg_selector,
 				new OnLeftButtonClickListener());
 	}
-	
+
+    /**
+     * 左侧单击自定义事件
+     * @param titleName
+     * @param listener
+     */
+	public void initTopBarForLeftClick(String titleName, onLeftBtnClickListener listener){
+		mHeaderLayout = (HeaderLayout)findViewById(R.id.common_actionbar);
+		mHeaderLayout.init(HeaderStyle.TITLE_DOUBLE_BUTTON);
+		mHeaderLayout.setTitleAndLeftButton(titleName,
+                R.drawable.base_action_bar_back_bg_selector, listener);
+	}
+
 	public class OnLeftButtonClickListener implements
 			onLeftImageButtonClickListener {
-
 		@Override
 		public void onClick() {
 			finish();
 		}
 	}
-	
+
 	public class OnRightButtonClickListener implements
 	onRightImageButtonClickListener {
 		

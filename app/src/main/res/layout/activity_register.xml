@@ -106,8 +106,11 @@
                 android:id="@+id/tv_community"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@drawable/base_edit_input"
+                android:padding="@dimen/padding_10"
                 android:hint="输入小区名字"
-                android:textColorHint="@color/hint_color"/>
+                android:textSize="@dimen/text_size_16"
+                android:textColorHint="@color/hint_color" />
 
             <Button
                 android:id="@+id/btn_sign_up"
