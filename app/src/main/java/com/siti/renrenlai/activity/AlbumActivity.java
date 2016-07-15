@@ -72,6 +72,9 @@ public class AlbumActivity extends Activity {
         }
     };
 
+
+
+
     // 预览按钮的监听
     private class PreviewListener implements OnClickListener {
         public void onClick(View v) {

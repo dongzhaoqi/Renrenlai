@@ -23,6 +23,11 @@ import org.xutils.x;
 
 import java.io.File;
 
+import cn.finalteam.galleryfinal.CoreConfig;
+import cn.finalteam.galleryfinal.FunctionConfig;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.ThemeConfig;
+
 
 /**
  * @author Dong
@@ -35,6 +40,7 @@ public class CustomApplication extends Application {
 	public User user = new User();
 	public static int mScreenWidth;
 	public static int mScreenHight;
+	public static FunctionConfig functionConfig;
 	private DbManager.DaoConfig daoConfig;
 	private DbManager db;
 
@@ -73,7 +79,32 @@ public class CustomApplication extends Application {
 		x.Ext.init(this);
 		x.Ext.setDebug(true); // 是否输出debug日志
 
+        initGallery();
 	}
+
+    private void initGallery(){
+        //设置主题
+        //ThemeConfig.CYAN
+        ThemeConfig theme = new ThemeConfig.Builder()
+                .build();
+        //配置功能
+        functionConfig = new FunctionConfig.Builder()
+                .setEnableCamera(true)
+                .setEnableEdit(true)
+                .setEnableCrop(true)
+                .setEnableRotate(true)
+                .setCropSquare(true)
+                .setEnablePreview(true)
+                .setMutiSelectMaxSize(9)
+                .build();
+
+        //配置imageloader
+        cn.finalteam.galleryfinal.ImageLoader imageloader = new PicassoImageLoader();
+        CoreConfig coreConfig = new CoreConfig.Builder(this, imageloader, theme)
+                .setFunctionConfig(functionConfig)
+                .build();
+        GalleryFinal.init(coreConfig);
+    }
 
 	public DbManager.DaoConfig getDaoConfig() {
 		DbManager.DaoConfig daoConfig = new DbManager.DaoConfig()

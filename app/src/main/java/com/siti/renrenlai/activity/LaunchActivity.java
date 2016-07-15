@@ -6,6 +6,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -38,6 +39,7 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.ChoosePhotoListAdapter;
 import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.adapter.SpinnerProjectAdapter;
@@ -69,6 +71,7 @@ import org.xutils.x;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,6 +83,8 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import cn.finalteam.galleryfinal.GalleryFinal;
+import cn.finalteam.galleryfinal.model.PhotoInfo;
 import rebus.bottomdialog.BottomDialog;
 
 /**
@@ -140,6 +145,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     ImageView ivCharity;
     @Bind(R.id.iv_discuss)
     ImageView ivDiscuss;
+    @Bind(R.id.iv_add)
+    ImageView ivAdd;
     /*@Bind(R.id.edit_text)
     PictureAndTextEditorView etDetail;
     @Bind(R.id.action_bold)
@@ -156,6 +163,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private static final int SELECT_PICTURE = 0;
     private static final int TAKE_PICTURE = 1;
     private static final int FROM_IMAGE_LIB = 2;
+    private final int REQUEST_CODE_GALLERY = 1001;
     private PictureAdapter picAdapter;
     // 照相机拍照得到的图片
     private File mCurrentPhotoFile;
@@ -168,6 +176,9 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
     private DbManager db;
     private DbTempActivity dbTempActivity;
     private ImageAdapter imageAdapter;
+    private List<PhotoInfo> mPhotoList;
+    private ChoosePhotoListAdapter mChoosePhotoListAdapter;
+
     int flag_gallery;
     int flag_image_lib;
     int width, height;
@@ -195,13 +206,12 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             }
         });
 
-        /*mEditor.setEditorHeight(200);
-        mEditor.setEditorFontSize(18);
-        mEditor.setEditorFontColor(Color.BLACK);
-        mEditor.setPadding(10, 10, 10, 10);
-        //    mEditor.setBackground("https://raw.githubusercontent.com/wasabeef/art/master/chip.jpg");
-        mEditor.setPlaceholder("Insert text here...");*/
-
+        mPhotoList = new ArrayList<>();
+        mChoosePhotoListAdapter = new ChoosePhotoListAdapter(this, mPhotoList);
+        noScrollGridView.setAdapter(mChoosePhotoListAdapter);
+        if(mPhotoList != null && mPhotoList.size() ==9){
+            ivAdd.setVisibility(View.GONE);
+        }
         db = x.getDb(CustomApplication.getInstance().getDaoConfig());
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         picAdapter = new PictureAdapter(this);
@@ -217,7 +227,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 }
             }
         });
-        noScrollGridView.setAdapter(picAdapter);
+        //noScrollGridView.setAdapter(picAdapter);
     }
 
     /**
@@ -372,7 +382,8 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 switch (id) {
                     case R.id.item_pick_photo:
                         flag_gallery = 3;
-                        startAnimActivity(AlbumActivity.class);
+                        //startAnimActivity(AlbumActivity.class);
+                        GalleryFinal.openGalleryMuti(REQUEST_CODE_GALLERY, CustomApplication.functionConfig, mOnHanlderResultCallback);
                         flag_image_lib = 0;
                         return true;
                     case R.id.item_take_pic:
@@ -390,6 +401,24 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
         });
         dialog.show();
     }
+
+    private GalleryFinal.OnHanlderResultCallback mOnHanlderResultCallback = new GalleryFinal.OnHanlderResultCallback() {
+        @Override
+        public void onHanlderSuccess(int reqeustCode, List<PhotoInfo> resultList) {
+            if (resultList != null) {
+                mPhotoList.addAll(resultList);
+                for (PhotoInfo info : resultList){
+                    Log.e(TAG, "onHanlderSuccess: "+ info.getPhotoPath() );
+                }
+                mChoosePhotoListAdapter.notifyDataSetChanged();
+            }
+        }
+
+        @Override
+        public void onHanlderFailure(int requestCode, String errorMsg) {
+            Toast.makeText(LaunchActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+        }
+    };
 
     /**
      * 调用拍照
@@ -507,7 +536,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
 
 
     @OnClick({R.id.layout_type, R.id.ll_interest, R.id.ll_help, R.id.ll_advice, R.id.tv_start_time, R.id.tv_end_time,
-            R.id.tv_project_name, R.id.layout_cover, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
+            R.id.tv_project_name, R.id.layout_cover,R.id.iv_add, R.id.tv_deadline, R.id.btn_preview, R.id.btn_publish})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.ll_interest:
@@ -543,7 +572,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
             case R.id.tv_project_name:
                 showProjectsDialog();
                 break;
-            case R.id.layout_cover:
+            case R.id.iv_add:
                 showPicDialog();
                 break;
             /*case R.id.action_bold:
@@ -568,11 +597,14 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                 Intent previewIntent = new Intent(LaunchActivity.this, PreviewActivity.class);
                 imgs = new ArrayList<>();
                 if (flag_gallery == 3) {
-                    int picCount = picAdapter.getCount();
+                    /*int picCount = picAdapter.getCount();
                     System.out.println("count:" + picCount);
                     for (int i = 0; i < picCount - 1; i++) {
                         System.out.println("path:" + Bimp.getTempSelectBitmap().get(i).getPath());
                         imgs.add(Bimp.getTempSelectBitmap().get(i).getPath());
+                    }*/
+                    for(int i = 0; i < mPhotoList.size(); i++){
+                        imgs.add(mPhotoList.get(i).getPhotoPath());
                     }
                 } else if (flag_image_lib == 4) {
                     int picCount = imageAdapter.getCount();
@@ -718,7 +750,7 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                         String path, imageName;
                         if (flag_gallery == 3) {
                             Log.d(TAG, "flag_gallery: " + flag_gallery);
-                            for (int i = 0; i < picAdapter.getCount() - 1; i++) {
+                            /*for (int i = 0; i < picAdapter.getCount() - 1; i++) {
                                 path = Bimp.getTempSelectBitmap().get(i).getPath();
                                 imageName = path.substring(path.lastIndexOf("/") + 1);
                                 //imageName = UUID.randomUUID().toString().substring(0, 16);
@@ -727,6 +759,25 @@ public class LaunchActivity extends BaseActivity implements View.OnClickListener
                                     Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
                                     upload(activity_id, myBitmap, imageName);
                                 }
+                            }*/
+                            ExifInterface exif = null;
+                            int orientation;
+                            for(int i = 0; i < mPhotoList.size(); i++){
+                                path = mPhotoList.get(i).getPhotoPath();
+                                Log.d(TAG, "onResponse:------> " + path);
+                                imageName = path.substring(path.lastIndexOf("/") + 1);
+                                File imgFile = new File(path);
+                                Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
+
+                                try {
+                                    exif = new ExifInterface(path);
+                                } catch (IOException e) {
+                                    e.printStackTrace();
+                                }
+                                orientation = exif.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                        ExifInterface.ORIENTATION_UNDEFINED);
+                                Bitmap bmRotated = ImageHelper.rotateBitmap(myBitmap, orientation);
+                                upload(activity_id, bmRotated, imageName);
                             }
                         } else if (flag_image_lib == 4) {
                             Log.d(TAG, "flag_image_lib: " + flag_image_lib);

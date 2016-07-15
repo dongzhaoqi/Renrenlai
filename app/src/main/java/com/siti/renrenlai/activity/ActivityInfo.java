@@ -99,8 +99,8 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
     TextView empty_view;
     @Bind(R.id.empty_view_like)
     TextView empty_view_like;
-    @Bind(R.id.detail_scrollgridview)
-    NoScrollGridView noScrollGridView;
+    /*@Bind(R.id.detail_scrollgridview)
+    NoScrollGridView noScrollGridView;*/
     @Bind(R.id.btn_comment)
     Button btnComment;
     @Bind(R.id.btn_favor)
@@ -184,7 +184,7 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         } else {
             Picasso.with(this).load(R.drawable.no_img).into(activity_img);
         }
-        noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        /*noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         if (imagePath.size() == 0) {
             empty_view_like.setVisibility(View.VISIBLE);
             ll_image.setVisibility(View.GONE);
@@ -199,8 +199,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
                 }
             });
             noScrollGridView.setAdapter(picAdapter);
-        }
+        }*/
         btnComment.setText("评论(" + (commentsList.size()) + ")");
+
+        if(lovedUsersList.size() == 0){
+            empty_view_like.setVisibility(View.VISIBLE);
+            ll_image.setVisibility(View.GONE);
+        }
 
         for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
@@ -242,13 +247,13 @@ public class ActivityInfo extends BaseActivity implements OnClickListener {
         tv_activity_time.setText(activity_time);
         //Picasso.with(this).load(activity.getActivityImg()).into(activity_img);
 
+        mAdapter = new CommentAdapter(this, commentsList);
+
         if (commentsList.size() == 0) {
             empty_view.setVisibility(View.VISIBLE);
             list_comment.setVisibility(View.GONE);
             return;
         }
-
-        mAdapter = new CommentAdapter(this, commentsList);
         mAdapter.setOnItemClickListener(new CommentAdapter.OnRecyclerViewItemClickListener() {
             @Override
             public void onItemClick(View view, Object data) {

@@ -348,7 +348,7 @@
                         android:paddingRight="@dimen/activity_vertical_margin" />
                 </com.ms.square.android.expandabletextview.ExpandableTextView>-->
 
-                <RelativeLayout
+                <!--<RelativeLayout
                     android:id="@+id/layout_cover"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -379,7 +379,7 @@
                         android:numColumns="3"
                         android:scrollbars="none" />
 
-                </RelativeLayout>
+                </RelativeLayout>-->
 
             </LinearLayout>
 

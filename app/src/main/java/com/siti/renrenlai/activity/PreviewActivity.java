@@ -7,10 +7,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.siti.renrenlai.R;
+import com.siti.renrenlai.adapter.ImageAdapter;
 import com.siti.renrenlai.adapter.PictureAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.view.NoScrollGridView;
@@ -46,10 +48,10 @@ public class PreviewActivity extends BaseActivity {
     @Bind(R.id.tv_project) TextView tvProject;
     @Bind(R.id.noScrollgridview)
     NoScrollGridView noScrollGridView;
-    @Bind(R.id.et_detail)
-    PictureAndTextEditorView etDetail;
+    @Bind(R.id.tv_detail)
+    TextView tvDetail;
     int activity_type;
-    private PictureAdapter picAdapter;
+    private ImageAdapter picAdapter;
     private static final String TAG = "PreviewActivity";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,8 +85,8 @@ public class PreviewActivity extends BaseActivity {
         tvDeadline.setText(activity.getDeadline());
         tvPlace.setText(activity.getActivityAddress());
         tvPeople.setText(activity.getParticipateNum());
-        //tvDetail.setText(activity.getActivityDetailDescrip());
-        List<String> detail = new ArrayList<>();
+        tvDetail.setText(activity.getActivityDetailDescrip());
+        /*List<String> detail = new ArrayList<>();
         String[] descrip = activity.getActivityDetailDescrip().split(" ");
         for(String str : descrip){
             if(str.contains("/") && str.contains(".")){
@@ -94,14 +96,14 @@ public class PreviewActivity extends BaseActivity {
             Log.e(TAG, "detail: "+ str);
         }
         etDetail.setmContentList(detail);
-        etDetail.setFocusable(false);
+        etDetail.setFocusable(false);*/
         if(activity.getProjectName() != null){
             tvProject.setText(activity.getProjectName());
         }else{
-            rl_project.setVisibility(View.INVISIBLE);
+            rl_project.setVisibility(View.GONE);
         }
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        picAdapter = new PictureAdapter(this, images);
+        picAdapter = new ImageAdapter(this, images);
         noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent intent = new Intent(PreviewActivity.this, GalleryActivity.class);

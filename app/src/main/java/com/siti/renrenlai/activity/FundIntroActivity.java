@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -49,7 +50,7 @@ import cn.sharesdk.framework.ShareSDK;
 /**
  * Created by Dong on 2016/4/12.
  */
-public class FundIntroActivity extends BaseActivity implements View.OnClickListener {
+public class FundIntroActivity extends BaseActivity implements View.OnClickListener{
 
     @Bind(R.id.fund_list)
     XRecyclerView fundList;
@@ -58,6 +59,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     @Bind(R.id.btnLogin)
     Button btnLogin;
     private ImageView iv_project;
+    private RelativeLayout layout_home;
     private List<Project> projectList;       //项目列表
     private FundIntroAdapter fundAdapter;
     private static final String TAG = "FundIntroActivity";
@@ -89,7 +91,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             try {
                 data = new String(entry.data, "UTF-8");
                 JSONObject jsonObject = new JSONObject(data);
-                Log.d(TAG, "cache: " + jsonObject);
+                //Log.d(TAG, "cache: " + jsonObject);
                 if (jsonObject.optJSONArray("result") != null) {
                     getData(jsonObject);
                 } else {
@@ -125,6 +127,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         fundList.setLayoutManager(new LinearLayoutManager(this));
         View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup) findViewById(android.R.id.content), false);
         iv_project = (ImageView) header.findViewById(R.id.iv_project);
+        layout_home = (RelativeLayout) header.findViewById(R.id.layout_home);
         fundList.addHeaderView(header);
 
         fundList.setLoadingListener(new XRecyclerView.LoadingListener() {
@@ -146,6 +149,20 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                         fundList.loadMoreComplete();
                     }
                 }, 1000);
+            }
+        });
+
+        fundList.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.e(TAG, "onScrolled: " + "--->" +layout_home.getTop() );
             }
         });
     }
@@ -345,4 +362,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
     public void onClick() {
         startActivity(new Intent(this, LoginActivity.class));
     }
+
+
 }
