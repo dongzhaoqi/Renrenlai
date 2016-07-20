@@ -1,7 +1,6 @@
 package com.siti.renrenlai.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -11,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
 import com.siti.renrenlai.R;
-import com.siti.renrenlai.util.Bimp;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -71,8 +69,12 @@ public class ImageAdapter extends BaseAdapter {
                 holder.image.setVisibility(View.GONE);
             }
         }else{
-            Uri uri = Uri.fromFile(new File(imageList.get(position)));
-            Picasso.with(mContext).load(uri).placeholder(R.drawable.ic_gf_default_photo).into(holder.image);
+            if(imageList.get(position).contains("http")){
+                Picasso.with(mContext).load(imageList.get(position)).placeholder(R.drawable.ic_gf_default_photo).into(holder.image);
+            }else {
+                Uri uri = Uri.fromFile(new File(imageList.get(position)));
+                Picasso.with(mContext).load(uri).placeholder(R.drawable.ic_gf_default_photo).into(holder.image);
+            }
         }
         return convertView;
     }

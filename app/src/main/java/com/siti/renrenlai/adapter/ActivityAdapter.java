@@ -94,8 +94,8 @@ public class ActivityAdapter extends RecyclerView.Adapter<ActivityAdapter.ViewHo
         //将数据保存在itemView的Tag中，以便点击时进行获取
         viewHolder.itemView.setTag(i);
         if (imagePath != null){
-            Picasso.with(mContext).load(imagePath).into(viewHolder.iv_cover);
-            //loader.displayImage(imagePath, viewHolder.mImageView, options, animateFirstListener);
+            //Picasso.with(mContext).load(imagePath).into(viewHolder.iv_cover);
+            loader.displayImage(imagePath, viewHolder.iv_cover, options, animateFirstListener);
         }else{
             Picasso.with(mContext).load(R.drawable.no_img).into(viewHolder.iv_cover);
         }

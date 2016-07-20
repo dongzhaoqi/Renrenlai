@@ -111,7 +111,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     private List<LovedUsers> lovedUsersList;            //所有喜欢的用户的头像
     private List<CommentContents> commentsList;         //评论列表
     private List<ProjectImage> imageList;              //活动封面
-    private ArrayList<String> imagePath;
+    private ArrayList<String> activityImagePath;
     private List<Activity> relatedActivityList;          //项目的相关活动
     private Project project;
     private ImageAdapter picAdapter;
@@ -131,7 +131,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     private void initViews() {
         list_comment.setNestedScrollingEnabled(false);  //若不加上此句,ScrollView 嵌套RecylerView 会导致滑动不流畅
-        imagePath = new ArrayList<>();
+        activityImagePath = new ArrayList<>();
         userName = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(ProjectInfo.this, "login"), "userName");
         userHeadImgePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
         project = (Project) getIntent().getExtras().getSerializable("project");
@@ -164,12 +164,18 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
         }
 
         btnComment.setText("评论(" + (commentsList.size()) + ")");
+
+        if (lovedUsersList.size() == 0) {
+            empty_view_like.setVisibility(View.VISIBLE);
+            ll_image.setVisibility(View.GONE);
+        }
+
         for (int i = 0; i < lovedUsersList.size(); i++) {
             CircleImageView image = new CircleImageView(this);
             String imagePath = lovedUsersList.get(i).getUserHeadPicImagePath().replace("\\", "");
             //image.setBorderColorResource(R.color.colorPrimary);
             //image.setBorderWidth(2);
-            System.out.println("ProjectInfo imagePath:" + imagePath);
+            System.out.println("ProjectInfo userhead imagePath:" + imagePath);
             Picasso.with(this).load(imagePath).resize(96, 96).into(image);
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             params.setMargins(15, 0, 0, 0);
@@ -194,31 +200,28 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
             for (int i = 0; i < imageList.size(); i++) {
                 String path = imageList.get(i).getProjectImagePath();
                 System.out.println("ProjectInfo path:" + path);
-                imagePath.add(ConstantValue.urlRoot + path);
+                activityImagePath.add(ConstantValue.urlRoot + path);
             }
         }
-        if (imagePath != null && imagePath.size() > 0) {
-            Picasso.with(this).load(imagePath.get(0)).into(activity_img);
+        if (activityImagePath != null && activityImagePath.size() > 0) {
+            Picasso.with(this).load(activityImagePath.get(0)).into(activity_img);
         } else {
             Picasso.with(this).load(R.drawable.no_img).into(activity_img);
         }
 
         noScrollGridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        if (imagePath.size() == 0) {
-            empty_view_like.setVisibility(View.VISIBLE);
-            ll_image.setVisibility(View.GONE);
-        } else {
-            picAdapter = new ImageAdapter(this, imagePath);
-            noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                    Intent intent = new Intent(ProjectInfo.this, GalleryImageActivity.class);
-                    intent.putStringArrayListExtra("imagePath", imagePath);
-                    intent.putExtra("ID", i);
-                    startActivity(intent);
-                }
-            });
-            noScrollGridView.setAdapter(picAdapter);
-        }
+
+        picAdapter = new ImageAdapter(this, activityImagePath);
+        noScrollGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent intent = new Intent(ProjectInfo.this, GalleryImageActivity.class);
+                intent.putStringArrayListExtra("imagePath", activityImagePath);
+                intent.putExtra("ID", i);
+                startActivity(intent);
+            }
+        });
+        noScrollGridView.setAdapter(picAdapter);
+
         if (commentsList.size() == 0) {
             empty_view.setVisibility(View.VISIBLE);
             list_comment.setVisibility(View.GONE);
@@ -389,7 +392,7 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
     /**
      * 点击评论按钮，屏幕滚动到评论处
      */
-    public void scrollToComment(){
+    public void scrollToComment() {
         new Handler().post(new Runnable() {
             @Override
             public void run() {
@@ -400,9 +403,10 @@ public class ProjectInfo extends BaseActivity implements View.OnClickListener {
 
     /**
      * 点击某个人的评论，将屏幕滚动到该评论下方
+     *
      * @param view 要评论的item
      */
-    public void scrollToSpecifiedComment(final View view){
+    public void scrollToSpecifiedComment(final View view) {
         new Handler().post(new Runnable() {
             @Override
             public void run() {

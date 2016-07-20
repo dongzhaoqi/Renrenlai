@@ -9,7 +9,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -123,6 +122,7 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
                 CommonUtils.showShare(FundIntroActivity.this, "家园创变大赛");
             }
         });
+
         // 设置LinearLayoutManager
         fundList.setLayoutManager(new LinearLayoutManager(this));
         View header = LayoutInflater.from(this).inflate(R.layout.project_header, (ViewGroup) findViewById(android.R.id.content), false);
@@ -162,7 +162,6 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.e(TAG, "onScrolled: " + "--->" +layout_home.getTop() );
             }
         });
     }
