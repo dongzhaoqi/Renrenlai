@@ -7,7 +7,7 @@ public class ConstantValue {
 
     /*本机测试*/
 //   public static final String urlRoot = "http://192.168.1.100:8080/RenrenLai";
-    //   public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
+//       public static final String urlRoot = "http://10.1.40.76:8080/RenrenLai";
  //   public static final String urlRoot = "http://10.1.1.165:8080/RenrenLai";
 
     /*外网测试*/
@@ -72,8 +72,15 @@ public class ConstantValue {
     //初始化该城市下的小区
     public static final String GET_GROUP_LIST = urlRoot + "/getGroupListByCityId";
 
-    //更改用户昵称
+    //更改用户头像
+    public static final String UPDATE_USER_HEAD = urlRoot + "/updateHeadImage";
+
+    //更改用户密码
     public static final String UPDATE_USER_PASSWORD = urlRoot + "/forgetPassword";
+
+    //更新用户小区
+    public static final String UPDATE_USER_GROUP = urlRoot + "/updateUserGroupInfo";
+
 
     //更改用户昵称
     public static final String UPDATE_USER_NAME = urlRoot + "/updateUserName";
@@ -87,8 +94,11 @@ public class ConstantValue {
     //更改用户简介
     public static final String UPDATE_USER_INTRODUCTION = urlRoot + "/updateUserIntroduction";
 
-    //获取活动列表
+    //获取活动列表 未登录
     public static final String GET_ACTIVITY_LIST = urlRoot + "/getActivityListForApp";
+
+    //获取活动列表 已登录
+    public static final String GET_ACTIVITY_AROUND_LIST = urlRoot + "/getActivityAroundForApp";
 
     //获取活动详情
     public static final String GET_ACTIVITY_INFO = urlRoot + "/getActivityDynamicInfoForApp";

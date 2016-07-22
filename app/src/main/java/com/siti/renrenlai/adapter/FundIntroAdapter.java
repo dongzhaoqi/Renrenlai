@@ -94,6 +94,11 @@ public class FundIntroAdapter extends RecyclerView.Adapter<FundIntroAdapter.View
                 holder.tvComment1.setText(commentList.get(0).getCommentContent());
                 holder.tvComment2.setText("");
             }
+        }else{
+            holder.tvUsername1.setText("");
+            holder.tvUsername2.setText("");
+            holder.tvComment1.setText("");
+            holder.tvComment2.setText("");
         }
         //将数据保存在itemView的Tag中，以便点击时进行获取
         holder.itemView.setTag(project.getProjectId());

@@ -129,7 +129,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         } else {
             tv_userName.setText(realName);
             isSignedin = true;
-            Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
+            Picasso.with(getActivity()).load(ConstantValue.urlRoot + userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
             initMyActivity();
@@ -366,7 +366,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         receivedLikeSize = receivedLikeList == null ? 0 : receivedLikeList.size();
         count = systemMessageSize + receivedReviewSize + receivedLikeSize;
 
-        Log.e(TAG, "systemMessageSize:" + systemMessageSize + " receivedReviewSize:" + receivedReviewSize + " receivedLikeSize:" + receivedLikeSize );
+        //Log.e(TAG, "systemMessageSize:" + systemMessageSize + " receivedReviewSize:" + receivedReviewSize + " receivedLikeSize:" + receivedLikeSize );
 
         if (count > 0) {
             iv_circle.setVisibility(View.VISIBLE);
@@ -467,7 +467,7 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         if (!"0".equals(userName)) {
-            initMessage();
+            init();
         }
     }
 }

@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.siti.renrenlai.R;
 import com.siti.renrenlai.bean.User;
+import com.siti.renrenlai.db.DbTempActivity;
 import com.siti.renrenlai.dialog.HobbyDialog;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
@@ -32,8 +34,11 @@ import com.siti.renrenlai.util.PhotoUtil;
 import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.squareup.picasso.Picasso;
 
+import org.json.JSONException;
 import org.json.JSONObject;
+import org.xutils.ex.DbException;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
@@ -83,8 +88,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
     private static int MODIFY_NAME = 2;         //修改昵称
     private static int MODIFY_INTRO = 3;        //修改个人简介
     private static int CHOOSE_COMMUNITY = 4;        //选择我的小区
-    private String userHeadImagePath;
-    private User user = CustomApplication.getInstance().getUser();
+    private String userHeadImagePath, userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,10 +103,16 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
 
     private void initProfile() {
         userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
-        Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
+        Log.e("initProfile: " , ConstantValue.urlRoot + userHeadImagePath );
+        Picasso.with(this).load(ConstantValue.urlRoot + userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "realName");
+
+        userName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "userName");
+
         tv_nickName.setText(nickName);
 
         gender = SharedPreferencesUtil.readString(
@@ -208,6 +218,62 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         startActivityForResult(camera, TAKE_PICTURE);
     }
 
+
+    /**
+     *
+     * @param userName  用户名
+     * @param bitmap    上传的bitmap图片
+     * @param imageName 图片名字
+     * @return
+     */
+    private void uploadUserHead(String userName, Bitmap bitmap, String imageName){
+        String url = ConstantValue.UPDATE_USER_HEAD;
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("userName", userName);
+            jsonObject.put("imageName", imageName);
+            jsonObject.put("imageData", Bitmap2StrByBase64(bitmap));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        JsonObjectRequest req = new JsonObjectRequest(Request.Method.POST, url, jsonObject,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d("response", "response:" + response.toString());
+                        userHeadImagePath = response.optString("result");
+                        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"),
+                                "userHeadPicImagePath", userHeadImagePath);
+                        showToast("上传成功!");
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Log.e("Error: ", "error.getMessage():" + error.getMessage());
+                showToast("出错了!");
+            }
+        });
+        req.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(req);
+    }
+
+    /**
+     * 通过Base32将Bitmap转换成Base64字符串
+     *
+     * @param bit
+     * @return
+     */
+    public String Bitmap2StrByBase64(Bitmap bit) {
+
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bit.compress(Bitmap.CompressFormat.JPEG, 40, bos);// 参数100表示不压缩
+        byte[] bytes = bos.toByteArray();
+        return Base64.encodeToString(bytes, Base64.NO_WRAP);
+
+    }
+
     /**
      * "选择性别"弹出框
      */
@@ -294,6 +360,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             // 照片的原始资源地址
             Uri originalUri = data.getData();
             // 使用ContentProvider通过URI获取原始图片
+            imgName = new SimpleDateFormat("yyyy-MM-dd").format(new Date()) + ".jpg";
             Bitmap photo = null;
             try {
                 photo = BitmapFactory.decodeStream(resolver.openInputStream(originalUri));
@@ -307,6 +374,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
                 // 释放原始图片占用的内存，防止out of memory异常发生
                 //photo.recycle();
                 img_photo.setImageBitmap(photo);
+                uploadUserHead(userName, photo, imgName);
             }
         } else if (requestCode == TAKE_PICTURE) {
 
@@ -317,6 +385,7 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
             bitmap = PhotoUtil.rotaingImageView(90, bitmap);
             //bitmap = ImageHelper.getRoundedCornerBitmap(bitmap, 130);
             img_photo.setImageBitmap(bitmap);
+            uploadUserHead(userName, bitmap, imgName);
         } else if (requestCode == MODIFY_NAME) {
             nickName = data.getStringExtra("nickName");
             tv_nickName.setText(nickName);
