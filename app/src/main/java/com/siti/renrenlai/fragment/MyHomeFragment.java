@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.android.volley.Cache;
 import com.android.volley.DefaultRetryPolicy;
@@ -31,6 +32,7 @@ import com.siti.renrenlai.util.SharedPreferencesUtil;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 import org.xutils.DbManager;
 import org.xutils.ex.DbException;
 import org.xutils.x;
@@ -48,6 +50,9 @@ public class MyHomeFragment extends BaseFragment {
 
     @Bind(R.id.dream_fund_list)
     XRecyclerView dreamFundList;
+    @Bind(R.id.tv_no_dream)
+    TextView tvNoData;
+
     private View view;
     String url = ConstantValue.GET_PROJECT_LIST;
     String userName;
@@ -214,7 +219,7 @@ public class MyHomeFragment extends BaseFragment {
             dreamFundList.setAdapter(fundAdapter);
             dreamFundList.setRefreshProgressStyle(ProgressStyle.BallSpinFadeLoader);
             dreamFundList.setArrowImageView(R.drawable.iconfont_downgrey);
-            
+
         }
     }
 

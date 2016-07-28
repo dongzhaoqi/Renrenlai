@@ -126,10 +126,15 @@ public class MeFragment extends BaseFragment implements View.OnClickListener {
         userHeadPicImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(getActivity(), "login"), "userHeadPicImagePath");
         if (userName.equals("0")) {
             tv_userName.setText("请登录");
+            layout_logout.setVisibility(View.GONE);
         } else {
             tv_userName.setText(realName);
             isSignedin = true;
-            Picasso.with(getActivity()).load(ConstantValue.urlRoot + userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
+            if(!userHeadPicImagePath.contains("http")){
+                userHeadPicImagePath = ConstantValue.urlRoot + userHeadPicImagePath;
+            }
+            Log.e("userHeadPicImagePath: " , userHeadPicImagePath );
+            Picasso.with(getActivity()).load(userHeadPicImagePath).placeholder(R.drawable.no_img).into(img_photo);
 
             db = x.getDb(CustomApplication.getInstance().getDaoConfig());
             initMyActivity();

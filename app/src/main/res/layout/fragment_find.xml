@@ -41,8 +41,20 @@
         android:id="@+id/tv_nodata"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="暂无活动数据，稍后重试"
+        android:gravity="center"
         android:visibility="gone"
+        android:textSize="@dimen/text_size_14"
         android:layout_centerInParent="true"/>
 
+    <TextView
+        android:id="@+id/tv_nodata_link"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:visibility="gone"
+        android:layout_below="@id/tv_nodata"
+        android:text="@string/no_data_link"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_14"
+        android:layout_centerInParent="true"/>
 </RelativeLayout>

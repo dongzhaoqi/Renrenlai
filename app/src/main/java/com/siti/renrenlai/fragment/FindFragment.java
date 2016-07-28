@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.speech.RecognizerIntent;
 import android.support.v7.widget.LinearLayoutManager;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,7 @@ import com.siti.renrenlai.R;
 import com.siti.renrenlai.activity.ActivityInfo;
 import com.siti.renrenlai.activity.FundIntroActivity;
 import com.siti.renrenlai.activity.MainActivity;
+import com.siti.renrenlai.activity.MyProfileActivity;
 import com.siti.renrenlai.adapter.ActivityAdapter;
 import com.siti.renrenlai.bean.Activity;
 import com.siti.renrenlai.bean.ActivityImage;
@@ -75,6 +77,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     private SearchBox search;
     private FloatingSearchView mSearchView;
     private TextView tvNoData;
+    private TextView tvNoDataLink;
     private static final String TAG = "FindFragment";
     String url = ConstantValue.GET_ACTIVITY_LIST;
     String userName, url1, url2, url3;
@@ -101,11 +104,7 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
 
         initView();
 
-        initMessage();
 
-        cache();
-
-        initEvent();
 
     }
 
@@ -285,6 +284,17 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         search = (SearchBox) findViewById(R.id.searchbox);
         mSearchView = (FloatingSearchView) findViewById(R.id.floating_search_view);
         tvNoData = (TextView) findViewById(R.id.tv_nodata);
+        tvNoDataLink = (TextView) findViewById(R.id.tv_nodata_link);
+
+        if("0".equals(userName)){
+            tvNoData.setVisibility(View.VISIBLE);
+            tvNoDataLink.setVisibility(View.VISIBLE);
+            String no_data = getResources().getString(R.string.no_activity_data);
+            tvNoData.setText(Html.fromHtml(no_data));
+            tvNoDataLink.setOnClickListener(this);
+            return;
+        }
+
         mXRecyclerView = (XRecyclerView) findViewById(R.id.list);
         // 设置LinearLayoutManager
         mXRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
@@ -314,6 +324,12 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
                 }, 1000);
             }
         });
+
+        initMessage();
+
+        cache();
+
+        initEvent();
     }
 
 
@@ -386,6 +402,8 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
         }
         if(activityList == null || activityList.size() == 0){
             tvNoData.setVisibility(View.VISIBLE);
+            String no_data = getResources().getString(R.string.no_activity_data);
+            tvNoData.setText(Html.fromHtml(no_data));
             return;
         }
         adapter = new ActivityAdapter(getActivity(), activityList);
@@ -602,6 +620,9 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
             case R.id.iv_fund:
                 startAnimActivity(FundIntroActivity.class);
                 break;
+            case R.id.tv_nodata_link:
+                startAnimActivity(MyProfileActivity.class);
+                break;
         }
     }
 
@@ -665,16 +686,20 @@ public class FindFragment extends BaseFragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
-        lastFirstVisiblePosition = ((LinearLayoutManager)mXRecyclerView.getLayoutManager()).
-                findFirstCompletelyVisibleItemPosition();
+        if(!"0".equals(userName)) {
+            lastFirstVisiblePosition = ((LinearLayoutManager) mXRecyclerView.getLayoutManager()).
+                    findFirstCompletelyVisibleItemPosition();
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
-        cache();
-        //回到之前浏览到的位置
-        mXRecyclerView.getLayoutManager().scrollToPosition(lastFirstVisiblePosition);
+        if(!"0".equals(userName)) {
+            cache();
+            //回到之前浏览到的位置
+            mXRecyclerView.getLayoutManager().scrollToPosition(lastFirstVisiblePosition);
+        }
     }
 
 

@@ -3,29 +3,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+    <!--<FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent">-->
+
+    <TextView
+        android:id="@+id/tv_no_dream"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        android:text="@string/no_data"/>
 
         <com.jcodecraeer.xrecyclerview.XRecyclerView
             android:id="@+id/dream_fund_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-        <RelativeLayout
-            android:id="@+id/layout_dream_go"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/item_height"
-            android:layout_gravity="bottom"
-            android:visibility="gone">
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:drawableRight="@drawable/go"
-                android:gravity="center"
-                android:text="家园梦想，我有"
-                android:textSize="@dimen/text_size_16" />
-        </RelativeLayout>
-    </FrameLayout>
+    <!--</FrameLayout>-->
 </RelativeLayout>

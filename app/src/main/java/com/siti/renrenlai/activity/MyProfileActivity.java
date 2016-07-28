@@ -101,10 +101,15 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         initProfile();
     }
 
+
     private void initProfile() {
         userHeadImagePath = SharedPreferencesUtil.readString(SharedPreferencesUtil.getSharedPreference(this, "login"), "userHeadPicImagePath");
-        Log.e("initProfile: " , ConstantValue.urlRoot + userHeadImagePath );
-        Picasso.with(this).load(ConstantValue.urlRoot + userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
+
+        if(!userHeadImagePath.contains("http")){
+            userHeadImagePath = ConstantValue.urlRoot + userHeadImagePath;
+        }
+        Log.e("userHeadImagePath: " , userHeadImagePath );
+        Picasso.with(this).load(userHeadImagePath).placeholder(R.drawable.no_img).into(img_photo);
         nickName = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(
                         getApplicationContext(), "login"), "realName");
@@ -134,6 +139,11 @@ public class MyProfileActivity extends BaseActivity implements OnClickListener {
         } else {
             tv_hobby.setText(hobby);
         }
+
+        groupName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "groupName");
+        tvCommunity.setText(groupName);
 
         intro = SharedPreferencesUtil.readString(
                 SharedPreferencesUtil.getSharedPreference(

@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class User implements Serializable{
 
 	private int userId;
+	private String groupName;
 	private String userName;
 	private String userHeadPicImagePath;
 	private String sex;
@@ -21,6 +22,14 @@ public class User implements Serializable{
 
 	public void setUserId(int userId) {
 		this.userId = userId;
+	}
+
+	public String getGroupName() {
+		return groupName;
+	}
+
+	public void setGroupName(String groupName) {
+		this.groupName = groupName;
 	}
 
 	public String getUserName() {

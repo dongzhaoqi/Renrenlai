@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.android.volley.DefaultRetryPolicy;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
@@ -23,13 +24,17 @@ import com.siti.renrenlai.bean.Group;
 import com.siti.renrenlai.bean.Province;
 import com.siti.renrenlai.util.ConstantValue;
 import com.siti.renrenlai.util.CustomApplication;
+import com.siti.renrenlai.util.SharedPreferencesUtil;
 import com.siti.renrenlai.view.HeaderLayout;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.Bind;
@@ -53,7 +58,7 @@ public class ChooseCommunity extends BaseActivity {
     ProvinceAdapter provinceAdapter;
     CityAdapter cityAdapter;
     int provinceId, cityId, groupId;
-    String url, groupName;
+    String url, groupName, userName;
     private static final String TAG = "ChooseCommunity";
     private static int CHOOSE_COMMUNITY = 4;        //选择我的小区
 
@@ -62,9 +67,15 @@ public class ChooseCommunity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_community);
         ButterKnife.bind(this);
+        userName = SharedPreferencesUtil.readString(
+                SharedPreferencesUtil.getSharedPreference(
+                        getApplicationContext(), "login"), "userName");
         initTopBarForBoth("选择我的小区", "提交", new HeaderLayout.onRightImageButtonClickListener() {
             @Override
             public void onClick() {
+                modifyMyGroup();
+                SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(getApplicationContext(), "login"),
+                        "groupName", groupName);
                 Intent intent = new Intent();
                 intent.putExtra("groupName", groupName);
                 setResult(RESULT_OK, intent);
@@ -73,6 +84,35 @@ public class ChooseCommunity extends BaseActivity {
             }
         });
         initProvince();
+    }
+
+    /**
+     * 修改我的小区
+     */
+    private void modifyMyGroup() {
+        url = ConstantValue.UPDATE_USER_GROUP;
+
+        JSONObject json = new JSONObject();
+        try {
+            json.put("userName", userName);
+            json.put("groupId", groupId);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        JsonObjectRequest likeRequest = new JsonObjectRequest(url, json,
+                new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+            }
+        });
+        likeRequest.setRetryPolicy(new DefaultRetryPolicy(20 * 1000, 0,
+                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        CustomApplication.getInstance().addToRequestQueue(likeRequest);
     }
 
     /**
@@ -192,17 +232,19 @@ public class ChooseCommunity extends BaseActivity {
         JSONArray result = response.optJSONArray("result");
         groupList = com.alibaba.fastjson.JSONArray.parseArray(result.toString(), Group.class);
         List<String> groups = new ArrayList<>();
+        final HashMap<String, Integer> map = new HashMap<>();
         for (Group group : groupList) {
             groups.add(group.getGroupProName());
+            map.put(group.getGroupProName(), group.getGroupNameId());
         }
         arrayAdapter = new MyArrayAdapter<>(ChooseCommunity.this, android.R.layout.simple_dropdown_item_1line, groups);
         tvCommunity.setAdapter(arrayAdapter);
         tvCommunity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 groupName = parent.getAdapter().getItem(position).toString();
-                Log.d(TAG, "onItemClick: " + groupName);
+                groupId = map.get(groupName);
+                Log.d(TAG, "onItemClick: " + groupName +" groupId:" + groupId);
             }
         });
         tvCommunity.setThreshold(1);

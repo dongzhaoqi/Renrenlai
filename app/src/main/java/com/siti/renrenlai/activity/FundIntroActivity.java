@@ -45,9 +45,9 @@ import cn.sharesdk.framework.ShareSDK;
 public class FundIntroActivity extends BaseActivity implements View.OnClickListener, ObservableScrollView.ScrollViewListener {
 
     /*@Bind(R.id.fund_list)
-    XRecyclerView fundList;
+    XRecyclerView fundList;*/
     @Bind(R.id.layout_dream_go)
-    RelativeLayout layoutDreamGo;*/
+    RelativeLayout layoutDreamGo;
     @Bind(R.id.ll_head_default)
     LinearLayout llHeadDefault;
     @Bind(R.id.btnLogin)
@@ -328,17 +328,20 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
         initData();
         llHeadDefault.setVisibility(View.GONE);
     }*/
-    @OnClick({/*R.id.layout_dream_go,*/ R.id.btnLogin, R.id.iv_project, R.id.btn_home, R.id.btn_dream})
+    @OnClick({R.id.layout_dream_go, R.id.btnLogin, R.id.iv_project, R.id.btn_home, R.id.btn_dream,
+            R.id.btn_home_default, R.id.btn_dream_default})
     public void onClick(View view) {
         int id = view.getId();
         switch (id) {
-            /*case R.id.layout_dream_go:
+            case R.id.layout_dream_go:
                 startAnimActivity(ApplyWishActivity.class);
-                break;*/
+                break;
             case R.id.btn_home:
+            case R.id.btn_home_default:
                 index = 0;
                 break;
             case R.id.btn_dream:
+            case R.id.btn_dream_default:
                 index = 1;
                 break;
             /*case R.id.btn_home_default:
@@ -373,8 +376,8 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onScrollChanged(ObservableScrollView scrollView, int x, int y, int oldx, int oldy) {
-        Log.e(TAG, "onScrollChanged: " + "  y:" + y + " oldy:" + oldy + " llhead:" + ll_head.getBottom());
-        if(y >= ll_head.getBottom()){
+        Log.e(TAG, "onScrollChanged: " + "  y:" + y + " oldy:" + oldy + " llhead getTop:" + ll_head.getTop());
+        if(y >= ll_head.getTop()){
             llHeadDefault.setVisibility(View.VISIBLE);
             layout_home_default = (RelativeLayout) findViewById(R.id.layout_home_default);
             layout_dream_default = (RelativeLayout) findViewById(R.id.layout_dream_default);
@@ -382,8 +385,23 @@ public class FundIntroActivity extends BaseActivity implements View.OnClickListe
             btn_dream_default = (Button) findViewById(R.id.btn_dream_default);
             btn_home_default.setOnClickListener(FundIntroActivity.this);
             btn_dream_default.setOnClickListener(FundIntroActivity.this);
+            if(index == 0){
+                btn_home_default.setSelected(true);
+                btn_dream_default.setSelected(false);
+            }else if(index == 1){
+                btn_home_default.setSelected(false);
+                btn_dream_default.setSelected(true);
+            }
         }else {
-            llHeadDefault.setVisibility(View.GONE);
+            llHeadDefault.setVisibility(View.INVISIBLE);
+        }
+
+        if(index == 0 && oldy - y < 0){
+            //向上滑 old < y
+            layoutDreamGo.setVisibility(View.VISIBLE);
+            layoutDreamGo.setBackgroundResource(R.drawable.layout_top_border);
+        } else {
+            layoutDreamGo.setVisibility(View.GONE);
         }
     }
     /**

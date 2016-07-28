@@ -129,6 +129,8 @@ public class LoginActivity extends BaseActivity implements OnClickListener {
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userName", user.getUserName());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
+                "groupName", user.getGroupName());
+        SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "realName", user.getRealName());
         SharedPreferencesUtil.writeString(SharedPreferencesUtil.getSharedPreference(this, "login"),
                 "userHeadPicImagePath", user.getUserHeadPicImagePath());
